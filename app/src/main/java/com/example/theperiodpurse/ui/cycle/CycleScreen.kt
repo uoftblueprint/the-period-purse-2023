@@ -109,8 +109,8 @@ fun CycleScreenLayout() {
             .fillMaxWidth()
             .fillMaxHeight()
             .padding(
-                start = 20.dp, end = 20.dp,
-                top = 25.dp
+                horizontal = 20.dp,
+                vertical = 25.dp
             )
     ) {
         CurrentCycleBox()
