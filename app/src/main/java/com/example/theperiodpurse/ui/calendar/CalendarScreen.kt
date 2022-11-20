@@ -1,129 +1,99 @@
 package com.example.theperiodpurse.ui.calendar
 
-import android.graphics.Paint.Align
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
+import com.google.accompanist.pager.*
+import kotlinx.coroutines.launch
 
-class CalendarScreen : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            ThePeriodPurseTheme {
-                Surface(color = MaterialTheme.colors.background) {
-                    CalendarScreenLayout()
-                }
-            }
-        }
-    }
-}
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
-fun CalendarCycleTopBar (isCalendar: Boolean) {
-    var calendarTextColor = Color.DarkGray
-    var cycleTextColor = Color.Black
-    if (isCalendar) {
-        calendarTextColor = Color.Black
-        cycleTextColor = Color.DarkGray
-    }
-
-    Column {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Button(
-                onClick = { /*TODO*/ },
-                shape = RectangleShape,
-                border = BorderStroke(0.dp, color = Color.LightGray),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
-                modifier = Modifier
-                    .weight(1f)
-            ) {
-                Text(text = "Calendar",
-                    fontSize = 24.sp,
-                    color = calendarTextColor,
-                    modifier = Modifier
-                        .weight(.5f)
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                        .padding(top = 16.dp, bottom = 6.dp)
-                )
-            }
-            Button(
-                onClick = { /*TODO*/ },
-                shape = RectangleShape,
-                border = BorderStroke(0.dp, color = Color.LightGray),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
-                modifier = Modifier
-                    .weight(1f)
-            ) {
-                Text(text = "Cycle",
-                    fontSize = 24.sp,
-                    color = cycleTextColor,
-                    modifier = Modifier
-                        .weight(.5f)
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                        .padding(top = 16.dp, bottom = 6.dp)
-                )
-            }
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Box(modifier = Modifier
-                .weight(.5f)
-                .size(1.dp)
-                .clip(RectangleShape)
-                .background(color = calendarTextColor)
-            )
-            Box(modifier = Modifier
-                .weight(.5f)
-                .size(5.dp)
-                .clip(RectangleShape)
-                .background(color = Color.LightGray)
+fun Tabs(tabs: List<CalendarTabItem>, pagerState: PagerState) {
+    val scope = rememberCoroutineScope()
+    TabRow(
+        selectedTabIndex = pagerState.currentPage,
+        backgroundColor = Color.LightGray,
+        contentColor = Color.Black,
+        indicator = { tabPositions ->
+            TabRowDefaults.Indicator(
+                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
             )
         }
-    }
+    ) {
 
+        tabs.forEachIndexed { index, tab ->
+            Tab(
+                text = { Text(tab.title) },
+                selected = pagerState.currentPage == index,
+                onClick = {
+                    scope.launch {
+                        pagerState.animateScrollToPage(index)
+                    }
+                }
+            )
+        }
+        
+    }
 }
 
-fun CalendarBottomBar () {
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun TabsContent(tabs: List<CalendarTabItem>, pagerState: PagerState) {
+    HorizontalPager(state = pagerState, count = tabs.size) { page ->
+        tabs[page].screen()
+    }
+}
 
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun CalendarScreen() {
+    val tabs = listOf(
+        CalendarTabItem.CalendarTab,
+        CalendarTabItem.CycleTab
+    )
+    val pagerState = rememberPagerState()
+    ThePeriodPurseTheme() {
+        Scaffold (topBar = {})
+        { padding ->
+            Column(modifier = Modifier.padding(padding)) {
+                Tabs(tabs = tabs, pagerState = pagerState)
+                TabsContent(tabs = tabs, pagerState = pagerState)
+            }
+        }
+    }
 }
 
 @Composable
 fun CalendarScreenLayout() {
-    Column(
-        modifier = Modifier
-            .fillMaxHeight()
-    ) {
-        CalendarCycleTopBar(true)
+    ThePeriodPurseTheme() {
+        Text("Calendar Screen Content")
     }
 }
 
 @Preview
 @Composable
 fun CalendarScreenPreview() {
-    CalendarScreen()
+    ThePeriodPurseTheme() {
+        CalendarScreen()
+    }
 }
 
-@Preview
+
+@OptIn(ExperimentalPagerApi::class)
+@Preview(showBackground = true)
 @Composable
-fun CalendarCycleTopBarPreview () {
-    CalendarCycleTopBar(true)
+fun TabsPreview() {
+    val tabs = listOf(
+        CalendarTabItem.CalendarTab,
+        CalendarTabItem.CycleTab,
+    )
+    val pagerState = rememberPagerState()
+    Tabs(tabs = tabs, pagerState = pagerState)
 }
