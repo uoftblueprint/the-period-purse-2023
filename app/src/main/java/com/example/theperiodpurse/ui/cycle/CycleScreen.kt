@@ -20,9 +20,9 @@ import com.example.theperiodpurse.R
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 
 @Composable
-fun CurrentCycleBox() {
+fun CurrentCycleBox(modifier: Modifier = Modifier) {
     Card(
-        Modifier
+        modifier
             .fillMaxWidth()
             .height(300.dp),
         elevation = 2.dp, shape = RoundedCornerShape(5)
@@ -32,35 +32,36 @@ fun CurrentCycleBox() {
             fontSize = 20.sp,
             fontWeight = FontWeight(700),
             color = Color(0xFFB12126),
-            modifier = Modifier.padding(start = 20.dp, top = 20.dp)
+            modifier = modifier.padding(start = 20.dp, top = 20.dp)
         )
 
     }
 }
 
 @Composable
-fun AverageLengthBox(title: String, image: String = "Change this into Image later", color: Color) {
-    Card(Modifier.width(166.dp), elevation = 2.dp,
+fun AverageLengthBox(modifier: Modifier = Modifier, title: String,
+                     image: String = "Change this into Image later", color: Color) {
+    Card(modifier.width(177.dp), elevation = 2.dp,
         backgroundColor = color, shape = RoundedCornerShape(10)
     ) {
-        Column(Modifier.padding(18.dp)) {
+        Column(modifier.padding(18.dp)) {
             Text(
                 text = title,
                 fontSize = 12.sp,
                 fontWeight = FontWeight(700),
                 color = Color(0xFF868083),
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier.height(20.dp))
             Row {
                 Text(
                     text = stringResource(R.string.log_to_learn),
                     fontSize = 10.sp,
                     fontWeight = FontWeight(500),
-                    modifier = Modifier.width(55.dp)
+                    modifier = modifier.width(55.dp)
                 )
-                Spacer(modifier = Modifier.width(29.dp))
+                Spacer(modifier.width(29.dp))
                 Box(
-                    Modifier
+                    modifier
                         .size(50.dp)
                         .clip(RoundedCornerShape(50))
                         .background(Color.Red)) {}
@@ -70,17 +71,17 @@ fun AverageLengthBox(title: String, image: String = "Change this into Image late
 }
 
 @Composable
-fun CycleHistoryBox() {
-    Card(Modifier.fillMaxWidth(), elevation = 2.dp, shape =
+fun CycleHistoryBox(modifier: Modifier = Modifier) {
+    Card(modifier.fillMaxWidth(), elevation = 2.dp, shape =
     RoundedCornerShape(10)) {
-        Column(Modifier.padding(horizontal = 30.dp, vertical = 25.dp)) {
+        Column(modifier.padding(horizontal = 30.dp, vertical = 25.dp)) {
             Text(
                 text = stringResource(R.string.cycle_history),
                 fontSize = 20.sp,
                 fontWeight = FontWeight(700),
                 color = Color(0xFF868083),
             )
-            Divider(color = Color(0xFF868083), modifier = Modifier
+            Divider(color = Color(0xFF868083), modifier = modifier
                 .padding(vertical = 15.dp).fillMaxWidth())
             Text(text = stringResource(R.string.log_to_learn))
         }
@@ -88,9 +89,9 @@ fun CycleHistoryBox() {
 }
 
 @Composable
-fun CycleScreenLayout() {
+fun CycleScreenLayout(modifier: Modifier = Modifier) {
     Column(
-        Modifier
+        modifier
             .verticalScroll(rememberScrollState())
             .fillMaxWidth()
             .fillMaxHeight()
@@ -100,15 +101,15 @@ fun CycleScreenLayout() {
             )
     ) {
         CurrentCycleBox()
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier.height(30.dp))
         Row {
             AverageLengthBox(title = stringResource(R.string.avg_period_len),
                 color = Color(0xFFFEDBDB))
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier.width(16.dp))
             AverageLengthBox(title = stringResource(R.string.avg_cycle_len),
                 color = Color(0xFFBAE0D8))
         }
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier.height(30.dp))
         CycleHistoryBox()
     }
 }
