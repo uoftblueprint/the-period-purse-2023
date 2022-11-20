@@ -1,3 +1,39 @@
 <resources>
-    <string name="app_name">The Period Purse</string>
+    <string name="app_name">Menstruation Nation</string>
+    <string name="welcome">Welcome!</string>
+    <string name="quick_start">Quick Start</string>
+    <string name="apple_start">Sign in with Apple</string>
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
+    <string name="cancel">Cancel</string>
+    <string name="question_one">How long does your period usually last?</string>
+    <string name="description_one">This will help us make our reminders more accurate.</string>
+    <string name="tap_to_input">Tap to input</string>
+    <string name="question_two">When did your period last start?</string>
+    <string name="description_two">Record your last period or skip if you do not know.</string>
+    <string name="choose_date">Choose date</string>
+    <string name="question_three">What symptoms do you want to track?</string>
+    <string name="description_three">You can change these anytime in yours settings.</string>
+    <string name="caption_three">By default, we will always track your period flow. Choose up to four other symptoms to track.</string>
+    <string name="mood">Mood</string>
+    <string name="exercise">Exercise</string>
+    <string name="cramps">Cramps</string>
+    <string name="sleep">Sleep</string>
+    <string name="flow">Flow</string>
+    <string name="order_details">Average period length: %1$s \n Last period: %2$s \nSymptoms to log: %3$s</string>
+    <string name="average_period_length">Average period length</string>
+    <string name="last_period">Last period</string>
+    <string name="symptoms_to_log">Symptoms to log</string>
+    <string name="new_account">New Account</string>
+    <string name="lets_go">Let\'s go!</string>
+    <string name="back_button">Back</string>
+    <string name="title_onboard_one">Average Period Length</string>
+    <string name="title_onboard_two">Last Period</string>
+    <string name="title_onboard_three">Symptoms To Log</string>
+    <string name="title_onboard_summary">Summary</string>
+    <plurals name="period_length">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+
 </resources>
