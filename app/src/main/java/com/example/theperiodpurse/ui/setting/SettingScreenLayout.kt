@@ -1,6 +1,7 @@
 package com.example.theperiodpurse.ui.setting
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.rememberScrollableState
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
@@ -12,7 +13,7 @@ import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -120,19 +121,24 @@ fun SettingScreenLayout(
 
 @Composable
 fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter) {
+    var checked by remember { mutableStateOf(false) }
+    val color = if (checked) Color.Green else Color.White
     Column(
         modifier = modifier
             .padding(10.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,) {
-        IconButton(
-            modifier = Modifier
-                .height(70.dp)
-                .width(70.dp),
-            onClick = { /*TODO*/ }) {
+        IconToggleButton(checked = checked,
+            onCheckedChange = { checked = !checked }
+        ) {
             Icon(
                 painter = icon,
-                "contentDescription")
+                contentDescription = "contentDescription",
+                modifier = Modifier
+                    .background(color)
+                    .height(50.dp)
+                    .width(50.dp)
+            )
 
         }
         Text(modifier = Modifier.padding(5.dp),
