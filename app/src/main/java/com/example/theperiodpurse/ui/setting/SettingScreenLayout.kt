@@ -28,7 +28,12 @@ import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 //}
 
 @Composable
-fun SettingScreenLayout(modifier: Modifier = Modifier){
+fun SettingScreenLayout(
+    modifier: Modifier = Modifier,
+    onNotificationClicked: () -> Unit,
+    onBackUpClicked: () -> Unit,
+    onDeleteClicked: () -> Unit,
+){
    Column(modifier = modifier
        .fillMaxSize()
        .verticalScroll(rememberScrollState())) {
@@ -87,7 +92,10 @@ fun SettingScreenLayout(modifier: Modifier = Modifier){
        }
        Divider(thickness = 1.dp)
 
-      TabOption(stringResource(id = R.string.customize_notifications))
+      TabOption(
+          stringResource(id = R.string.customize_notifications),
+          onTabClicked = onNotificationClicked
+      )
 
        Divider(thickness = 1.dp)
        Text(
@@ -97,9 +105,15 @@ fun SettingScreenLayout(modifier: Modifier = Modifier){
                start = 10.dp)
        )
 
-       TabOption(text = stringResource(R.string.back_up_account))
+       TabOption(
+           text = stringResource(R.string.back_up_account),
+           onTabClicked = onBackUpClicked
+       )
        Spacer(modifier = Modifier.padding(10.dp))
-       TabOption(text = stringResource(id = R.string.delete_account))
+       TabOption(
+           text = stringResource(id = R.string.delete_account),
+           onTabClicked = onDeleteClicked
+       )
    }
 
 }
@@ -127,9 +141,9 @@ fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter) {
 }
 
 @Composable
-fun TabOption(text: String){
+fun TabOption(text: String, onTabClicked: () -> Unit){
     TabRow(modifier = Modifier.fillMaxWidth(), selectedTabIndex = 0, backgroundColor = Color.White) {
-        Tab(modifier = Modifier.fillMaxWidth(), selected = true, onClick = { /*TODO*/ }) {
+        Tab(modifier = Modifier.fillMaxWidth(), selected = true, onClick = { onTabClicked() }) {
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp),
@@ -149,11 +163,11 @@ fun TabOption(text: String){
     }
 }
 
-
-@Preview(showBackground = true)
-@Composable
-fun SettingScreenScreenPreview() {
-    ThePeriodPurseTheme {
-        SettingScreenLayout()
-    }
-}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun SettingScreenScreenPreview() {
+//    ThePeriodPurseTheme {
+//        SettingScreenLayout()
+//    }
+//}
