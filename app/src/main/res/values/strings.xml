@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">The Period Purse</string>
+    <string name="tracking_preferences">Tracking Preferences</string>
+    <string name="notifications_heading">Notifications</string>
+    <string name="account_settings_heading">Account settings</string>
+    <string name="remind_me_to_log_symptoms">Remind me to log symptoms</string>
+    <string name="customize_notifications">Customise Notifications</string>
+    <string name="mood">Mood</string>
+    <string name="exercise">Exercise</string>
+    <string name="cramps">Cramps</string>
+    <string name="sleep">Sleep</string>
+    <string name="back_up_account">Back Up Account</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="settings_home">Settings</string>
+    <string name="back_button">Back</string>
 </resources>
