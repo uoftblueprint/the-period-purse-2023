@@ -25,14 +25,12 @@ import com.example.theperiodpurse.ui.SummaryScreen
 import com.example.theperiodpurse.ui.onboarding.*
 
 
-
 enum class OnboardingScreen(@StringRes val title: Int) {
     Welcome(title = R.string.app_name),
     QuestionOne(title = R.string.title_onboard_one),
     QuestionTwo(title = R.string.title_onboard_two),
     QuestionThree(title = R.string.title_onboard_three),
     Summary(title = R.string.title_onboard_summary),
-
 
 
 }
@@ -100,7 +98,7 @@ fun OnboardApp(
             }
             composable(route = OnboardingScreen.QuestionOne.name) {
                 QuestionOneScreen(
-                    onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionTwo.name)},
+                    onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionTwo.name) },
                     onSelectionChanged = { viewModel.setQuantity(it.toInt()) }
                 )
             }
@@ -123,7 +121,12 @@ fun OnboardApp(
             composable(route = OnboardingScreen.Summary.name) {
                 SummaryScreen(
                     onboardUiState = uiState,
-                    onSendButtonClicked = { cancelOrderAndNavigateToStart(viewModel, navController) },
+                    onSendButtonClicked = {
+                        cancelOrderAndNavigateToStart(
+                            viewModel,
+                            navController
+                        )
+                    },
                     onCancelButtonClicked = {
                         cancelOrderAndNavigateToStart(viewModel, navController)
                     },

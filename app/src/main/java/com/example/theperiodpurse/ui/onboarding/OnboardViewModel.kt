@@ -23,7 +23,7 @@ class OnboardViewModel : ViewModel() {
             currentState.copy(
                 days = numberDays,
 
-            )
+                )
         }
     }
 
@@ -34,13 +34,13 @@ class OnboardViewModel : ViewModel() {
         var listOfSymptoms: MutableList<String> = mutableListOf()
         var tempList = logSymptoms.split("|")
         tempList.forEach { option ->
-            if (option != ""){
+            if (option != "") {
                 listOfSymptoms.add(option)
             }
         }
 
         _uiState.update { currentState ->
-            currentState.copy( symptomsOptions = listOfSymptoms)
+            currentState.copy(symptomsOptions = listOfSymptoms)
         }
     }
 
@@ -61,7 +61,6 @@ class OnboardViewModel : ViewModel() {
     fun resetOrder() {
         _uiState.value = OnboardUIState(dateOptions = dateOptions())
     }
-
 
 
     /**

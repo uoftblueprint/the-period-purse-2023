@@ -3,13 +3,7 @@ package com.example.theperiodpurse
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.theperiodpurse.ui.onboarding.OnboardApp
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 
@@ -18,7 +12,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ThePeriodPurseTheme {
-                OnboardApp()
+                Application()
 
             }
         }
@@ -26,14 +20,6 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    ThePeriodPurseTheme {
-        Greeting("Android")
-    }
+fun Application() {
+    OnboardApp()
 }

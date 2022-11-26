@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2022 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.example.theperiodpurse.ui
 
 import androidx.compose.foundation.selection.selectable
@@ -29,9 +14,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.data.DataSource.symptoms
-import com.example.theperiodpurse.ui.component.FormattedPriceLabel
-import android.content.Context
-import android.widget.RadioGroup
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 
@@ -53,7 +35,7 @@ fun QuestionThreeScreen(
     onCancelButtonClicked: () -> Unit = {},
     onNextButtonClicked: () -> Unit = {},
     modifier: Modifier = Modifier
-){
+) {
     var selectedValue by rememberSaveable { mutableStateOf("") }
     Column(
         modifier = Modifier.padding(32.dp),
@@ -71,18 +53,20 @@ fun QuestionThreeScreen(
             fontSize = 15.sp,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
-        Row(modifier = Modifier.padding(32.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(
+            modifier = Modifier.padding(32.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             Text(
                 text = stringResource(R.string.flow),
                 fontSize = 15.sp,
 
-            )
+                )
             Text(
                 text = stringResource(R.string.caption_three),
                 fontSize = 15.sp,
 
-            )
+                )
 
         }
         Divider(thickness = 1.dp, modifier = modifier.padding(bottom = 16.dp))
@@ -110,23 +94,23 @@ fun QuestionThreeScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
-                        RadioButton(
-                            selected = selectedValue.contains(item),
-                            onClick = {
-                                if (selectedValue.contains(item)) {
+                    RadioButton(
+                        selected = selectedValue.contains(item),
+                        onClick = {
+                            if (selectedValue.contains(item)) {
 
-                                    selectedValue = selectedValue.replace(item, "")
+                                selectedValue = selectedValue.replace(item, "")
 
 
-                                } else if (!selectedValue.contains(item)) {
-                                    selectedValue = selectedValue + "|" + item
-
-                                }
-                                onSelectionChanged(selectedValue)
+                            } else if (!selectedValue.contains(item)) {
+                                selectedValue = selectedValue + "|" + item
 
                             }
-                        )
-                        Text(item)
+                            onSelectionChanged(selectedValue)
+
+                        }
+                    )
+                    Text(item)
 
                 }
             }
@@ -154,11 +138,9 @@ fun QuestionThreeScreen(
 }
 
 
-
-
 @Preview
 @Composable
-fun SelectOptionPreview(){
+fun SelectOptionPreview() {
     val context = LocalContext.current
     QuestionThreeScreen(
 

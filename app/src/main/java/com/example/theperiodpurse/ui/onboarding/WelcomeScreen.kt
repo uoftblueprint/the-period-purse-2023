@@ -18,17 +18,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.theperiodpurse.R
 
 
 @Composable
-fun WelcomeScreen(onNextButtonClicked: () -> Unit,
-                  modifier: Modifier = Modifier) {
+fun WelcomeScreen(
+    onNextButtonClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
-        modifier = modifier.padding(16.dp).fillMaxWidth(),
+        modifier = modifier
+            .padding(16.dp)
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -43,18 +46,15 @@ fun WelcomeScreen(onNextButtonClicked: () -> Unit,
         Spacer(modifier = Modifier.height(8.dp))
         SelectOnboardButton(
             text = stringResource(R.string.quick_start),
-            onClick = { onNextButtonClicked()}
+            onClick = { onNextButtonClicked() }
         )
         SelectOnboardButton(
             text = stringResource(R.string.apple_start),
-            onClick = { onNextButtonClicked()}
+            onClick = { onNextButtonClicked() }
         )
 
 
-
-
     }
-
 
 
 }
@@ -64,7 +64,7 @@ fun SelectOnboardButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
-){
+) {
     Button(
         onClick = onClick,
         modifier = modifier.widthIn(min = 250.dp)
@@ -75,7 +75,7 @@ fun SelectOnboardButton(
 
 @Preview
 @Composable
-fun WelcomeScreenPreview(){
+fun WelcomeScreenPreview() {
     WelcomeScreen(onNextButtonClicked = { })
 
 }
