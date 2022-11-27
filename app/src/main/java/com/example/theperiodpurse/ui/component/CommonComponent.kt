@@ -21,7 +21,7 @@ import com.example.theperiodpurse.ui.theme.Teal100
 
 @Composable
 fun BottomNavigation(navController: NavController) {
-    var fabIconId by remember { mutableStateOf(R.drawable.add_circle_outline_black_24dp) }
+    var fabIconId by remember { mutableStateOf(R.drawable.add_black_24dp) }
     var fabBackgroundColor by remember { mutableStateOf(Red100) }
     navController.addOnDestinationChangedListener { _, destination, _ ->
         if (destination.route == Screen.Calendar.name) {
