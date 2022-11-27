@@ -61,7 +61,6 @@ fun WelcomeScreen(onNextButtonClicked: () -> Unit, modifier: Modifier = Modifier
         )
         Text("By continuing, you accept the", textAlign = TextAlign.Center)
         Text("Terms and Conditions and Privacy Policy.", textAlign = TextAlign.Center)
-
     }
 }
 
