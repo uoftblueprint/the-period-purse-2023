@@ -1,4 +1,10 @@
 package com.example.theperiodpurse.setting
 
-class SettingScreen {
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+
+
+@Composable
+fun SettingScreen() {
+    Text("Setting")
 }
