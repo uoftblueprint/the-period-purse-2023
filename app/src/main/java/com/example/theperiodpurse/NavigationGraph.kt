@@ -8,25 +8,32 @@ import com.example.theperiodpurse.ui.calendar.CalendarScreen
 import com.example.theperiodpurse.ui.cycle.CycleScreenLayout
 import com.example.theperiodpurse.ui.setting.SettingScreen
 
+enum class Screen() {
+    Calendar,
+    Cycle,
+    Settings,
+    Learn
+}
+
 @Composable
 fun NavigationGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = AppScreen.Calendar.name,
+        startDestination = Screen.Calendar.name,
     ) {
-        composable(route = AppScreen.Calendar.name) {
+        composable(route = Screen.Calendar.name) {
             CalendarScreen()
         }
 
-        composable(route = AppScreen.Settings.name) {
+        composable(route = Screen.Settings.name) {
             SettingScreen()
         }
 
-        composable(route = AppScreen.Cycle.name) {
+        composable(route = Screen.Cycle.name) {
             CycleScreenLayout()
         }
 
-        composable(route = AppScreen.Learn.name) {
+        composable(route = Screen.Learn.name) {
             CycleScreenLayout()
         }
     }

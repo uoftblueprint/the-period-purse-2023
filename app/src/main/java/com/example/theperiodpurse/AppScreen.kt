@@ -11,13 +11,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import com.example.theperiodpurse.ui.component.BottomNavigation
 
-enum class AppScreen() {
-    Calendar,
-    Cycle,
-    Settings,
-    Learn
-}
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

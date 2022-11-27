@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import com.example.theperiodpurse.AppScreen
+import com.example.theperiodpurse.Screen
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.ui.theme.Red100
 import com.example.theperiodpurse.ui.theme.Teal100
@@ -24,7 +24,7 @@ fun BottomNavigation(navController: NavController) {
     var fabIcon by remember { mutableStateOf(R.drawable.add_circle_outline_black_24dp) }
     var fabBackgroundColor by remember { mutableStateOf(Red100) }
     navController.addOnDestinationChangedListener { _, destination, _ ->
-        if (destination.route == AppScreen.Calendar.name) {
+        if (destination.route == Screen.Calendar.name) {
             fabIcon = R.drawable.add_black_24dp
             fabBackgroundColor = Red100
         } else {
@@ -35,7 +35,7 @@ fun BottomNavigation(navController: NavController) {
 
     BottomNavigation_(
         onInfoNavigationClicked = {
-            navController.navigate(AppScreen.Learn.name) {
+            navController.navigate(Screen.Learn.name) {
                 popUpTo(navController.graph.findStartDestination().id) {
                     saveState = true
                 }
@@ -44,7 +44,7 @@ fun BottomNavigation(navController: NavController) {
             }
         },
         onSettingsNavigationClicked = {
-            navController.navigate(AppScreen.Settings.name) {
+            navController.navigate(Screen.Settings.name) {
                 popUpTo(navController.graph.findStartDestination().id) {
                     saveState = true
                 }
@@ -53,7 +53,7 @@ fun BottomNavigation(navController: NavController) {
             }
         },
         onFABClicked = {
-            navController.navigate(AppScreen.Calendar.name) {
+            navController.navigate(Screen.Calendar.name) {
                 popUpTo(navController.graph.findStartDestination().id) {
                     saveState = true
                 }
@@ -88,19 +88,15 @@ private fun BottomNavigation_(
                         contentDescription = null
                     )
                 },
-                label = { Text(AppScreen.Learn.name) },
+                label = { Text(Screen.Learn.name) },
                 selected = false,
                 onClick = onInfoNavigationClicked,
             )
 
 
             BottomNavigationItem(
-                icon = {},
-                label = null,
-                selected = false,
-                onClick = {},
-                enabled = false,
-                modifier = Modifier.weight(0.35f)
+                icon = {}, label = null, selected = false, onClick = {},
+                enabled = false, modifier = Modifier.weight(0.35f)
             )
 
             BottomNavigationItem(
@@ -110,7 +106,7 @@ private fun BottomNavigation_(
                         contentDescription = null
                     )
                 },
-                label = { Text(AppScreen.Settings.name) },
+                label = { Text(Screen.Settings.name) },
                 selected = false,
                 onClick = onSettingsNavigationClicked,
             )
