@@ -13,4 +13,5 @@
     <string name="delete_account">Delete Account</string>
     <string name="settings_home">Settings</string>
     <string name="back_button">Back</string>
+    <string name="sample_notification">Every day at 10:00 AM</string>
 </resources>
