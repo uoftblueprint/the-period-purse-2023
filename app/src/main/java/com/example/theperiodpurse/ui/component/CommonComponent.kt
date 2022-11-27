@@ -1,4 +1,5 @@
-package com.example.theperiodpurse.component
+
+package com.example.theperiodpurse.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -10,9 +11,8 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -22,8 +22,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.theperiodpurse.AppScreen
 import com.example.theperiodpurse.R
 
-class CommonComponent {
-}
 @Composable
 fun BottomNavigation(navController: NavController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -45,12 +43,12 @@ fun BottomNavigation(navController: NavController) {
                 selected = currentDestination?.hierarchy?.any { it.route == AppScreen.Settings.name } == true,
                 onClick = {
                     navController.navigate(AppScreen.Learn.name) {
-                                                             popUpTo(navController.graph.findStartDestination().id) {
-                                                             saveState = true
-                                                             }
-                                                             launchSingleTop = true
-                                                             restoreState = true
-                                                             }
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 },
             )
 
@@ -60,7 +58,7 @@ fun BottomNavigation(navController: NavController) {
                 selected = false,
                 onClick = {},
                 enabled = false,
-                modifier = Modifier.width(0.dp)
+                modifier = Modifier.weight(0.35f)
             )
 
             BottomNavigationItem(
@@ -87,44 +85,23 @@ fun BottomNavigation(navController: NavController) {
 }
 
 @Composable
-fun FloatingActionButton(currentDestination: NavDestination?): Unit {
-    var fabIcon by remember { mutableStateOf(0) }
+fun FloatingActionButton(id: Int, backgroundColor: Color) {
+    val circle = MaterialTheme.shapes.large.copy(CornerSize(percent = 50))
     FloatingActionButton(
         onClick = { },
-        shape = MaterialTheme.shapes.large.copy(CornerSize(percent = 50)),
+        shape = circle,
         contentColor = Color.White,
-        backgroundColor = Color.Red,
-        modifier = Modifier.border(color = Color.White, width = 2.dp, shape=MaterialTheme.shapes.large.copy(
-            CornerSize(percent =50)
-        ))
+        backgroundColor = backgroundColor,
+        modifier = Modifier
+            .border(color = Color.White, width = 2.dp, shape = circle)
+            .size(70.dp)
     ) {
-        Icon(imageVector = Icons.Rounded.Add, contentDescription = "fab")
-//        Icon(
-//            painter = painterResource(id = R.drawable.add_circle_outline_black_24dp),
-//            contentDescription = "fab",
-//            modifier = Modifier.width(56.dp).aspectRatio(1f)
-//        )
+        Icon(
+            painter = painterResource(id),
+            contentDescription = "fab",
+            modifier = Modifier.width(30.dp).aspectRatio(1f)
+        )
     }
 }
 
-@Composable
-fun BottomAppBar(navController: NavController): Unit {
-    BottomAppBar(
-        backgroundColor = Color.White
-    ) {
 
-        IconButton(onClick = { navController.navigate(AppScreen.Learn.name) }) {
-            Icon(painterResource(id = R.drawable.info_black_24dp), contentDescription = "Localized description")
-        }
-        FloatingActionButton(
-            onClick = { },
-            shape = MaterialTheme.shapes.large.copy(CornerSize(percent = 50))
-        ) {
-            Icon(imageVector = Icons.Rounded.Add, contentDescription = "fab")
-        }
-
-        IconButton(onClick = { navController.navigate(AppScreen.Settings.name) }) {
-            Icon(painterResource(id = R.drawable.settings_black_24dp), contentDescription = "Localized description")
-        }
-    }
-}

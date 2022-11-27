@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.theperiodpurse.calendar.CalendarScreen
-import com.example.theperiodpurse.cycle.CycleScreen
-import com.example.theperiodpurse.setting.SettingScreen
+import com.example.theperiodpurse.ui.calendar.CalendarScreen
+import com.example.theperiodpurse.ui.cycle.CycleScreenLayout
+import com.example.theperiodpurse.ui.setting.SettingScreen
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {
@@ -23,11 +23,11 @@ fun NavigationGraph(navController: NavHostController) {
         }
 
         composable(route = AppScreen.Cycle.name) {
-            CycleScreen()
+            CycleScreenLayout()
         }
 
         composable(route = AppScreen.Learn.name) {
-            CycleScreen()
+            CycleScreenLayout()
         }
     }
 }

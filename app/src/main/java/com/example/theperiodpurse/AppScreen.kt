@@ -5,13 +5,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
-import com.example.theperiodpurse.component.BottomNavigation
-import com.example.theperiodpurse.component.FloatingActionButton
+import com.example.theperiodpurse.ui.component.BottomNavigation
+import com.example.theperiodpurse.ui.component.FloatingActionButton
 
 enum class AppScreen() {
     Calendar,
@@ -40,10 +41,22 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun App(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    
+    var fabIcon by remember { mutableStateOf(R.drawable.add_circle_outline_black_24dp) }
+    var backgroundColor by remember {
+        mutableStateOf(Color(0xFFBF3428))
+    }
+    navController.addOnDestinationChangedListener { _, destination, _ ->
+        if (destination.route == AppScreen.Settings.name) {
+            fabIcon = R.drawable.add_black_24dp
+            backgroundColor = Color(0xFFBF3428)
+        } else {
+            fabIcon = R.drawable.today_black_24dp
+            backgroundColor = Color(0xFF72C6B7)
+        }
+    }
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(navController.currentDestination)
+            FloatingActionButton(fabIcon, backgroundColor)
         },
         bottomBar = {
             BottomNavigation(navController = navController)
@@ -51,21 +64,7 @@ fun App(modifier: Modifier = Modifier) {
 
         floatingActionButtonPosition = FabPosition.Center,
         isFloatingActionButtonDocked = true,
-//        bottomBar = { BottomAppBar(navController = navController) }
     ) {
         NavigationGraph(navController = navController)
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    ThePeriodPurseTheme {
-        Greeting("Android")
     }
 }

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">The Period Purse</string>
+    <string name="log_to_learn">Please start logging to learn more.</string>
+    <string name="current_cycle">Current cycle</string>
+    <string name="cycle_history">Cycle history</string>
+    <string name="avg_period_len">Average period length</string>
+    <string name="avg_cycle_len">Average cycle length</string>
 </resources>
