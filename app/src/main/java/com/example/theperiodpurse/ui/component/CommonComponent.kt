@@ -16,20 +16,20 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.theperiodpurse.Screen
 import com.example.theperiodpurse.R
-import com.example.theperiodpurse.ui.theme.Red100
-import com.example.theperiodpurse.ui.theme.Teal100
+import com.example.theperiodpurse.ui.theme.Red
+import com.example.theperiodpurse.ui.theme.Teal
 
 @Composable
 fun BottomNavigation(navController: NavController) {
     var fabIconId by remember { mutableStateOf(R.drawable.add_black_24dp) }
-    var fabBackgroundColor by remember { mutableStateOf(Red100) }
+    var fabBackgroundColor by remember { mutableStateOf(Red) }
     navController.addOnDestinationChangedListener { _, destination, _ ->
         if (destination.route == Screen.Calendar.name) {
             fabIconId = R.drawable.add_black_24dp
-            fabBackgroundColor = Red100
+            fabBackgroundColor = Red
         } else {
             fabIconId = R.drawable.today_black_24dp
-            fabBackgroundColor = Teal100
+            fabBackgroundColor = Teal
         }
     }
 
@@ -159,12 +159,12 @@ fun FloatingActionButton(
 @Preview
 @Composable
 fun BottomNavigationPreviewNonCalendar() {
-    BottomNavigationWithFAB({}, {}, {}, R.drawable.today_black_24dp, Teal100)
+    BottomNavigationWithFAB({}, {}, {}, R.drawable.today_black_24dp, Teal)
 }
 
 @Preview
 @Composable
 fun BottomNavigationPreviewCalendar() {
-    BottomNavigationWithFAB({}, {}, {}, R.drawable.add_black_24dp, Red100)
+    BottomNavigationWithFAB({}, {}, {}, R.drawable.add_black_24dp, Red)
 }
 
