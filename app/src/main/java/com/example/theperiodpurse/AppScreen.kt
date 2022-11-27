@@ -59,12 +59,6 @@ fun ScreenApp(
     navController: NavHostController = rememberNavController()
 
 ) {
-    // Get current back stack entry
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    // Get the name of the current screen
-    val currentScreen = OnboardingScreen.valueOf(
-        backStackEntry?.destination?.route ?: OnboardingScreen.Welcome.name
-    )
     Scaffold(
     ) { innerPadding ->
         val uiState by viewModel.uiState.collectAsState()
