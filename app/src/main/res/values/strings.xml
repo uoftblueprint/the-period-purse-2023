@@ -27,11 +27,6 @@
     <string name="new_account">New Account</string>
     <string name="lets_go">Let\'s go!</string>
     <string name="back_button">Back</string>
-    <string name="title_onboard_one">Average Period Length</string>
-    <string name="title_onboard_two">Last Period</string>
-    <string name="title_onboard_three">Symptoms To Log</string>
-    <string name="title_onboard_summary">Summary</string>
-    <string name="title_calendar_screen">Calendar</string>
     <plurals name="period_length">
         <item quantity="one">%d day</item>
         <item quantity="other">%d days</item>

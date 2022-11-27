@@ -15,7 +15,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.data.DataSource
 import com.example.theperiodpurse.ui.QuestionThreeScreen
@@ -41,13 +40,13 @@ fun Application() {
     ScreenApp()
 }
 
-enum class OnboardingScreen(@StringRes val title: Int) {
-    Welcome(title = R.string.app_name),
-    QuestionOne(title = R.string.title_onboard_one),
-    QuestionTwo(title = R.string.title_onboard_two),
-    QuestionThree(title = R.string.title_onboard_three),
-    Summary(title = R.string.title_onboard_summary),
-    Calendar(title = R.string.title_calendar_screen)
+enum class OnboardingScreen() {
+    Welcome,
+    QuestionOne,
+    QuestionTwo,
+    QuestionThree,
+    Summary,
+    Calendar
 
 
 }
