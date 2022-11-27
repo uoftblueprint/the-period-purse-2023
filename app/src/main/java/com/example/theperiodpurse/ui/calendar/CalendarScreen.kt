@@ -27,7 +27,8 @@ fun Tabs(tabs: List<CalendarTabItem>, pagerState: PagerState) {
             TabRowDefaults.Indicator(
                 Modifier.pagerTabIndicatorOffset(
                     pagerState,
-                    tabPositions)
+                    tabPositions),
+                color = Color(0xff5a9f93)
             )
         }
     ) {
