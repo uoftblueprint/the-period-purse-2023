@@ -15,6 +15,9 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Tabs(tabs: List<CalendarTabItem>, pagerState: PagerState) {
+    // Composable for tabs
+    // Tabs are displayed in ordered row by tabs list
+    // PagerState allows for navigation/animation between paginated layouts
     val scope = rememberCoroutineScope()
     TabRow(
         selectedTabIndex = pagerState.currentPage,
@@ -22,11 +25,12 @@ fun Tabs(tabs: List<CalendarTabItem>, pagerState: PagerState) {
         contentColor = Color.Black,
         indicator = { tabPositions ->
             TabRowDefaults.Indicator(
-                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
+                Modifier.pagerTabIndicatorOffset(
+                    pagerState,
+                    tabPositions)
             )
         }
     ) {
-
         tabs.forEachIndexed { index, tab ->
             Tab(
                 text = { Text(tab.title) },
@@ -54,6 +58,8 @@ fun TabsContent(tabs: List<CalendarTabItem>, pagerState: PagerState) {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun CalendarScreen() {
+    // Main calendar screen which allows navigation to cycle page and calendar
+    // By default, opens on to the Calendar
     val tabs = listOf(
         CalendarTabItem.CalendarTab,
         CalendarTabItem.CycleTab
@@ -72,11 +78,15 @@ fun CalendarScreen() {
 
 @Composable
 fun CalendarScreenLayout() {
+    // Contains the swippable content
     ThePeriodPurseTheme() {
-        Text("Calendar Screen Content")
+        Text(
+            text="Calendar Screen Content"
+        )
     }
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @Preview
 @Composable
 fun CalendarScreenPreview() {
