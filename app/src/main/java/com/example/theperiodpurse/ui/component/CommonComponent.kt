@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -26,10 +27,38 @@ import com.example.theperiodpurse.R
 fun BottomNavigation(navController: NavController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    Box() {
+    BottomNavigation_(
+        onInfoNavigationClicked = {
+            navController.navigate(AppScreen.Learn.name) {
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+        },
+        onSettingsNavigationClicked = {
+            navController.navigate(AppScreen.Settings.name) {
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+        }
+    )
+}
 
+@Composable
+private fun BottomNavigation_(
+        onInfoNavigationClicked: () -> Unit,
+        onSettingsNavigationClicked: () -> Unit,
+        modifier: Modifier = Modifier
+    ) {
+    Box() {
         BottomNavigation(
             backgroundColor = Color.White,
+            modifier = modifier
         ) {
 
             BottomNavigationItem(
@@ -40,16 +69,8 @@ fun BottomNavigation(navController: NavController) {
                     )
                 },
                 label = { Text(AppScreen.Learn.name) },
-                selected = currentDestination?.hierarchy?.any { it.route == AppScreen.Settings.name } == true,
-                onClick = {
-                    navController.navigate(AppScreen.Learn.name) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
+                selected = false,
+                onClick = onInfoNavigationClicked,
             )
 
             BottomNavigationItem(
@@ -69,16 +90,9 @@ fun BottomNavigation(navController: NavController) {
                     )
                 },
                 label = { Text(AppScreen.Settings.name) },
-                selected = currentDestination?.hierarchy?.any { it.route == AppScreen.Settings.name } == true,
-                onClick = {
-                    navController.navigate(AppScreen.Settings.name) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
+//                selected = currentDestination?.hierarchy?.any { it.route == AppScreen.Settings.name } == true,
+                selected = false,
+                onClick = onSettingsNavigationClicked,
             )
         }
     }
@@ -107,9 +121,17 @@ fun FloatingActionButton(navController: NavController, id: Int, backgroundColor:
         Icon(
             painter = painterResource(id),
             contentDescription = "fab",
-            modifier = Modifier.width(30.dp).aspectRatio(1f)
+            modifier = Modifier
+                .width(30.dp)
+                .aspectRatio(1f)
         )
     }
+}
+
+@Preview
+@Composable
+fun BottomNavigationPreview() {
+    BottomNavigation_({}, {})
 }
 
 
