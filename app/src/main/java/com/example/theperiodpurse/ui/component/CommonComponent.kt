@@ -85,10 +85,18 @@ fun BottomNavigation(navController: NavController) {
 }
 
 @Composable
-fun FloatingActionButton(id: Int, backgroundColor: Color) {
+fun FloatingActionButton(navController: NavController, id: Int, backgroundColor: Color) {
     val circle = MaterialTheme.shapes.large.copy(CornerSize(percent = 50))
     FloatingActionButton(
-        onClick = { },
+        onClick = {
+            navController.navigate(AppScreen.Calendar.name) {
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+        },
         shape = circle,
         contentColor = Color.White,
         backgroundColor = backgroundColor,

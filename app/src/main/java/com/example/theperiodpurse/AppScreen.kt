@@ -46,7 +46,7 @@ fun App(modifier: Modifier = Modifier) {
         mutableStateOf(Color(0xFFBF3428))
     }
     navController.addOnDestinationChangedListener { _, destination, _ ->
-        if (destination.route == AppScreen.Settings.name) {
+        if (destination.route == AppScreen.Calendar.name) {
             fabIcon = R.drawable.add_black_24dp
             backgroundColor = Color(0xFFBF3428)
         } else {
@@ -56,7 +56,7 @@ fun App(modifier: Modifier = Modifier) {
     }
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(fabIcon, backgroundColor)
+            FloatingActionButton(navController, fabIcon, backgroundColor)
         },
         bottomBar = {
             BottomNavigation(navController = navController)
