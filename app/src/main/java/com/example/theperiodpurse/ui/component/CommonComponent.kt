@@ -21,19 +21,19 @@ import com.example.theperiodpurse.ui.theme.Teal100
 
 @Composable
 fun BottomNavigation(navController: NavController) {
-    var fabIcon by remember { mutableStateOf(R.drawable.add_circle_outline_black_24dp) }
+    var fabIconId by remember { mutableStateOf(R.drawable.add_circle_outline_black_24dp) }
     var fabBackgroundColor by remember { mutableStateOf(Red100) }
     navController.addOnDestinationChangedListener { _, destination, _ ->
         if (destination.route == Screen.Calendar.name) {
-            fabIcon = R.drawable.add_black_24dp
+            fabIconId = R.drawable.add_black_24dp
             fabBackgroundColor = Red100
         } else {
-            fabIcon = R.drawable.today_black_24dp
+            fabIconId = R.drawable.today_black_24dp
             fabBackgroundColor = Teal100
         }
     }
 
-    BottomNavigation_(
+    BottomNavigationWithFAB(
         onInfoNavigationClicked = {
             navController.navigate(Screen.Learn.name) {
                 popUpTo(navController.graph.findStartDestination().id) {
@@ -53,29 +53,35 @@ fun BottomNavigation(navController: NavController) {
             }
         },
         onFABClicked = {
-            navController.navigate(Screen.Calendar.name) {
-                popUpTo(navController.graph.findStartDestination().id) {
-                    saveState = true
+            if (navController.currentDestination?.route == Screen.Calendar.name) {
+                /* TODO onAddActionClicked */
+            } else {
+                navController.navigate(Screen.Calendar.name) {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
                 }
-                launchSingleTop = true
-                restoreState = true
             }
         },
-        fabIcon = fabIcon,
+        fabIconId = fabIconId,
         fabBackgroundColor = fabBackgroundColor
     )
 }
 
 @Composable
-private fun BottomNavigation_(
+private fun BottomNavigationWithFAB(
     onInfoNavigationClicked: () -> Unit,
     onSettingsNavigationClicked: () -> Unit,
     onFABClicked: () -> Unit,
-    fabIcon: Int,
+    fabIconId: Int,
     fabBackgroundColor: Color,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navItemModifier: Modifier = Modifier,
+    fabModifier: Modifier = Modifier
 ) {
-    Box() {
+    Box {
         BottomNavigation(
             backgroundColor = Color.White,
             modifier = modifier.align(Alignment.BottomCenter)
@@ -91,13 +97,10 @@ private fun BottomNavigation_(
                 label = { Text(Screen.Learn.name) },
                 selected = false,
                 onClick = onInfoNavigationClicked,
+                modifier = navItemModifier
             )
 
-
-            BottomNavigationItem(
-                icon = {}, label = null, selected = false, onClick = {},
-                enabled = false, modifier = Modifier.weight(0.35f)
-            )
+            Spacer(modifier = modifier.width(58.dp))
 
             BottomNavigationItem(
                 icon = {
@@ -109,14 +112,15 @@ private fun BottomNavigation_(
                 label = { Text(Screen.Settings.name) },
                 selected = false,
                 onClick = onSettingsNavigationClicked,
+                modifier = navItemModifier
             )
         }
 
         FloatingActionButton(
             onClick = onFABClicked,
-            id = fabIcon,
+            iconId = fabIconId,
             backgroundColor = fabBackgroundColor,
-            modifier = Modifier
+            modifier = fabModifier
                 .align(Alignment.BottomCenter)
                 .padding(15.dp)
         )
@@ -127,22 +131,23 @@ private fun BottomNavigation_(
 @Composable
 fun FloatingActionButton(
     onClick: () -> Unit,
-    id: Int,
+    iconId: Int,
     backgroundColor: Color,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    contentColor: Color = Color.White
 ) {
     val circle = MaterialTheme.shapes.large.copy(CornerSize(percent = 50))
     FloatingActionButton(
         onClick = onClick,
         shape = circle,
-        contentColor = Color.White,
+        contentColor = contentColor,
         backgroundColor = backgroundColor,
         modifier = modifier
             .border(color = Color.White, width = 2.dp, shape = circle)
             .size(70.dp)
     ) {
         Icon(
-            painter = painterResource(id),
+            painter = painterResource(iconId),
             contentDescription = "fab",
             modifier = Modifier
                 .width(30.dp)
@@ -154,12 +159,12 @@ fun FloatingActionButton(
 @Preview
 @Composable
 fun BottomNavigationPreviewNonCalendar() {
-    BottomNavigation_({}, {}, {}, R.drawable.today_black_24dp, Teal100)
+    BottomNavigationWithFAB({}, {}, {}, R.drawable.today_black_24dp, Teal100)
 }
 
 @Preview
 @Composable
 fun BottomNavigationPreviewCalendar() {
-    BottomNavigation_({}, {}, {}, R.drawable.add_black_24dp, Red100)
+    BottomNavigationWithFAB({}, {}, {}, R.drawable.add_black_24dp, Red100)
 }
 
