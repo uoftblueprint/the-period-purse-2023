@@ -15,6 +15,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.theperiodpurse.R
 
@@ -33,7 +35,8 @@ fun SettingScreenLayout(
            text = stringResource(R.string.tracking_preferences),
            modifier = modifier.padding(
                top = 50.dp,
-               start = 10.dp)
+               start = 10.dp),
+           color = Color.Gray
        )
 
        TrackingPreferencesRow()
@@ -41,12 +44,15 @@ fun SettingScreenLayout(
            text = stringResource(R.string.notifications_heading),
            modifier = modifier.padding(
                top = 50.dp,
-               start = 10.dp)
+               start = 10.dp),
+           color = Color.Gray
        )
        Row(modifier = modifier.padding(20.dp)) {
            var checked by remember { mutableStateOf(false) }
            Column (modifier = Modifier) {
-               Text(text = stringResource(R.string.remind_me_to_log_symptoms))
+               Text(text = stringResource(
+                   R.string.remind_me_to_log_symptoms),
+                   fontWeight = FontWeight.Bold)
                Spacer(modifier = modifier.padding(3.dp))
                Text(text = stringResource(R.string.sample_notification))
            }
@@ -69,7 +75,8 @@ fun SettingScreenLayout(
            text = stringResource(R.string.account_settings_heading),
            modifier = modifier.padding(
                top = 50.dp,
-               start = 10.dp)
+               start = 10.dp),
+           color = Color.Gray
        )
        TabOption(
            text = stringResource(R.string.back_up_account),
@@ -153,7 +160,9 @@ fun TabOption(text: String, onTabClicked: () -> Unit){
                 horizontalArrangement = Arrangement.SpaceBetween) {
                 Text(
                     modifier = Modifier.weight(1f),
-                    text = text)
+                    text = text,
+                    fontWeight = FontWeight.Bold
+                )
                 Icon(
                     imageVector = Icons.Filled.KeyboardArrowRight,
                     contentDescription = "arrow",
