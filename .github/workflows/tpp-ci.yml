@@ -32,6 +32,8 @@ jobs:
       run: gradle wrapper
     - name: Run Test
       run: gradle clean test
+    - name: Run Instrumental Android Tests
+      run: gradle clean connectedAndroidTest
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2
       with:
