@@ -36,6 +36,8 @@ jobs:
       uses: reactivecircus/android-emulator-runner@v2
       with:
         api-level: 33
+        arch: x86_64
+        target: google_apis
         script: ./gradlew clean connectedAndroidTest
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2
