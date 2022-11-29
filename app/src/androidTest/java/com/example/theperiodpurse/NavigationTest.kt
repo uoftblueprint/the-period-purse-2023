@@ -2,6 +2,7 @@ package com.example.theperiodpurse
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -54,7 +55,7 @@ class NavigationTest {
     @Test
     fun appNavHost_clickCalendarFABOnSettingsScreen_navigatesToCalendarScreen() {
         navigateToSettingsScreen()
-        composeTestRule.onNodeWithContentDescription("fab")
+        composeTestRule.onNodeWithContentDescription("Navigate to Calendar page")
             .performClick()
         navController.assertCurrentRouteName(Screen.Calendar.name)
     }
@@ -62,7 +63,7 @@ class NavigationTest {
     @Test
     fun appNavHost_clickCalendarFABOnInfoScreen_navigatesToCalendarScreen() {
         navigateToInfoScreen()
-        composeTestRule.onNodeWithContentDescription("fab")
+        composeTestRule.onNodeWithContentDescription("Navigate to Calendar page")
             .performClick()
         navController.assertCurrentRouteName(Screen.Calendar.name)
     }

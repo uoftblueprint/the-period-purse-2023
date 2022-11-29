@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -23,13 +24,16 @@ import com.example.theperiodpurse.ui.theme.Teal
 fun BottomNavigation(navController: NavController) {
     var fabIconId by remember { mutableStateOf(R.drawable.add_black_24dp) }
     var fabBackgroundColor by remember { mutableStateOf(Red) }
+    var fabContentDescriptionId by remember { mutableStateOf(R.string.fab_to_calendar) }
     navController.addOnDestinationChangedListener { _, destination, _ ->
         if (destination.route == Screen.Calendar.name) {
             fabIconId = R.drawable.add_black_24dp
             fabBackgroundColor = Red
+            fabContentDescriptionId = R.string.fab_see_log_options
         } else {
             fabIconId = R.drawable.today_black_24dp
             fabBackgroundColor = Teal
+            fabContentDescriptionId = R.string.fab_to_calendar
         }
     }
 
@@ -66,7 +70,8 @@ fun BottomNavigation(navController: NavController) {
             }
         },
         fabIconId = fabIconId,
-        fabBackgroundColor = fabBackgroundColor
+        fabBackgroundColor = fabBackgroundColor,
+        fabContentDescription = stringResource(id = fabContentDescriptionId)
     )
 }
 
@@ -77,6 +82,7 @@ private fun BottomNavigationWithFAB(
     onFABClicked: () -> Unit,
     fabIconId: Int,
     fabBackgroundColor: Color,
+    fabContentDescription: String,
     modifier: Modifier = Modifier,
     navItemModifier: Modifier = Modifier,
     fabModifier: Modifier = Modifier
@@ -119,6 +125,7 @@ private fun BottomNavigationWithFAB(
         FloatingActionButton(
             onClick = onFABClicked,
             iconId = fabIconId,
+            contentDescription = fabContentDescription,
             backgroundColor = fabBackgroundColor,
             modifier = fabModifier
                 .align(Alignment.BottomCenter)
@@ -132,6 +139,7 @@ private fun BottomNavigationWithFAB(
 fun FloatingActionButton(
     onClick: () -> Unit,
     iconId: Int,
+    contentDescription: String,
     backgroundColor: Color,
     modifier: Modifier = Modifier,
     contentColor: Color = Color.White
@@ -148,7 +156,7 @@ fun FloatingActionButton(
     ) {
         Icon(
             painter = painterResource(iconId),
-            contentDescription = "fab",
+            contentDescription = contentDescription,
             modifier = Modifier
                 .width(30.dp)
                 .aspectRatio(1f)
@@ -159,12 +167,19 @@ fun FloatingActionButton(
 @Preview
 @Composable
 fun BottomNavigationPreviewNonCalendar() {
-    BottomNavigationWithFAB({}, {}, {}, R.drawable.today_black_24dp, Teal)
+    BottomNavigationWithFAB({}, {}, {},
+        fabIconId = R.drawable.today_black_24dp,
+        fabBackgroundColor = Teal,
+        fabContentDescription = stringResource(id = R.string.fab_to_calendar))
 }
 
 @Preview
 @Composable
 fun BottomNavigationPreviewCalendar() {
-    BottomNavigationWithFAB({}, {}, {}, R.drawable.add_black_24dp, Red)
+    BottomNavigationWithFAB({}, {}, {},
+        fabIconId = R.drawable.add_black_24dp,
+        fabBackgroundColor = Red,
+        fabContentDescription = stringResource(id = R.string.fab_to_calendar)
+    )
 }
 
