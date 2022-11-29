@@ -33,7 +33,10 @@ jobs:
     - name: Run Test
       run: gradle clean test
     - name: Run Instrumental Android Tests
-      run: gradle clean connectedAndroidTest
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 33
+        script: ./gradle clean connectedAndroidTest
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2
       with:
