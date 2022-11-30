@@ -30,9 +30,19 @@ jobs:
         distribution: 'temurin'
     - name: Run gradle wrapper
       run: gradle wrapper
-    - name: Run Test
-      run: gradle clean test
+
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2
       with:
         arguments: build
+
+    - name: Run Test
+      run: ./gradle test
+
+    - name: Run Instrumental Tests
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 33
+        arch: x86_64
+        target: google_apis
+        script: ./gradlew connectedAndroidTest
