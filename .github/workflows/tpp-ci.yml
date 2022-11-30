@@ -37,7 +37,7 @@ jobs:
         arguments: build
 
     - name: Run Test
-      run: ./gradle test
+      run: ./gradlew test
 
     - name: Run Instrumental Tests
       uses: reactivecircus/android-emulator-runner@v2
