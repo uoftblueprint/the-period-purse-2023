@@ -1,6 +1,10 @@
 package com.example.theperiodpurse.ui.setting
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -8,7 +12,9 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -54,12 +60,9 @@ fun SettingAppBar(
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
-//    viewModel: OrderViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
-    // Get current back stack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
-    // Get the name of the current screen
     val currentScreen = SettingScreenNavigation.valueOf(
         backStackEntry?.destination?.route ?: SettingScreenNavigation.Start.name
     )
@@ -73,7 +76,12 @@ fun SettingsScreen(
             )
         }
     ) { innerPadding ->
-//        val uiState by viewModel.uiState.collectAsState()
+        Image(
+            painter = painterResource(id = R.drawable.background),
+            contentDescription = null,
+            modifier = Modifier.fillMaxWidth().fillMaxHeight().fillMaxSize(),
+            contentScale = ContentScale.FillBounds
+        )
 
         NavHost(
             navController = navController,
@@ -94,14 +102,12 @@ fun SettingsScreen(
                 )
             }
             composable(route = SettingScreenNavigation.Notification.name) {
-//                val context = LocalContext.current
                 NotificationsScreen()
             }
             composable(route = SettingScreenNavigation.BackUpAccount.name) {
                 BackUpAccountScreen()
             }
             composable(route = SettingScreenNavigation.DeleteAccount.name) {
-                val context = LocalContext.current
                 DeleteAccountScreen()
             }
         }
