@@ -1,23 +1,32 @@
 package com.example.theperiodpurse.ui.calendar
 
 import android.os.Build
+import android.view.RoundedCorner
 // import android.os.Bundle
 // import androidx.activity.ComponentActivity
 // import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.theperiodpurse.R
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import com.google.accompanist.pager.*
 import com.kizitonwose.calendar.compose.VerticalCalendar
@@ -98,8 +107,10 @@ fun CalendarScreen() {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarScreenLayout() {
-    // Contains the swippable content
+    // Contains the swappable content
     ThePeriodPurseTheme() {
+        val bg = painterResource(R.drawable.colourwatercolour)
+
         val currentMonth = remember { YearMonth.now() }
         val startMonth = remember { currentMonth.minusMonths(12) } // Previous months
         val endMonth = remember { currentMonth.plusMonths(0) } // Next months
@@ -112,15 +123,21 @@ fun CalendarScreenLayout() {
             firstDayOfWeek = firstDayOfWeek
         )
 
-        Column {
-            VerticalCalendar(
-                state = state,
-                dayContent = { Day(it) },
-                monthHeader = { month ->
-                    MonthHeader(month) }
+        Box() {
+            Image(painter = bg,
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillBounds,
             )
+            Column() {
+                VerticalCalendar(
+                    state = state,
+                    dayContent = { Day(it) },
+                    monthHeader = { month ->
+                        MonthHeader(month) }
+                )
+            }
         }
-
     }
 }
 
@@ -130,18 +147,32 @@ fun CalendarScreenLayout() {
 fun Day(day: CalendarDay) {
     Box(
         modifier = Modifier
-            .padding(8.dp)
+            .padding(1.dp)
             .aspectRatio(1f),
         contentAlignment = Alignment.Center,
-
-        ) {
-        Text(
-            text = if (day.position == DayPosition.MonthDate) {
-                day.date.dayOfMonth.toString()
-            } else {
-                ""
-            }
         )
+    {
+        if (day.position == DayPosition.MonthDate) {
+            Box(
+                modifier = Modifier
+                    .size(54.dp)
+                    .clip(shape = RoundedCornerShape(6.dp))
+//                    .padding(1.dp)
+                    .fillMaxSize()
+                    .background(Color.White)
+                    .border(
+                        color = Color.Gray,
+                        width = 1.dp,
+                        shape = RoundedCornerShape(6.dp)
+                    ),
+                contentAlignment = Alignment.TopStart,
+            ) {
+                Text(modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp),
+                    fontSize = 14.sp,
+                    text = day.date.dayOfMonth.toString()
+                )
+            }
+        }
     }
 }
 
@@ -153,15 +184,15 @@ fun MonthHeader(calendarMonth: CalendarMonth) {
     val daysOfWeek = calendarMonth.weekDays.first().map { it.date.dayOfWeek }
     Column(
         modifier = Modifier
-            .padding(8.dp),
+            .padding(vertical = 5.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
 
         // Month
         Text(
-            modifier = Modifier.padding(24.dp),
+            modifier = Modifier.padding(12.dp),
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Medium,
-            fontSize = 18.sp,
+            fontSize = 15.sp,
             text = calendarMonth.yearMonth.displayText()
         )
 
@@ -171,7 +202,7 @@ fun MonthHeader(calendarMonth: CalendarMonth) {
                 Text(
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Medium,
                     fontSize = 12.sp,
                     text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
                 )
