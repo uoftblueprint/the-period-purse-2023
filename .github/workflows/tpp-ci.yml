@@ -36,37 +36,12 @@ jobs:
       with:
         arguments: build
 
-    - name: AVD cache
-      uses: actions/cache@v3
-      id: avd-cache
-      with:
-        path: |
-          ~/.android/avd/*
-          ~/.android/adb*
-        key: avd-33
-
-    - name: create AVD and generate snapshot for caching
-      if: steps.avd-cache.outputs.cache-hit != 'true'
-      uses: reactivecircus/android-emulator-runner@v2
-      with:
-        api-level: 33
-        arch: x86_64
-        target: google_apis
-        force-avd-creation: false
-        emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-        disable-animations: false
-        script: echo "Generated AVD snapshot for caching."
-
     - name: Run Test
       run: ./gradlew test
 
     - name: Run Instrumental Tests
       uses: reactivecircus/android-emulator-runner@v2
       with:
-        api-level: 33
-        arch: x86_64
-        force-avd-creation: false
-        emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+        api-level: 29
         disable-animations: true
-        target: google_apis
         script: ./gradlew connectedAndroidTest
