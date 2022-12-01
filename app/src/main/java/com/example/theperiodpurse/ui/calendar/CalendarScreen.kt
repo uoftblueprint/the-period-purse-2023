@@ -6,6 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import com.google.accompanist.pager.*
@@ -82,7 +84,9 @@ fun CalendarScreenLayout() {
     // Contains the swippable content
     ThePeriodPurseTheme() {
         Text(
-            text="Calendar Screen Content"
+            text="Calendar Screen Content",
+            modifier = Modifier
+                .semantics { contentDescription = "Calendar Page" } // keep somewhere for testing
         )
     }
 }
