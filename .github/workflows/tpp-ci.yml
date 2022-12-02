@@ -31,8 +31,10 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         arguments: build
+        cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/test-github-actions-with-emulator' }}
   
   unit-tests:
+    name: Unit Tests
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -49,6 +51,7 @@ jobs:
       run: ./gradlew test
 
   instrumental-tests:
+    name: Instrumental Tests
     runs-on: macOS-latest
     strategy:
       matrix:
