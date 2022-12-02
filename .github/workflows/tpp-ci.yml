@@ -31,9 +31,7 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         arguments: build
-        cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/test-github-actions-with-emulator' }}
-    - name:
-      run: echo ${{ github.ref }}
+        cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/pull/34/merge' }}
   
   unit-tests:
     name: Unit Tests
