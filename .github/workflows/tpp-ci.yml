@@ -32,7 +32,8 @@ jobs:
       with:
         arguments: build
         cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/test-github-actions-with-emulator' }}
-    - run: echo ${{ github.ref }} 
+    - name:
+      run: echo ${{ github.ref }}
   
   unit-tests:
     name: Unit Tests
