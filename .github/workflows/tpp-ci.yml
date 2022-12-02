@@ -65,6 +65,9 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
 
+    - name: Gradle cache
+      uses: gradle/gradle-build-action@v2
+
     - name: AVD cache
       uses: actions/cache@v3
       id: avd-cache
