@@ -18,6 +18,7 @@ permissions:
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -31,7 +32,7 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         arguments: build
-        cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/pull/34/merge' }}
+        cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
   
   unit-tests:
     name: Unit Tests
@@ -44,8 +45,6 @@ jobs:
         distribution: 'temurin'
     - name: Build with Gradle 
       uses: gradle/gradle-build-action@v2
-      with:
-        arguments: build
 
     - name: Run Test
       run: ./gradlew test
