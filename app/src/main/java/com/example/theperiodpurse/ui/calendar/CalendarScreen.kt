@@ -1,7 +1,6 @@
 package com.example.theperiodpurse.ui.calendar
 
 import android.os.Build
-import android.view.RoundedCorner
 // import android.os.Bundle
 // import androidx.activity.ComponentActivity
 // import androidx.activity.compose.setContent
@@ -9,12 +8,11 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +35,7 @@ import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.*
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 
 @OptIn(ExperimentalPagerApi::class)
@@ -93,7 +92,7 @@ fun CalendarScreen() {
         CalendarTabItem.CycleTab
     )
     val pagerState = rememberPagerState()
-    ThePeriodPurseTheme() {
+    ThePeriodPurseTheme {
         Scaffold (topBar = {})
         { padding ->
             Column(modifier = Modifier.padding(padding)) {
@@ -108,9 +107,10 @@ fun CalendarScreen() {
 @Composable
 fun CalendarScreenLayout() {
     // Contains the swappable content
-    ThePeriodPurseTheme() {
+    ThePeriodPurseTheme {
         val bg = painterResource(R.drawable.colourwatercolour)
 
+        var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
         val currentMonth = remember { YearMonth.now() }
         val startMonth = remember { currentMonth.minusMonths(12) } // Previous months
         val endMonth = remember { currentMonth.plusMonths(0) } // Next months
@@ -123,18 +123,22 @@ fun CalendarScreenLayout() {
             firstDayOfWeek = firstDayOfWeek
         )
 
-        Box() {
+        Box {
             Image(painter = bg,
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.FillBounds,
             )
-            Column() {
+            Column {
                 VerticalCalendar(
                     state = state,
-                    dayContent = { Day(it) },
                     monthHeader = { month ->
-                        MonthHeader(month) }
+                        MonthHeader(month) },
+                    dayContent = { day ->
+                        Day(day, isSelected = selectedDate == day.date) { day ->
+                            selectedDate = if (selectedDate == day.date) null else day.date
+                        }
+                    }
                 )
             }
         }
@@ -144,7 +148,10 @@ fun CalendarScreenLayout() {
 // Creates the days
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Day(day: CalendarDay) {
+fun Day(day: CalendarDay,
+        isSelected: Boolean,
+        onClick: (CalendarDay) -> Unit
+) {
     Box(
         modifier = Modifier
             .padding(1.dp)
@@ -157,13 +164,16 @@ fun Day(day: CalendarDay) {
                 modifier = Modifier
                     .size(54.dp)
                     .clip(shape = RoundedCornerShape(6.dp))
-//                    .padding(1.dp)
                     .fillMaxSize()
-                    .background(Color.White)
+                    .background(color = if (isSelected) Color.Green else Color.White)
                     .border(
                         color = Color.Gray,
                         width = 1.dp,
                         shape = RoundedCornerShape(6.dp)
+                    )
+                    .clickable(
+                        enabled = day.position == DayPosition.MonthDate,
+                        onClick = { onClick(day) }
                     ),
                 contentAlignment = Alignment.TopStart,
             ) {
@@ -211,28 +221,28 @@ fun MonthHeader(calendarMonth: CalendarMonth) {
     }
 }
 
-// Function to display Month with Year (To be put in a utils folder)
+// Function to display Month with Year
 @RequiresApi(Build.VERSION_CODES.O)
 fun YearMonth.displayText(short: Boolean = false): String {
     return "${this.month.displayText(short = short)} ${this.year}"
 }
 
-// Function to display Month (To be put in utils folder)
+// Function to display Month
 @RequiresApi(Build.VERSION_CODES.O)
 fun Month.displayText(short: Boolean = true): String {
     val style = if (short) TextStyle.SHORT else TextStyle.FULL
     return getDisplayName(style, Locale.ENGLISH)
 }
 
-@OptIn(ExperimentalPagerApi::class)
+
+//@OptIn(ExperimentalPagerApi::class)
 @Preview
 @Composable
 fun CalendarScreenPreview() {
-    ThePeriodPurseTheme() {
+    ThePeriodPurseTheme {
         CalendarScreen()
     }
 }
-
 
 @OptIn(ExperimentalPagerApi::class)
 @Preview(showBackground = true)
