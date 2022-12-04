@@ -1,43 +1,54 @@
 package com.example.theperiodpurse
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import com.example.theperiodpurse.ui.onboarding.*
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
+import com.example.theperiodpurse.ui.component.BottomNavigation
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ThePeriodPurseTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    Greeting("Android")
-                }
+                Application()
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
+fun Application() {
+    ScreenApp()
 }
 
-@Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
-    ThePeriodPurseTheme {
-        Greeting("Android")
+fun ScreenApp(
+    modifier: Modifier = Modifier,
+    viewModel: OnboardViewModel = viewModel(),
+    navController: NavHostController = rememberNavController()
+) {
+    Scaffold(
+        bottomBar = {
+            if (currentRoute(navController) in Screen.values().map{ it.name }) {
+                BottomNavigation(navController = navController)
+            }
+        }
+    ) { innerPadding ->
+        NavigationGraph(
+            navController = navController,
+            startDestination = OnboardingScreen.Welcome.name,
+            viewModel,
+            modifier = modifier.padding(innerPadding)
+        )
     }
 }
