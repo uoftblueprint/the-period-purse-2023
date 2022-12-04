@@ -38,8 +38,10 @@ fun ScreenApp(
 ) {
     Scaffold(
         bottomBar = {
-            BottomNavigation(navController = navController)
-        },
+            if (!OnboardingScreen.values().any { currentRoute(navController) == it.name }) {
+                BottomNavigation(navController = navController)
+            }
+        }
     ) { innerPadding ->
         NavigationGraph(
             navController = navController,

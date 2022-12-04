@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.theperiodpurse.data.DataSource
 import com.example.theperiodpurse.ui.QuestionThreeScreen
 import com.example.theperiodpurse.ui.SummaryScreen
@@ -117,4 +118,10 @@ private fun cancelOrderAndNavigateToStart(
 ) {
     viewModel.resetOrder()
     navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = false)
+}
+
+@Composable
+fun currentRoute(navController: NavHostController): String? {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    return navBackStackEntry?.destination?.route
 }
