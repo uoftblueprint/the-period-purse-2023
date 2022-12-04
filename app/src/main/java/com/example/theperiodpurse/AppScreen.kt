@@ -21,6 +21,7 @@ import com.example.theperiodpurse.ui.QuestionThreeScreen
 import com.example.theperiodpurse.ui.SummaryScreen
 import com.example.theperiodpurse.ui.cycle.CycleScreenLayout
 import com.example.theperiodpurse.ui.onboarding.*
+import com.example.theperiodpurse.ui.setting.*
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 
 class MainActivity : ComponentActivity() {
@@ -28,8 +29,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ThePeriodPurseTheme {
-                Application()
-
+//                Application()
+                SettingsScreen()
             }
         }
     }
@@ -110,6 +111,29 @@ fun ScreenApp(
             composable(route = OnboardingScreen.Calendar.name) {
                 CycleScreenLayout(
                 )
+            }
+
+            composable(route = SettingScreenNavigation.Start.name) {
+                SettingScreenLayout(
+                    onNotificationClicked = {
+                        navController.navigate(SettingScreenNavigation.Notification.name)
+                    },
+                    onBackUpClicked = {
+                        navController.navigate(SettingScreenNavigation.BackUpAccount.name)
+                    },
+                    onDeleteClicked = {
+                        navController.navigate(SettingScreenNavigation.DeleteAccount.name)
+                    },
+                )
+            }
+            composable(route = SettingScreenNavigation.Notification.name) {
+                NotificationsScreen()
+            }
+            composable(route = SettingScreenNavigation.BackUpAccount.name) {
+                BackUpAccountScreen()
+            }
+            composable(route = SettingScreenNavigation.DeleteAccount.name) {
+                DeleteAccountScreen()
             }
 
 
