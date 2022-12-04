@@ -3,7 +3,6 @@ package com.example.theperiodpurse
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
@@ -37,6 +36,10 @@ class NavigationTest {
         composeTestRule.onNodeWithStringId(R.string.customize_notifications)
             .performClick()
         navController.assertCurrentRouteName(SettingScreenNavigation.Notification.name)
+        composeTestRule.activityRule.scenario.onActivity { activity ->
+            activity.onBackPressedDispatcher.onBackPressed()
+        }
+        navController.assertCurrentRouteName(SettingScreenNavigation.Start.name)
     }
 
     @Test
