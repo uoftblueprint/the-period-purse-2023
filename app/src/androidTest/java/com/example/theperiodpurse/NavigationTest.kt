@@ -30,8 +30,17 @@ class NavigationTest {
         }
     }
 
+    private fun skipAllOnboardingScreens() {
+        composeTestRule.onNodeWithText("Quick Start").performClick()
+        for (i in 1..3) {
+            composeTestRule.onNodeWithText("Skip").performClick()
+        }
+        composeTestRule.onNodeWithText("Let's go!").performClick()
+    }
+
     @Test
-    fun appNavhost_clickSettings_navigatesToSettingsScreen() {
+    fun appNavHost_clickSettings_navigatesToSettingsScreen() {
+        skipAllOnboardingScreens()
         composeTestRule.onNodeWithText(Screen.Settings.name)
             .performClick()
         navController.assertCurrentRouteName(Screen.Settings.name)
@@ -42,7 +51,8 @@ class NavigationTest {
     }
 
     @Test
-    fun appNavhost_clickSettings_navigatesToInfoScreen() {
+    fun appNavHost_clickSettings_navigatesToInfoScreen() {
+        skipAllOnboardingScreens()
         composeTestRule.onNodeWithText(Screen.Learn.name)
             .performClick()
         navController.assertCurrentRouteName(Screen.Learn.name)
@@ -54,6 +64,7 @@ class NavigationTest {
 
     @Test
     fun appNavHost_clickCalendarFABOnSettingsScreen_navigatesToCalendarScreen() {
+        skipAllOnboardingScreens()
         navigateToSettingsScreen()
         composeTestRule.onNodeWithContentDescription("Navigate to Calendar page")
             .performClick()
@@ -62,6 +73,7 @@ class NavigationTest {
 
     @Test
     fun appNavHost_clickCalendarFABOnInfoScreen_navigatesToCalendarScreen() {
+        skipAllOnboardingScreens()
         navigateToInfoScreen()
         composeTestRule.onNodeWithContentDescription("Navigate to Calendar page")
             .performClick()

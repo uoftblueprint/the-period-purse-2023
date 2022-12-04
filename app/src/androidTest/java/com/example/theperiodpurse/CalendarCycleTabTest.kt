@@ -28,8 +28,16 @@ class CalendarCycleTabTest {
         }
     }
 
+    private fun skipAllOnboardingScreens() {
+        composeTestRule.onNodeWithText("Quick Start").performClick()
+        for (i in 1..3) {
+            composeTestRule.onNodeWithText("Skip").performClick()
+        }
+        composeTestRule.onNodeWithText("Let's go!").performClick()
+    }
 
     private fun navigateToCalendarScreen() {
+        skipAllOnboardingScreens()
         composeTestRule.onNodeWithContentDescription("Navigate to Calendar page")
             .performClick()
     }
