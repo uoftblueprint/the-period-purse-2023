@@ -1,6 +1,7 @@
 package com.example.theperiodpurse
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.ui.Modifier
@@ -38,7 +39,7 @@ fun ScreenApp(
 ) {
     Scaffold(
         bottomBar = {
-            if (!OnboardingScreen.values().any { currentRoute(navController) == it.name }) {
+            if (currentRoute(navController) in Screen.values().map{ it.name }) {
                 BottomNavigation(navController = navController)
             }
         }
