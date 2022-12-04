@@ -24,7 +24,7 @@ class CalendarCycleTabTest {
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
-            ScreenApp(navController = navController)
+            ScreenApp(navController = navController, skipOnboarding = true)
         }
     }
 

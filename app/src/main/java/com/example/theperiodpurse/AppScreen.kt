@@ -27,37 +27,14 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Application() {
-    ScreenAppWithOnboarding()
+    ScreenApp()
 }
-
-@Composable
-fun ScreenAppWithOnboarding(
-    modifier: Modifier = Modifier,
-    viewModel: OnboardViewModel = viewModel(),
-    navController: NavHostController = rememberNavController()
-) {
-    Scaffold(
-        bottomBar = {
-            if (currentRoute(navController) in Screen.values().map{ it.name }) {
-                BottomNavigation(navController = navController)
-            }
-        }
-    ) { innerPadding ->
-        NavigationGraph(
-            navController = navController,
-            startDestination = OnboardingScreen.Welcome.name,
-            viewModel,
-            modifier = modifier.padding(innerPadding)
-        )
-
-    }
-}
-
 
 @Composable
 fun ScreenApp(
     modifier: Modifier = Modifier,
     viewModel: OnboardViewModel = viewModel(),
+    skipOnboarding: Boolean = false,
     navController: NavHostController = rememberNavController()
 ) {
     Scaffold(
@@ -69,9 +46,10 @@ fun ScreenApp(
     ) { innerPadding ->
         NavigationGraph(
             navController = navController,
-            startDestination = Screen.Calendar.name,
+            startDestination = if (skipOnboarding) Screen.Calendar.name else OnboardingScreen.Welcome.name,
             viewModel,
             modifier = modifier.padding(innerPadding)
         )
+
     }
 }
