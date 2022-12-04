@@ -38,8 +38,8 @@ class CalendarCycleTabTest {
 
     private fun navigateToCalendarScreen() {
         skipAllOnboardingScreens()
-        composeTestRule.onNodeWithContentDescription("Navigate to Calendar page")
-            .performClick()
+//        composeTestRule.onNodeWithContentDescription("Navigate to Calendar page")
+//            .performClick()
     }
 
     private fun navigateToCycleScreen() {
