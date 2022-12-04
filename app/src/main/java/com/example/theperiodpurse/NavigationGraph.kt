@@ -52,6 +52,10 @@ fun NavigationGraph(
             CalendarScreen()
         }
 
+        composable(route = "home") {
+            ScreenApp()
+        }
+
         composable(route = Screen.Settings.name) {
             SettingScreen()
         }
@@ -99,7 +103,7 @@ fun NavigationGraph(
             SummaryScreen(
                 onboardUiState = uiState,
                 onSendButtonClicked = {
-                    navController.navigate(Screen.Calendar.name)
+                    navController.navigate("home")
                 },
                 onCancelButtonClicked = {
                     cancelOrderAndNavigateToStart(viewModel, navController)

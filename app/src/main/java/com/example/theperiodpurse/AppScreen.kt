@@ -1,7 +1,6 @@
 package com.example.theperiodpurse
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.ui.Modifier
@@ -28,8 +27,32 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Application() {
-    ScreenApp()
+    ScreenAppWithOnboarding()
 }
+
+@Composable
+fun ScreenAppWithOnboarding(
+    modifier: Modifier = Modifier,
+    viewModel: OnboardViewModel = viewModel(),
+    navController: NavHostController = rememberNavController()
+) {
+    Scaffold(
+        bottomBar = {
+            if (currentRoute(navController) in Screen.values().map{ it.name }) {
+                BottomNavigation(navController = navController)
+            }
+        }
+    ) { innerPadding ->
+        NavigationGraph(
+            navController = navController,
+            startDestination = OnboardingScreen.Welcome.name,
+            viewModel,
+            modifier = modifier.padding(innerPadding)
+        )
+
+    }
+}
+
 
 @Composable
 fun ScreenApp(
@@ -46,7 +69,7 @@ fun ScreenApp(
     ) { innerPadding ->
         NavigationGraph(
             navController = navController,
-            startDestination = OnboardingScreen.Welcome.name,
+            startDestination = Screen.Calendar.name,
             viewModel,
             modifier = modifier.padding(innerPadding)
         )

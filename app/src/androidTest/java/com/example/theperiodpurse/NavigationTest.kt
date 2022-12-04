@@ -2,7 +2,6 @@ package com.example.theperiodpurse
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -30,17 +29,8 @@ class NavigationTest {
         }
     }
 
-    private fun skipAllOnboardingScreens() {
-        composeTestRule.onNodeWithText("Quick Start").performClick()
-        for (i in 1..3) {
-            composeTestRule.onNodeWithText("Skip").performClick()
-        }
-        composeTestRule.onNodeWithText("Let's go!").performClick()
-    }
-
     @Test
     fun appNavHost_clickSettings_navigatesToSettingsScreen() {
-        skipAllOnboardingScreens()
         composeTestRule.onNodeWithText(Screen.Settings.name)
             .performClick()
         navController.assertCurrentRouteName(Screen.Settings.name)
@@ -52,7 +42,6 @@ class NavigationTest {
 
     @Test
     fun appNavHost_clickSettings_navigatesToInfoScreen() {
-        skipAllOnboardingScreens()
         composeTestRule.onNodeWithText(Screen.Learn.name)
             .performClick()
         navController.assertCurrentRouteName(Screen.Learn.name)
@@ -64,7 +53,6 @@ class NavigationTest {
 
     @Test
     fun appNavHost_clickCalendarFABOnSettingsScreen_navigatesToCalendarScreen() {
-        skipAllOnboardingScreens()
         navigateToSettingsScreen()
         composeTestRule.onNodeWithContentDescription("Navigate to Calendar page")
             .performClick()
@@ -73,7 +61,6 @@ class NavigationTest {
 
     @Test
     fun appNavHost_clickCalendarFABOnInfoScreen_navigatesToCalendarScreen() {
-        skipAllOnboardingScreens()
         navigateToInfoScreen()
         composeTestRule.onNodeWithContentDescription("Navigate to Calendar page")
             .performClick()
