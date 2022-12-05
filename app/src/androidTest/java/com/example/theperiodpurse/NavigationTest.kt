@@ -31,6 +31,14 @@ class NavigationTest {
     }
 
     @Test
+    fun appNavhost_clickBackUp_navigatesToBackUpScreen() {
+        navController.assertCurrentRouteName(SettingScreenNavigation.Start.name)
+        composeTestRule.onNodeWithStringId(R.string.back_up_account)
+            .performClick()
+        navController.assertCurrentRouteName(SettingScreenNavigation.BackUpAccount.name)
+    }
+
+    @Test
     fun appNavhost_clickNotifications_navigatesToNotificationsScreen() {
         navController.assertCurrentRouteName(SettingScreenNavigation.Start.name)
         composeTestRule.onNodeWithStringId(R.string.customize_notifications)
@@ -40,14 +48,6 @@ class NavigationTest {
             activity.onBackPressedDispatcher.onBackPressed()
         }
         navController.assertCurrentRouteName(SettingScreenNavigation.Start.name)
-    }
-
-    @Test
-    fun appNavhost_clickBackUp_navigatesToBackUpScreen() {
-        navController.assertCurrentRouteName(SettingScreenNavigation.Start.name)
-        composeTestRule.onNodeWithStringId(R.string.back_up_account)
-            .performClick()
-        navController.assertCurrentRouteName(SettingScreenNavigation.BackUpAccount.name)
     }
 
     @Test
