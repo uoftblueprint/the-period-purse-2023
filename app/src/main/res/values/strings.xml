@@ -38,4 +38,6 @@
     <string name="avg_cycle_len">Average cycle length</string>
     <string name="period_flow">Period Flow</string>
     <string name="expand_button_symptoms_content_description">Expand to switch symptom to view</string>
+    <string name="fab_to_calendar">Navigate to Calendar page</string>
+    <string name="fab_see_log_options">Open logging options</string>
 </resources>
