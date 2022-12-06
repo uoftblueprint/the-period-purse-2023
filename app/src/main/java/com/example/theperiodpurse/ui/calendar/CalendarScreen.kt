@@ -230,6 +230,7 @@ fun CalendarScreenLayout() {
     // Contains the swippable content
     ThePeriodPurseTheme() {
         Column(
+            modifier = Modifier.fillMaxSize()
         ) {
             SymptomTab()
             Text(
@@ -243,11 +244,7 @@ fun CalendarScreenLayout() {
     }
 }
 
-@Preview
-@Composable
-fun DisplaySymptomTabPreview() {
-    SymptomTab()
-}
+
 
 @OptIn(ExperimentalPagerApi::class)
 @Preview
@@ -257,7 +254,6 @@ fun CalendarScreenPreview() {
         CalendarScreen()
     }
 }
-
 
 @OptIn(ExperimentalPagerApi::class)
 @Preview(showBackground = true)
@@ -269,4 +265,10 @@ fun TabsPreview() {
     )
     val pagerState = rememberPagerState()
     Tabs(tabs = tabs, pagerState = pagerState)
+}
+
+@Preview
+@Composable
+fun DisplaySymptomTabPreview() {
+    SymptomTab()
 }
