@@ -24,54 +24,32 @@ class CalendarCycleTabTest {
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
-            ScreenApp(navController = navController)
+            ScreenApp(navController = navController, skipOnboarding = true)
         }
     }
 
-    private fun skipAllOnboardingScreens() {
-        composeTestRule.onNodeWithText("Quick Start").performClick()
-        for (i in 1..3) {
-            composeTestRule.onNodeWithText("Skip").performClick()
-        }
-        composeTestRule.onNodeWithText("Let's go!").performClick()
-    }
-
-    private fun navigateToCalendarScreen() {
-        skipAllOnboardingScreens()
-        composeTestRule.onNodeWithContentDescription("Navigate to Calendar page")
-            .performClick()
-    }
 
     private fun navigateToCycleScreen() {
-        navigateToCalendarScreen()
         composeTestRule.onNodeWithText(CalendarTabItem.CycleTab.title).performClick()
     }
 
     @Test
     fun appTabs_clickCalendar_CycleNotDisplayed() {
-        navigateToCalendarScreen()
-
         composeTestRule.onNodeWithContentDescription("Cycle Page").assertIsNotDisplayed()
     }
 
     @Test
     fun appTabs_clickCalendar_CalendarDisplayed() {
-        // update when Calendar screen is implemented with text from now screen
-        navigateToCalendarScreen()
-
         composeTestRule.onNodeWithContentDescription("Calendar Page").assertIsDisplayed()
     }
 
     @Test
     fun appTabs_clickCalendar_CalendarSelected() {
-        navigateToCalendarScreen()
-
         composeTestRule.onNodeWithText(CalendarTabItem.CalendarTab.title).assertIsSelected()
     }
 
     @Test
     fun appTabs_clickCycleTab_DisplaysCycle() {
-        navigateToCalendarScreen()
         composeTestRule.onNodeWithText(CalendarTabItem.CycleTab.title).performClick()
 
         composeTestRule.onNodeWithContentDescription("Cycle Page").assertIsDisplayed()
@@ -79,7 +57,6 @@ class CalendarCycleTabTest {
 
     @Test
     fun appTabs_clickCycleTab_SelectsCycle() {
-        navigateToCalendarScreen()
         composeTestRule.onNodeWithText(CalendarTabItem.CycleTab.title).performClick()
 
         composeTestRule.onNodeWithText(CalendarTabItem.CycleTab.title).assertIsSelected()
@@ -87,7 +64,6 @@ class CalendarCycleTabTest {
 
     @Test
     fun appTabs_swipeCalendarPage_DisplaysCycle() {
-        navigateToCalendarScreen()
         composeTestRule.onRoot().performTouchInput {
             swipeLeft()
         }
@@ -97,7 +73,6 @@ class CalendarCycleTabTest {
 
     @Test
     fun appTabs_swipeCalendarPage_SelectsCycle() {
-        navigateToCalendarScreen()
         composeTestRule.onRoot().performTouchInput {
             swipeLeft()
         }
@@ -107,7 +82,6 @@ class CalendarCycleTabTest {
 
     @Test
     fun appTabs_swipeCyclePage_SelectsCalendar() {
-        navigateToCalendarScreen()
         composeTestRule.onRoot().performTouchInput {
             swipeLeft()
             swipeRight()
@@ -118,7 +92,6 @@ class CalendarCycleTabTest {
 
     @Test
     fun appTabs_swipeCyclePage_DisplaysCalendar() {
-        navigateToCalendarScreen()
         composeTestRule.onRoot().performTouchInput {
             swipeLeft()
             swipeRight()

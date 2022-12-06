@@ -1,9 +1,6 @@
 package com.example.theperiodpurse.ui.calendar
 
 import android.os.Build
-// import android.os.Bundle
-// import androidx.activity.ComponentActivity
-// import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,10 +16,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,13 +28,16 @@ import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import com.google.accompanist.pager.*
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
-import com.kizitonwose.calendar.core.*
+import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.DayPosition
+import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
+import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.Month
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.*
-import kotlinx.coroutines.launch
-import java.time.LocalDate
 
 
 @OptIn(ExperimentalPagerApi::class)
@@ -94,7 +94,7 @@ fun CalendarScreen() {
         CalendarTabItem.CycleTab
     )
     val pagerState = rememberPagerState()
-    ThePeriodPurseTheme {
+    ThePeriodPurseTheme() {
         Scaffold (topBar = {})
         { padding ->
             Column(modifier = Modifier.padding(padding)) {
@@ -132,6 +132,11 @@ fun CalendarScreenLayout() {
                 contentScale = ContentScale.FillBounds,
             )
             Column {
+                Text(
+                    text="Calendar Screen Content",
+                    modifier = Modifier
+                        .semantics { contentDescription = "Calendar Page" } // keep somewhere for testing
+                )
                 VerticalCalendar(
                     state = state,
                     monthHeader = { month ->
@@ -206,23 +211,19 @@ fun MonthHeader(calendarMonth: CalendarMonth) {
             fontWeight = FontWeight.Medium,
             fontSize = 15.sp,
             text = calendarMonth.yearMonth.displayText()
-            text="Calendar Screen Content",
-            modifier = Modifier
-                .semantics { contentDescription = "Calendar Page" } // keep somewhere for testing
         )
-
-        // Days of Week
-        Row(modifier = Modifier.fillMaxWidth()) {
-            for (dayOfWeek in daysOfWeek) {
-                Text(
-                    modifier = Modifier.weight(1f),
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 12.sp,
-                    text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
-                )
+                    // Days of Week
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                for (dayOfWeek in daysOfWeek) {
+                    Text(
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 12.sp,
+                        text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
+                    )
+                }
             }
-        }
     }
 }
 
@@ -240,11 +241,10 @@ fun Month.displayText(short: Boolean = true): String {
 }
 
 
-//@OptIn(ExperimentalPagerApi::class)
 @Preview
 @Composable
 fun CalendarScreenPreview() {
-    ThePeriodPurseTheme {
+    ThePeriodPurseTheme() {
         CalendarScreen()
     }
 }

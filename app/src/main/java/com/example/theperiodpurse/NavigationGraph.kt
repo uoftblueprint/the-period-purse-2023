@@ -99,6 +99,7 @@ fun NavigationGraph(
             SummaryScreen(
                 onboardUiState = uiState,
                 onSendButtonClicked = {
+                    navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
                     navController.navigate(Screen.Calendar.name)
                 },
                 onCancelButtonClicked = {

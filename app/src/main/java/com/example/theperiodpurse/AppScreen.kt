@@ -35,6 +35,7 @@ fun Application() {
 fun ScreenApp(
     modifier: Modifier = Modifier,
     viewModel: OnboardViewModel = viewModel(),
+    skipOnboarding: Boolean = false,
     navController: NavHostController = rememberNavController()
 ) {
     Scaffold(
@@ -46,7 +47,7 @@ fun ScreenApp(
     ) { innerPadding ->
         NavigationGraph(
             navController = navController,
-            startDestination = OnboardingScreen.Welcome.name,
+            startDestination = if (skipOnboarding) Screen.Calendar.name else OnboardingScreen.Welcome.name,
             viewModel,
             modifier = modifier.padding(innerPadding)
         )
