@@ -19,6 +19,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -126,7 +128,9 @@ fun CalendarScreenLayout() {
         Box {
             Image(painter = bg,
                 contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .semantics { contentDescription = "Calendar Page" },
                 contentScale = ContentScale.FillBounds,
             )
             Column {
