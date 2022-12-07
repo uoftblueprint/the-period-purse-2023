@@ -1,6 +1,7 @@
 package com.example.theperiodpurse.ui.calendar
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
@@ -8,6 +9,8 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -35,6 +38,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.Screen
 import com.example.theperiodpurse.R
+import com.example.theperiodpurse.ui.calendar.LogPrompt.Flow.iconTint
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -47,19 +51,32 @@ fun LogScreen(
 ) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val day = LocalDate.parse(date)
-        LogScreenLayout(day, navController)
+
+        val logPrompts = listOf(
+            LogPrompt.Flow,
+            LogPrompt.Mood,
+            LogPrompt.Sleep,
+            LogPrompt.Cramps,
+            LogPrompt.Exercise,
+            LogPrompt.Notes
+        )
+        LogScreenLayout(day, navController, logPrompts)
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun LogScreenLayout(date: LocalDate, navController: NavController) {
+fun LogScreenLayout(
+    date: LocalDate,
+    navController: NavController,
+    logPrompts: List<LogPrompt>
+) {
     Column() {
         LogScreenTopBar(
             navController = navController,
             date = date
         )
-
+        LogPromptCards(logPrompts = logPrompts)
     }
 }
 
@@ -179,6 +196,30 @@ fun ChangeableExpandButton( expanded: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
+fun LogPromptCards(logPrompts: List<LogPrompt>) {
+    LazyColumn(modifier = Modifier.background(Color.White)) {
+        items(logPrompts) {
+            Column(
+                modifier = Modifier
+                    .drawBehind {
+                        val strokeWidth = 2f
+                        val x = size.width - strokeWidth
+                        val y = size.height - strokeWidth
+
+                        drawLine(
+                            color = Color(50,50,50),
+                            start = Offset(0f, 0f), //(0,0) at top-left point of the box
+                            end = Offset(x, 0f), //top-right point of the box
+                            strokeWidth = strokeWidth
+                        )
+                    }) {
+                LogPromptCard(logPrompt = it)
+            }
+        }
+    }
+}
+
+@Composable
 fun LogPromptCard(logPrompt: LogPrompt) {
     var expanded by remember { mutableStateOf(false) }
     Column (
@@ -193,21 +234,9 @@ fun LogPromptCard(logPrompt: LogPrompt) {
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
-                .drawBehind {
-                    val strokeWidth = 2f
-                    val x = size.width - strokeWidth
-                    val y = size.height - strokeWidth
-
-                    drawLine(
-                        color = Color.Black,
-                        start = Offset(0f, 0f), //(0,0) at top-left point of the box
-                        end = Offset(x, 0f), //top-right point of the box
-                        strokeWidth = strokeWidth
-                    )
-                }
+                .padding(top = 0.dp, bottom = 0.dp, start = 20.dp, end = 20.dp)
         ) {
-            logPrompt.icon
+            logPrompt.icon()
             Text(logPrompt.title)
             Spacer(Modifier.weight(1f))
             ChangeableExpandButton(expanded = expanded) {
@@ -221,24 +250,27 @@ fun LogPromptCard(logPrompt: LogPrompt) {
 }
 
 typealias ComposableFun = @Composable () -> Unit
-typealias ComposableIconFun = @Composable (Unit) -> Unit
+typealias ComposableIconFun = @Composable () -> Unit
 
 open class LogPrompt(var title: String, var icon: ComposableIconFun, var prompt: ComposableFun) {
+    val iconTint = Color(50,50,50)
     object Flow : LogPrompt(
         title = "Flow",
         icon = { Icon(
             painter = painterResource(id = R.drawable.opacity_black_24dp),
-            contentDescription = "Flow Icon"
+            contentDescription = "Flow Icon",
+            tint = iconTint
         ) },
         prompt = {
-            Text("Some test text")
+            Text("Some Test Text")
         }
     )
     object Mood : LogPrompt(
         title = "Mood",
         icon = { Icon(
             painter = painterResource(id = R.drawable.sentiment_very_satisfied_black_24dp),
-            contentDescription = "Mood Icon"
+            contentDescription = "Mood Icon",
+            tint = iconTint
         ) },
         prompt = {}
     )
@@ -246,7 +278,8 @@ open class LogPrompt(var title: String, var icon: ComposableIconFun, var prompt:
         title = "Sleep",
         icon = { Icon(
             painter = painterResource(id = R.drawable.nightlight_black_24dp),
-            contentDescription = "Sleep Icon"
+            contentDescription = "Sleep Icon",
+            tint = iconTint
         ) },
         prompt = {}
     )
@@ -254,7 +287,8 @@ open class LogPrompt(var title: String, var icon: ComposableIconFun, var prompt:
         title = "Cramps",
         icon = { Icon(
             painter = painterResource(id = R.drawable.sentiment_very_dissatisfied_black_24dp),
-            contentDescription = "Cramp Icon"
+            contentDescription = "Cramp Icon",
+            tint = iconTint
         ) },
         prompt = {}
     )
@@ -262,7 +296,8 @@ open class LogPrompt(var title: String, var icon: ComposableIconFun, var prompt:
         title = "Exercise",
         icon = { Icon(
             painter = painterResource(id =R.drawable.self_improvement_black_24dp),
-            contentDescription = "Exercise Icon"
+            contentDescription = "Exercise Icon",
+            tint = iconTint
         ) },
         prompt = {}
     )
@@ -270,7 +305,8 @@ open class LogPrompt(var title: String, var icon: ComposableIconFun, var prompt:
         title = "Notes",
         icon = { Icon(
             painter = painterResource(id = R.drawable.edit_black_24dp),
-            contentDescription = "Notes Icon"
+            contentDescription = "Notes Icon",
+            tint = iconTint
         ) },
         prompt = {}
     )
@@ -291,4 +327,18 @@ fun LogScreenTopBarPreview() {
 @Composable
 fun LogPromptCardPreview() {
     LogPromptCard(logPrompt = LogPrompt.Flow)
+}
+
+@Preview
+@Composable
+fun LogPromptCardsPreview() {
+    val logPrompts = listOf(
+        LogPrompt.Flow,
+        LogPrompt.Mood,
+        LogPrompt.Sleep,
+        LogPrompt.Cramps,
+        LogPrompt.Exercise,
+        LogPrompt.Notes
+    )
+    LogPromptCards(logPrompts = logPrompts)
 }
