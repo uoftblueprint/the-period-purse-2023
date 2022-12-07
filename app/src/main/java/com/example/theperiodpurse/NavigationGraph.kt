@@ -67,7 +67,10 @@ fun NavigationGraph(
             // date is in yyyy-mm-dd format
             val date = backStackEntry.arguments?.getString("date")
             if (date != null) {
-                DailySymptomScreen(date = date)
+                DailySymptomScreen(
+                    date = date,
+                    navController = navController
+                )
             }
         }
 
