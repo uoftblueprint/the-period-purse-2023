@@ -45,12 +45,8 @@ fun DailySymptomScreenLayout(date: LocalDate, navController: NavController) {
                             date.minusDays(1).toString()
                         )
                 ) {
-                    popUpTo("%s/%s/%s".format(
-                        Screen.Calendar.name,
-                        Screen.Log.name,
-                        date.toString()
-                    )) {
-                        inclusive = true
+                    popUpTo(Screen.Calendar.name) {
+                        inclusive = false
                     }
                 }
             }) {
@@ -70,12 +66,8 @@ fun DailySymptomScreenLayout(date: LocalDate, navController: NavController) {
                             date.plusDays(1)
                         )
                 ) {
-                    popUpTo("%s/%s/%s".format(
-                        Screen.Calendar.name,
-                        Screen.Log.name,
-                        date.plusDays(1).toString()
-                    )) {
-                        inclusive = true
+                    popUpTo(Screen.Calendar.name) {
+                        inclusive = false
                     }
                 }
             }) {
