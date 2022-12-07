@@ -38,7 +38,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.Screen
 import com.example.theperiodpurse.R
-import com.example.theperiodpurse.ui.calendar.LogPrompt.Flow.iconTint
+import com.example.theperiodpurse.data.LogPrompt
+import com.example.theperiodpurse.data.LogSquare
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -60,6 +61,15 @@ fun LogScreen(
             LogPrompt.Exercise,
             LogPrompt.Notes
         )
+
+        val logSquares = listOf(
+            LogSquare.FlowLight,
+            LogSquare.FlowMedium,
+            LogSquare.FlowHeavy,
+            LogSquare.FlowSpotting,
+            LogSquare.FlowNone
+        )
+
         LogScreenLayout(day, navController, logPrompts)
     }
 }
@@ -268,69 +278,6 @@ fun LogPromptCard(logPrompt: LogPrompt) {
     }
 }
 
-
-typealias ComposableFun = @Composable () -> Unit
-typealias ComposableIconFun = @Composable () -> Unit
-
-open class LogPrompt(var title: String, var icon: ComposableIconFun, var prompt: ComposableFun) {
-    val iconTint = Color(50,50,50)
-    object Flow : LogPrompt(
-        title = "Flow",
-        icon = { Icon(
-            painter = painterResource(id = R.drawable.opacity_black_24dp),
-            contentDescription = "Flow Icon",
-            tint = iconTint
-        ) },
-        prompt = {
-            Text("Some Test Text")
-        }
-    )
-    object Mood : LogPrompt(
-        title = "Mood",
-        icon = { Icon(
-            painter = painterResource(id = R.drawable.sentiment_very_satisfied_black_24dp),
-            contentDescription = "Mood Icon",
-            tint = iconTint
-        ) },
-        prompt = {}
-    )
-    object Sleep : LogPrompt(
-        title = "Sleep",
-        icon = { Icon(
-            painter = painterResource(id = R.drawable.nightlight_black_24dp),
-            contentDescription = "Sleep Icon",
-            tint = iconTint
-        ) },
-        prompt = {}
-    )
-    object Cramps : LogPrompt(
-        title = "Cramps",
-        icon = { Icon(
-            painter = painterResource(id = R.drawable.sentiment_very_dissatisfied_black_24dp),
-            contentDescription = "Cramp Icon",
-            tint = iconTint
-        ) },
-        prompt = {}
-    )
-    object Exercise : LogPrompt(
-        title = "Exercise",
-        icon = { Icon(
-            painter = painterResource(id =R.drawable.self_improvement_black_24dp),
-            contentDescription = "Exercise Icon",
-            tint = iconTint
-        ) },
-        prompt = {}
-    )
-    object Notes : LogPrompt(
-        title = "Notes",
-        icon = { Icon(
-            painter = painterResource(id = R.drawable.edit_black_24dp),
-            contentDescription = "Notes Icon",
-            tint = iconTint
-        ) },
-        prompt = {}
-    )
-}
 
 @Preview
 @Composable
