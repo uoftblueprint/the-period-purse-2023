@@ -202,12 +202,12 @@ fun LogPromptCards(logPrompts: List<LogPrompt>) {
             Column(
                 modifier = Modifier
                     .drawBehind {
-                        val strokeWidth = 2f
+                        val strokeWidth = 4f
                         val x = size.width - strokeWidth
                         val y = size.height - strokeWidth
 
                         drawLine(
-                            color = Color(50,50,50),
+                            color = Color(200, 200, 200),
                             start = Offset(0f, 0f), //(0,0) at top-left point of the box
                             end = Offset(x, 0f), //top-right point of the box
                             strokeWidth = strokeWidth
@@ -232,11 +232,13 @@ fun LogPromptCard(logPrompt: LogPrompt) {
             )
     ) {
         Row (
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 0.dp, bottom = 0.dp, start = 20.dp, end = 20.dp)
+                .padding(top = 10.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
         ) {
             logPrompt.icon()
+            Spacer(Modifier.size(10.dp))
             Text(logPrompt.title)
             Spacer(Modifier.weight(1f))
             ChangeableExpandButton(expanded = expanded) {
