@@ -1,13 +1,10 @@
 package com.example.theperiodpurse
 
-import android.util.Log
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -18,7 +15,7 @@ import com.example.theperiodpurse.data.DataSource
 import com.example.theperiodpurse.ui.QuestionThreeScreen
 import com.example.theperiodpurse.ui.SummaryScreen
 import com.example.theperiodpurse.ui.calendar.CalendarScreen
-import com.example.theperiodpurse.ui.calendar.DailySymptomScreen
+import com.example.theperiodpurse.ui.calendar.LogScreen
 import com.example.theperiodpurse.ui.cycle.CycleScreenLayout
 import com.example.theperiodpurse.ui.onboarding.OnboardViewModel
 import com.example.theperiodpurse.ui.onboarding.QuestionOneScreen
@@ -67,7 +64,7 @@ fun NavigationGraph(
             // date is in yyyy-mm-dd format
             val date = backStackEntry.arguments?.getString("date")
             if (date != null) {
-                DailySymptomScreen(
+                LogScreen(
                     date = date,
                     navController = navController
                 )
