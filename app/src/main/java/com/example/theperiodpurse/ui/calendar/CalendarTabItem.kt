@@ -6,9 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import com.example.theperiodpurse.ui.cycle.CycleScreenLayout
 
-typealias ComposableFun = @Composable (navController: NavController) -> Unit
+typealias ComposableNavFun = @Composable (navController: NavController) -> Unit
 
-open class CalendarTabItem(var title: String, var screen: ComposableFun) {
+open class CalendarTabItem(var title: String, var screen: ComposableNavFun) {
     // Sealed Class to separately store the tab data from any screens main file
     @RequiresApi(Build.VERSION_CODES.O)
     object CalendarTab : CalendarTabItem("Calendar", {navController -> CalendarScreenLayout(navController) })

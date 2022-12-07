@@ -1,5 +1,6 @@
 package com.example.theperiodpurse.ui.calendar
 
+import android.graphics.drawable.Icon
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -16,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.Screen
+import com.example.theperiodpurse.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -58,7 +61,7 @@ fun LogScreenTopBar(navController: NavController, date: LocalDate) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = Color(200,200,200))
+            .background(color = Color(200, 200, 200))
     ) {
         Row (modifier = Modifier
             .padding(start = 10.dp, top = 10.dp, end = 0.dp)
@@ -152,6 +155,60 @@ fun LogScreenTopBar(navController: NavController, date: LocalDate) {
 
         }
     }
+}
+
+typealias ComposableFun = @Composable (navController: NavController) -> Unit
+typealias ComposableIconFun = @Composable (Unit) -> Unit
+
+open class LogPrompt(var title: String, var icon: ComposableIconFun, var prompt: ComposableFun) {
+    object Flow : LogPrompt(
+        title = "Flow",
+        icon = { Icon(
+            painter = painterResource(id = R.drawable.opacity_black_24dp),
+            contentDescription = "Flow Icon"
+        ) },
+        prompt = {}
+    )
+    object Mood : LogPrompt(
+        title = "Mood",
+        icon = { Icon(
+            painter = painterResource(id = R.drawable.sentiment_very_satisfied_black_24dp),
+            contentDescription = "Mood Icon"
+        ) },
+        prompt = {}
+    )
+    object Sleep : LogPrompt(
+        title = "Sleep",
+        icon = { Icon(
+            painter = painterResource(id = R.drawable.nightlight_black_24dp),
+            contentDescription = "Sleep Icon"
+        ) },
+        prompt = {}
+    )
+    object Cramps : LogPrompt(
+        title = "Cramps",
+        icon = { Icon(
+            painter = painterResource(id = R.drawable.sentiment_very_dissatisfied_black_24dp),
+            contentDescription = "Cramp Icon"
+        ) },
+        prompt = {}
+    )
+    object Exercise : LogPrompt(
+        title = "Exercise",
+        icon = { Icon(
+            painter = painterResource(id =R.drawable.self_improvement_black_24dp),
+            contentDescription = "Exercise Icon"
+        ) },
+        prompt = {}
+    )
+    object Notes : LogPrompt(
+        title = "Notes",
+        icon = { Icon(
+            painter = painterResource(id = R.drawable.edit_black_24dp),
+            contentDescription = "Notes Icon"
+        ) },
+        prompt = {}
+    )
 }
 
 @Preview
