@@ -233,23 +233,41 @@ fun LogPromptCard(logPrompt: LogPrompt) {
     ) {
         Row (
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
+                .padding(top = 10.dp, bottom = 10.dp, start = 30.dp, end = 15.dp)
         ) {
             logPrompt.icon()
             Spacer(Modifier.size(10.dp))
-            Text(logPrompt.title)
+            Text(
+                text = logPrompt.title,
+                fontWeight = FontWeight.Bold,
+                color = Color(50,50,50),
+                fontSize = 16.sp
+            )
             Spacer(Modifier.weight(1f))
             ChangeableExpandButton(expanded = expanded) {
                 expanded = !expanded
             }
         }
         if (expanded) {
-            logPrompt.prompt()
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .padding(
+                        top = 10.dp,
+                        bottom = 20.dp,
+                        start = 40.dp,
+                        end = 40.dp
+                    )
+            ) {
+                logPrompt.prompt()
+            }
         }
     }
 }
+
 
 typealias ComposableFun = @Composable () -> Unit
 typealias ComposableIconFun = @Composable () -> Unit
