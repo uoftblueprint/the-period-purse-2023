@@ -1,23 +1,31 @@
 package com.example.theperiodpurse.ui.calendar
 
-import android.graphics.drawable.Icon
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -157,7 +165,62 @@ fun LogScreenTopBar(navController: NavController, date: LocalDate) {
     }
 }
 
-typealias ComposableFun = @Composable (navController: NavController) -> Unit
+@Composable
+fun ChangeableExpandButton( expanded: Boolean, onClick: () -> Unit) {
+    IconButton(onClick = onClick) {
+        Icon(
+            imageVector = 
+                if (expanded) Icons.Filled.KeyboardArrowUp
+                else Icons.Filled.KeyboardArrowDown,
+            tint = Color.Black,
+            contentDescription = "Expand Button",
+        )
+    }
+}
+
+@Composable
+fun LogPromptCard(logPrompt: LogPrompt) {
+    var expanded by remember { mutableStateOf(false) }
+    Column (
+        modifier = Modifier
+            .animateContentSize(
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessLow
+                )
+            )
+    ) {
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .drawBehind {
+                    val strokeWidth = 2f
+                    val x = size.width - strokeWidth
+                    val y = size.height - strokeWidth
+
+                    drawLine(
+                        color = Color.Black,
+                        start = Offset(0f, 0f), //(0,0) at top-left point of the box
+                        end = Offset(x, 0f), //top-right point of the box
+                        strokeWidth = strokeWidth
+                    )
+                }
+        ) {
+            logPrompt.icon
+            Text(logPrompt.title)
+            Spacer(Modifier.weight(1f))
+            ChangeableExpandButton(expanded = expanded) {
+                expanded = !expanded
+            }
+        }
+        if (expanded) {
+            logPrompt.prompt()
+        }
+    }
+}
+
+typealias ComposableFun = @Composable () -> Unit
 typealias ComposableIconFun = @Composable (Unit) -> Unit
 
 open class LogPrompt(var title: String, var icon: ComposableIconFun, var prompt: ComposableFun) {
@@ -167,7 +230,9 @@ open class LogPrompt(var title: String, var icon: ComposableIconFun, var prompt:
             painter = painterResource(id = R.drawable.opacity_black_24dp),
             contentDescription = "Flow Icon"
         ) },
-        prompt = {}
+        prompt = {
+            Text("Some test text")
+        }
     )
     object Mood : LogPrompt(
         title = "Mood",
@@ -220,4 +285,10 @@ fun LogScreenTopBarPreview() {
             navController = rememberNavController()
         )
     }
+}
+
+@Preview
+@Composable
+fun LogPromptCardPreview() {
+    LogPromptCard(logPrompt = LogPrompt.Flow)
 }
