@@ -2,6 +2,7 @@ package com.example.theperiodpurse.ui.calendar
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -14,12 +15,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.Screen
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 
 @Composable
@@ -48,24 +55,37 @@ fun LogScreenLayout(date: LocalDate, navController: NavController) {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LogScreenTopBar(navController: NavController, date: LocalDate) {
-    Box() {
-        IconButton(onClick = { navController.navigateUp() }) {
-            Icon(
-                imageVector = Icons.Filled.Close,
-                contentDescription = "Log Close Button"
-            )
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = Color(200,200,200))
+    ) {
+        Row (modifier = Modifier
+            .padding(start = 10.dp, top = 10.dp, end = 0.dp)
+        ) {
+            IconButton(
+                onClick = { navController.navigateUp() },
+                modifier = Modifier
+                    .then(Modifier.size(24.dp))
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Close,
+                    contentDescription = "Log Close Button"
+                )
+            }
         }
+
         Row(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp, bottom = 10.dp)
-                .height(50.dp)
+                .padding(top = 0.dp, bottom = 0.dp, start = 35.dp, end = 35.dp)
+                .height(65.dp)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .weight(.33f)
+                    .weight(.1f)
             ) {
                 IconButton(onClick = {
                     navController.navigate(
@@ -91,15 +111,24 @@ fun LogScreenTopBar(navController: NavController, date: LocalDate) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .weight(.33f)
+                    .weight(.8f)
             ) {
-                Text(date.toString())
+                Text(
+                    text = "Log your symptoms for:",
+                    color = Color(50,50,50),
+                    fontSize = 12.sp
+                )
+                Text(
+                    text = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)),
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
             }
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .weight(.33f)
+                    .weight(.1f)
             ) {
                 IconButton(onClick = {
                     navController.navigate("%s/%s/%s"
