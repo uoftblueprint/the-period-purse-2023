@@ -13,6 +13,7 @@ fun NavController.assertCurrentRouteName(expectedRouteName: String) {
     assertEquals(expectedRouteName, currentBackStackEntry?.destination?.route)
 }
 
+
 fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.onNodeWithStringId(
     @StringRes id: Int
 ): SemanticsNodeInteraction = onNodeWithText(activity.getString(id))
