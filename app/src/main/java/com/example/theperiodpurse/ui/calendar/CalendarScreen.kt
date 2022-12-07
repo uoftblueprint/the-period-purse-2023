@@ -144,6 +144,15 @@ fun CalendarScreenLayout(navController: NavController) {
                     dayContent = { day ->
                         Day(day, isSelected = selectedDate == day.date) { day ->
                             selectedDate = if (selectedDate == day.date) null else day.date
+                            navController
+                                .navigate(
+                                    route = "%s/%s/%s"
+                                        .format(
+                                            Screen.Calendar,
+                                            Screen.Log,
+                                            day.date.toString()
+                                        )
+                                )
                         }
                     }
                 )
