@@ -26,7 +26,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.R
+import com.example.theperiodpurse.Screen
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import com.google.accompanist.pager.*
 import com.kizitonwose.calendar.compose.VerticalCalendar
@@ -77,16 +80,16 @@ fun Tabs(tabs: List<CalendarTabItem>, pagerState: PagerState) {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun TabsContent(tabs: List<CalendarTabItem>, pagerState: PagerState) {
+fun TabsContent(tabs: List<CalendarTabItem>, pagerState: PagerState, navController: NavController) {
     HorizontalPager(state = pagerState, count = tabs.size) { page ->
-        tabs[page].screen()
+        tabs[page].screen(navController)
     }
 }
 
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun CalendarScreen() {
+fun CalendarScreen(navController: NavController) {
     // Main calendar screen which allows navigation to cycle page and calendar
     // By default, opens on to the Calendar
     val tabs = listOf(
@@ -99,7 +102,7 @@ fun CalendarScreen() {
         { padding ->
             Column(modifier = Modifier.padding(padding)) {
                 Tabs(tabs = tabs, pagerState = pagerState)
-                TabsContent(tabs = tabs, pagerState = pagerState)
+                TabsContent(tabs = tabs, pagerState = pagerState, navController = navController)
             }
         }
     }
@@ -107,7 +110,7 @@ fun CalendarScreen() {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarScreenLayout() {
+fun CalendarScreenLayout(navController: NavController) {
     // Contains the swappable content
     ThePeriodPurseTheme {
         val bg = painterResource(R.drawable.colourwatercolour)
@@ -244,7 +247,7 @@ fun Month.displayText(short: Boolean = true): String {
 @Composable
 fun CalendarScreenPreview() {
     ThePeriodPurseTheme {
-        CalendarScreen()
+        CalendarScreen(rememberNavController())
     }
 }
 

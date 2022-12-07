@@ -49,7 +49,7 @@ fun NavigationGraph(
         modifier = modifier
     ) {
         composable(route = Screen.Calendar.name) {
-            CalendarScreen()
+            CalendarScreen(navController = navController)
         }
 
         composable(route = Screen.Settings.name) {
