@@ -74,7 +74,7 @@ open class LogPrompt(
                 contentDescription = "Notes Icon",
                 tint = color
         ) },
-        prompt = {}
+        prompt = { logViewModel -> NotesPrompt(logViewModel = logViewModel) }
     )
 }
 

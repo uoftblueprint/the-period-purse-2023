@@ -11,6 +11,7 @@
     <string name="tap_to_input">Tap to input</string>
     <string name="hours">Hours</string>
     <string name="minutes">Minutes</string>
+    <string name="notes_description">Record a symptom or make a note</string>
     <string name="question_two">When did your period last start?</string>
     <string name="description_two">Record your last period or skip if you do not know.</string>
     <string name="choose_date">Choose date</string>
