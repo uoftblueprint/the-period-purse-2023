@@ -2,12 +2,16 @@ package com.example.theperiodpurse.ui.symptomlog
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -81,6 +85,20 @@ fun SleepPrompt(logViewModel: LogViewModel) {
                     logViewModel.setText(LogPrompt.Sleep, time.toString())
                 })
         )
+        Button(
+            onClick = {
+                logViewModel.resetText(LogPrompt.Sleep)
+                hoursSlept = ""
+                minutesSlept = ""
+                      },
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color(200, 200, 200)),
+            modifier = Modifier
+                .padding(start = 16.dp)
+        ) {
+            Text(
+                "Clear"
+            )
+        }
     }
 }
 
