@@ -222,7 +222,8 @@ fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
 
     val tabColor =  animateColorAsState(
         targetValue =
-        if (logViewModel.getSquareSelected(logPrompt) != null) Teal
+        if (logViewModel.getSquareSelected(logPrompt) != null ||
+            logViewModel.getText(logPrompt) != "") Teal
         else Color(50,50,50),
         animationSpec = tween(500, 0, LinearEasing)
     )
