@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import com.example.theperiodpurse.R
+import com.example.theperiodpurse.ui.symptomlog.CrampsPrompt
 import com.example.theperiodpurse.ui.symptomlog.FlowPrompt
 import com.example.theperiodpurse.ui.symptomlog.LogViewModel
 import com.example.theperiodpurse.ui.symptomlog.MoodPrompt
@@ -58,7 +59,7 @@ open class LogPrompt(
                 contentDescription = "Cramp Icon",
                 tint = color
         ) },
-        prompt = {}
+        prompt = { logViewModel -> CrampsPrompt(logViewModel = logViewModel)}
     )
     object Exercise : LogPrompt(
         title = "Exercise",
