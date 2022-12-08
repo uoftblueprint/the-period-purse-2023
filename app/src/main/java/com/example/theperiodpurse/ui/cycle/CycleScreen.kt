@@ -85,7 +85,8 @@ fun CycleHistoryBox(modifier: Modifier = Modifier) {
                 color = Color(0xFF868083),
             )
             Divider(color = Color(0xFF868083), modifier = modifier
-                .padding(vertical = 15.dp).fillMaxWidth())
+                .padding(vertical = 15.dp)
+                .fillMaxWidth())
             Text(text = stringResource(R.string.log_to_learn))
         }
     }
@@ -102,7 +103,7 @@ fun CycleScreenLayout(modifier: Modifier = Modifier) {
                 horizontal = 20.dp,
                 vertical = 25.dp
             )
-            .semantics { contentDescription = "Cycle Page"}
+            .semantics { contentDescription = "Cycle Page" }
     ) {
         CurrentCycleBox()
         Spacer(modifier.height(30.dp))
@@ -123,13 +124,5 @@ fun CycleScreenLayout(modifier: Modifier = Modifier) {
 fun CycleScreenPreview() {
     ThePeriodPurseTheme {
         CycleScreenLayout()
-    }
-    }
-
-
-@Composable
-fun CycleScreenLayout () {
-    ThePeriodPurseTheme {
-        Text("Cycle Screen Content")
     }
 }
