@@ -65,7 +65,7 @@ fun MoodPrompt (logViewModel: LogViewModel) {
 fun MoodPromptPreview() {
     FlowPrompt(
         logViewModel = LogViewModel(
-            logPrompts = listOf(LogPrompt.Flow)
+            logPrompts = listOf(LogPrompt.Mood)
         )
     )
 }
