@@ -15,9 +15,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
@@ -79,6 +77,7 @@ fun LogScreenLayout(
     logViewModel: LogViewModel
 ) {
     Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
@@ -88,6 +87,10 @@ fun LogScreenLayout(
             date = date
         )
         LogPromptCards(logPrompts = logPrompts, logViewModel = logViewModel)
+        Spacer(modifier = Modifier
+            .height(130.dp)
+            .weight(1f))
+        SaveButton(navController = navController)
     }
 }
 
@@ -331,6 +334,29 @@ fun LogSelectableSquare(
     }
 }
 
+@Composable
+fun SaveButton(navController: NavController) {
+    Column (
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+    ) {
+        Button(
+            onClick = {
+                navController.navigateUp()
+            },
+            colors = ButtonDefaults.buttonColors(backgroundColor = Teal),
+            modifier = Modifier
+                .padding(20.dp)
+                .width(300.dp)
+        ) {
+            Text(
+                text = "Save",
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+}
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
@@ -405,4 +431,10 @@ fun LogSelectableSquarePreview() {
             logViewModel.setSquareSelected(logSquare)
         }
     }
+}
+
+@Preview
+@Composable
+fun SaveButtonPreview() {
+    SaveButton(navController = rememberNavController())
 }
