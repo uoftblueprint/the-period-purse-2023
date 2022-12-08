@@ -78,7 +78,11 @@ fun LogScreenLayout(
     logPrompts: List<LogPrompt>,
     logViewModel: LogViewModel
 ) {
-    Column() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
         LogScreenTopBar(
             navController = navController,
             date = date
