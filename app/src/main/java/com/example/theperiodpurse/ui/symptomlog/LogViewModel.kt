@@ -22,6 +22,14 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
         }
     }
 
+    fun getSquareSelected(logPrompt: LogPrompt) : String? {
+        if (uiState.value.selectSquares[logPrompt.title] !is String) {
+            return(null)
+        } else {
+            return(uiState.value.selectSquares[logPrompt.title] as String)
+        }
+    }
+
     fun resetSquareSelected(logSquare: LogSquare) {
         _uiState.update { currentState ->
             currentState.selectSquares[logSquare.promptTitle] = false
