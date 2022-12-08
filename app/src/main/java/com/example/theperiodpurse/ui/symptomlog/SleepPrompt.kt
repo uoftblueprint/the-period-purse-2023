@@ -1,9 +1,6 @@
 package com.example.theperiodpurse.ui.symptomlog
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
@@ -43,48 +40,60 @@ fun SleepPrompt(logViewModel: LogViewModel) {
     }
     val focusManager = LocalFocusManager.current
 
-    Column() {
-        EditNumberField(
-            label = R.string.hours,
-            value = hoursSlept,
-            onValueChange = { hoursSlept = it },
+    Row(modifier = Modifier
+        .padding(start = 10.dp, bottom = 10.dp
+        )) {
+        Box(
+            modifier = Modifier
+                .width(85.dp)
+        ) {
+            EditNumberField(
+                label = R.string.hours,
+                value = hoursSlept,
+                onValueChange = { hoursSlept = it },
 
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    focusManager.clearFocus()
-                    val time = Time(
-                        if (hoursSlept != "") hoursSlept.toInt() else 0,
-                        if (minutesSlept != "") minutesSlept.toInt() else 0,
-                        0
-                    )
-                    logViewModel.setText(LogPrompt.Sleep, time.toString())
-                })
-        )
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        focusManager.clearFocus()
+                        val time = Time(
+                            if (hoursSlept != "") hoursSlept.toInt() else 0,
+                            if (minutesSlept != "") minutesSlept.toInt() else 0,
+                            0
+                        )
+                        logViewModel.setText(LogPrompt.Sleep, time.toString())
+                    })
+            )
+        }
         Spacer(modifier = Modifier.size(5.dp))
-        EditNumberField(
-            label = R.string.minutes,
-            value = minutesSlept,
-            onValueChange = { minutesSlept = it },
+        Box(
+            modifier = Modifier
+                .width(90.dp)
+        ) {
+            EditNumberField(
+                label = R.string.minutes,
+                value = minutesSlept,
+                onValueChange = { minutesSlept = it },
 
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    focusManager.clearFocus()
-                    val time = Time(
-                        if (hoursSlept != "") hoursSlept.toInt() else 0,
-                        if (minutesSlept != "") minutesSlept.toInt() else 0,
-                        0
-                    )
-                    logViewModel.setText(LogPrompt.Sleep, time.toString())
-                })
-        )
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        focusManager.clearFocus()
+                        val time = Time(
+                            if (hoursSlept != "") hoursSlept.toInt() else 0,
+                            if (minutesSlept != "") minutesSlept.toInt() else 0,
+                            0
+                        )
+                        logViewModel.setText(LogPrompt.Sleep, time.toString())
+                    })
+            )
+        }
         Button(
             onClick = {
                 logViewModel.resetText(LogPrompt.Sleep)
