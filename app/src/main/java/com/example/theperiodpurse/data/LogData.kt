@@ -24,7 +24,7 @@ open class LogPrompt(
         title = "Flow",
         icon = {color ->
             Icon(
-                painter = painterResource(id = R.drawable.opacity_black_24dp),
+                painter = painterResource(R.drawable.opacity_black_24dp),
                 contentDescription = "Flow Icon",
                 tint = color
         ) },
@@ -34,7 +34,7 @@ open class LogPrompt(
         title = "Mood",
         icon = { color ->
             Icon(
-                painter = painterResource(id = R.drawable.sentiment_very_satisfied_black_24dp),
+                painter = painterResource(R.drawable.add_reaction_48px),
                 contentDescription = "Mood Icon",
                 tint = color
         ) },
@@ -43,7 +43,7 @@ open class LogPrompt(
     object Sleep : LogPrompt(
         title = "Sleep",
         icon = { color -> Icon(
-                painter = painterResource(id = R.drawable.nightlight_black_24dp),
+                painter = painterResource(R.drawable.nightlight_black_24dp),
                 contentDescription = "Sleep Icon",
                 tint = color
         ) },
@@ -52,7 +52,7 @@ open class LogPrompt(
     object Cramps : LogPrompt(
         title = "Cramps",
         icon = { color -> Icon(
-                painter = painterResource(id = R.drawable.sentiment_very_dissatisfied_black_24dp),
+                painter = painterResource(R.drawable.sentiment_very_dissatisfied_black_24dp),
                 contentDescription = "Cramp Icon",
                 tint = color
         ) },
@@ -70,7 +70,7 @@ open class LogPrompt(
     object Notes : LogPrompt(
         title = "Notes",
         icon = { color -> Icon(
-                painter = painterResource(id = R.drawable.edit_black_24dp),
+                painter = painterResource(R.drawable.edit_black_24dp),
                 contentDescription = "Notes Icon",
                 tint = color
         ) },
@@ -88,7 +88,7 @@ open class LogSquare (
         icon = {
             Icon(
                 // Missing asset
-                painter = painterResource(id = R.drawable.water_drop_black_24dp),
+                painter = painterResource(R.drawable.water_drop_black_24dp),
                 contentDescription = "FlowLight"
             )
         },
@@ -98,7 +98,7 @@ open class LogSquare (
         description = "Medium",
         icon = {
             Icon(
-                painter = painterResource(id = R.drawable.opacity_black_24dp),
+                painter = painterResource(R.drawable.opacity_black_24dp),
                 contentDescription = "FlowMedium"
             )
         },
@@ -109,7 +109,7 @@ open class LogSquare (
         icon = {
             Icon(
                 // Missing asset
-                painter = painterResource(id = R.drawable.menu_black_24dp),
+                painter = painterResource(R.drawable.menu_black_24dp),
                 contentDescription = "FlowHeavy"
             )
         },
@@ -119,7 +119,7 @@ open class LogSquare (
         description = "Spotting",
         icon = {
             Icon(
-                painter = painterResource(id = R.drawable.spotting),
+                painter = painterResource(R.drawable.spotting),
                 contentDescription = "FlowSpotting"
             )
         },
@@ -129,10 +129,87 @@ open class LogSquare (
         description = "None",
         icon = {
             Icon(
-                painter = painterResource(id = R.drawable.not_interested_black_24dp),
+                painter = painterResource(R.drawable.not_interested_black_24dp),
                 contentDescription = "FlowNone"
             )
         },
         promptTitle = "Flow"
+    )
+
+    object MoodHappy: LogSquare(
+        description = "Happy",
+        icon = {
+            Icon(
+                painter = painterResource(R.drawable.sentiment_satisfied_black_24dp),
+                contentDescription = "MoodHappy"
+            )
+        },
+        promptTitle = "Mood"
+    )
+
+    object MoodNeutral: LogSquare(
+        description = "Meh",
+        icon = {
+            Icon(
+                painter = painterResource(R.drawable.sentiment_neutral_black_24dp),
+                contentDescription = "MoodNeutral"
+            )
+        },
+        promptTitle = "Mood"
+    )
+
+    object MoodSad: LogSquare(
+        description = "Sad",
+        icon = {
+            Icon(
+                painter = painterResource(R.drawable.sentiment_dissatisfied_black_24dp),
+                contentDescription = "MoodSad"
+            )
+        },
+        promptTitle = "Mood"
+    )
+
+    object MoodSilly: LogSquare(
+        description = "Silly/Goofy",
+        icon = {
+            Icon(
+                painter = painterResource(R.drawable.sentiment_very_satisfied_black_24dp),
+                contentDescription = "MoodSilly"
+            )
+        },
+        promptTitle = "Mood"
+    )
+
+    object MoodSick: LogSquare(
+        description = "Sick",
+        icon = {
+            Icon(
+                painter = painterResource(R.drawable.sick_black_24dp),
+                contentDescription = "MoodSick",
+            )
+        },
+        promptTitle = "Mood"
+    )
+
+    object MoodAngry: LogSquare(
+        description = "Angry",
+        icon = {
+            Icon(
+                painter = painterResource(id = R.drawable.sentiment_extremely_dissatisfied_48px),
+                contentDescription = "MoodAngry",
+            )
+        },
+        promptTitle = "Mood"
+    )
+
+    object MoodLoved: LogSquare(
+        description = "Loved",
+        icon = {
+            Icon(
+                painter = painterResource(id = R.drawable.favorite_48px),
+                contentDescription = "MoodLoved",
+            )
+        },
+        promptTitle = "Mood"
     )
 }
