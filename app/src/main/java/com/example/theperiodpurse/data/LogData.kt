@@ -2,6 +2,7 @@ package com.example.theperiodpurse.data
 
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material.icons.outlined.AddReaction
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.*
@@ -110,7 +111,7 @@ open class LogSquare (
         icon = {
             Icon(
                 // Missing asset
-                painter = painterResource(R.drawable.menu_black_24dp),
+                imageVector = Icons.Filled.WaterDrop,
                 contentDescription = "FlowHeavy"
             )
         },

@@ -224,7 +224,7 @@ fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
         targetValue =
         if (logViewModel.getSquareSelected(logPrompt) != null) Teal
         else Color(50,50,50),
-        animationSpec = tween(250, 0, LinearEasing)
+        animationSpec = tween(500, 0, LinearEasing)
     )
 
     Column (
