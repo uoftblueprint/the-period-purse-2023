@@ -214,4 +214,48 @@ open class LogSquare (
         },
         promptTitle = "Mood"
     )
+
+    object CrampsNeutral: LogSquare(
+        description = "Neutral",
+        icon = {
+            Icon(
+                imageVector = Icons.Rounded.SentimentNeutral,
+                contentDescription = "CrampsNeutral",
+            )
+        },
+        promptTitle = "Cramps"
+    )
+
+    object CrampsBad: LogSquare(
+        description = "Bad",
+        icon = {
+            Icon(
+                imageVector = Icons.Rounded.SentimentDissatisfied,
+                contentDescription = "CrampsBad",
+            )
+        },
+        promptTitle = "Cramps"
+    )
+
+    object CrampsTerrible: LogSquare(
+        description = "Terrible",
+        icon = {
+            Icon(
+                imageVector = Icons.Rounded.SentimentVeryDissatisfied,
+                contentDescription = "CrampsTerrible",
+            )
+        },
+        promptTitle = "Cramps"
+    )
+
+    object CrampsNone: LogSquare(
+        description = "None",
+        icon = {
+            Icon(
+                imageVector = Icons.Rounded.SentimentVerySatisfied,
+                contentDescription = "CrampsNone",
+            )
+        },
+        promptTitle = "Cramps"
+    )
 }
