@@ -35,7 +35,7 @@ fun SleepPrompt(logViewModel: LogViewModel) {
     }
     var minutesSlept by remember {
         mutableStateOf(
-            if (logViewModel.getText(LogPrompt.Sleep) != "")
+            if (selectedTime != "")
                 Time.valueOf(selectedTime).minutes.toString()
             else
                 ""
@@ -60,7 +60,7 @@ fun SleepPrompt(logViewModel: LogViewModel) {
                         if (hoursSlept != "") hoursSlept.toInt() else 0,
                         if (minutesSlept != "") minutesSlept.toInt() else 0,
                         0
-                    ) // possible bug of saving 0 sleep time
+                    )
                     logViewModel.setText(LogPrompt.Sleep, time.toString())
                 })
         )
