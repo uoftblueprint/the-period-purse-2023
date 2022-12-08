@@ -45,7 +45,7 @@ import java.time.format.FormatStyle
 
 @Composable
 fun LogScreen(
-    date: String="0000-00-00",
+    date: String="0001-01-01",
     navController: NavController
 ) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -215,6 +215,14 @@ fun LogPromptCards(logPrompts: List<LogPrompt>, logViewModel: LogViewModel) {
 @Composable
 fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
     var expanded by remember { mutableStateOf(false) }
+
+    val tabColor =  animateColorAsState(
+        targetValue =
+        if (logViewModel.getSquareSelected(logPrompt) != null) Teal
+        else Color(50,50,50),
+        animationSpec = tween(250, 0, LinearEasing)
+    )
+
     Column (
         modifier = Modifier
             .animateContentSize(
@@ -232,12 +240,12 @@ fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
                 .fillMaxWidth()
                 .padding(top = 10.dp, bottom = 10.dp, start = 30.dp, end = 15.dp)
         ) {
-            logPrompt.icon()
+            logPrompt.icon(tabColor.value)
             Spacer(Modifier.size(10.dp))
             Text(
                 text = logPrompt.title,
                 fontWeight = FontWeight.Bold,
-                color = Color(50,50,50),
+                color = tabColor.value,
                 fontSize = 16.sp
             )
             Spacer(Modifier.weight(1f))
@@ -291,12 +299,12 @@ fun LogSelectableSquare(
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
             .wrapContentSize(Alignment.Center)
     ) {
         Box (
+            contentAlignment = Alignment.Center,
             modifier = Modifier
-                .size(100.dp)
+                .size(75.dp)
                 .clip(shape = RoundedCornerShape(10.dp))
                 .background(
                     color = squareColor.value
@@ -305,11 +313,38 @@ fun LogSelectableSquare(
                     onClick(logSquare)
                 }
         ) {
-            logSquare.icon()
+            logSquare.icon(Color(50, 50, 50))
         }
+        Text(
+            text = logSquare.description,
+            fontSize = 16.sp,
+            color = Color(50, 50, 50),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 10.dp, bottom = 20.dp)
+        )
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
+@Preview
+@Composable
+fun LogScreenLayoutPreview() {
+    val logPrompts = listOf(
+        LogPrompt.Flow,
+        LogPrompt.Mood,
+        LogPrompt.Sleep,
+        LogPrompt.Cramps,
+        LogPrompt.Exercise,
+        LogPrompt.Notes
+    )
+    LogScreenLayout(
+        date = LocalDate.parse("2022-12-07"),
+        navController = rememberNavController(),
+        logPrompts = logPrompts,
+        logViewModel = LogViewModel(logPrompts)
+    )
+}
 
 @Preview
 @Composable

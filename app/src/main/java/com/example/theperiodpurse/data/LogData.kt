@@ -7,85 +7,72 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import com.example.theperiodpurse.R
-import com.example.theperiodpurse.data.LogPrompt.Cramps.iconTint
 import com.example.theperiodpurse.ui.calendar.LogSelectableSquare
+import com.example.theperiodpurse.ui.symptomlog.FlowPrompt
 import com.example.theperiodpurse.ui.symptomlog.LogViewModel
 
 
 typealias ComposablePromptFun = @Composable (logViewModel: LogViewModel) -> Unit
-typealias ComposableIconFun = @Composable () -> Unit
+typealias ComposableIconFun = @Composable (color: Color) -> Unit
 
-open class LogPrompt(var title: String, var icon: ComposableIconFun, var prompt: ComposablePromptFun) {
-    val iconTint = Color(50,50,50)
+open class LogPrompt(
+        var title: String,
+        var icon: ComposableIconFun,
+        var prompt: ComposablePromptFun,
+    ) {
     object Flow : LogPrompt(
         title = "Flow",
-        icon = { Icon(
-            painter = painterResource(id = R.drawable.opacity_black_24dp),
-            contentDescription = "Flow Icon",
-            tint = iconTint
+        icon = {color ->
+            Icon(
+                painter = painterResource(id = R.drawable.opacity_black_24dp),
+                contentDescription = "Flow Icon",
+                tint = color
         ) },
-        prompt = { logViewModel ->
-            var selected by remember { mutableStateOf<String?>(null) }
-            Column() {
-                Text("Some Test Text")
-                LogSelectableSquare(
-                    logSquare = LogSquare.FlowLight,
-                    selected = selected
-                ) { logSquare ->
-                    if (selected == logSquare.description) {
-                        selected = null
-                        logViewModel.resetSquareSelected(logSquare)
-                    } else {
-                        selected = logSquare.description
-                        logViewModel.setSquareSelected(logSquare)
-                    }
-                }
-            }
-
-        }
+        prompt = { logViewModel -> FlowPrompt(logViewModel = logViewModel) }
     )
     object Mood : LogPrompt(
         title = "Mood",
-        icon = { Icon(
-            painter = painterResource(id = R.drawable.sentiment_very_satisfied_black_24dp),
-            contentDescription = "Mood Icon",
-            tint = iconTint
+        icon = { color ->
+            Icon(
+                painter = painterResource(id = R.drawable.sentiment_very_satisfied_black_24dp),
+                contentDescription = "Mood Icon",
+                tint = color
         ) },
         prompt = {}
     )
     object Sleep : LogPrompt(
         title = "Sleep",
-        icon = { Icon(
-            painter = painterResource(id = R.drawable.nightlight_black_24dp),
-            contentDescription = "Sleep Icon",
-            tint = iconTint
+        icon = { color -> Icon(
+                painter = painterResource(id = R.drawable.nightlight_black_24dp),
+                contentDescription = "Sleep Icon",
+                tint = color
         ) },
         prompt = {}
     )
     object Cramps : LogPrompt(
         title = "Cramps",
-        icon = { Icon(
-            painter = painterResource(id = R.drawable.sentiment_very_dissatisfied_black_24dp),
-            contentDescription = "Cramp Icon",
-            tint = iconTint
+        icon = { color -> Icon(
+                painter = painterResource(id = R.drawable.sentiment_very_dissatisfied_black_24dp),
+                contentDescription = "Cramp Icon",
+                tint = color
         ) },
         prompt = {}
     )
     object Exercise : LogPrompt(
         title = "Exercise",
-        icon = { Icon(
-            painter = painterResource(id =R.drawable.self_improvement_black_24dp),
-            contentDescription = "Exercise Icon",
-            tint = iconTint
+        icon = { color -> Icon(
+                painter = painterResource(id =R.drawable.self_improvement_black_24dp),
+                contentDescription = "Exercise Icon",
+                tint = color
         ) },
         prompt = {}
     )
     object Notes : LogPrompt(
         title = "Notes",
-        icon = { Icon(
-            painter = painterResource(id = R.drawable.edit_black_24dp),
-            contentDescription = "Notes Icon",
-            tint = iconTint
+        icon = { color -> Icon(
+                painter = painterResource(id = R.drawable.edit_black_24dp),
+                contentDescription = "Notes Icon",
+                tint = color
         ) },
         prompt = {}
     )
@@ -100,6 +87,7 @@ open class LogSquare (
         description = "Light",
         icon = {
             Icon(
+                // Missing asset
                 painter = painterResource(id = R.drawable.water_drop_black_24dp),
                 contentDescription = "FlowLight"
             )
