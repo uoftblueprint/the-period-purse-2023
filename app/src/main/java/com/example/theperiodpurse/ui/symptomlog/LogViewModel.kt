@@ -9,7 +9,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
-    private val _uiState = MutableStateFlow(LogUiState(getSquares(logPrompts)))
+    private val _uiState = MutableStateFlow(LogUiState(
+        getSquares(logPrompts),
+        getText(logPrompts)
+    ))
     val uiState: StateFlow<LogUiState> = _uiState.asStateFlow()
 
     fun setSquareSelected(logSquare: LogSquare) {
@@ -40,11 +43,43 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
         }
     }
 
+    fun setText(logPrompt: LogPrompt, newText: String) {
+        _uiState.update { currentState ->
+            currentState.promptToText[logPrompt.title] = newText
+            currentState.copy(
+                selectSquares =
+                currentState.selectSquares
+            )
+        }
+    }
+
+    fun getText(logPrompt: LogPrompt): String{
+        return(uiState.value.promptToText[logPrompt.title]?: "")
+    }
+
+    fun resetText(logPrompt: LogPrompt) {
+        _uiState.update { currentState ->
+            currentState.promptToText[logPrompt.title] = ""
+            currentState.copy(
+                selectSquares =
+                currentState.selectSquares
+            )
+        }
+    }
+
     private fun getSquares(logPrompts: List<LogPrompt>): LinkedHashMap<String, Any> {
         var selectedSquares = LinkedHashMap<String, Any>()
         for (logPrompt in logPrompts) {
             selectedSquares[logPrompt.title] = false
         }
         return(selectedSquares)
+    }
+
+    private fun getText(logPrompts: List<LogPrompt>): LinkedHashMap<String, String> {
+        var promptToText = LinkedHashMap<String, String>()
+        for (logPrompt in logPrompts) {
+            promptToText[logPrompt.title] = ""
+        }
+        return(promptToText)
     }
 }
