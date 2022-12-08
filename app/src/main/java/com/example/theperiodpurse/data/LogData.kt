@@ -65,7 +65,7 @@ open class LogPrompt(
                 contentDescription = "Exercise Icon",
                 tint = color
         ) },
-        prompt = {}
+        prompt = { logViewModel -> ExercisePrompt(logViewModel = logViewModel) }
     )
     object Notes : LogPrompt(
         title = "Notes",
@@ -255,5 +255,104 @@ open class LogSquare (
             )
         },
         promptTitle = "Cramps"
+    )
+
+    object ExerciseCardio : LogSquare(
+        description = "Cardio",
+        icon = {
+            Icon(
+                imageVector = Icons.Rounded.DirectionsRun,
+                contentDescription = "ExerciseCardio",
+            )
+        },
+        promptTitle = "Exercise"
+    )
+
+    object ExerciseYoga : LogSquare(
+        description = "Yoga",
+        icon = {
+            Icon(
+                imageVector = Icons.Rounded.SelfImprovement,
+                contentDescription = "ExerciseYoga",
+            )
+        },
+        promptTitle = "Exercise"
+    )
+
+    object ExerciseStrength : LogSquare(
+        description = "Strength",
+        icon = {
+            Icon(
+                imageVector = Icons.Rounded.FitnessCenter,
+                contentDescription = "ExerciseStrength",
+            )
+        },
+        promptTitle = "Exercise"
+    )
+
+    object ExerciseBallSports : LogSquare(
+        description = "Ball Sports",
+        icon = {
+            Icon(
+                imageVector = Icons.Rounded.SportsSoccer,
+                contentDescription = "ExerciseBallSports",
+            )
+        },
+        promptTitle = "Exercise"
+    )
+
+    object ExerciseMartialArts : LogSquare(
+        description = "Martial Arts",
+        icon = {
+            Icon(
+                imageVector = Icons.Rounded.SportsMartialArts,
+                contentDescription = "ExerciseMartialArts",
+            )
+        },
+        promptTitle = "Exercise"
+    )
+
+    object ExerciseWaterSports : LogSquare(
+        description = "Water Sports",
+        icon = {
+            Icon(
+                imageVector = Icons.Rounded.Pool,
+                contentDescription = "Water Sports",
+            )
+        },
+        promptTitle = "Exercise"
+    )
+
+    object ExerciseCycling : LogSquare(
+        description = "Cycling",
+        icon = {
+            Icon(
+                imageVector = Icons.Rounded.DirectionsBike,
+                contentDescription = "ExerciseCycling",
+            )
+        },
+        promptTitle = "Exercise"
+    )
+
+    object ExerciseRacquetSports : LogSquare(
+        description = "Racquet Sports",
+        icon = {
+            Icon(
+                imageVector = Icons.Rounded.SportsTennis,
+                contentDescription = "ExerciseRacquetSports",
+            )
+        },
+        promptTitle = "Exercise"
+    )
+
+    object ExerciseWinterSports : LogSquare(
+        description = "Winter Sports",
+        icon = {
+            Icon(
+                imageVector = Icons.Rounded.DownhillSkiing,
+                contentDescription = "ExerciseWinterSports",
+            )
+        },
+        promptTitle = "Exercise"
     )
 }
