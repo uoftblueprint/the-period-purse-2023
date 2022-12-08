@@ -1,6 +1,7 @@
 package com.example.theperiodpurse.ui.calendar
 
 import androidx.lifecycle.ViewModel
+import com.example.theperiodpurse.data.LogPrompt
 import com.example.theperiodpurse.data.LogSquare
 import com.example.theperiodpurse.data.LogUiState
 import com.example.theperiodpurse.data.OnboardUIState
@@ -9,14 +10,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class LogViewModel(logSquares: List<LogSquare>) : ViewModel() {
-    private val _uiState = MutableStateFlow(LogUiState(getSquares(logSquares)))
+class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
+    private val _uiState = MutableStateFlow(LogUiState(getSquares(logPrompts)))
     val uiState: StateFlow<LogUiState> = _uiState.asStateFlow()
 
     fun setSquareSelected(logSquare: LogSquare) {
         _uiState.update { currentState ->
-            currentState.selectSquares[logSquare.description] =
-                !currentState.selectSquares[logSquare.description]!!
+            currentState.selectSquares[logSquare.promptTitle] = logSquare.description
             currentState.copy(
                 selectSquares =
                     currentState.selectSquares
@@ -24,14 +24,24 @@ class LogViewModel(logSquares: List<LogSquare>) : ViewModel() {
         }
     }
 
-    fun isSquareSelected(logSquare: LogSquare) : Boolean {
-        return(uiState.value.selectSquares[logSquare.description]?: false)
+    fun resetSquareSelected(logSquare: LogSquare) {
+        _uiState.update { currentState ->
+            currentState.selectSquares[logSquare.promptTitle] = false
+            currentState.copy(
+                selectSquares =
+                currentState.selectSquares
+            )
+        }
     }
 
-    private fun getSquares(logSquares: List<LogSquare>): LinkedHashMap<String, Boolean> {
-        var selectedSquares = LinkedHashMap<String, Boolean>()
-        for (logSquare in logSquares) {
-            selectedSquares[logSquare.description] = false
+    fun isSquareSelected(logSquare: LogSquare) : Boolean {
+        return(uiState.value.selectSquares[logSquare.promptTitle] == logSquare.description)
+    }
+
+    private fun getSquares(logPrompts: List<LogPrompt>): LinkedHashMap<String, Any> {
+        var selectedSquares = LinkedHashMap<String, Any>()
+        for (logPrompt in logPrompts) {
+            selectedSquares[logPrompt.title] = false
         }
         return(selectedSquares)
     }

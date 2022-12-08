@@ -1,5 +1,5 @@
 package com.example.theperiodpurse.data
 
 data class LogUiState (
-    var selectSquares: LinkedHashMap<String, Boolean>
+    var selectSquares: LinkedHashMap<String, Any>
 )

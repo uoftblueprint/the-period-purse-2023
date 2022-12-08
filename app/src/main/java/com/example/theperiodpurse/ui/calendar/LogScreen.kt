@@ -3,11 +3,17 @@ package com.example.theperiodpurse.ui.calendar
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.Spring
+import com.example.theperiodpurse.ui.theme.Teal
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -62,15 +68,13 @@ fun LogScreen(
             LogPrompt.Notes
         )
 
-        val logSquares = listOf(
-            LogSquare.FlowLight,
-            LogSquare.FlowMedium,
-            LogSquare.FlowHeavy,
-            LogSquare.FlowSpotting,
-            LogSquare.FlowNone
+        val logSquarePrompts = listOf( // log prompts that use selectable squares
+            LogPrompt.Flow
         )
 
-        LogScreenLayout(day, navController, logPrompts)
+        val logViewModel = LogViewModel(logSquarePrompts)
+
+        LogScreenLayout(day, navController, logPrompts, logViewModel)
     }
 }
 
@@ -79,14 +83,15 @@ fun LogScreen(
 fun LogScreenLayout(
     date: LocalDate,
     navController: NavController,
-    logPrompts: List<LogPrompt>
+    logPrompts: List<LogPrompt>,
+    logViewModel: LogViewModel
 ) {
     Column() {
         LogScreenTopBar(
             navController = navController,
             date = date
         )
-        LogPromptCards(logPrompts = logPrompts)
+        LogPromptCards(logPrompts = logPrompts, logViewModel = logViewModel)
     }
 }
 
@@ -193,20 +198,7 @@ fun LogScreenTopBar(navController: NavController, date: LocalDate) {
 }
 
 @Composable
-fun ChangeableExpandButton( expanded: Boolean, onClick: () -> Unit) {
-    IconButton(onClick = onClick) {
-        Icon(
-            imageVector = 
-                if (expanded) Icons.Filled.KeyboardArrowUp
-                else Icons.Filled.KeyboardArrowDown,
-            tint = Color.Black,
-            contentDescription = "Expand Button",
-        )
-    }
-}
-
-@Composable
-fun LogPromptCards(logPrompts: List<LogPrompt>) {
+fun LogPromptCards(logPrompts: List<LogPrompt>, logViewModel: LogViewModel) {
     LazyColumn(modifier = Modifier.background(Color.White)) {
         items(logPrompts) {
             Column(
@@ -223,14 +215,14 @@ fun LogPromptCards(logPrompts: List<LogPrompt>) {
                             strokeWidth = strokeWidth
                         )
                     }) {
-                LogPromptCard(logPrompt = it)
+                LogPromptCard(logPrompt = it, logViewModel)
             }
         }
     }
 }
 
 @Composable
-fun LogPromptCard(logPrompt: LogPrompt) {
+fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
     var expanded by remember { mutableStateOf(false) }
     Column (
         modifier = Modifier
@@ -240,6 +232,7 @@ fun LogPromptCard(logPrompt: LogPrompt) {
                     stiffness = Spring.StiffnessLow
                 )
             )
+            .clickable { expanded = !expanded }
     ) {
         Row (
             verticalAlignment = Alignment.CenterVertically,
@@ -272,8 +265,56 @@ fun LogPromptCard(logPrompt: LogPrompt) {
                         end = 40.dp
                     )
             ) {
-                logPrompt.prompt()
+                logPrompt.prompt(logViewModel)
             }
+        }
+    }
+}
+
+@Composable
+fun ChangeableExpandButton( expanded: Boolean, onClick: () -> Unit) {
+    IconButton(onClick = onClick) {
+        Icon(
+            imageVector =
+            if (expanded) Icons.Filled.KeyboardArrowUp
+            else Icons.Filled.KeyboardArrowDown,
+            tint = Color(97, 153, 154),
+            contentDescription = "Expand Button",
+        )
+    }
+}
+
+@Composable
+fun LogSelectableSquare(
+    logSquare: LogSquare,
+    selected : String?,
+    onClick: (LogSquare) -> Unit
+) {
+
+    val squareColor = animateColorAsState(
+        targetValue =
+            if (logSquare.description == selected) Teal
+            else Color(200,200,200),
+        animationSpec = tween(250, 0, LinearEasing)
+    )
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentSize(Alignment.Center)
+    ) {
+        Box (
+            modifier = Modifier
+                .size(100.dp)
+                .clip(shape = RoundedCornerShape(10.dp))
+                .background(
+                    color = squareColor.value
+                )
+                .clickable {
+                    onClick(logSquare)
+                }
+        ) {
+            logSquare.icon()
         }
     }
 }
@@ -293,7 +334,10 @@ fun LogScreenTopBarPreview() {
 @Preview
 @Composable
 fun LogPromptCardPreview() {
-    LogPromptCard(logPrompt = LogPrompt.Flow)
+    val logPrompts = listOf(LogPrompt.Flow)
+    val logViewModel = LogViewModel(logPrompts)
+
+    LogPromptCard(logPrompt = LogPrompt.Flow, logViewModel)
 }
 
 @Preview
@@ -307,5 +351,27 @@ fun LogPromptCardsPreview() {
         LogPrompt.Exercise,
         LogPrompt.Notes
     )
-    LogPromptCards(logPrompts = logPrompts)
+    val logViewModel = LogViewModel(logPrompts)
+    LogPromptCards(logPrompts = logPrompts, logViewModel)
+}
+
+@Preview
+@Composable
+fun LogSelectableSquarePreview() {
+    val logPrompts = listOf(LogPrompt.Flow)
+    val logViewModel = LogViewModel(logPrompts)
+    var selected by remember { mutableStateOf<String?>(null) }
+
+    LogSelectableSquare(
+        logSquare = LogSquare.FlowLight,
+        selected = selected
+    ) { logSquare ->
+        if (selected == logSquare.description) {
+            selected = null
+            logViewModel.resetSquareSelected(logSquare)
+        } else {
+            selected = logSquare.description
+            logViewModel.setSquareSelected(logSquare)
+        }
+    }
 }

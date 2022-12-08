@@ -1,18 +1,22 @@
 package com.example.theperiodpurse.data
 
+import android.util.Log
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.data.LogPrompt.Cramps.iconTint
+import com.example.theperiodpurse.ui.calendar.LogSelectableSquare
+import com.example.theperiodpurse.ui.calendar.LogViewModel
 
 
-typealias ComposableFun = @Composable () -> Unit
+typealias ComposablePromptFun = @Composable (logViewModel: LogViewModel) -> Unit
 typealias ComposableIconFun = @Composable () -> Unit
 
-open class LogPrompt(var title: String, var icon: ComposableIconFun, var prompt: ComposableFun) {
+open class LogPrompt(var title: String, var icon: ComposableIconFun, var prompt: ComposablePromptFun) {
     val iconTint = Color(50,50,50)
     object Flow : LogPrompt(
         title = "Flow",
@@ -21,8 +25,31 @@ open class LogPrompt(var title: String, var icon: ComposableIconFun, var prompt:
             contentDescription = "Flow Icon",
             tint = iconTint
         ) },
-        prompt = {
-            Text("Some Test Text")
+        prompt = { logViewModel ->
+            val logSquares = listOf(
+                LogSquare.FlowLight,
+                LogSquare.FlowMedium,
+                LogSquare.FlowHeavy,
+                LogSquare.FlowSpotting,
+                LogSquare.FlowNone
+            )
+            var selected by remember { mutableStateOf<String?>(null) }
+            Column() {
+                Text("Some Test Text")
+                LogSelectableSquare(
+                    logSquare = LogSquare.FlowLight,
+                    selected = selected
+                ) { logSquare ->
+                    if (selected == logSquare.description) {
+                        selected = null
+                        logViewModel.resetSquareSelected(logSquare)
+                    } else {
+                        selected = logSquare.description
+                        logViewModel.setSquareSelected(logSquare)
+                    }
+                }
+            }
+
         }
     )
     object Mood : LogPrompt(
@@ -72,7 +99,11 @@ open class LogPrompt(var title: String, var icon: ComposableIconFun, var prompt:
     )
 }
 
-open class LogSquare (var description: String, var icon: ComposableIconFun) {
+open class LogSquare (
+    var description: String,
+    var icon: ComposableIconFun,
+    var promptTitle: String
+    ) {
     object FlowLight: LogSquare(
         description = "Light",
         icon = {
@@ -80,7 +111,8 @@ open class LogSquare (var description: String, var icon: ComposableIconFun) {
                 painter = painterResource(id = R.drawable.water_drop_black_24dp),
                 contentDescription = "FlowLight"
             )
-        }
+        },
+        promptTitle = "Flow"
     )
     object FlowMedium: LogSquare(
         description = "Medium",
@@ -89,7 +121,8 @@ open class LogSquare (var description: String, var icon: ComposableIconFun) {
                 painter = painterResource(id = R.drawable.opacity_black_24dp),
                 contentDescription = "FlowMedium"
             )
-        }
+        },
+        promptTitle = "Flow"
     )
     object FlowHeavy: LogSquare(
         description = "Heavy",
@@ -99,7 +132,8 @@ open class LogSquare (var description: String, var icon: ComposableIconFun) {
                 painter = painterResource(id = R.drawable.menu_black_24dp),
                 contentDescription = "FlowHeavy"
             )
-        }
+        },
+        promptTitle = "Flow"
     )
     object FlowSpotting: LogSquare(
         description = "Spotting",
@@ -108,7 +142,8 @@ open class LogSquare (var description: String, var icon: ComposableIconFun) {
                 painter = painterResource(id = R.drawable.spotting),
                 contentDescription = "FlowSpotting"
             )
-        }
+        },
+        promptTitle = "Flow"
     )
     object FlowNone: LogSquare(
         description = "None",
@@ -117,6 +152,7 @@ open class LogSquare (var description: String, var icon: ComposableIconFun) {
                 painter = painterResource(id = R.drawable.not_interested_black_24dp),
                 contentDescription = "FlowNone"
             )
-        }
+        },
+        promptTitle = "Flow"
     )
 }
