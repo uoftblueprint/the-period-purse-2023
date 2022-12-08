@@ -231,7 +231,7 @@ fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
         animationSpec = tween(500, 0, LinearEasing)
     )
 
-    Column (
+    Column(
         modifier = Modifier
             .animateContentSize(
                 animationSpec = spring(
@@ -240,25 +240,29 @@ fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
                 )
             )
     ) {
-        Row (
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
+        Column (
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp, bottom = 10.dp, start = 30.dp, end = 15.dp)
                 .clickable { expanded = !expanded }
         ) {
-            logPrompt.icon(tabColor.value)
-            Spacer(Modifier.size(10.dp))
-            Text(
-                text = logPrompt.title,
-                fontWeight = FontWeight.Bold,
-                color = tabColor.value,
-                fontSize = 16.sp
-            )
-            Spacer(Modifier.weight(1f))
-            ChangeableExpandButton(expanded = expanded) {
-                expanded = !expanded
+            Row (
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp, bottom = 10.dp, start = 30.dp, end = 15.dp)
+            ) {
+                logPrompt.icon(tabColor.value)
+                Spacer(Modifier.size(10.dp))
+                Text(
+                    text = logPrompt.title,
+                    fontWeight = FontWeight.Bold,
+                    color = tabColor.value,
+                    fontSize = 16.sp
+                )
+                Spacer(Modifier.weight(1f))
+                ChangeableExpandButton(expanded = expanded) {
+                    expanded = !expanded
+                }
             }
         }
         if (expanded) {
