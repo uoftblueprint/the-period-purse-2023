@@ -9,7 +9,7 @@ import androidx.compose.ui.res.painterResource
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.data.LogPrompt.Cramps.iconTint
 import com.example.theperiodpurse.ui.calendar.LogSelectableSquare
-import com.example.theperiodpurse.ui.calendar.LogViewModel
+import com.example.theperiodpurse.ui.symptomlog.LogViewModel
 
 
 typealias ComposablePromptFun = @Composable (logViewModel: LogViewModel) -> Unit

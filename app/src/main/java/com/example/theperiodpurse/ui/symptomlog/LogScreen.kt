@@ -37,6 +37,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.Screen
 import com.example.theperiodpurse.data.LogPrompt
 import com.example.theperiodpurse.data.LogSquare
+import com.example.theperiodpurse.ui.symptomlog.LogViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -197,7 +198,6 @@ fun LogPromptCards(logPrompts: List<LogPrompt>, logViewModel: LogViewModel) {
                     .drawBehind {
                         val strokeWidth = 4f
                         val x = size.width - strokeWidth
-                        val y = size.height - strokeWidth
 
                         drawLine(
                             color = Color(200, 200, 200),

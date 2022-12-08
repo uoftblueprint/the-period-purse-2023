@@ -1,9 +1,8 @@
-package com.example.theperiodpurse.ui.calendar
+package com.example.theperiodpurse.ui.symptomlog
 
 import androidx.lifecycle.ViewModel
 import com.example.theperiodpurse.data.LogPrompt
 import com.example.theperiodpurse.data.LogSquare
-import com.example.theperiodpurse.data.LogUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
