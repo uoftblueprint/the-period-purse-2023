@@ -142,7 +142,7 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
                 end = 0.dp,
                 bottom = 16.dp),
             modifier = Modifier
-                .height(450.dp),
+                .height(400.dp),
             content = {
                 items(flowSquares) { flowSquare ->
                     LogSelectableSquare(
