@@ -236,7 +236,6 @@ fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
                     stiffness = Spring.StiffnessLow
                 )
             )
-            .clickable { expanded = !expanded }
     ) {
         Row (
             verticalAlignment = Alignment.CenterVertically,
@@ -244,6 +243,7 @@ fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 10.dp, bottom = 10.dp, start = 30.dp, end = 15.dp)
+                .clickable { expanded = !expanded }
         ) {
             logPrompt.icon(tabColor.value)
             Spacer(Modifier.size(10.dp))
