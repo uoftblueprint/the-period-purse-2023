@@ -1,15 +1,16 @@
 package com.example.theperiodpurse.data
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AddReaction
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import com.example.theperiodpurse.R
-import com.example.theperiodpurse.ui.calendar.LogSelectableSquare
 import com.example.theperiodpurse.ui.symptomlog.FlowPrompt
 import com.example.theperiodpurse.ui.symptomlog.LogViewModel
+import com.example.theperiodpurse.ui.symptomlog.MoodPrompt
 
 
 typealias ComposablePromptFun = @Composable (logViewModel: LogViewModel) -> Unit
@@ -34,11 +35,11 @@ open class LogPrompt(
         title = "Mood",
         icon = { color ->
             Icon(
-                painter = painterResource(R.drawable.add_reaction_48px),
+                imageVector = Icons.Outlined.AddReaction,
                 contentDescription = "Mood Icon",
                 tint = color
         ) },
-        prompt = {}
+        prompt = { logViewModel -> MoodPrompt(logViewModel = logViewModel) }
     )
     object Sleep : LogPrompt(
         title = "Sleep",
@@ -195,7 +196,7 @@ open class LogSquare (
         description = "Angry",
         icon = {
             Icon(
-                painter = painterResource(id = R.drawable.sentiment_extremely_dissatisfied_48px),
+                imageVector = Icons.Rounded.MoodBad,
                 contentDescription = "MoodAngry",
             )
         },
@@ -206,7 +207,7 @@ open class LogSquare (
         description = "Loved",
         icon = {
             Icon(
-                painter = painterResource(id = R.drawable.favorite_48px),
+                imageVector = Icons.Rounded.Favorite,
                 contentDescription = "MoodLoved",
             )
         },
