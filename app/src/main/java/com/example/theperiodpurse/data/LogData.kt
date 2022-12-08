@@ -1,6 +1,5 @@
 package com.example.theperiodpurse.data
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -26,13 +25,6 @@ open class LogPrompt(var title: String, var icon: ComposableIconFun, var prompt:
             tint = iconTint
         ) },
         prompt = { logViewModel ->
-            val logSquares = listOf(
-                LogSquare.FlowLight,
-                LogSquare.FlowMedium,
-                LogSquare.FlowHeavy,
-                LogSquare.FlowSpotting,
-                LogSquare.FlowNone
-            )
             var selected by remember { mutableStateOf<String?>(null) }
             Column() {
                 Text("Some Test Text")

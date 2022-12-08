@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import com.example.theperiodpurse.data.LogPrompt
 import com.example.theperiodpurse.data.LogSquare
 import com.example.theperiodpurse.data.LogUiState
-import com.example.theperiodpurse.data.OnboardUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,10 +31,6 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
                 currentState.selectSquares
             )
         }
-    }
-
-    fun isSquareSelected(logSquare: LogSquare) : Boolean {
-        return(uiState.value.selectSquares[logSquare.promptTitle] == logSquare.description)
     }
 
     private fun getSquares(logPrompts: List<LogPrompt>): LinkedHashMap<String, Any> {
