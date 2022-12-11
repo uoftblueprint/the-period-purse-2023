@@ -35,7 +35,7 @@ fun CrampsPrompt (logViewModel: LogViewModel) {
                 end = 0.dp,
                 bottom = 16.dp),
             modifier = Modifier
-                .height(250.dp),
+                .height(270.dp),
             content = {
                 items(flowSquares) { flowSquare ->
                     LogSelectableSquare(

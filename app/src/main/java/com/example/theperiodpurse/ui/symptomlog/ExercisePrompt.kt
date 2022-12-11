@@ -138,7 +138,7 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
             columns = GridCells.Fixed(3),
             contentPadding = PaddingValues(
                 start = 0.dp,
-                top = 10.dp,
+                top = 20.dp,
                 end = 0.dp,
                 bottom = 16.dp),
             modifier = Modifier
