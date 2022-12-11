@@ -8,8 +8,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
-import com.example.theperiodpurse.ui.setting.SettingScreenNavigation
-import com.example.theperiodpurse.ui.setting.SettingsScreen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -28,8 +26,6 @@ class NavigationTest {
                 ComposeNavigator()
             )
             ScreenApp(navController = navController, skipOnboarding = true)
-//            ScreenApp(navController = navController)
-            SettingsScreen(navController = navController)
         }
     }
 
@@ -70,31 +66,5 @@ class NavigationTest {
             .performClick()
         navController.assertCurrentRouteName(Screen.Calendar.name)
     }
-
 }
 
-    @Test
-    fun appNavhost_clickNotifications_navigatesToNotificationsScreen() {
-        navController.assertCurrentRouteName(SettingScreenNavigation.Start.name)
-        composeTestRule.onNodeWithStringId(R.string.customize_notifications)
-            .performClick()
-        navController.assertCurrentRouteName(SettingScreenNavigation.Notification.name)
-    }
-
-    @Test
-    fun appNavhost_clickBackUp_navigatesToBackUpScreen() {
-        navController.assertCurrentRouteName(SettingScreenNavigation.Start.name)
-        composeTestRule.onNodeWithStringId(R.string.back_up_account)
-            .performClick()
-        navController.assertCurrentRouteName(SettingScreenNavigation.BackUpAccount.name)
-    }
-
-    @Test
-    fun appNavhost_clickDelete_navigatesToDeleteScreen() {
-        navController.assertCurrentRouteName(SettingScreenNavigation.Start.name)
-        composeTestRule.onNodeWithStringId(R.string.delete_account)
-            .performClick()
-        navController.assertCurrentRouteName(SettingScreenNavigation.DeleteAccount.name)
-    }
-
-}

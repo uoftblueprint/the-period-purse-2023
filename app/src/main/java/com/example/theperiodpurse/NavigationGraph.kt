@@ -18,7 +18,7 @@ import com.example.theperiodpurse.ui.onboarding.OnboardViewModel
 import com.example.theperiodpurse.ui.onboarding.QuestionOneScreen
 import com.example.theperiodpurse.ui.onboarding.QuestionTwoScreen
 import com.example.theperiodpurse.ui.onboarding.WelcomeScreen
-import com.example.theperiodpurse.ui.setting.SettingScreen
+import com.example.theperiodpurse.ui.setting.SettingsScreen
 
 enum class Screen() {
     Calendar,
@@ -53,7 +53,7 @@ fun NavigationGraph(
         }
 
         composable(route = Screen.Settings.name) {
-            SettingScreen()
+            SettingsScreen()
         }
 
         composable(route = Screen.Cycle.name) {
