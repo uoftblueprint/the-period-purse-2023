@@ -360,14 +360,15 @@ fun SaveButton(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
     ) {
-        Button(
+        FloatingActionButton(
             onClick = {
                 navController.navigateUp()
             },
-            colors = ButtonDefaults.buttonColors(backgroundColor = Teal),
+            backgroundColor = Teal,
             modifier = Modifier
                 .padding(20.dp)
-                .width(300.dp)
+                .width(350.dp)
+                .height(40.dp)
         ) {
             Text(
                 text = "Save",
