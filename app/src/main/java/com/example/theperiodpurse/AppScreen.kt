@@ -3,11 +3,17 @@ package com.example.theperiodpurse
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.theperiodpurse.ui.onboarding.*
@@ -44,6 +50,13 @@ fun ScreenApp(
             }
         }
     ) { innerPadding ->
+        Image(
+            painter = painterResource(id = R.drawable.background),
+            contentDescription = null,
+            modifier = Modifier.fillMaxWidth().fillMaxHeight().fillMaxSize(),
+            contentScale = ContentScale.FillBounds
+        )
+        
         NavigationGraph(
             navController = navController,
             startDestination = if (skipOnboarding) Screen.Calendar.name else OnboardingScreen.Welcome.name,
