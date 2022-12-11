@@ -11,6 +11,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -76,22 +77,36 @@ fun LogScreenLayout(
     logPrompts: List<LogPrompt>,
     logViewModel: LogViewModel
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-        LogScreenTopBar(
-            navController = navController,
-            date = date
-        )
-        LogPromptCards(logPrompts = logPrompts, logViewModel = logViewModel)
-        Spacer(modifier = Modifier
-            .height(130.dp)
-            .weight(1f))
-        SaveButton(navController = navController)
+    Box() {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+        ) {
+            LogScreenTopBar(
+                navController = navController,
+                date = date
+            )
+            LogPromptCards(logPrompts = logPrompts, logViewModel = logViewModel)
+            Spacer(modifier = Modifier
+                .height(130.dp)
+                .weight(1f))
+        }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Spacer(modifier = Modifier
+                .weight(1f)
+            )
+            SaveButton(navController = navController)
+        }
+
     }
+
+
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
