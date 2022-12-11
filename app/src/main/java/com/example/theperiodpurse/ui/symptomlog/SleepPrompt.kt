@@ -68,7 +68,7 @@ fun SleepPrompt(logViewModel: LogViewModel) {
                     })
             )
         }
-        Spacer(modifier = Modifier.size(5.dp))
+        Spacer(modifier = Modifier.size(17.dp))
         Box(
             modifier = Modifier
                 .width(90.dp)
@@ -94,6 +94,7 @@ fun SleepPrompt(logViewModel: LogViewModel) {
                     })
             )
         }
+        Spacer(modifier = Modifier.size(6.dp))
         Button(
             onClick = {
                 logViewModel.resetText(LogPrompt.Sleep)
