@@ -79,7 +79,7 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
             Spacer(modifier = Modifier.size(17.dp))
             Box(
                 modifier = Modifier
-                    .width(90.dp)
+                    .width(100.dp)
             ) {
                 EditNumberField(
                     label = R.string.minutes,
