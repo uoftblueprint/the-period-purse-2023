@@ -310,6 +310,7 @@ fun LogSelectableSquare(
     )
 
     Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .wrapContentSize(Alignment.Center)
     ) {
