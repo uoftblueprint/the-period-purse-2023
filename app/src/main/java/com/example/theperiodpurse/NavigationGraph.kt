@@ -1,10 +1,13 @@
 package com.example.theperiodpurse
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -46,10 +49,9 @@ fun NavigationGraph(
     NavHost(
         navController = navController,
         startDestination = startDestination,
-        modifier = modifier
     ) {
         composable(route = Screen.Calendar.name) {
-            CalendarScreen()
+            CalendarScreen(modifier)
         }
 
         composable(route = Screen.Settings.name) {
@@ -122,7 +124,7 @@ private fun cancelOrderAndNavigateToStart(
 }
 
 @Composable
-fun currentRoute(navController: NavHostController): String? {
+fun currentRoute(navController: NavController): String? {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    return navBackStackEntry?.destination?.route
+    return  navBackStackEntry?.destination?.route
 }
