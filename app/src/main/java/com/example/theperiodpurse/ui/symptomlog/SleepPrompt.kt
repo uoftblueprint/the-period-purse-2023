@@ -69,7 +69,10 @@ fun SleepPrompt(logViewModel: LogViewModel) {
                 EditNumberField(
                     label = R.string.hours,
                     value = hoursSlept,
-                    onValueChange = { hoursSlept = it },
+                    onValueChange = {
+                        hoursSlept = it
+                        saveTextData(logViewModel, hoursSlept, minutesSlept)
+                                    },
 
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
@@ -90,7 +93,10 @@ fun SleepPrompt(logViewModel: LogViewModel) {
                 EditNumberField(
                     label = R.string.minutes,
                     value = minutesSlept,
-                    onValueChange = { minutesSlept = it },
+                    onValueChange = {
+                        minutesSlept = it
+                        saveTextData(logViewModel, hoursSlept, minutesSlept)
+                                    },
 
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
