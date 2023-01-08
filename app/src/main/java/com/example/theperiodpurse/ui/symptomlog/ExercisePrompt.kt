@@ -179,7 +179,7 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
     }
 }
 
-fun saveTextData(
+private fun saveTextData(
     logViewModel: LogViewModel,
     hoursExercised: String,
     minutesExercised: String) {
