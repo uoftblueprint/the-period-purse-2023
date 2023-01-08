@@ -6,13 +6,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navArgument
 import com.example.theperiodpurse.data.DataSource
 import com.example.theperiodpurse.ui.QuestionThreeScreen
 import com.example.theperiodpurse.ui.SummaryScreen
 import com.example.theperiodpurse.ui.calendar.CalendarScreen
+import com.example.theperiodpurse.ui.calendar.LogScreen
 import com.example.theperiodpurse.ui.cycle.CycleScreenLayout
 import com.example.theperiodpurse.ui.onboarding.OnboardViewModel
 import com.example.theperiodpurse.ui.onboarding.QuestionOneScreen
@@ -22,6 +25,7 @@ import com.example.theperiodpurse.ui.setting.SettingScreen
 
 enum class Screen() {
     Calendar,
+    Log,
     Cycle,
     Settings,
     Learn
@@ -49,7 +53,22 @@ fun NavigationGraph(
         modifier = modifier
     ) {
         composable(route = Screen.Calendar.name) {
-            CalendarScreen()
+            CalendarScreen(navController = navController)
+        }
+
+        composable(
+            route = "%s/%s/{date}"
+                .format(Screen.Calendar, Screen.Log),
+            arguments = listOf(navArgument("date") { type = NavType.StringType })
+        ) { backStackEntry ->
+            // date is in yyyy-mm-dd format
+            val date = backStackEntry.arguments?.getString("date")
+            if (date != null) {
+                LogScreen(
+                    date = date,
+                    navController = navController
+                )
+            }
         }
 
         composable(route = Screen.Settings.name) {
