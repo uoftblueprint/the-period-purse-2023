@@ -60,7 +60,10 @@ fun NotesPrompt(logViewModel: LogViewModel) {
 
             MinLinesOutlinedTextField(
                 value = notesText,
-                onValueChange = { notes: String -> notesText = notes },
+                onValueChange = {
+                        notes: String -> notesText = notes
+                        saveTextData(logViewModel, notesText)
+                                },
                 label = { Text(text = "Record a symptom or make a note") },
                 maxLines = 5,
                 keyboardOptions = KeyboardOptions(
@@ -68,10 +71,6 @@ fun NotesPrompt(logViewModel: LogViewModel) {
                 ),
                 keyboardActions = KeyboardActions(
                     onDone = {
-                        saveTextData(logViewModel, notesText)
-                        focusManager.clearFocus()
-                    },
-                    onNext = {
                         saveTextData(logViewModel, notesText)
                         focusManager.clearFocus()
                     }
