@@ -1,5 +1,7 @@
 package com.example.theperiodpurse.ui.symptomlog
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -10,9 +12,12 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,6 +29,7 @@ import com.example.theperiodpurse.ui.calendar.LogSelectableSquare
 import com.example.theperiodpurse.ui.onboarding.EditNumberField
 import java.sql.Time
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ExercisePrompt(logViewModel: LogViewModel) {
     val selectedTime = logViewModel.getText(LogPrompt.Exercise)
@@ -43,8 +49,21 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
                 ""
         )
     }
-    val focusManager = LocalFocusManager.current
 
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+    val interactionSource = remember { MutableInteractionSource() }
+    Box(modifier = Modifier // this box allows clicking out of the keyboard
+        .fillMaxWidth()
+        .clickable(
+            interactionSource = interactionSource,
+            indication = null
+        ) {
+            keyboardController?.hide()
+
+            focusManager.clearFocus(true)
+            saveTextData(logViewModel, hoursExercised, minutesExercised)
+        }) {
     Column() {
         Row(
             modifier = Modifier
@@ -57,21 +76,19 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
                 EditNumberField(
                     label = R.string.hours,
                     value = hoursExercised,
-                    onValueChange = { hoursExercised = it },
+                    onValueChange = {
+                        hoursExercised = it
+                        saveTextData(logViewModel, hoursExercised, minutesExercised)
+                                    },
 
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
+                        keyboardType = KeyboardType.NumberPassword,
                         imeAction = ImeAction.Done
                     ),
                     keyboardActions = KeyboardActions(
                         onDone = {
-                            focusManager.clearFocus()
-                            val time = Time(
-                                if (hoursExercised != "") hoursExercised.toInt() else 0,
-                                if (minutesExercised != "") minutesExercised.toInt() else 0,
-                                0
-                            )
-                            logViewModel.setText(LogPrompt.Exercise, time.toString())
+                            focusManager.moveFocus(FocusDirection.Right)
+                            saveTextData(logViewModel, hoursExercised, minutesExercised)
                         })
                 )
             }
@@ -84,21 +101,19 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
                 EditNumberField(
                     label = R.string.minutes,
                     value = minutesExercised,
-                    onValueChange = { minutesExercised = it },
+                    onValueChange = {
+                        minutesExercised = it
+                        saveTextData(logViewModel, hoursExercised, minutesExercised)
+                                    },
 
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
+                        keyboardType = KeyboardType.NumberPassword,
                         imeAction = ImeAction.Done
                     ),
                     keyboardActions = KeyboardActions(
                         onDone = {
                             focusManager.clearFocus()
-                            val time = Time(
-                                if (hoursExercised != "") hoursExercised.toInt() else 0,
-                                if (minutesExercised != "") minutesExercised.toInt() else 0,
-                                0
-                            )
-                            logViewModel.setText(LogPrompt.Exercise, time.toString())
+                            saveTextData(logViewModel, hoursExercised, minutesExercised)
                         })
                 )
             }
@@ -161,9 +176,19 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
             }
         )
     }
+    }
+}
 
-
-
+fun saveTextData(
+    logViewModel: LogViewModel,
+    hoursExercised: String,
+    minutesExercised: String) {
+    val time = Time(
+        if (hoursExercised != "") hoursExercised.toInt() else 0,
+        if (minutesExercised != "") minutesExercised.toInt() else 0,
+        0
+    )
+    logViewModel.setText(LogPrompt.Exercise, time.toString())
 }
 
 @Preview
