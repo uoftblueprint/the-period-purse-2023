@@ -71,11 +71,17 @@ fun SleepPrompt(logViewModel: LogViewModel) {
                     value = hoursSlept,
                     onValueChange = {
                         hoursSlept = it
-                        saveTextData(logViewModel, hoursSlept, minutesSlept)
+                        try {
+                            saveTextData(logViewModel, hoursSlept, minutesSlept)
+                        } catch (e: NumberFormatException) {
+                            hoursSlept = ""
+                            minutesSlept = ""
+                            saveTextData(logViewModel, hoursSlept, minutesSlept)
+                        }
                                     },
 
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
+                        keyboardType = KeyboardType.NumberPassword,
                         imeAction = ImeAction.Done
                     ),
                     keyboardActions = KeyboardActions(
@@ -95,11 +101,17 @@ fun SleepPrompt(logViewModel: LogViewModel) {
                     value = minutesSlept,
                     onValueChange = {
                         minutesSlept = it
-                        saveTextData(logViewModel, hoursSlept, minutesSlept)
+                        try {
+                            saveTextData(logViewModel, hoursSlept, minutesSlept)
+                        } catch (e: NumberFormatException) {
+                            hoursSlept = ""
+                            minutesSlept = ""
+                            saveTextData(logViewModel, hoursSlept, minutesSlept)
+                        }
                                     },
 
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
+                        keyboardType = KeyboardType.NumberPassword,
                         imeAction = ImeAction.Done
                     ),
                     keyboardActions = KeyboardActions(

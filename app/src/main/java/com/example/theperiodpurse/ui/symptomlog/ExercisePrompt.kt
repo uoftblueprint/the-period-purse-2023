@@ -62,7 +62,13 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
             keyboardController?.hide()
 
             focusManager.clearFocus(true)
-            saveTextData(logViewModel, hoursExercised, minutesExercised)
+            try {
+                saveTextData(logViewModel, hoursExercised, minutesExercised)
+            } catch (e: NumberFormatException) {
+                hoursExercised = ""
+                minutesExercised = ""
+                saveTextData(logViewModel, hoursExercised, minutesExercised)
+            }
         }) {
     Column() {
         Row(
@@ -78,7 +84,13 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
                     value = hoursExercised,
                     onValueChange = {
                         hoursExercised = it
-                        saveTextData(logViewModel, hoursExercised, minutesExercised)
+                        try {
+                            saveTextData(logViewModel, hoursExercised, minutesExercised)
+                        } catch (e: NumberFormatException) {
+                            hoursExercised = ""
+                            minutesExercised = ""
+                            saveTextData(logViewModel, hoursExercised, minutesExercised)
+                        }
                                     },
 
                     keyboardOptions = KeyboardOptions(
@@ -103,7 +115,13 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
                     value = minutesExercised,
                     onValueChange = {
                         minutesExercised = it
-                        saveTextData(logViewModel, hoursExercised, minutesExercised)
+                        try {
+                            saveTextData(logViewModel, hoursExercised, minutesExercised)
+                        } catch (e: NumberFormatException) {
+                            hoursExercised = ""
+                            minutesExercised = ""
+                            saveTextData(logViewModel, hoursExercised, minutesExercised)
+                        }
                                     },
 
                     keyboardOptions = KeyboardOptions(
