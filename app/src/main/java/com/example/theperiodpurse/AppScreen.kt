@@ -53,7 +53,7 @@ fun ScreenApp(
         Image(
             painter = painterResource(id = R.drawable.background),
             contentDescription = null,
-            modifier = Modifier.fillMaxWidth().fillMaxHeight().fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds
         )
         

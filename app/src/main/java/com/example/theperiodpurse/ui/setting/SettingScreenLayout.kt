@@ -29,23 +29,20 @@ fun SettingScreenLayout(
     onBackUpClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
 ){
+    val textModifier = modifier.padding(top = 50.dp, start = 10.dp)
    Column(modifier = modifier
        .fillMaxSize()
        .verticalScroll(rememberScrollState())) {
        Text(
            text = stringResource(R.string.tracking_preferences),
-           modifier = modifier.padding(
-               top = 50.dp,
-               start = 10.dp),
+           modifier = textModifier,
            color = Color.Gray
        )
 
        TrackingPreferencesRow()
        Text(
            text = stringResource(R.string.notifications_heading),
-           modifier = modifier.padding(
-               top = 50.dp,
-               start = 10.dp),
+           modifier = textModifier,
            color = Color.Gray
        )
        Row(modifier = modifier.padding(20.dp)) {
@@ -74,9 +71,7 @@ fun SettingScreenLayout(
       )
        Text(
            text = stringResource(R.string.account_settings_heading),
-           modifier = modifier.padding(
-               top = 50.dp,
-               start = 10.dp),
+           modifier = textModifier,
            color = Color.Gray
        )
        TabOption(
@@ -89,7 +84,7 @@ fun SettingScreenLayout(
            onTabClicked = onDeleteClicked
        )
        Spacer(modifier = Modifier.padding(10.dp))
-       Text(text = "The Period Purse. All rights reserved.")
+       Text(text = stringResource(id = R.string.copyright))
    }
 }
 
@@ -103,28 +98,32 @@ fun TrackingPreferencesRow(modifier: Modifier = Modifier){
         TrackingOptionButton(
             modifier = modifier,
             label = stringResource(R.string.mood),
-            icon = painterResource(id = R.drawable.sentiment_neutral_black_24dp)
+            icon = painterResource(id = R.drawable.sentiment_neutral_black_24dp),
+            contentDescription = stringResource(R.string.mood),
         )
         TrackingOptionButton(
             modifier = modifier,
             label = stringResource(R.string.exercise),
-            icon = painterResource(id = R.drawable.self_improvement_black_24dp)
+            icon = painterResource(id = R.drawable.self_improvement_black_24dp),
+            contentDescription = stringResource(R.string.exercise)
         )
         TrackingOptionButton(
             modifier = modifier,
             label = stringResource(R.string.cramps),
-            icon = painterResource(id = R.drawable.sick_black_24dp)
+            icon = painterResource(id = R.drawable.sick_black_24dp),
+            contentDescription = stringResource(R.string.cramps),
         )
         TrackingOptionButton(
             modifier = modifier,
             label = stringResource(R.string.sleep),
-            icon = painterResource(id = R.drawable.nightlight_black_24dp)
+            icon = painterResource(id = R.drawable.nightlight_black_24dp),
+            contentDescription = stringResource(R.string.sleep)
         )
     }
 }
 
 @Composable
-fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter) {
+fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter, contentDescription: String) {
     var checked by remember { mutableStateOf(false) }
     val color = if (checked) Color.Green else Color.White
     Column(
@@ -139,7 +138,7 @@ fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter) {
         ) {
             Icon(
                 painter = icon,
-                contentDescription = "contentDescription",
+                contentDescription = contentDescription,
                 modifier = Modifier
                     .background(color)
                     .height(50.dp)

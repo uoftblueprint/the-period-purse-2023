@@ -48,4 +48,5 @@
     <string name="delete_account">Delete Account</string>
     <string name="settings_home">Settings</string>
     <string name="sample_notification">Every day at 10:00 AM</string>
+    <string name="copyright">© 2023 The Period Purse. All rights reserved.</string>
 </resources>
