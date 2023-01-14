@@ -28,4 +28,38 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
         val AVERAGE_CYCLE_LENGTH = intPreferencesKey("average_cycle_length")
         val DAYS_SINCE_LAST_PERIOD = intPreferencesKey("days_since_last_period")
     }
+
+    suspend fun updateSymptomsToTrack(symptomsToTrack: ArrayList<Symptom>) {
+        val gson = Gson()
+        val json = gson.toJson(symptomsToTrack)
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.SYMPTOMS_TO_TRACK] = json
+        }
+    }
+
+    suspend fun updatePeriodHistory(periodHistory: ArrayList<Date>) {
+        val gson = Gson()
+        val json = gson.toJson(periodHistory)
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.PERIOD_HISTORY] = json
+        }
+    }
+
+    suspend fun updateAveragePeriodLength(averagePeriodLength: Int) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.AVERAGE_PERIOD_LENGTH] = averagePeriodLength
+        }
+    }
+
+    suspend fun updateAverageCycleLength(averageCycleLength: Int) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.AVERAGE_CYCLE_LENGTH] = averageCycleLength
+        }
+    }
+
+    suspend fun updateDaysSinceLastPeriod(daysSinceLastPeriod: Int) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.DAYS_SINCE_LAST_PERIOD] = daysSinceLastPeriod
+        }
+    }
 }
