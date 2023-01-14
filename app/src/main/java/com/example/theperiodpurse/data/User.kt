@@ -80,6 +80,9 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
         }
     }
 
+    // Get initial user data
+    suspend fun fetchInitialUserData() = mapUser(dataStore.data.first().toPreferences())
+
     // Get user data
     private fun mapUser(preferences: Preferences): User {
         val symptomsToTrackTypeToken = object: TypeToken<ArrayList<Symptom>>() {}.type
