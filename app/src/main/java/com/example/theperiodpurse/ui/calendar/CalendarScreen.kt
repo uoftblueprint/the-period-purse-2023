@@ -22,33 +22,28 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.theperiodpurse.R
+import com.example.theperiodpurse.data.Symptom
+import com.example.theperiodpurse.data.userDAO
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
 
-sealed class Symptom(@StringRes val nameId: Int, @DrawableRes val resourceId: Int) {
-    object Flow : Symptom(R.string.period_flow, R.drawable.opacity_black_24dp)
-    object Exercise : Symptom(R.string.exercise, R.drawable.self_improvement_black_24dp)
-    object Cramps : Symptom(R.string.cramps, R.drawable.sick_black_24dp)
-    object Mood : Symptom(R.string.mood, R.drawable.sentiment_neutral_black_24dp)
-    object Sleep : Symptom(R.string.sleep, R.drawable.nightlight_black_24dp)
-}
 
 val tabModifier = Modifier
     .background(Color.White)
     .fillMaxWidth()
 
-/* TODO: retrieve this programmatically from user preferences */
-val trackedSymptoms = listOf(
-    Symptom.Flow,
-    Symptom.Mood,
-    Symptom.Exercise,
-    Symptom.Cramps,
-    Symptom.Sleep
-)
+///* TODO: retrieve this programmatically from user preferences */
+//val trackedSymptoms = listOf(
+//    Symptom.Flow,
+//    Symptom.Mood,
+//    Symptom.Exercise,
+//    Symptom.Cramps,
+//    Symptom.Sleep
+//)
 
 @Composable
-fun SymptomTab(modifier: Modifier = Modifier) {
+fun SymptomTab(modifier: Modifier = Modifier, trackedSymptoms: List<Symptom>) {
     var expanded by remember { mutableStateOf(false) }
     var activeSymptom: Symptom? by remember { mutableStateOf(null) }
     Column(modifier = modifier) {
@@ -83,12 +78,12 @@ private fun DisplaySymptomTab(
         modifier = modifier
     ) {
         Text(
-            text = stringResource(activeSymptom?.nameId ?: Symptom.Flow.nameId),
+            text = stringResource(activeSymptom?.nameId ?: Symptom.FLOW.nameId),
             modifier = Modifier.padding(end = 2.dp)
         )
         Icon(
             painter = painterResource(
-                id = activeSymptom?.resourceId ?: Symptom.Flow.resourceId
+                id = activeSymptom?.resourceId ?: Symptom.FLOW.resourceId
             ),
             tint = Color.Black,
             contentDescription = null,
@@ -224,6 +219,7 @@ fun CalendarScreen() {
     }
 }
 
+val previewTrackedSymptoms = Symptom.values().asList()
 
 @Composable
 fun CalendarScreenLayout() {
@@ -232,7 +228,10 @@ fun CalendarScreenLayout() {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            SymptomTab()
+            SymptomTab(
+                trackedSymptoms = previewTrackedSymptoms
+//                trackedSymptoms = userDAO.get().symptomsToTrack
+            )
             Text(
                 text = "Calendar Screen Content",
                 modifier = Modifier
@@ -266,9 +265,8 @@ fun TabsPreview() {
     val pagerState = rememberPagerState()
     Tabs(tabs = tabs, pagerState = pagerState)
 }
-
 @Preview
 @Composable
 fun DisplaySymptomTabPreview() {
-    SymptomTab()
+    SymptomTab(trackedSymptoms = previewTrackedSymptoms)
 }
