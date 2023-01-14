@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.io.IOException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -38,8 +39,7 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
     }
 
     suspend fun updatePeriodHistory(periodHistory: ArrayList<Date>) {
-        val gson = Gson()
-        val json = gson.toJson(periodHistory)
+        val json = Gson().toJson(periodHistory)
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.PERIOD_HISTORY] = json
         }
@@ -61,5 +61,26 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.DAYS_SINCE_LAST_PERIOD] = daysSinceLastPeriod
         }
+    }
+
+    private fun mapUser(preferences: Preferences): User {
+        val symptomsToTrackTypeToken = object: TypeToken<ArrayList<Symptom>>() {}.type
+        val symptomsToTrackJson = preferences[PreferencesKeys.SYMPTOMS_TO_TRACK] ?: ""
+        val symptomsToTrack = Gson().fromJson<ArrayList<Symptom>>(symptomsToTrackJson,
+            symptomsToTrackTypeToken)
+
+        val periodHistoryTypeToken = object: TypeToken<ArrayList<Date>>() {}.type
+        val periodHistoryJson = preferences[PreferencesKeys.PERIOD_HISTORY] ?: ""
+        val periodHistory = Gson().fromJson<ArrayList<Date>>(periodHistoryJson,
+            periodHistoryTypeToken)
+
+        val averagePeriodLength = preferences[PreferencesKeys.AVERAGE_PERIOD_LENGTH] ?: 0
+
+        val averageCycleLength = preferences[PreferencesKeys.AVERAGE_CYCLE_LENGTH] ?: 0
+
+        val daysSinceLastPeriod = preferences[PreferencesKeys.DAYS_SINCE_LAST_PERIOD] ?: 0
+
+        return User(symptomsToTrack, periodHistory, averagePeriodLength, averageCycleLength,
+            daysSinceLastPeriod)
     }
 }
