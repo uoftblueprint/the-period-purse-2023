@@ -31,8 +31,7 @@ class UserPreferencesRepository(private val dataStore: DataStore<Preferences>) {
     }
 
     suspend fun updateSymptomsToTrack(symptomsToTrack: ArrayList<Symptom>) {
-        val gson = Gson()
-        val json = gson.toJson(symptomsToTrack)
+        val json = Gson().toJson(symptomsToTrack)
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.SYMPTOMS_TO_TRACK] = json
         }
