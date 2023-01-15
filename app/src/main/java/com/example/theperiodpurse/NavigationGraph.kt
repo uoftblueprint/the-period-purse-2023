@@ -1,5 +1,7 @@
 package com.example.theperiodpurse
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -35,6 +37,7 @@ enum class OnboardingScreen() {
     Summary,
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationGraph(
     navController: NavHostController,
