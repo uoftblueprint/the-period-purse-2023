@@ -1,5 +1,7 @@
 package com.example.theperiodpurse.ui.setting
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -57,6 +59,7 @@ fun SettingAppBar(
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
@@ -102,7 +105,7 @@ fun SettingsScreen(
                 )
             }
             composable(route = SettingScreenNavigation.Notification.name) {
-                NotificationsScreenLayout()
+                TimeWheel(context= LocalContext.current)
             }
             composable(route = SettingScreenNavigation.BackUpAccount.name) {
                 BackUpAccountScreen()
