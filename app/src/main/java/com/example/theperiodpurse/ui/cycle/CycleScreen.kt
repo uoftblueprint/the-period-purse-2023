@@ -1,12 +1,13 @@
 package com.example.theperiodpurse.ui.cycle
 
-import android.media.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Divider
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -84,7 +85,8 @@ fun CycleHistoryBox(modifier: Modifier = Modifier) {
                 color = Color(0xFF868083),
             )
             Divider(color = Color(0xFF868083), modifier = modifier
-                .padding(vertical = 15.dp).fillMaxWidth())
+                .padding(vertical = 15.dp)
+                .fillMaxWidth())
             Text(text = stringResource(R.string.log_to_learn))
         }
     }
@@ -101,7 +103,7 @@ fun CycleScreenLayout(modifier: Modifier = Modifier) {
                 horizontal = 20.dp,
                 vertical = 25.dp
             )
-            .semantics { contentDescription = "Cycle Page"}
+            .semantics { contentDescription = "Cycle Page" }
     ) {
         CurrentCycleBox()
         Spacer(modifier.height(30.dp))
