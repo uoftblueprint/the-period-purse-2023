@@ -181,8 +181,8 @@ fun Day(day: CalendarDay,
                     .size(54.dp)
                     .clip(shape = RoundedCornerShape(6.dp))
                     .fillMaxSize()
-                    .background(color = if (day.date.isAfter(LocalDate.now())) Color.LightGray
-                    else Color.White)
+                    .background(color = if (isSelected) Color.Green else Color.White)
+                    .semantics { contentDescription = day.date.toString() }
                     .border(
                         color = Color.Gray,
                         width = 1.dp,
