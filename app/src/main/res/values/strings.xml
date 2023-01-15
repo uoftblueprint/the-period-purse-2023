@@ -36,6 +36,8 @@
     <string name="cycle_history">Cycle history</string>
     <string name="avg_period_len">Average period length</string>
     <string name="avg_cycle_len">Average cycle length</string>
-    <string name="fab_to_calendar">Navigate to Calendar page</string>
-    <string name="fab_see_log_options">Open logging options</string>
+
+    <string name="fab_to_calender">Average cycle length</string>
+    <string name="fab_to_calendar">temp1</string>
+    <string name="fab_see_log_options">temp2</string>
 </resources>
