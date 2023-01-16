@@ -138,14 +138,15 @@ fun CalendarScreenLayout(navController: NavController) {
             )
             Column {
                 VerticalCalendar(
+                    modifier = Modifier.semantics { contentDescription = "Calendar" },
                     state = state,
                     monthHeader = { month ->
                         MonthHeader(month) },
                     dayContent = { day ->
                         Day(day, isSelected = selectedDate == day.date) { day ->
-                            selectedDate = if (selectedDate == day.date) null else day.date
-                            navController
-                                .navigate(
+                            selectedDate = if (selectedDate == day.date) null
+                            else day.date
+                            navController.navigate(
                                     route = "%s/%s/%s"
                                         .format(
                                             Screen.Calendar,
@@ -181,7 +182,8 @@ fun Day(day: CalendarDay,
                     .size(54.dp)
                     .clip(shape = RoundedCornerShape(6.dp))
                     .fillMaxSize()
-                    .background(color = if (isSelected) Color.Green else Color.White)
+                    .background(color = if (day.date.isAfter(LocalDate.now())) Color.LightGray
+                    else Color.White)
                     .semantics { contentDescription = day.date.toString() }
                     .border(
                         color = Color.Gray,
@@ -189,8 +191,9 @@ fun Day(day: CalendarDay,
                         shape = RoundedCornerShape(6.dp)
                     )
                     .clickable(
-                        enabled = day.position == DayPosition.MonthDate,
-                        onClick = { onClick(day) }
+                        enabled = !day.date.isAfter(LocalDate.now()),
+                        onClick = { if (day.date.isAfter(LocalDate.now())) null
+                            else onClick(day) }
                     ),
                 contentAlignment = Alignment.TopStart,
             ) {
