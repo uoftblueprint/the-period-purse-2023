@@ -1,8 +1,10 @@
 package com.example.theperiodpurse
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +23,7 @@ import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import com.example.theperiodpurse.ui.component.BottomNavigation
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -31,11 +34,13 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Application() {
     ScreenApp()
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ScreenApp(
     modifier: Modifier = Modifier,
