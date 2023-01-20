@@ -5,4 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
+<!--    <resources>-->
+<!--        <style name="TimePicker" parent="Theme.AppCompat.Light.Dialog">-->
+<!--            <item name="android:timePickerMode">spinner</item>-->
+<!--        </style>-->
+<!--    </resources>-->
+    <TimePicker
+        android:id="@+id/datePicker1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:timePickerMode="spinner"/>
+
 </FrameLayout>
