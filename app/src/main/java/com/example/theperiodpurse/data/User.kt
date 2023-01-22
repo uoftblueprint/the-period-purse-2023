@@ -1,15 +1,6 @@
 package com.example.theperiodpurse.data
 
-import android.util.Log
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.*
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.io.IOException
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import java.util.UUID
 import javax.persistence.*
 
 @Entity
@@ -17,12 +8,14 @@ import javax.persistence.*
 data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    val id: UUID,
 
+    @OneToMany
     @Column(name = "symptoms_to_track")
     val symptomsToTrack: ArrayList<Symptom> = ArrayList(),
 
-    @Column(nullable = false)
+    @OneToMany
+    @Column(name = "period_history")
     val periodHistory: ArrayList<Date> = ArrayList(),
 
     @Column(name = "average_period_length")
