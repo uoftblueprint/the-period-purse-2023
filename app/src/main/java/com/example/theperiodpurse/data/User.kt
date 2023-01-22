@@ -8,7 +8,7 @@ import javax.persistence.*
 data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: UUID,
+    val userID: UUID,
 
     @OneToMany
     @Column(name = "symptoms_to_track")
