@@ -31,9 +31,11 @@ class CalendarScreenTest {
     fun appLogScreen_clickOnArrow_showAndHideSymptomOptions() {
         composeTestRule.onNodeWithContentDescription("Expand to switch symptoms")
             .performClick()
-        composeTestRule.onNodeWithTag("Symptom Options").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("Symptom Options", useUnmergedTree = true)
+            .assertIsDisplayed()
         composeTestRule.onNodeWithContentDescription("Expand to switch symptoms")
             .performClick()
-        composeTestRule.onNodeWithTag("Symptom Options").assertIsNotDisplayed()
+        composeTestRule.onNodeWithTag("Symptom Options", useUnmergedTree = true)
+            .assertIsNotDisplayed()
     }
 }
