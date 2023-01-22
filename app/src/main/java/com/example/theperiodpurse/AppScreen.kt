@@ -10,11 +10,18 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.theperiodpurse.data.UserDAO
 import com.example.theperiodpurse.ui.onboarding.*
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import com.example.theperiodpurse.ui.component.BottomNavigation
 
 class MainActivity : ComponentActivity() {
+    private val userDao = UserDAO()
+
+    override fun onDestroy() {
+        super.onDestroy()
+        userDao.destroy()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
