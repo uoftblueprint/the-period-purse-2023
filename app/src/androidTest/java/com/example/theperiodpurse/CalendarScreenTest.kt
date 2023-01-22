@@ -3,16 +3,10 @@ package com.example.theperiodpurse
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.*
-import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
-import androidx.test.espresso.action.ViewActions.scrollTo
-import androidx.test.espresso.action.ViewActions.swipeUp
-import com.example.theperiodpurse.ui.calendar.CalendarScreen
 import com.example.theperiodpurse.ui.calendar.CalendarTabItem
-import com.example.theperiodpurse.AppViewModel
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

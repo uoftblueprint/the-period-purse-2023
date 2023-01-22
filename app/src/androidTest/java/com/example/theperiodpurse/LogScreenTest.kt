@@ -1,10 +1,8 @@
 package com.example.theperiodpurse
 
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.navigation.compose.ComposeNavigator
@@ -17,7 +15,6 @@ import org.junit.Rule
 import org.junit.Test
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Calendar
 
 class LogScreenTest {
     @get:Rule
