@@ -143,9 +143,9 @@ fun CalendarScreenLayout(navController: NavController) {
                     monthHeader = { month ->
                         MonthHeader(month) },
                     dayContent = { day ->
-                        Day(day, isSelected = selectedDate == day.date) { day ->
-                            selectedDate = if (selectedDate == day.date) null
-                            else day.date
+                        Day(day, isSelected = selectedDate == day.date) { date ->
+                            selectedDate = if (selectedDate == date.date) null
+                            else date.date
                             navController.navigate(
                                     route = "%s/%s/%s"
                                         .format(
@@ -173,7 +173,6 @@ fun Day(day: CalendarDay,
         modifier = Modifier
             .padding(1.dp)
             .aspectRatio(1f),
-        contentAlignment = Alignment.Center,
         )
     {
         if (day.position == DayPosition.MonthDate) {
@@ -192,10 +191,9 @@ fun Day(day: CalendarDay,
                     )
                     .clickable(
                         enabled = !day.date.isAfter(LocalDate.now()),
-                        onClick = { if (day.date.isAfter(LocalDate.now())) null
-                            else onClick(day) }
+                        onClick = { if (!day.date.isAfter(LocalDate.now()))
+                            onClick(day) }
                     ),
-                contentAlignment = Alignment.TopStart,
             ) {
                 Text(modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp),
                     fontSize = 14.sp,
