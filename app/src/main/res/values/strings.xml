@@ -38,4 +38,15 @@
     <string name="avg_cycle_len">Average cycle length</string>
     <string name="fab_to_calendar">Navigate to Calendar page</string>
     <string name="fab_see_log_options">Open logging options</string>
+
+    <string name="tracking_preferences">Tracking Preferences</string>
+    <string name="notifications_heading">Notifications</string>
+    <string name="account_settings_heading">Account settings</string>
+    <string name="remind_me_to_log_symptoms">Remind me to log symptoms</string>
+    <string name="customize_notifications">Customise Notifications</string>
+    <string name="back_up_account">Back Up Account</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="settings_home">Settings</string>
+    <string name="sample_notification">Every day at 10:00 AM</string>
+    <string name="copyright">© 2023 The Period Purse. All rights reserved.</string>
 </resources>
