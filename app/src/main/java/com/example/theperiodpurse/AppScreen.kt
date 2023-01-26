@@ -1,14 +1,15 @@
 package com.example.theperiodpurse
 
 import android.os.Build
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.layout.padding
@@ -28,7 +29,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ThePeriodPurseTheme {
-                Application()
+                Application(applicationContext)
             }
         }
     }
@@ -36,8 +37,23 @@ class MainActivity : ComponentActivity() {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Application() {
+fun Application(context: Context) {
     ScreenApp()
+    createNotificationChannel(context)
+}
+
+fun createNotificationChannel(context: Context) {
+    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val channel = NotificationChannel(
+            "notification_channel",
+            "Notification",
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        channel.description = "Used for the reminder notifications"
+
+        val notificationManager = context.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -61,7 +77,7 @@ fun ScreenApp(
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds
         )
-        
+
         NavigationGraph(
             navController = navController,
             startDestination = if (skipOnboarding) Screen.Calendar.name else OnboardingScreen.Welcome.name,
