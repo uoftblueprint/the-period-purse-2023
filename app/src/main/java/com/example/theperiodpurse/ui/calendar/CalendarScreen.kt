@@ -23,6 +23,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -138,7 +139,8 @@ fun CalendarScreenLayout(navController: NavController) {
             )
             Column {
                 VerticalCalendar(
-                    modifier = Modifier.semantics { contentDescription = "Calendar" },
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 24.dp)
+                        .semantics { contentDescription = "Calendar" },
                     state = state,
                     monthHeader = { month ->
                         MonthHeader(month) },
@@ -178,16 +180,19 @@ fun Day(day: CalendarDay,
         if (day.position == DayPosition.MonthDate) {
             Box(
                 modifier = Modifier
-                    .size(54.dp)
-                    .clip(shape = RoundedCornerShape(6.dp))
+                    .size(64.dp)
+                    .clip(shape = RoundedCornerShape(8.dp))
                     .fillMaxSize()
-                    .background(color = if (day.date.isAfter(LocalDate.now())) Color.LightGray
-                    else Color.White)
+                    .background(color = if (day.date.isAfter(LocalDate.now())) {
+                        Color(237, 237, 237)
+                    } else {
+                        Color.White
+                    })
                     .semantics { contentDescription = day.date.toString() }
                     .border(
-                        color = Color.Gray,
+                        color = Color(200,205,205),
                         width = 1.dp,
-                        shape = RoundedCornerShape(6.dp)
+                        shape = RoundedCornerShape(8.dp)
                     )
                     .clickable(
                         enabled = !day.date.isAfter(LocalDate.now()),
@@ -195,10 +200,15 @@ fun Day(day: CalendarDay,
                             onClick(day) }
                     ),
             ) {
-                Text(modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp),
-                    fontSize = 14.sp,
-                    text = day.date.dayOfMonth.toString()
-                )
+                Text(modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    text = day.date.dayOfMonth.toString(),
+                    color = if (day.date.isAfter(LocalDate.now())) {
+                        Color(190, 190, 190)
+                    } else {
+                        Color.Black
+                    })
             }
         }
     }
@@ -212,15 +222,15 @@ fun MonthHeader(calendarMonth: CalendarMonth) {
     val daysOfWeek = calendarMonth.weekDays.first().map { it.date.dayOfWeek }
     Column(
         modifier = Modifier
-            .padding(vertical = 5.dp),
+            .padding(vertical = 18.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
 
         // Month
         Text(
             modifier = Modifier.padding(12.dp),
             textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Medium,
-            fontSize = 15.sp,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.ExtraBold,
             text = calendarMonth.yearMonth.displayText()
         )
 
@@ -228,10 +238,11 @@ fun MonthHeader(calendarMonth: CalendarMonth) {
         Row(modifier = Modifier.fillMaxWidth()) {
             for (dayOfWeek in daysOfWeek) {
                 Text(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f)
+                        .offset(y = 10.dp),
                     textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 12.sp,
+                    style = MaterialTheme.typography.body2,
+                    fontSize = 10.sp,
                     text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
                 )
             }
