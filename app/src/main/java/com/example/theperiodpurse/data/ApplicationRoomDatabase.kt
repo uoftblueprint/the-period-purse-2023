@@ -4,11 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
 @Database(entities=[User::class, Date::class], version = 1, exportSchema = false)
+@TypeConverters(SymptomConverter::class, DateConverter::class)
 abstract class ApplicationRoomDatabase: RoomDatabase() {
-    abstract fun userDAO(): userDAO
-    abstract fun dateDAO(): dateDAO
+    abstract fun userDAO(): UserDAO
+    abstract fun dateDAO(): DateDAO
     companion object {
         @Volatile
         private var INSTANCE: ApplicationRoomDatabase? = null
