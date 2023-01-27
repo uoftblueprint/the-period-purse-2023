@@ -1,7 +1,7 @@
 package com.example.theperiodpurse.data.module
 
+import com.example.theperiodpurse.data.UserDAO
 import com.example.theperiodpurse.data.UserRepository
-import com.example.theperiodpurse.data.userDAO
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +13,7 @@ import javax.inject.Singleton
 object AppModule {
     @Singleton
     @Provides
-    fun provideUserRepository(userDAO: userDAO): UserRepository {
+    fun provideUserRepository(userDAO: UserDAO): UserRepository {
         return UserRepository(userDAO)
     }
 }

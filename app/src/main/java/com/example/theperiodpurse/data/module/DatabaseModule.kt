@@ -2,7 +2,7 @@ package com.example.theperiodpurse.data.module
 
 import android.content.Context
 import com.example.theperiodpurse.data.ApplicationRoomDatabase
-import com.example.theperiodpurse.data.userDAO
+import com.example.theperiodpurse.data.UserDAO
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +14,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 private object DatabaseModule {
     @Provides
-    fun provideUserDao(appDatabase: ApplicationRoomDatabase): userDAO {
+    fun provideUserDao(appDatabase: ApplicationRoomDatabase): UserDAO {
         return appDatabase.userDAO()
     }
 
