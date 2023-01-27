@@ -6,13 +6,16 @@ import com.google.gson.reflect.TypeToken
 
 class SymptomConverter {
     @TypeConverter
-    fun fromSymptomList(symptoms: List<Symptom>): String {
-        return symptoms.joinToString(",")
+    fun fromSymptomList(symptomList: ArrayList<Symptom>): String {
+        val gson = Gson()
+        return gson.toJson(symptomList)
     }
 
     @TypeConverter
-    fun toSymptomList(symptoms: String): List<Symptom> {
-        return symptoms.split(",").map { Symptom.valueOf(it) }
+    fun toSymptomList(symptomList: String): ArrayList<Symptom> {
+        val gson = Gson()
+        val type = object : TypeToken<ArrayList<Symptom>>() {}.type
+        return gson.fromJson(symptomList, type)
     }
 }
 
