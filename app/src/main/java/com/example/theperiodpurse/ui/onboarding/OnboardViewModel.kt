@@ -1,17 +1,19 @@
 package com.example.theperiodpurse.ui.onboarding
-
+import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import androidx.lifecycle.ViewModel
-import com.example.theperiodpurse.data.OnboardUIState
+import com.example.theperiodpurse.data.*
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class OnboardViewModel : ViewModel() {
+@HiltViewModel
+class OnboardViewModel @Inject constructor (private val userRepository: UserRepository) : ViewModel() {
     private val _uiState = MutableStateFlow(OnboardUIState(dateOptions = dateOptions()))
     val uiState: StateFlow<OnboardUIState> = _uiState.asStateFlow()
 
@@ -80,4 +82,27 @@ class OnboardViewModel : ViewModel() {
         return dateOptions
     }
 
+    private fun createUser(symptomsToTrack: Symptom, averagePeriodLength: Int,
+                           averageCycleLength: Int, daysSinceLastPeriod: Int): User {
+        return User(
+            symptomsToTrack = symptomsToTrack,
+            averagePeriodLength = averagePeriodLength,
+            averageCycleLength = averageCycleLength,
+            daysSinceLastPeriod = daysSinceLastPeriod
+        )
+    }
+
+    private fun saveUser(user: User) {
+        userRepository.addUser(user)
+    }
+
+    fun addNewUser(symptomsToTrack: Symptom, averagePeriodLength: Int,
+                           averageCycleLength: Int, daysSinceLastPeriod: Int) {
+        saveUser(createUser(symptomsToTrack, averagePeriodLength, averageCycleLength,
+            daysSinceLastPeriod))
+    }
+
+    fun getAllUsers() {
+        userRepository.getAllUsers()
+    }
 }

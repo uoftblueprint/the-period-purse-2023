@@ -6,9 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.layout.padding
@@ -21,7 +19,9 @@ import androidx.navigation.NavHostController
 import com.example.theperiodpurse.ui.onboarding.*
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import com.example.theperiodpurse.ui.component.BottomNavigation
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
