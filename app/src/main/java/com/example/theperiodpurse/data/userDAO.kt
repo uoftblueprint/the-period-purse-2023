@@ -3,10 +3,10 @@ package com.example.theperiodpurse.data
 import androidx.room.*
 
 @Dao
-interface userDAO {
-    @Query("SELECT * FROM user where id = 1")
-    fun get(): User
-    @Query("SELECT * FROM user")
+interface UserDAO {
+    @Query("SELECT * FROM users WHERE id = :id")
+    fun get(id: Int): User
+    @Query("SELECT * FROM users")
     fun getUsers(): List<User>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun save(user: User)

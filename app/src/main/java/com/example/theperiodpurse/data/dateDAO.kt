@@ -4,7 +4,7 @@ import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface dateDAO {
+interface DateDAO {
     @Query("SELECT * FROM date WHERE id = :id")
     fun get(id: Long): Flow<Date>
     @Insert(onConflict = OnConflictStrategy.REPLACE)

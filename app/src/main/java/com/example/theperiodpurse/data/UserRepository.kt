@@ -5,7 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class UserRepository(private val userDAO: userDAO) {
+class UserRepository(private val userDAO: UserDAO) {
     val allUsers = MutableLiveData<List<User>>()
     val user = MutableLiveData<User>()
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
