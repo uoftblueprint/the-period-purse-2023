@@ -1,5 +1,4 @@
 package com.example.theperiodpurse.ui.onboarding
-import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -82,10 +81,12 @@ class OnboardViewModel @Inject constructor (private val userRepository: UserRepo
         return dateOptions
     }
 
-    private fun createUser(symptomsToTrack: Symptom, averagePeriodLength: Int,
+    private fun createUser(symptomsToTrack: ArrayList<Symptom>, periodHistory: ArrayList<Date>,
+                           averagePeriodLength: Int,
                            averageCycleLength: Int, daysSinceLastPeriod: Int): User {
         return User(
             symptomsToTrack = symptomsToTrack,
+            periodHistory = periodHistory,
             averagePeriodLength = averagePeriodLength,
             averageCycleLength = averageCycleLength,
             daysSinceLastPeriod = daysSinceLastPeriod
@@ -96,9 +97,9 @@ class OnboardViewModel @Inject constructor (private val userRepository: UserRepo
         userRepository.addUser(user)
     }
 
-    fun addNewUser(symptomsToTrack: Symptom, averagePeriodLength: Int,
-                           averageCycleLength: Int, daysSinceLastPeriod: Int) {
-        saveUser(createUser(symptomsToTrack, averagePeriodLength, averageCycleLength,
+    fun addNewUser(symptomsToTrack: ArrayList<Symptom>, periodHistory: ArrayList<Date>,
+                   averagePeriodLength: Int, averageCycleLength: Int, daysSinceLastPeriod: Int) {
+        saveUser(createUser(symptomsToTrack, periodHistory, averagePeriodLength, averageCycleLength,
             daysSinceLastPeriod))
     }
 
