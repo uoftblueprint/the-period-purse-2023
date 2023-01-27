@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.example.theperiodpurse.data.DataSource
+import com.example.theperiodpurse.data.Symptom
 import com.example.theperiodpurse.ui.QuestionThreeScreen
 import com.example.theperiodpurse.ui.SummaryScreen
 import com.example.theperiodpurse.ui.calendar.CalendarScreen
@@ -121,6 +122,9 @@ fun NavigationGraph(
             SummaryScreen(
                 onboardUiState = uiState,
                 onSendButtonClicked = {
+                    viewModel.addNewUser(
+                        Symptom.MOOD, 0, 0, 0
+                    )
                     navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
                     navController.navigate(Screen.Calendar.name)
                 },
