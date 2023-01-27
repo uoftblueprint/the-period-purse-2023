@@ -1,0 +1,26 @@
+package com.example.theperiodpurse.data.module
+
+import android.content.Context
+import com.example.theperiodpurse.data.ApplicationRoomDatabase
+import com.example.theperiodpurse.data.userDAO
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+private object DatabaseModule {
+    @Provides
+    fun provideUserDao(appDatabase: ApplicationRoomDatabase): userDAO {
+        return appDatabase.userDAO()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAppDatabase(@ApplicationContext context: Context): ApplicationRoomDatabase {
+        return ApplicationRoomDatabase.getDatabase(context)
+    }
+}
