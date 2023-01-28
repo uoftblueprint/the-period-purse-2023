@@ -5,8 +5,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DateDAO {
-    @Query("SELECT * FROM date WHERE id = :id")
-    fun get(id: Long): Flow<Date>
+    @Query("SELECT * FROM dates WHERE id = :id")
+    fun get(id: Int): Flow<Date>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun save(date: Date)
     @Update
