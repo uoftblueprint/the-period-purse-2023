@@ -87,8 +87,9 @@ private fun DisplaySymptomTab(
                 id = activeSymptom?.resourceId ?: Symptom.FLOW.resourceId
             ),
             tint = Color.Black,
-            contentDescription = null,
+            contentDescription = activeSymptom?.name,
             modifier = Modifier.padding(end = 0.dp)
+                .testTag("Selected Symptom")
         )
         SwitchSymptomButton(
             expanded = expanded,
