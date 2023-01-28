@@ -53,15 +53,6 @@ val tabModifier = Modifier
     .background(Color.White)
     .fillMaxWidth()
 
-///* TODO: retrieve this programmatically from user preferences */
-//val trackedSymptoms = listOf(
-//    Symptom.Flow,
-//    Symptom.Mood,
-//    Symptom.Exercise,
-//    Symptom.Cramps,
-//    Symptom.Sleep
-//)
-
 @Composable
 fun SymptomTab(modifier: Modifier = Modifier, trackedSymptoms: List<Symptom>) {
     var expanded by remember { mutableStateOf(false) }
@@ -241,27 +232,6 @@ fun CalendarScreen(navController: NavController) {
 
 val previewTrackedSymptoms = Symptom.values().asList()
 
-@Composable
-fun CalendarScreenLayout() {
-    // Contains the swippable content
-    ThePeriodPurseTheme {
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            SymptomTab(
-                trackedSymptoms = previewTrackedSymptoms
-//                trackedSymptoms = userDAO.get().symptomsToTrack
-            )
-            Text(
-                text = "Calendar Screen Content",
-                modifier = Modifier
-                    .semantics {
-                        contentDescription = "Calendar Page"
-                    } // keep somewhere for testing
-            )
-        }
-    }
-}
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarScreenLayout(navController: NavController) {
@@ -291,6 +261,10 @@ fun CalendarScreenLayout(navController: NavController) {
                 contentScale = ContentScale.FillBounds,
             )
             Column {
+                SymptomTab(
+                    trackedSymptoms = previewTrackedSymptoms
+//                trackedSymptoms = userDAO.get().symptomsToTrack
+                )
                 VerticalCalendar(
                     modifier = Modifier.semantics { contentDescription = "Calendar" },
                     state = state,
