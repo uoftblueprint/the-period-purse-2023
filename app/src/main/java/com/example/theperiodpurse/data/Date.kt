@@ -1,16 +1,21 @@
 package com.example.theperiodpurse.data
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import java.util.Date
 
-@Entity(tableName = "date")
+@Entity(tableName = "dates")
 data class Date (
     @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
-//    val date: Date,
+    val id: Int = 0,
+    @TypeConverters(DaysConverter::class)
+    val date: Date,
     val flow: FlowSeverity,
     val mood: Mood,
-//    val exerciseLength: Date,
+    @TypeConverters(DaysConverter::class)
+    val exerciseLength: Date,
     val exerciseType: Exercise,
     val crampSeverity: CrampSeverity,
-//    val sleep: Date
+    @TypeConverters(DaysConverter::class)
+    val sleep: Date
     )
