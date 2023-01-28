@@ -6,8 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-@Database(entities=[User::class, Date::class], version = 1, exportSchema = false)
-@TypeConverters(SymptomConverter::class, DateConverter::class)
+@Database(entities=[User::class, Date::class], version = 2, exportSchema = false)
+@TypeConverters(SymptomConverter::class, DateConverter::class, DaysConverter::class)
 abstract class ApplicationRoomDatabase: RoomDatabase() {
     abstract fun userDAO(): UserDAO
     abstract fun dateDAO(): DateDAO
