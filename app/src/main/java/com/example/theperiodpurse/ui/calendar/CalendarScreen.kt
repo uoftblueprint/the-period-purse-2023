@@ -90,6 +90,7 @@ private fun DisplaySymptomTab(
     ) {
         Text(
             text = stringResource(activeSymptom?.nameId ?: Symptom.FLOW.nameId),
+            fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(end = 2.dp)
         )
         Icon(
