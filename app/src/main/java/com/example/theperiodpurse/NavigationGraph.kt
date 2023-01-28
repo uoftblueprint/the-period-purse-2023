@@ -119,8 +119,9 @@ fun NavigationGraph(
         }
         composable(route = OnboardingScreen.Summary.name) {
             val symptomList = arrayListOf(Symptom.MOOD);
-            val dateList = arrayListOf(Date(1, FlowSeverity.HEAVY, Mood.ANGRY, Exercise.YOGA,
-                CrampSeverity.Bad))
+            val currentDate = java.util.Date()
+            val dateList = arrayListOf(Date(2, currentDate, FlowSeverity.HEAVY, Mood.ANGRY,
+                currentDate, Exercise.YOGA, CrampSeverity.Bad, currentDate))
             SummaryScreen(
                 onboardUiState = uiState,
                 onSendButtonClicked = {
