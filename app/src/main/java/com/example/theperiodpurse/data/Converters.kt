@@ -34,3 +34,15 @@ class DateConverter {
         return gson.fromJson(dateList, type)
     }
 }
+
+class DaysConverter {
+    @TypeConverter
+    fun fromTimestamp(value: Long?): java.util.Date? {
+        return if (value == null) null else java.util.Date(value)
+    }
+
+    @TypeConverter
+    fun dateToTimestamp(date: java.util.Date?): Long? {
+        return date?.time
+    }
+}
