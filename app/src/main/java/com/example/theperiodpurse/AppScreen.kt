@@ -2,16 +2,24 @@ package com.example.theperiodpurse
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.registerForActivityResult
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -51,7 +59,7 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var mAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
-
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
@@ -147,6 +155,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
     }
+}
 
     @Composable
     fun LoginScreen() {
@@ -208,6 +217,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
 @Composable
 fun GoogleSignInButton(
     signInClicked: () -> Unit
@@ -242,11 +252,13 @@ fun GoogleSignOutButton(
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Application(skipOnboarding: Boolean = false, mainActivity: MainActivity) {
     ScreenApp(skipOnboarding = skipOnboarding, mainActivity = mainActivity)
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ScreenApp(
     modifier: Modifier = Modifier,
@@ -262,6 +274,12 @@ fun ScreenApp(
             }
         }
     ) { innerPadding ->
+        Image(
+            painter = painterResource(id = R.drawable.background),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.FillBounds
+        )
 
         NavigationGraph(
             navController = navController,
@@ -272,5 +290,4 @@ fun ScreenApp(
         )
 
     }
-
 }

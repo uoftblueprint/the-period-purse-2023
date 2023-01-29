@@ -1,6 +1,8 @@
 package com.example.theperiodpurse
 
 import androidx.activity.result.ActivityResultRegistry
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,6 +26,7 @@ import com.example.theperiodpurse.ui.onboarding.QuestionTwoScreen
 import com.example.theperiodpurse.ui.onboarding.WelcomeScreen
 import com.example.theperiodpurse.ui.setting.SettingPage
 import com.example.theperiodpurse.ui.setting.SettingScreen
+import com.example.theperiodpurse.ui.setting.SettingsScreen
 
 enum class Screen() {
     Calendar,
@@ -41,6 +44,7 @@ enum class OnboardingScreen() {
     Summary,
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationGraph(
     navController: NavHostController,

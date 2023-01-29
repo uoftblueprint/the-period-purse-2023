@@ -66,5 +66,5 @@ class NavigationTest {
             .performClick()
         navController.assertCurrentRouteName(Screen.Calendar.name)
     }
-
 }
+
