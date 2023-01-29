@@ -12,7 +12,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class OnboardViewModel @Inject constructor (private val userRepository: UserRepository) : ViewModel() {
+class OnboardViewModel @Inject constructor (private val userRepository: UserRepository,
+                                            private val dateRepository: DateRepository
+                                            ): ViewModel() {
     private val _uiState = MutableStateFlow(OnboardUIState(dateOptions = dateOptions()))
     val uiState: StateFlow<OnboardUIState> = _uiState.asStateFlow()
 
@@ -82,8 +84,8 @@ class OnboardViewModel @Inject constructor (private val userRepository: UserRepo
     }
 
     private fun createUser(symptomsToTrack: ArrayList<Symptom>, periodHistory: ArrayList<Date>,
-                           averagePeriodLength: Int,
-                           averageCycleLength: Int, daysSinceLastPeriod: Int): User {
+                           averagePeriodLength: Int, averageCycleLength: Int,
+                           daysSinceLastPeriod: Int): User {
         return User(
             symptomsToTrack = symptomsToTrack,
             periodHistory = periodHistory,
@@ -105,5 +107,29 @@ class OnboardViewModel @Inject constructor (private val userRepository: UserRepo
 
     fun getAllUsers() {
         userRepository.getAllUsers()
+    }
+
+    private fun createDate(date: java.util.Date, flow: FlowSeverity, mood: Mood,
+                           exerciseLength: java.util.Date, exerciseType: Exercise,
+                           crampSeverity: CrampSeverity, sleep: java.util.Date): Date {
+        return Date(
+            date = date,
+            flow = flow,
+            mood = mood,
+            exerciseLength = exerciseLength,
+            exerciseType = exerciseType,
+            crampSeverity = crampSeverity,
+            sleep = sleep
+        )
+    }
+
+    private fun saveDate(date: Date) {
+        dateRepository.addDate(date)
+    }
+
+    fun addNewDate(date: java.util.Date, flow: FlowSeverity, mood: Mood,
+                   exerciseLength: java.util.Date, exerciseType: Exercise,
+                   crampSeverity: CrampSeverity, sleep: java.util.Date) {
+        saveDate(createDate(date, flow, mood, exerciseLength, exerciseType, crampSeverity, sleep))
     }
 }
