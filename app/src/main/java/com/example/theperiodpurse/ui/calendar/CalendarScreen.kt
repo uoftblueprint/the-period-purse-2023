@@ -35,6 +35,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.Screen
 import com.example.theperiodpurse.ui.theme.HeaderColor1
+import com.example.theperiodpurse.ui.theme.SelectedColor1
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import com.google.accompanist.pager.*
 import com.kizitonwose.calendar.compose.VerticalCalendar
@@ -74,7 +75,7 @@ fun Tabs(tabs: List<CalendarTabItem>, pagerState: PagerState) {
                         pagerState,
                         tabPositions
                     ),
-                    color = Color(0xff5a9f93)
+                    color = SelectedColor1
                 )
             }
         ) {

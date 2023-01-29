@@ -11,3 +11,6 @@ val Teal = Color(0xFF72C6B7)
 
 val HeaderColor1 = Color(0xFFF1F1F1)
 val BottomBarColor1 = Color(0xFFFFFFFF)
+val SelectedColor1 = Color(0xFF589E92)
+val MainFontColor = Color(0xFF090909)
+val SecondaryFontColor = Color(0xFF717173)
