@@ -31,6 +31,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.Screen
+import com.example.theperiodpurse.ui.theme.HeaderColor1
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import com.google.accompanist.pager.*
 import com.kizitonwose.calendar.compose.VerticalCalendar
@@ -53,7 +54,7 @@ fun Tabs(tabs: List<CalendarTabItem>, pagerState: PagerState) {
     val scope = rememberCoroutineScope()
     TabRow(
         selectedTabIndex = pagerState.currentPage,
-        backgroundColor = Color.LightGray,
+        backgroundColor = HeaderColor1,
         contentColor = Color.Black,
         indicator = { tabPositions ->
             TabRowDefaults.Indicator(

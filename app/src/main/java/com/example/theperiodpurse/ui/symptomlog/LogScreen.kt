@@ -39,6 +39,7 @@ import com.example.theperiodpurse.Screen
 import com.example.theperiodpurse.data.LogPrompt
 import com.example.theperiodpurse.data.LogSquare
 import com.example.theperiodpurse.ui.symptomlog.LogViewModel
+import com.example.theperiodpurse.ui.theme.HeaderColor1
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -117,7 +118,7 @@ fun LogScreenTopBar(navController: NavController, date: LocalDate) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = Color(200, 200, 200))
+            .background(color = HeaderColor1)
     ) {
         Row (modifier = Modifier
             .padding(start = 10.dp, top = 10.dp, end = 0.dp)
