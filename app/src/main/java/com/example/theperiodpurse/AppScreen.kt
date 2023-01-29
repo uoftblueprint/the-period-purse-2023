@@ -59,6 +59,7 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var mAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,11 +83,13 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
     private fun signIn() {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -110,6 +113,8 @@ class MainActivity : ComponentActivity() {
 
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         mAuth.signInWithCredential(credential)
@@ -127,6 +132,7 @@ class MainActivity : ComponentActivity() {
             }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun signOut() {
         // get the google account
         val googleSignInClient: GoogleSignInClient
@@ -155,8 +161,11 @@ class MainActivity : ComponentActivity() {
                 }
             }
     }
-}
 
+
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     fun LoginScreen() {
 
