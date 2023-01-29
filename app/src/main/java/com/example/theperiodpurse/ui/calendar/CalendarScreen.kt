@@ -5,16 +5,19 @@ import android.os.Build
 // import androidx.activity.ComponentActivity
 // import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.ripple.LocalRippleTheme
+import androidx.compose.material.ripple.RippleAlpha
+import androidx.compose.material.ripple.RippleTheme
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -44,6 +47,14 @@ import java.util.*
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
+inline fun Modifier.noRippleClickable(crossinline onClick: ()->Unit): Modifier = composed {
+    clickable(indication = null,
+        interactionSource = remember { MutableInteractionSource() }) {
+        onClick()
+    }
+}
+
+
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -52,32 +63,48 @@ fun Tabs(tabs: List<CalendarTabItem>, pagerState: PagerState) {
     // Tabs are displayed in ordered row by tabs list
     // PagerState allows for navigation/animation between paginated layouts
     val scope = rememberCoroutineScope()
-    TabRow(
-        selectedTabIndex = pagerState.currentPage,
-        backgroundColor = HeaderColor1,
-        contentColor = Color.Black,
-        indicator = { tabPositions ->
-            TabRowDefaults.Indicator(
-                Modifier.pagerTabIndicatorOffset(
-                    pagerState,
-                    tabPositions),
-                color = Color(0xff5a9f93)
-            )
-        }
-    ) {
-        tabs.forEachIndexed { index, tab ->
-            Tab(
-                text = { Text(tab.title) },
-                selected = pagerState.currentPage == index,
-                onClick = {
-                    scope.launch {
-                        pagerState.animateScrollToPage(index)
+    CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme()) {
+        TabRow(
+            selectedTabIndex = pagerState.currentPage,
+            backgroundColor = HeaderColor1,
+            contentColor = Color.Black,
+            indicator = { tabPositions ->
+                TabRowDefaults.Indicator(
+                    Modifier.pagerTabIndicatorOffset(
+                        pagerState,
+                        tabPositions
+                    ),
+                    color = Color(0xff5a9f93)
+                )
+            }
+        ) {
+            tabs.forEachIndexed { index, tab ->
+                Tab(
+                    text = { Text(tab.title) },
+                    selected = pagerState.currentPage == index,
+                    modifier = Modifier
+                        .noRippleClickable {
+                            scope.launch {
+                                pagerState.animateScrollToPage(index)
+                            }
+                        },
+                    onClick = {
+                        scope.launch {
+                            pagerState.animateScrollToPage(index)
+                        }
                     }
-                }
-            )
+                )
+            }
         }
-        
     }
+}
+
+private class NoRippleTheme : RippleTheme {
+    @Composable
+    override fun defaultColor() = RippleTheme.defaultRippleColor(Color.Unspecified, true)
+
+    @Composable
+    override fun rippleAlpha(): RippleAlpha = RippleAlpha(draggedAlpha = 0f, focusedAlpha = 0f, hoveredAlpha = 0f, pressedAlpha = 0f)
 }
 
 @OptIn(ExperimentalPagerApi::class)
@@ -140,7 +167,8 @@ fun CalendarScreenLayout(navController: NavController) {
             )
             Column {
                 VerticalCalendar(
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 24.dp)
+                    modifier = Modifier
+                        .padding(horizontal = 12.dp, vertical = 24.dp)
                         .semantics { contentDescription = "Calendar" },
                     state = state,
                     monthHeader = { month ->
@@ -184,21 +212,25 @@ fun Day(day: CalendarDay,
                     .size(64.dp)
                     .clip(shape = RoundedCornerShape(8.dp))
                     .fillMaxSize()
-                    .background(color = if (day.date.isAfter(LocalDate.now())) {
-                        Color(237, 237, 237)
-                    } else {
-                        Color.White
-                    })
+                    .background(
+                        color = if (day.date.isAfter(LocalDate.now())) {
+                            Color(237, 237, 237)
+                        } else {
+                            Color.White
+                        }
+                    )
                     .semantics { contentDescription = day.date.toString() }
                     .border(
-                        color = Color(200,205,205),
+                        color = Color(200, 205, 205),
                         width = 1.dp,
                         shape = RoundedCornerShape(8.dp)
                     )
                     .clickable(
                         enabled = !day.date.isAfter(LocalDate.now()),
-                        onClick = { if (!day.date.isAfter(LocalDate.now()))
-                            onClick(day) }
+                        onClick = {
+                            if (!day.date.isAfter(LocalDate.now()))
+                                onClick(day)
+                        }
                     ),
             ) {
                 Text(modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
@@ -239,7 +271,8 @@ fun MonthHeader(calendarMonth: CalendarMonth) {
         Row(modifier = Modifier.fillMaxWidth()) {
             for (dayOfWeek in daysOfWeek) {
                 Text(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .offset(y = 10.dp),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.body2,
