@@ -2,6 +2,7 @@ package com.example.theperiodpurse.data.module
 
 import android.content.Context
 import com.example.theperiodpurse.data.ApplicationRoomDatabase
+import com.example.theperiodpurse.data.DateDAO
 import com.example.theperiodpurse.data.UserDAO
 import dagger.Module
 import dagger.Provides
@@ -16,6 +17,11 @@ private object DatabaseModule {
     @Provides
     fun provideUserDao(appDatabase: ApplicationRoomDatabase): UserDAO {
         return appDatabase.userDAO()
+    }
+
+    @Provides
+    fun provideDateDao(appDatabase: ApplicationRoomDatabase): DateDAO {
+        return appDatabase.dateDAO()
     }
 
     @Provides
