@@ -42,7 +42,7 @@ fun SettingScreenLayout(
        TrackingPreferencesRow()
        Text(
            text = stringResource(R.string.notifications_heading),
-           modifier = textModifier,
+           modifier = modifier.padding(top = 5.dp, start = 10.dp),
            color = Color.Gray
        )
        Row(modifier = modifier.padding(20.dp)) {
