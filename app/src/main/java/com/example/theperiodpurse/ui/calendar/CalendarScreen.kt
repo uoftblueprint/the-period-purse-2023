@@ -168,7 +168,7 @@ fun CalendarScreenLayout(navController: NavController) {
             Column {
                 VerticalCalendar(
                     modifier = Modifier
-                        .padding(horizontal = 12.dp, vertical = 24.dp)
+                        .padding(horizontal = 12.dp)
                         .semantics { contentDescription = "Calendar" },
                     state = state,
                     monthHeader = { month ->
