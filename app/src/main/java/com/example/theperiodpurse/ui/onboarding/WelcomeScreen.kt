@@ -1,6 +1,15 @@
 package com.example.theperiodpurse.ui.onboarding
 
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.provider.Settings.Global.getString
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultRegistry
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,46 +32,36 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat.startActivityForResult
+import com.example.theperiodpurse.MainActivity
 import com.example.theperiodpurse.R
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.FirebaseAuth
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseUser
 
 
 @Composable
 fun WelcomeScreen(onNextButtonClicked: () -> Unit, modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-            .padding(16.dp)
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
 
-        Spacer(modifier = Modifier.height(16.dp))
 
-        // Logo Image
-        Image(
-            painter = painterResource(R.drawable.app_logo),
-            contentDescription = null,
-            modifier = Modifier.width(500.dp)
-        )
-        Spacer(modifier = Modifier.height(16.dp))
 
-        // Welcome text
-        Text(text = stringResource(R.string.welcome), style = MaterialTheme.typography.h4)
-        Spacer(modifier = Modifier.height(8.dp))
 
-        // Quick Start button
-        QuickStartButton(
-            onClick = { onNextButtonClicked() }
-        )
 
-        // Sign in with Apple button
-        AppleSignInButton(
-            onClick = { onNextButtonClicked() }
-        )
-        Text("By continuing, you accept the", textAlign = TextAlign.Center)
-        Text("Terms and Conditions and Privacy Policy.", textAlign = TextAlign.Center)
-    }
+
+
+
+
+
+
+
+
 }
+
+
 
 @Composable
 fun QuickStartButton(
@@ -80,7 +79,7 @@ fun QuickStartButton(
 }
 
 @Composable
-fun AppleSignInButton(
+fun GoogleSignInButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -89,7 +88,9 @@ fun AppleSignInButton(
         modifier = modifier.widthIn(min = 250.dp),
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
     ) {
-        Text("Sign In with Apple", color = Color.Black)
+        Text("Sign In with Google", color = Color.Black)
+
+
     }
 }
 

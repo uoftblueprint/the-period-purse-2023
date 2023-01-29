@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "670833659413-t93gvujbq4cetmu8kvi6q28oqm4ab5mi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.theperiodpurse",
+            "certificate_hash": "9530ca5d378bc848254e8ff14511ffe6f91b5bd3"
+          }
+        },
+        {
           "client_id": "670833659413-6q9jgb44besuj2hdr8sa2uuv5fr6e19j.apps.googleusercontent.com",
           "client_type": 3
         }

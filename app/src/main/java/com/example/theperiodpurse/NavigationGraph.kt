@@ -1,5 +1,6 @@
 package com.example.theperiodpurse
 
+import androidx.activity.result.ActivityResultRegistry
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -21,6 +22,7 @@ import com.example.theperiodpurse.ui.onboarding.OnboardViewModel
 import com.example.theperiodpurse.ui.onboarding.QuestionOneScreen
 import com.example.theperiodpurse.ui.onboarding.QuestionTwoScreen
 import com.example.theperiodpurse.ui.onboarding.WelcomeScreen
+import com.example.theperiodpurse.ui.setting.SettingPage
 import com.example.theperiodpurse.ui.setting.SettingScreen
 
 enum class Screen() {
@@ -44,7 +46,8 @@ fun NavigationGraph(
     navController: NavHostController,
     startDestination: String,
     viewModel: OnboardViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    mainActivity: MainActivity
 ) {
     val uiState by viewModel.uiState.collectAsState()
     NavHost(
@@ -72,7 +75,7 @@ fun NavigationGraph(
         }
 
         composable(route = Screen.Settings.name) {
-            SettingScreen()
+            SettingPage(mainActivity)
         }
 
         composable(route = Screen.Cycle.name) {
@@ -84,14 +87,6 @@ fun NavigationGraph(
         }
 
         // Onboard Screens
-
-        composable(route = OnboardingScreen.Welcome.name) {
-            WelcomeScreen(
-                onNextButtonClicked = {
-                    navController.navigate(OnboardingScreen.QuestionOne.name)
-                }
-            )
-        }
         composable(route = OnboardingScreen.QuestionOne.name) {
             QuestionOneScreen(
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionTwo.name) },
@@ -129,6 +124,7 @@ fun NavigationGraph(
         }
     }
 }
+
 
 /**
  * Resets the [OnboardUIState] and pops up to [OnboardingScreen.Start]
