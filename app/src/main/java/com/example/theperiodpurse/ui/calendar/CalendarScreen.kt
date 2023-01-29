@@ -229,8 +229,8 @@ fun MonthHeader(calendarMonth: CalendarMonth) {
         Text(
             modifier = Modifier.padding(12.dp),
             textAlign = TextAlign.Center,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.ExtraBold,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.W500,
             text = calendarMonth.yearMonth.displayText()
         )
 
@@ -241,8 +241,8 @@ fun MonthHeader(calendarMonth: CalendarMonth) {
                     modifier = Modifier.weight(1f)
                         .offset(y = 10.dp),
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.body2,
                     fontSize = 10.sp,
+                    fontWeight = FontWeight.ExtraBold,
                     text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
                 )
             }

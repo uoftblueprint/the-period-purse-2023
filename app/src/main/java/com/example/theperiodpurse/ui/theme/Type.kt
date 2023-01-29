@@ -9,13 +9,12 @@ import androidx.compose.ui.unit.sp
 import com.example.theperiodpurse.R
 
 val Avenir = FontFamily(
-    Font(R.font.avenir_book)
+    Font(R.font.avenir_medium),
+    Font(R.font.avenir_book, FontWeight.Thin),
+    Font(R.font.avenir_light, FontWeight.ExtraLight),
+    Font(R.font.avenir_heavy, FontWeight.Bold),
+    Font(R.font.avenir_black, FontWeight.ExtraBold)
 )
-
-val Avenir_Black = FontFamily(
-    Font(R.font.avenir_black)
-)
-
 
 // Set of Material typography styles to start with
 val Typography = Typography(
@@ -23,12 +22,5 @@ val Typography = Typography(
         fontFamily = Avenir,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp
-    ),
-
-    body2 = TextStyle(
-            fontFamily = Avenir_Black,
-    fontWeight = FontWeight.Normal,
-    fontSize = 16.sp
     )
-
 )
