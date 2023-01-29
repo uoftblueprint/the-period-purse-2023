@@ -40,7 +40,9 @@ import com.example.theperiodpurse.data.LogPrompt
 import com.example.theperiodpurse.data.LogSquare
 import com.example.theperiodpurse.ui.symptomlog.LogViewModel
 import com.example.theperiodpurse.ui.theme.HeaderColor1
+import com.kizitonwose.calendar.core.atStartOfMonth
 import java.time.LocalDate
+import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -147,7 +149,9 @@ fun LogScreenTopBar(navController: NavController, date: LocalDate) {
                 modifier = Modifier
                     .weight(.1f),
             ) {
-                IconButton(onClick = {
+                if (date.minusDays(1) >=
+                    YearMonth.now().minusMonths(12).atStartOfMonth())
+                    IconButton(onClick = {
                     navController.navigate(
                         "%s/%s/%s".format(
                             Screen.Calendar.name,
@@ -193,6 +197,7 @@ fun LogScreenTopBar(navController: NavController, date: LocalDate) {
                 modifier = Modifier
                     .weight(.1f)
             ) {
+                if (date.plusDays(1)<=LocalDate.now())
                 IconButton(onClick = {
                     navController.navigate("%s/%s/%s"
                         .format(
