@@ -125,8 +125,10 @@ fun NavigationGraph(
             SummaryScreen(
                 onboardUiState = uiState,
                 onSendButtonClicked = {
-                    viewModel.addNewUser(
-                        symptomList, dateList, 0, 0, 0)
+                    viewModel.addNewDate(dateList[0].date, dateList[0].flow, dateList[0].mood,
+                        dateList[0].exerciseLength, dateList[0].exerciseType,
+                        dateList[0].crampSeverity, dateList[0].sleep)
+                    viewModel.addNewUser(symptomList, dateList, 0, 0, 0)
                     navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
                     navController.navigate(Screen.Calendar.name)
                 },
