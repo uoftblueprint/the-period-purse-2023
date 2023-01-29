@@ -41,15 +41,12 @@ fun ThePeriodPurseTheme(
     }
 
     val systemUiController = rememberSystemUiController()
-    if(darkTheme){
-        systemUiController.setSystemBarsColor(
-            color = Color.Transparent
-        )
-    }else{
-        systemUiController.setSystemBarsColor(
-            color = HeaderColor1
-        )
-    }
+    systemUiController.setSystemBarsColor(
+        color = HeaderColor1
+    )
+    systemUiController.setNavigationBarColor(
+        color = BottomBarColor1
+    )
 
     MaterialTheme(
         colors = colors,

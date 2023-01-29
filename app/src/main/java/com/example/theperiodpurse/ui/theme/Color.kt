@@ -10,3 +10,4 @@ val Red = Color(0xFFBF3428)
 val Teal = Color(0xFF72C6B7)
 
 val HeaderColor1 = Color(0xFFF1F1F1)
+val BottomBarColor1 = Color(0xFFFFFFFF)
