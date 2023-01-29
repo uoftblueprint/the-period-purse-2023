@@ -4,9 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -105,7 +103,7 @@ fun SettingsScreen(
                 )
             }
             composable(route = SettingScreenNavigation.Notification.name) {
-                TimeWheel(context= LocalContext.current)
+                NotificationsLayout(context= LocalContext.current)
             }
             composable(route = SettingScreenNavigation.BackUpAccount.name) {
                 BackUpAccountScreen()
