@@ -13,7 +13,7 @@ import org.junit.Test
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class CalendarScreenTest{
+class CalendarScreenTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
     private lateinit var navController: TestNavHostController
@@ -31,6 +31,18 @@ class CalendarScreenTest{
     }
 
     @Test
+    fun appCalendarScreen_clickOnArrow_showAndHideSymptomOptions() {
+        composeTestRule.onNodeWithContentDescription("Expand to switch symptoms")
+            .performClick()
+        composeTestRule.onNodeWithContentDescription("Mood")
+            .assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("Cramps")
+            .assertIsDisplayed().performClick()
+        composeTestRule.onNodeWithTag("Selected Symptom")
+        hasContentDescription("Cramps")
+    }
+
+    @Test
     fun calendarIsDisplayed() {
         composeTestRule.onNodeWithContentDescription("Calendar Page").assertIsDisplayed()
     }
@@ -38,8 +50,11 @@ class CalendarScreenTest{
     // Check last entry month (Current month)
     @Test
     fun displayCurrentMonth() {
-        composeTestRule.onNodeWithContentDescription(LocalDate.now().format(
-            DateTimeFormatter.ofPattern("yyyy-MM-dd"))).assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription(
+            LocalDate.now().format(
+                DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            )
+        ).assertIsDisplayed()
     }
 
     // Check scrolling works
@@ -47,7 +62,7 @@ class CalendarScreenTest{
     fun scrollTo_ActionAssertion() {
         composeTestRule.onNodeWithContentDescription("Calendar")
             .assert(hasScrollAction())
-        }
+    }
 
     // Check if you can go to Cycle Tab
     @Test
@@ -59,12 +74,10 @@ class CalendarScreenTest{
     // Click on date to bring up the tracking menu
     @Test
     fun appScreen_DisplayLogScreen() {
-        composeTestRule.onNodeWithContentDescription(LocalDate.now().format(
-            DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        ).toString()).performClick()
+        composeTestRule.onNodeWithContentDescription(
+            LocalDate.now().format(
+                DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            ).toString()
+        ).performClick()
     }
-
 }
-
-
-

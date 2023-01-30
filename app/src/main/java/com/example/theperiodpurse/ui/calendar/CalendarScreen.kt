@@ -1,24 +1,29 @@
 package com.example.theperiodpurse.ui.calendar
 
+
 import android.os.Build
-// import android.os.Bundle
-// import androidx.activity.ComponentActivity
-// import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -30,17 +35,131 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.Screen
+import com.example.theperiodpurse.data.Symptom
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import com.google.accompanist.pager.*
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.*
+import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.Month
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.*
-import kotlinx.coroutines.launch
-import java.time.LocalDate
+
+
+val tabModifier = Modifier
+    .background(Color.White)
+    .fillMaxWidth()
+
+@Composable
+fun SymptomTab(modifier: Modifier = Modifier, trackedSymptoms: List<Symptom>) {
+    var expanded by remember { mutableStateOf(false) }
+    var activeSymptom: Symptom? by remember { mutableStateOf(null) }
+    Column(modifier = modifier) {
+        DisplaySymptomTab(
+            activeSymptom = activeSymptom,
+            expanded = expanded,
+            onExpandButtonClick = { expanded = !expanded },
+            modifier = tabModifier
+        )
+        if (expanded) {
+            SwitchSymptomTab(
+                activeSymptom = activeSymptom,
+                symptoms = trackedSymptoms,
+                onSymptomOnClicks = trackedSymptoms.map { { activeSymptom = it } },
+                modifier = tabModifier
+            )
+        }
+    }
+}
+
+@Composable
+private fun DisplaySymptomTab(
+    activeSymptom: Symptom?,
+    expanded: Boolean,
+    onExpandButtonClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = modifier
+    ) {
+        Text(
+            text = stringResource(activeSymptom?.nameId ?: Symptom.FLOW.nameId),
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(end = 2.dp)
+        )
+        Icon(
+            painter = painterResource(
+                id = activeSymptom?.resourceId ?: Symptom.FLOW.resourceId
+            ),
+            tint = Color.Black,
+            contentDescription = activeSymptom?.name,
+            modifier = Modifier.padding(end = 0.dp)
+                .testTag("Selected Symptom")
+        )
+        SwitchSymptomButton(
+            expanded = expanded,
+            onClick = onExpandButtonClick
+        )
+    }
+}
+
+@Composable
+private fun SwitchSymptomButton(
+    expanded: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    IconButton(onClick = onClick, modifier = modifier) {
+        Icon(
+            imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+            tint = Color.Gray,
+            contentDescription = stringResource(R.string.expand_button_symptoms_content_description)
+        )
+    }
+}
+
+@Composable
+private fun SwitchSymptomTab(
+    activeSymptom: Symptom?,
+    symptoms: List<Symptom>,
+    onSymptomOnClicks: List<() -> Unit>,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        modifier = modifier.testTag("Symptom Options")
+    ) {
+        symptoms.zip(onSymptomOnClicks).forEach { (symptom, onClick) ->
+            val interactionSource = remember { MutableInteractionSource() }
+            val isPressed by interactionSource.collectIsPressedAsState()
+
+            IconButton(
+                onClick = onClick,
+                interactionSource = interactionSource
+            ) {
+                val defaultColor = Color.Black
+                val color = if (isPressed) {
+                    defaultColor.copy(ContentAlpha.disabled)
+                } else if (activeSymptom == symptom) {
+                    Color(0xFFBF3428)
+                } else {
+                    defaultColor
+                }
+                Icon(
+                    painter = painterResource(id = symptom.resourceId),
+                    tint = color,
+                    contentDescription = stringResource(symptom.nameId)
+                )
+            }
+        }
+    }
+}
 
 
 @OptIn(ExperimentalPagerApi::class)
@@ -58,7 +177,8 @@ fun Tabs(tabs: List<CalendarTabItem>, pagerState: PagerState) {
             TabRowDefaults.Indicator(
                 Modifier.pagerTabIndicatorOffset(
                     pagerState,
-                    tabPositions),
+                    tabPositions
+                ),
                 color = Color(0xff5a9f93)
             )
         }
@@ -74,7 +194,7 @@ fun Tabs(tabs: List<CalendarTabItem>, pagerState: PagerState) {
                 }
             )
         }
-        
+
     }
 }
 
@@ -98,15 +218,20 @@ fun CalendarScreen(navController: NavController) {
     )
     val pagerState = rememberPagerState()
     ThePeriodPurseTheme {
-        Scaffold (topBar = {})
+        Scaffold(topBar = {})
         { padding ->
-            Column(modifier = Modifier.padding(padding)) {
+            Column(
+                verticalArrangement = Arrangement.Bottom,
+                modifier = Modifier.padding(padding)
+            ) {
                 Tabs(tabs = tabs, pagerState = pagerState)
                 TabsContent(tabs = tabs, pagerState = pagerState, navController = navController)
             }
         }
     }
 }
+
+val previewTrackedSymptoms = Symptom.values().asList()
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -137,6 +262,10 @@ fun CalendarScreenLayout(navController: NavController) {
                 contentScale = ContentScale.FillBounds,
             )
             Column {
+                SymptomTab(
+                    trackedSymptoms = previewTrackedSymptoms
+//                trackedSymptoms = userDAO.get().symptomsToTrack
+                )
                 VerticalCalendar(
                     modifier = Modifier.semantics { contentDescription = "Calendar" },
                     state = state,
@@ -239,6 +368,8 @@ fun MonthHeader(calendarMonth: CalendarMonth) {
     }
 }
 
+
+
 // Function to display Month with Year
 @RequiresApi(Build.VERSION_CODES.O)
 fun YearMonth.displayText(short: Boolean = false): String {
@@ -272,4 +403,9 @@ fun TabsPreview() {
     )
     val pagerState = rememberPagerState()
     Tabs(tabs = tabs, pagerState = pagerState)
+}
+@Preview
+@Composable
+fun DisplaySymptomTabPreview() {
+    SymptomTab(trackedSymptoms = previewTrackedSymptoms)
 }
