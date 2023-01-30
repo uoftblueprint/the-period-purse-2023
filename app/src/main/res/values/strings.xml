@@ -39,6 +39,8 @@
     <string name="cycle_history">Cycle history</string>
     <string name="avg_period_len">Average period length</string>
     <string name="avg_cycle_len">Average cycle length</string>
+    <string name="period_flow">Period Flow</string>
+    <string name="expand_button_symptoms_content_description">Expand to switch symptoms</string>
     <string name="fab_to_calendar">Navigate to Calendar page</string>
     <string name="fab_see_log_options">Open logging options</string>
 
