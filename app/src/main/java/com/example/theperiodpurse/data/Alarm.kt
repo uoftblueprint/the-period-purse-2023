@@ -3,19 +3,17 @@ package com.example.theperiodpurse.data
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
-import android.content.ClipDescription
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import com.example.theperiodpurse.R
 
 class Alarm: BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
         try {
-            showNotification(context, "Test Title", "Test Description")
+            showNotification(context, "Reminder to Log Symptoms!", "This is your reminder to log your symptoms")
 
         }catch (e: Exception){
             println("didn't work rip")

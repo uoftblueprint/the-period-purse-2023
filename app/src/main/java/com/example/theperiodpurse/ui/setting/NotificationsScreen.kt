@@ -89,16 +89,12 @@ fun TimeWheel(context: Context){
             pickedTime = it
         }
     }
-//    Button(onClick = {
-//        setAlarm(context)
-//    }
-//    ) {
-//      Text(text = "notification")
-//    }
-
-//    Text(text = "expanded stuff starts  here")
-
-//    item();
+    Button(onClick = {
+        setAlarm(context)
+    }
+    ) {
+      Text(text = "notification")
+    }
 
 }
 
