@@ -1,19 +1,17 @@
 package com.example.theperiodpurse.ui.onboarding
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.example.theperiodpurse.data.*
+import com.example.theperiodpurse.data.Date
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class OnboardViewModel @Inject constructor (private val userRepository: UserRepository,
-                                            private val dateRepository: DateRepository
+                                            private val dateRepository: DateRepository,
                                             ): ViewModel() {
     private val _uiState = MutableStateFlow(OnboardUIState(dateOptions = dateOptions()))
     val uiState: StateFlow<OnboardUIState> = _uiState.asStateFlow()
@@ -103,6 +101,10 @@ class OnboardViewModel @Inject constructor (private val userRepository: UserRepo
                    averagePeriodLength: Int, averageCycleLength: Int, daysSinceLastPeriod: Int) {
         saveUser(createUser(symptomsToTrack, periodHistory, averagePeriodLength, averageCycleLength,
             daysSinceLastPeriod))
+        viewModelScope.launch {
+            val user = withContext(Dispatchers.Main) { userRepository.getUser(1) }
+            _uiState.value = _uiState.value.copy(user = user)
+        }
     }
 
     fun getAllUsers() {
