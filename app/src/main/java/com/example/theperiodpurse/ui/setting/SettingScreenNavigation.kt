@@ -4,9 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -18,11 +16,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.theperiodpurse.AppViewModel
 import com.example.theperiodpurse.R
 
 enum class SettingScreenNavigation(@StringRes val title: Int) {
@@ -62,6 +62,7 @@ fun SettingAppBar(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SettingsScreen(
+    appViewModel: AppViewModel = viewModel(),
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {

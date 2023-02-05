@@ -22,6 +22,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.data.LogPrompt
 import com.example.theperiodpurse.data.LogSquare
@@ -214,7 +215,8 @@ private fun saveTextData(
 fun ExercisePromptPreview() {
     ExercisePrompt(
         logViewModel = LogViewModel(
-            logPrompts = listOf(LogPrompt.Exercise)
+            logPrompts = listOf(LogPrompt.Exercise),
+            viewModel()
         )
     )
 }

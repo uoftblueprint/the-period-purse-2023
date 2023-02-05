@@ -1,6 +1,8 @@
 package com.example.theperiodpurse.ui.symptomlog
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.theperiodpurse.AppViewModel
 import com.example.theperiodpurse.data.LogPrompt
 import com.example.theperiodpurse.data.LogSquare
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -8,7 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
+class LogViewModel(logPrompts: List<LogPrompt>, appViewModel: AppViewModel) : ViewModel() {
     private val _uiState = MutableStateFlow(LogUiState(
         getSquares(logPrompts),
         getText(logPrompts)

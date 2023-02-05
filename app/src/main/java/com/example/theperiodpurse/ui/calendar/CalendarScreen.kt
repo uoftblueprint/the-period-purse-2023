@@ -31,8 +31,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.theperiodpurse.AppViewModel
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.Screen
 import com.example.theperiodpurse.data.Symptom
@@ -99,7 +101,8 @@ private fun DisplaySymptomTab(
             ),
             tint = Color.Black,
             contentDescription = activeSymptom?.name,
-            modifier = Modifier.padding(end = 0.dp)
+            modifier = Modifier
+                .padding(end = 0.dp)
                 .testTag("Selected Symptom")
         )
         SwitchSymptomButton(
@@ -200,16 +203,19 @@ fun Tabs(tabs: List<CalendarTabItem>, pagerState: PagerState) {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun TabsContent(tabs: List<CalendarTabItem>, pagerState: PagerState, navController: NavController) {
+fun TabsContent(tabs: List<CalendarTabItem>,
+                pagerState: PagerState,
+                navController: NavController,
+                appViewModel: AppViewModel) {
     HorizontalPager(state = pagerState, count = tabs.size) { page ->
-        tabs[page].screen(navController)
+        tabs[page].screen(navController, appViewModel)
     }
 }
 
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun CalendarScreen(navController: NavController) {
+fun CalendarScreen(navController: NavController, appViewModel: AppViewModel) {
     // Main calendar screen which allows navigation to cycle page and calendar
     // By default, opens on to the Calendar
     val tabs = listOf(
@@ -225,7 +231,11 @@ fun CalendarScreen(navController: NavController) {
                 modifier = Modifier.padding(padding)
             ) {
                 Tabs(tabs = tabs, pagerState = pagerState)
-                TabsContent(tabs = tabs, pagerState = pagerState, navController = navController)
+                TabsContent(
+                    tabs = tabs, pagerState = pagerState,
+                    navController = navController,
+                    appViewModel = appViewModel
+                )
             }
         }
     }
@@ -235,7 +245,7 @@ val previewTrackedSymptoms = Symptom.values().asList()
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarScreenLayout(navController: NavController) {
+fun CalendarScreenLayout(navController: NavController, appViewModel: AppViewModel) {
     // Contains the swappable content
     ThePeriodPurseTheme {
         val bg = painterResource(R.drawable.colourwatercolour)
@@ -310,8 +320,10 @@ fun Day(day: CalendarDay,
                     .size(54.dp)
                     .clip(shape = RoundedCornerShape(6.dp))
                     .fillMaxSize()
-                    .background(color = if (day.date.isAfter(LocalDate.now())) Color.LightGray
-                    else Color.White)
+                    .background(
+                        color = if (day.date.isAfter(LocalDate.now())) Color.LightGray
+                        else Color.White
+                    )
                     .semantics { contentDescription = day.date.toString() }
                     .border(
                         color = Color.Gray,
@@ -320,8 +332,10 @@ fun Day(day: CalendarDay,
                     )
                     .clickable(
                         enabled = !day.date.isAfter(LocalDate.now()),
-                        onClick = { if (!day.date.isAfter(LocalDate.now()))
-                            onClick(day) }
+                        onClick = {
+                            if (!day.date.isAfter(LocalDate.now()))
+                                onClick(day)
+                        }
                     ),
             ) {
                 Text(modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp),
@@ -389,7 +403,7 @@ fun Month.displayText(short: Boolean = true): String {
 @Composable
 fun CalendarScreenPreview() {
     ThePeriodPurseTheme {
-        CalendarScreen(rememberNavController())
+        CalendarScreen(rememberNavController(), viewModel())
     }
 }
 

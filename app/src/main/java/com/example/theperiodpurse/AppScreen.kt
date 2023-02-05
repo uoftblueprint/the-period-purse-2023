@@ -44,7 +44,8 @@ fun Application() {
 @Composable
 fun ScreenApp(
     modifier: Modifier = Modifier,
-    viewModel: OnboardViewModel = viewModel(),
+    appViewModel: AppViewModel = viewModel(),
+    onboardViewModel: OnboardViewModel = viewModel(),
     skipOnboarding: Boolean = false,
     navController: NavHostController = rememberNavController()
 ) {
@@ -65,7 +66,8 @@ fun ScreenApp(
         NavigationGraph(
             navController = navController,
             startDestination = if (skipOnboarding) Screen.Calendar.name else OnboardingScreen.Welcome.name,
-            viewModel,
+            onboardViewModel,
+            appViewModel,
             modifier = modifier.padding(innerPadding)
         )
 

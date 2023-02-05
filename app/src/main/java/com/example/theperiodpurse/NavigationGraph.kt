@@ -46,17 +46,18 @@ enum class OnboardingScreen() {
 fun NavigationGraph(
     navController: NavHostController,
     startDestination: String,
-    viewModel: OnboardViewModel,
+    onboardViewModel: OnboardViewModel,
+    appViewModel: AppViewModel,
     modifier: Modifier = Modifier
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val onboardUIState by onboardViewModel.uiState.collectAsState()
     NavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier
     ) {
         composable(route = Screen.Calendar.name) {
-            CalendarScreen(navController = navController)
+            CalendarScreen(navController = navController, appViewModel)
         }
 
         composable(
@@ -69,17 +70,18 @@ fun NavigationGraph(
             if (date != null) {
                 LogScreen(
                     date = date,
-                    navController = navController
+                    navController = navController,
+                    appViewModel
                 )
             }
         }
 
         composable(route = Screen.Settings.name) {
-            SettingsScreen()
+            SettingsScreen(appViewModel = appViewModel,)
         }
 
         composable(route = Screen.Cycle.name) {
-            CycleScreenLayout()
+            CycleScreenLayout(appViewModel)
         }
 
         composable(route = Screen.Learn.name) {
@@ -98,14 +100,14 @@ fun NavigationGraph(
         composable(route = OnboardingScreen.QuestionOne.name) {
             QuestionOneScreen(
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionTwo.name) },
-                onSelectionChanged = { viewModel.setQuantity(it.toInt()) }
+                onSelectionChanged = { onboardViewModel.setQuantity(it.toInt()) }
             )
         }
         composable(route = OnboardingScreen.QuestionTwo.name) {
             QuestionTwoScreen(
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionThree.name) },
-                options = uiState.dateOptions,
-                onSelectionChanged = { viewModel.setDate(it) }
+                options = onboardUIState.dateOptions,
+                onSelectionChanged = { onboardViewModel.setDate(it) }
             )
         }
 
@@ -113,7 +115,7 @@ fun NavigationGraph(
             val context = LocalContext.current
             QuestionThreeScreen(
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.Summary.name) },
-                onSelectionChanged = { viewModel.setSymptoms(it) },
+                onSelectionChanged = { onboardViewModel.setSymptoms(it) },
                 options = DataSource.symptoms.map { id -> context.resources.getString(id) },
             )
         }
@@ -123,17 +125,17 @@ fun NavigationGraph(
             val dateList = arrayListOf(Date(2, currentDate, FlowSeverity.HEAVY, Mood.ANGRY,
                 currentDate, Exercise.YOGA, CrampSeverity.Bad, currentDate))
             SummaryScreen(
-                onboardUiState = uiState,
+                onboardUiState = onboardUIState,
                 onSendButtonClicked = {
-                    viewModel.addNewDate(dateList[0].date, dateList[0].flow, dateList[0].mood,
+                    onboardViewModel.addNewDate(dateList[0].date, dateList[0].flow, dateList[0].mood,
                         dateList[0].exerciseLength, dateList[0].exerciseType,
                         dateList[0].crampSeverity, dateList[0].sleep)
-                    viewModel.addNewUser(symptomList, dateList, 0, 0, 0)
+                    onboardViewModel.addNewUser(symptomList, dateList, 0, 0, 0)
                     navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
                     navController.navigate(Screen.Calendar.name)
                 },
                 onCancelButtonClicked = {
-                    cancelOrderAndNavigateToStart(viewModel, navController)
+                    cancelOrderAndNavigateToStart(onboardViewModel, navController)
                 },
             )
         }

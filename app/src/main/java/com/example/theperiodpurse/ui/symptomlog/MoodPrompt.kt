@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.theperiodpurse.data.LogPrompt
 import com.example.theperiodpurse.data.LogSquare
 import com.example.theperiodpurse.ui.calendar.LogSelectableSquare
@@ -65,7 +66,8 @@ fun MoodPrompt (logViewModel: LogViewModel) {
 fun MoodPromptPreview() {
     FlowPrompt(
         logViewModel = LogViewModel(
-            logPrompts = listOf(LogPrompt.Mood)
+            logPrompts = listOf(LogPrompt.Mood),
+            viewModel()
         )
     )
 }

@@ -19,6 +19,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.theperiodpurse.AppViewModel
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 
@@ -93,7 +95,8 @@ fun CycleHistoryBox(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CycleScreenLayout(modifier: Modifier = Modifier) {
+fun CycleScreenLayout(appViewModel: AppViewModel,
+    modifier: Modifier = Modifier) {
     Column(
         modifier
             .verticalScroll(rememberScrollState())
@@ -123,6 +126,6 @@ fun CycleScreenLayout(modifier: Modifier = Modifier) {
 @Composable
 fun CycleScreenPreview() {
     ThePeriodPurseTheme {
-        CycleScreenLayout()
+        CycleScreenLayout(viewModel())
     }
 }
