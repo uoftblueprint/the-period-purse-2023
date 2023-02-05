@@ -7,7 +7,7 @@ import androidx.room.TypeConverters
 @Entity(tableName = "users")
 data class User(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Int = 1,
     @TypeConverters(SymptomConverter::class)
     val symptomsToTrack: ArrayList<Symptom> = ArrayList(),
     @TypeConverters(DateConverter::class)
