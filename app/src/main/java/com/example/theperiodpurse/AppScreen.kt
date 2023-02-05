@@ -1,5 +1,6 @@
 package com.example.theperiodpurse
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
