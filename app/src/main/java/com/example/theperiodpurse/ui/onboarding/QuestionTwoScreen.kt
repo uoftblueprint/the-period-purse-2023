@@ -105,7 +105,6 @@ fun QuestionTwoScreen(
             ) {
                 Text(stringResource(R.string.next))
                 onSelectionChanged(mDate.value+"|"+mDateTo.value)
-                // ADD SIGN IN FUNCTION CALL HERE
 
             }
 
