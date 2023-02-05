@@ -39,7 +39,12 @@ import com.example.theperiodpurse.Screen
 import com.example.theperiodpurse.data.LogPrompt
 import com.example.theperiodpurse.data.LogSquare
 import com.example.theperiodpurse.ui.symptomlog.LogViewModel
+import com.example.theperiodpurse.ui.theme.HeaderColor1
+import com.example.theperiodpurse.ui.theme.SecondaryFontColor
+import com.example.theperiodpurse.ui.theme.SelectedColor1
+import com.kizitonwose.calendar.core.atStartOfMonth
 import java.time.LocalDate
+import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -135,7 +140,7 @@ fun LogScreenTopBar(navController: NavController, date: LocalDate) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = Color(200, 200, 200))
+            .background(color = HeaderColor1)
     ) {
         Row (modifier = Modifier
             .padding(start = 10.dp, top = 10.dp, end = 0.dp)
@@ -164,7 +169,9 @@ fun LogScreenTopBar(navController: NavController, date: LocalDate) {
                 modifier = Modifier
                     .weight(.1f),
             ) {
-                IconButton(onClick = {
+                if (date.minusDays(1) >=
+                    YearMonth.now().minusMonths(12).atStartOfMonth())
+                    IconButton(onClick = {
                     navController.navigate(
                         "%s/%s/%s".format(
                             Screen.Calendar.name,
@@ -210,18 +217,19 @@ fun LogScreenTopBar(navController: NavController, date: LocalDate) {
                 modifier = Modifier
                     .weight(.1f)
             ) {
-                IconButton(onClick = {
-                    navController.navigate("%s/%s/%s"
-                        .format(
-                            Screen.Calendar.name,
-                            Screen.Log.name,
-                            date.plusDays(1)
-                        )
-                    ) {
-                        popUpTo(Screen.Calendar.name) {
-                            inclusive = false
+                if (date.plusDays(1)<=LocalDate.now())
+                    IconButton(onClick = {
+                        navController.navigate("%s/%s/%s"
+                            .format(
+                                Screen.Calendar.name,
+                                Screen.Log.name,
+                                date.plusDays(1)
+                            )
+                        ) {
+                            popUpTo(Screen.Calendar.name) {
+                                inclusive = false
+                            }
                         }
-                    }
                 },
                 modifier = Modifier
                     .semantics { contentDescription = "ClickNextDay" }
@@ -248,7 +256,7 @@ fun LogPromptCards(logPrompts: List<LogPrompt>, logViewModel: LogViewModel) {
                         val x = size.width - strokeWidth
 
                         drawLine(
-                            color = Color(200, 200, 200),
+                            color = HeaderColor1,
                             start = Offset(0f, 0f), //(0,0) at top-left point of the box
                             end = Offset(x, 0f), //top-right point of the box
                             strokeWidth = strokeWidth
@@ -267,8 +275,8 @@ fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
     val tabColor =  animateColorAsState(
         targetValue =
         if (logViewModel.getSquareSelected(logPrompt) != null ||
-            logViewModel.getText(logPrompt) != "") Teal
-        else Color(50,50,50),
+            logViewModel.getText(logPrompt) != "") SelectedColor1
+        else SecondaryFontColor,
         animationSpec = tween(500, 0, LinearEasing)
     )
 
@@ -329,7 +337,7 @@ fun ChangeableExpandButton( expanded: Boolean, onClick: () -> Unit) {
             imageVector =
             if (expanded) Icons.Filled.KeyboardArrowUp
             else Icons.Filled.KeyboardArrowDown,
-            tint = Color(97, 153, 154),
+            tint = SelectedColor1,
             contentDescription = "Expand Button",
         )
     }
@@ -344,8 +352,8 @@ fun LogSelectableSquare(
 
     val squareColor = animateColorAsState(
         targetValue =
-            if (logSquare.description == selected) Teal
-            else Color(200,200,200),
+            if (logSquare.description == selected) SelectedColor1
+            else HeaderColor1,
         animationSpec = tween(250, 0, LinearEasing)
     )
 
@@ -367,12 +375,12 @@ fun LogSelectableSquare(
                 }
                 .semantics { contentDescription = logSquare.description }
         ) {
-            logSquare.icon(Color(50, 50, 50))
+            logSquare.icon(SecondaryFontColor)
         }
         Text(
             text = logSquare.description,
             fontSize = 16.sp,
-            color = Color(50, 50, 50),
+            color = SecondaryFontColor,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 10.dp, bottom = 20.dp)
@@ -390,7 +398,7 @@ fun SaveButton(
     ) {
         FloatingActionButton(
             onClick = onClick,
-            backgroundColor = Teal,
+            backgroundColor = SelectedColor1,
             modifier = Modifier
                 .padding(20.dp)
                 .width(350.dp)
@@ -400,7 +408,8 @@ fun SaveButton(
                 text = "Save",
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .semantics { contentDescription = "Save Button" }
+                    .semantics { contentDescription = "Save Button" },
+                color = Color.White
             )
         }
     }
