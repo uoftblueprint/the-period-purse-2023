@@ -11,7 +11,6 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -26,6 +25,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -142,7 +144,7 @@ fun LogScreenTopBar(navController: NavController, date: LocalDate) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .weight(.1f)
+                    .weight(.1f),
             ) {
                 IconButton(onClick = {
                     navController.navigate(
@@ -178,7 +180,10 @@ fun LogScreenTopBar(navController: NavController, date: LocalDate) {
                 Text(
                     text = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)),
                     fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .testTag("DateLabel")
+                        .semantics { contentDescription = "DateLabel" }
                 )
             }
 
@@ -199,7 +204,10 @@ fun LogScreenTopBar(navController: NavController, date: LocalDate) {
                             inclusive = false
                         }
                     }
-                }) {
+                },
+                modifier = Modifier
+                    .semantics { contentDescription = "ClickNextDay" }
+                    ) {
                     Icon(
                         imageVector = Icons.Filled.ArrowForward,
                         contentDescription = "Log Forward Arrow"
@@ -250,7 +258,6 @@ fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
         modifier = Modifier
             .animateContentSize(
                 animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioMediumBouncy,
                     stiffness = Spring.StiffnessLow
                 )
             )
@@ -340,6 +347,7 @@ fun LogSelectableSquare(
                 .clickable {
                     onClick(logSquare)
                 }
+                .semantics { contentDescription = logSquare.description }
         ) {
             logSquare.icon(Color(50, 50, 50))
         }
@@ -372,7 +380,9 @@ fun SaveButton(navController: NavController) {
         ) {
             Text(
                 text = "Save",
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .semantics { contentDescription = "Save Button" }
             )
         }
     }
