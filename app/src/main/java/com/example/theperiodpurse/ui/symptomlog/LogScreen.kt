@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.Screen
@@ -47,6 +48,7 @@ import java.time.format.FormatStyle
 @Composable
 fun LogScreen(
     date: String="0001-01-01",
+    calendarViewModel: CalendarViewModel,
     navController: NavController
 ) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -67,7 +69,7 @@ fun LogScreen(
 
         val logViewModel = LogViewModel(logSquarePrompts)
 
-        LogScreenLayout(day, navController, logPrompts, logViewModel)
+        LogScreenLayout(day, navController, logPrompts, logViewModel, calendarViewModel)
     }
 }
 
@@ -77,7 +79,8 @@ fun LogScreenLayout(
     date: LocalDate,
     navController: NavController,
     logPrompts: List<LogPrompt>,
-    logViewModel: LogViewModel
+    logViewModel: LogViewModel,
+    calendarViewModel: CalendarViewModel
 ) {
     Box() {
         Column(
@@ -103,7 +106,16 @@ fun LogScreenLayout(
             Spacer(modifier = Modifier
                 .weight(1f)
             )
-            SaveButton(navController = navController)
+
+            SaveButton(onClick = {
+                calendarViewModel.saveDayInfo(
+                    date,
+                    CalendarDayUIState(
+                        exerciseType = logViewModel.getSquareSelected(LogPrompt.Exercise) ?: ""
+                    )
+                )
+                navController.navigateUp()
+            })
         }
 
     }
@@ -363,15 +375,15 @@ fun LogSelectableSquare(
 }
 
 @Composable
-fun SaveButton(navController: NavController) {
+fun SaveButton(
+    onClick: () -> Unit
+) {
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
     ) {
         FloatingActionButton(
-            onClick = {
-                navController.navigateUp()
-            },
+            onClick = onClick,
             backgroundColor = Teal,
             modifier = Modifier
                 .padding(20.dp)
@@ -404,7 +416,8 @@ fun LogScreenLayoutPreview() {
         date = LocalDate.parse("2022-12-07"),
         navController = rememberNavController(),
         logPrompts = logPrompts,
-        logViewModel = LogViewModel(logPrompts)
+        logViewModel = LogViewModel(logPrompts),
+        calendarViewModel = viewModel()
     )
 }
 
@@ -467,5 +480,5 @@ fun LogSelectableSquarePreview() {
 @Preview
 @Composable
 fun SaveButtonPreview() {
-    SaveButton(navController = rememberNavController())
+    SaveButton {}
 }

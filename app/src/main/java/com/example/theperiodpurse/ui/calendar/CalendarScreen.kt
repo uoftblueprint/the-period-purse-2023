@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.R
@@ -80,16 +81,24 @@ fun Tabs(tabs: List<CalendarTabItem>, pagerState: PagerState) {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun TabsContent(tabs: List<CalendarTabItem>, pagerState: PagerState, navController: NavController) {
+fun TabsContent(
+    tabs: List<CalendarTabItem>,
+    pagerState: PagerState,
+    calendarUIState: CalendarUIState,
+    navController: NavController
+) {
     HorizontalPager(state = pagerState, count = tabs.size) { page ->
-        tabs[page].screen(navController)
+        tabs[page].screen(calendarUIState, navController)
     }
 }
 
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun CalendarScreen(navController: NavController) {
+fun CalendarScreen(
+    navController: NavController,
+    calendarViewModel: CalendarViewModel
+) {
     // Main calendar screen which allows navigation to cycle page and calendar
     // By default, opens on to the Calendar
     val tabs = listOf(
@@ -97,12 +106,18 @@ fun CalendarScreen(navController: NavController) {
         CalendarTabItem.CycleTab
     )
     val pagerState = rememberPagerState()
+    val calendarUIState by calendarViewModel.uiState.collectAsState()
     ThePeriodPurseTheme {
         Scaffold (topBar = {})
         { padding ->
             Column(modifier = Modifier.padding(padding)) {
                 Tabs(tabs = tabs, pagerState = pagerState)
-                TabsContent(tabs = tabs, pagerState = pagerState, navController = navController)
+                TabsContent(
+                    tabs = tabs,
+                    pagerState = pagerState,
+                    calendarUIState = calendarUIState,
+                    navController = navController
+                )
             }
         }
     }
@@ -110,7 +125,7 @@ fun CalendarScreen(navController: NavController) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarScreenLayout(navController: NavController) {
+fun CalendarScreenLayout(calendarUIState: CalendarUIState, navController: NavController) {
     // Contains the swappable content
     ThePeriodPurseTheme {
         val bg = painterResource(R.drawable.colourwatercolour)
@@ -143,7 +158,11 @@ fun CalendarScreenLayout(navController: NavController) {
                     monthHeader = { month ->
                         MonthHeader(month) },
                     dayContent = { day ->
-                        Day(day, isSelected = selectedDate == day.date) { date ->
+                        Day(
+                            day = day,
+                            calendarDayUIState = calendarUIState.days[day.date],
+                            isSelected = selectedDate == day.date
+                        ) { date ->
                             selectedDate = if (selectedDate == date.date) null
                             else date.date
                             navController.navigate(
@@ -166,6 +185,7 @@ fun CalendarScreenLayout(navController: NavController) {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Day(day: CalendarDay,
+        calendarDayUIState: CalendarDayUIState?,
         isSelected: Boolean,
         onClick: (CalendarDay) -> Unit
 ) {
@@ -181,8 +201,10 @@ fun Day(day: CalendarDay,
                     .size(54.dp)
                     .clip(shape = RoundedCornerShape(6.dp))
                     .fillMaxSize()
-                    .background(color = if (day.date.isAfter(LocalDate.now())) Color.LightGray
-                    else Color.White)
+                    .background(
+                        color = if (day.date.isAfter(LocalDate.now())) Color.LightGray
+                        else Color.White
+                    )
                     .semantics { contentDescription = day.date.toString() }
                     .border(
                         color = Color.Gray,
@@ -191,14 +213,24 @@ fun Day(day: CalendarDay,
                     )
                     .clickable(
                         enabled = !day.date.isAfter(LocalDate.now()),
-                        onClick = { if (!day.date.isAfter(LocalDate.now()))
-                            onClick(day) }
+                        onClick = {
+                            if (!day.date.isAfter(LocalDate.now()))
+                                onClick(day)
+                        }
                     ),
             ) {
-                Text(modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp),
-                    fontSize = 14.sp,
-                    text = day.date.dayOfMonth.toString()
-                )
+                Column {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp),
+                        fontSize = 14.sp,
+                        text = day.date.dayOfMonth.toString()
+                    )
+                    if (calendarDayUIState != null) {
+                        Text(
+                            text = calendarDayUIState.exerciseType,
+                        )
+                    }
+                }
             }
         }
     }
@@ -258,7 +290,7 @@ fun Month.displayText(short: Boolean = true): String {
 @Composable
 fun CalendarScreenPreview() {
     ThePeriodPurseTheme {
-        CalendarScreen(rememberNavController())
+        CalendarScreen(rememberNavController(), viewModel())
     }
 }
 

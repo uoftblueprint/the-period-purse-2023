@@ -17,6 +17,7 @@ import com.example.theperiodpurse.data.DataSource
 import com.example.theperiodpurse.ui.QuestionThreeScreen
 import com.example.theperiodpurse.ui.SummaryScreen
 import com.example.theperiodpurse.ui.calendar.CalendarScreen
+import com.example.theperiodpurse.ui.calendar.CalendarViewModel
 import com.example.theperiodpurse.ui.calendar.LogScreen
 import com.example.theperiodpurse.ui.cycle.CycleScreenLayout
 import com.example.theperiodpurse.ui.onboarding.OnboardViewModel
@@ -47,6 +48,7 @@ fun NavigationGraph(
     navController: NavHostController,
     startDestination: String,
     viewModel: OnboardViewModel,
+    calendarViewModel: CalendarViewModel,
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -56,7 +58,7 @@ fun NavigationGraph(
         modifier = modifier
     ) {
         composable(route = Screen.Calendar.name) {
-            CalendarScreen(navController = navController)
+            CalendarScreen(navController = navController, calendarViewModel)
         }
 
         composable(
@@ -69,7 +71,8 @@ fun NavigationGraph(
             if (date != null) {
                 LogScreen(
                     date = date,
-                    navController = navController
+                    navController = navController,
+                    calendarViewModel = calendarViewModel
                 )
             }
         }
