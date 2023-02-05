@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
@@ -32,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat.startActivityForResult
 import com.example.theperiodpurse.MainActivity
 import com.example.theperiodpurse.R
@@ -70,27 +72,12 @@ fun QuickStartButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier.widthIn(min = 250.dp),
+        modifier = modifier.widthIn(min = 350.dp).height(50.dp),
+        shape= RoundedCornerShape(15),
 //        color = Color(52, 235, 161)
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
     ) {
-        Text("Quick Start", color = Color.White)
-    }
-}
-
-@Composable
-fun GoogleSignInButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Button(
-        onClick = onClick,
-        modifier = modifier.widthIn(min = 250.dp),
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
-    ) {
-        Text("Sign In with Google", color = Color.Black)
-
-
+        Text("Quick Start", color = Color.White, fontSize = 20.sp)
     }
 }
 

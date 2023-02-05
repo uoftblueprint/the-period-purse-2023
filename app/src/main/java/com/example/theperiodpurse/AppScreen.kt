@@ -1,6 +1,5 @@
 package com.example.theperiodpurse
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -9,22 +8,16 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.activity.result.ActivityResultRegistry
-import androidx.activity.result.registerForActivityResult
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.theperiodpurse.ui.onboarding.*
-import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import com.example.theperiodpurse.ui.component.BottomNavigation
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -33,18 +26,27 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.registerForActivityResult
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.ContentAlpha.medium
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseUser
@@ -164,10 +166,15 @@ class MainActivity : ComponentActivity() {
 
 
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     fun LoginScreen() {
+        Image(
+            painter = painterResource(id = R.drawable.background),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.FillBounds
+        )
 
 
         Column(
@@ -178,19 +185,20 @@ class MainActivity : ComponentActivity() {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
 
-            Spacer(modifier = Modifier.height(16.dp))
+
+            Spacer(modifier = Modifier.height(70.dp))
 
             // Logo Image
             Image(
                 painter = painterResource(R.drawable.app_logo),
                 contentDescription = null,
-                modifier = Modifier.width(500.dp)
+                modifier = Modifier.size(200 .dp)
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(60.dp))
 
             // Welcome text
-            Text(text = stringResource(R.string.welcome), style = MaterialTheme.typography.h4)
-            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = stringResource(R.string.welcome), style = MaterialTheme.typography.h4, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(100.dp))
 
             // Quick Start button
             QuickStartButton(
@@ -199,50 +207,93 @@ class MainActivity : ComponentActivity() {
                 }}
             )
 
+            Spacer(modifier = Modifier.height(5.dp))
+
             // Sign in with Google Button
             GoogleSignInButton {
                 signIn()
             }
+            Spacer(modifier = Modifier.height(5.dp))
 
+            val annotatedLinkString = buildAnnotatedString {
+                val str = "Terms and Conditions and Privacy Policy"
+                var startIndex = str.indexOf("Terms and Conditions")
+                var endIndex = startIndex + 20
+                addStyle(
+                    style = SpanStyle(
+                        textDecoration = TextDecoration.Underline,
+                        fontWeight = FontWeight.Bold
+                    ), start = startIndex, end = endIndex
+                )
+                startIndex = str.indexOf("Privacy Policy")
+                endIndex = startIndex + 14
+                addStyle(
+                    style = SpanStyle(
+                        textDecoration = TextDecoration.Underline,
+                                fontWeight = FontWeight.Bold
+                    ), start = startIndex, end = endIndex
+                )
+                append(str)
+            }
 
-
-
-            Text("By continuing, you accept the", textAlign = TextAlign.Center)
-            Text("Terms and Conditions and Privacy Policy.", textAlign = TextAlign.Center)
+            Text("By continuing, you accept the", textAlign = TextAlign.Center, )
+            Text(text = annotatedLinkString, textAlign = TextAlign.Center)
         }
 
-    }
-    @Composable
-    fun HomeScreen(navController: NavController) {
-       Column() {
-           Image(
-               painter = painterResource(R.drawable.app_logo),
-               contentDescription = null,
-               modifier = Modifier.width(500.dp)
-           )
-
-
-       }
     }
 }
 
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GoogleSignInButton(
     signInClicked: () -> Unit
 ) {
 
-    Button(onClick = signInClicked) {
-        Text(
-            modifier = Modifier
-                .padding(start = 20.dp)
-                .align(Alignment.CenterVertically),
-            text = "Sign In With Google",
-            fontSize = MaterialTheme.typography.h6.fontSize,
-        )
+    Surface(onClick = signInClicked,
+            modifier = Modifier.widthIn(min = 350.dp).height(50.dp),
+            shape= RoundedCornerShape(15),
+            border = BorderStroke(width = 1.dp, color=Color.LightGray),
+            color = MaterialTheme.colors.surface
+    ) {
+        Row (modifier = Modifier
+            .padding(
+                start = 12.dp,
+                end = 16.dp,
+                top = 12.dp,
+                bottom = 12.dp
+            ),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center){
+            Icon(
+                painter = painterResource(id = R.drawable.ic_google_logo),
+                contentDescription = "Google Button",
+                tint=Color.Unspecified,
+
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Text(
+                text = "Sign in with Google",
+                color = Color.Black, fontSize = 20.sp,
+            )
+
+        }
+
     }
 
 }
+
+@ExperimentalMaterialApi
+@Composable
+@Preview
+private fun GoogleButtonPreview(){
+    GoogleSignInButton {
+
+    }
+}
+
 
 @Composable
 fun GoogleSignOutButton(
@@ -300,3 +351,7 @@ fun ScreenApp(
 
     }
 }
+
+
+
+

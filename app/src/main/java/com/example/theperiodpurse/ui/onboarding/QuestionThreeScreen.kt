@@ -1,11 +1,7 @@
 package com.example.theperiodpurse.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.material.Button
-import androidx.compose.material.Divider
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.RadioButton
-import androidx.compose.material.Text
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,9 +11,12 @@ import androidx.compose.ui.unit.dp
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.data.DataSource.symptoms
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.Color
 
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
 
 /**
@@ -37,11 +36,26 @@ fun QuestionThreeScreen(
     modifier: Modifier = Modifier
 ) {
     var selectedValue by rememberSaveable { mutableStateOf("") }
+
+
     Column(
         modifier = Modifier.padding(32.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        Spacer(modifier = Modifier.height(25.dp))
+
+        Image(
+            painter = painterResource(R.drawable.cloth_pads_2x),
+            contentDescription = null,
+            modifier = Modifier.size(200 .dp),
+        )
+
+        Spacer(modifier = Modifier.height(25.dp))
+
+
+
         Text(
             text = stringResource(R.string.question_three),
             fontSize = 24.sp,
@@ -69,7 +83,6 @@ fun QuestionThreeScreen(
                 )
 
         }
-        Divider(thickness = 1.dp, modifier = modifier.padding(bottom = 16.dp))
 
         Column(modifier = modifier.padding(16.dp)) {
 
@@ -114,23 +127,22 @@ fun QuestionThreeScreen(
 
                 }
             }
-            Spacer(Modifier.height(24.dp))
-            Divider(thickness = 1.dp, modifier = modifier.padding(bottom = 16.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                OutlinedButton(modifier = Modifier.weight(1f), onClick = onNextButtonClicked) {
-                    Text(stringResource(R.string.skip))
+                OutlinedButton(modifier = Modifier.weight(1f), onClick = onNextButtonClicked, colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)) {
+                    Text(stringResource(R.string.skip),color = Color(97, 153, 154), fontSize = 20.sp)
                 }
                 Button(
                     modifier = Modifier.weight(1f),
                     // the button is enabled when the user makes a selection
                     enabled = selectedValue.isNotEmpty(),
-                    onClick = onNextButtonClicked
+                    onClick = onNextButtonClicked,
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
                 ) {
-                    Text(stringResource(R.string.next))
+                    Text(stringResource(R.string.next),color = Color.White, fontSize = 20.sp)
                 }
             }
         }

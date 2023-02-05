@@ -10,11 +10,15 @@ import androidx.compose.ui.unit.sp
 import com.example.theperiodpurse.R
 import android.app.DatePickerDialog
 import android.widget.DatePicker
+import androidx.compose.foundation.Image
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import com.example.theperiodpurse.data.OnboardUIState
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,7 +37,7 @@ fun QuestionTwoScreen(
     val mDay: Int
     val mContext = LocalContext.current
 
-    val mDate = remember { mutableStateOf("Select Date") }
+    val mDate = remember { mutableStateOf("Choose date") }
     val mDateTo = remember { mutableStateOf("") }
     val mCalendar = Calendar.getInstance()
 
@@ -56,23 +60,40 @@ fun QuestionTwoScreen(
 
     Column(
         modifier = Modifier.padding(32.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+
+        Spacer(modifier = Modifier.height(100.dp))
+
+        Image(
+            painter = painterResource(R.drawable.pad_2x),
+            contentDescription = null,
+            modifier = Modifier.size(200 .dp),
+        )
+
+        Spacer(modifier = Modifier.height(100.dp))
+
+
+
         Text(
             text = stringResource(R.string.question_two),
-            fontSize = 24.sp,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            fontSize = 30.sp,
+            modifier = Modifier.align(Alignment.CenterHorizontally).width(250.dp),
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
         )
 
         Text(
-            text = stringResource(R.string.description_one),
+            text = stringResource(R.string.description_two),
             fontSize = 15.sp,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
+            textAlign = TextAlign.Center
         )
         Spacer(Modifier.height(16.dp))
 
 
-        Divider(thickness = 1.dp, modifier = modifier.padding(bottom = 16.dp))
+
         Button(onClick = {
             mDatePickerDialog.show()
             entered = true
@@ -82,7 +103,7 @@ fun QuestionTwoScreen(
         }
 
         Spacer(Modifier.height(24.dp))
-        Divider(thickness = 1.dp, modifier = modifier.padding(bottom = 16.dp))
+
 
 
 
@@ -94,22 +115,25 @@ fun QuestionTwoScreen(
             OutlinedButton(
                 onClick = onNextButtonClicked,
                 modifier = modifier.weight(1f),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
 
             ) {
-                Text(stringResource(R.string.skip))
+                Text(stringResource(R.string.skip),color = Color(97, 153, 154), fontSize = 20.sp)
             }
             Button(
                 onClick = onNextButtonClicked,
                 enabled = entered,
                 modifier = modifier.weight(1f),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
             ) {
-                Text(stringResource(R.string.next))
+                Text(stringResource(R.string.next),color = Color.White, fontSize = 20.sp)
                 onSelectionChanged(mDate.value+"|"+mDateTo.value)
                 // ADD SIGN IN FUNCTION CALL HERE
 
             }
 
         }
+
 
     }
 

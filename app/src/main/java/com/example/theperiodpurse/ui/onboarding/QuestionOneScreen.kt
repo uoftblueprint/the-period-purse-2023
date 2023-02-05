@@ -1,6 +1,7 @@
 package com.example.theperiodpurse.ui.onboarding
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.text.KeyboardActions
@@ -11,10 +12,14 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,15 +41,31 @@ fun QuestionOneScreen(onNextButtonClicked: () -> Unit,
         verticalArrangement = Arrangement.spacedBy(8.dp)
 
     ) {
+
+        Spacer(modifier = Modifier.height(100.dp))
+
+        Image(
+            painter = painterResource(R.drawable.pad_2x),
+            contentDescription = null,
+            modifier = Modifier.size(200 .dp),
+        )
+
+        Spacer(modifier = Modifier.height(100.dp))
+
+
+
         Text(
             text = stringResource(R.string.question_one),
-            fontSize = 24.sp,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            fontSize = 28.sp,
+            modifier = Modifier.align(Alignment.CenterHorizontally).width(250.dp),
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
         )
         Text(
             text = stringResource(R.string.description_one),
             fontSize = 15.sp,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
+                    textAlign = TextAlign.Center
         )
         Spacer(Modifier.height(16.dp))
 
@@ -67,17 +88,20 @@ fun QuestionOneScreen(onNextButtonClicked: () -> Unit,
         ) {
             OutlinedButton(
                 onClick = onNextButtonClicked,
-                modifier = modifier.weight(1f)
+                modifier = modifier.weight(1f),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+
             ) {
-                Text(stringResource(R.string.skip))
+                Text(stringResource(R.string.skip),color = Color(97, 153, 154), fontSize = 20.sp)
             }
 
             Button(
                 onClick = onNextButtonClicked,
                 enabled = entered,
-                modifier =modifier.weight(1f)
+                modifier =modifier.weight(1f),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
             ) {
-                Text(stringResource(R.string.next))
+                Text(stringResource(R.string.next),color = Color.White, fontSize = 20.sp)
             }
         }
 
