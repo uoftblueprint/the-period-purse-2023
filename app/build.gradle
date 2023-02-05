@@ -72,6 +72,14 @@ dependencies {
     implementation "com.google.accompanist:accompanist-pager:0.25.0"
     implementation "com.google.accompanist:accompanist-pager-indicators:0.25.0"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
+    androidTestImplementation "androidx.navigation:navigation-testing:2.5.3"
+
+    implementation 'androidx.navigation:navigation-testing:2.5.3'
+
+    implementation 'androidx.core:core-ktx:1.9.0'
+
     implementation "io.github.vanpra.compose-material-dialogs:datetime:0.8.1-rc"
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.6'
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.27.0"

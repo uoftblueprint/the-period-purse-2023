@@ -21,6 +21,8 @@ import com.example.theperiodpurse.ui.component.FloatingActionButton
 import com.example.theperiodpurse.ui.onboarding.*
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 
+
+
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
