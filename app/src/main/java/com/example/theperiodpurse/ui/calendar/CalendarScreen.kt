@@ -355,6 +355,9 @@ fun Day(day: CalendarDay,
                         text = day.date.dayOfMonth.toString()
                     )
                     if (calendarDayUIState != null) {
+                        /* TODO: Update day box according to DayUIState
+                            example: */
+                        calendarDayUIState.
                         Text(
                             text = calendarDayUIState.exerciseType,
                         )

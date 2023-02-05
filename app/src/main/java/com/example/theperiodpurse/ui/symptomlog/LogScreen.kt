@@ -33,7 +33,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.Screen
@@ -75,7 +74,12 @@ fun LogScreen(
                 calendarViewModel.saveDayInfo(
                     day,
                     CalendarDayUIState(
-                        exerciseType = logViewModel.getSquareSelected(LogPrompt.Exercise) ?: ""
+                        flow = logViewModel.getSquareSelected(LogPrompt.Flow) ?: "",
+                        mood = logViewModel.getSquareSelected(LogPrompt.Mood) ?: "",
+                        exerciseLengthString = logViewModel.getText(LogPrompt.Exercise),
+                        exerciseType = logViewModel.getSquareSelected(LogPrompt.Exercise) ?: "",
+                        crampSeverity = logViewModel.getSquareSelected(LogPrompt.Cramps) ?: "",
+                        sleepString = logViewModel.getText(LogPrompt.Sleep)
                     )
                 )
                 navController.navigateUp()
