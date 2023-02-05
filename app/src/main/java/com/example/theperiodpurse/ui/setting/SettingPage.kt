@@ -1,6 +1,8 @@
 package com.example.theperiodpurse.ui.setting
 
+import android.os.Build
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
@@ -18,6 +20,7 @@ import com.example.theperiodpurse.GoogleSignOutButton
 import com.example.theperiodpurse.MainActivity
 import com.example.theperiodpurse.ui.onboarding.QuickStartButton
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SettingPage(mainActivity: MainActivity){
     Column(

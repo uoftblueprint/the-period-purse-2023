@@ -43,7 +43,7 @@
     <string name="expand_button_symptoms_content_description">Expand to switch symptoms</string>
     <string name="fab_to_calendar">Navigate to Calendar page</string>
     <string name="fab_see_log_options">Open logging options</string>
-
+    <string name="log_out">Log Out</string>
     <string name="tracking_preferences">Tracking Preferences</string>
     <string name="notifications_heading">Notifications</string>
     <string name="account_settings_heading">Account settings</string>

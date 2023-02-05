@@ -25,7 +25,7 @@ class NavigationTest {
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
-            ScreenApp(navController = navController, skipOnboarding = true)
+            ScreenApp(navController = navController, skipOnboarding = true, mainActivity = MainActivity())
         }
     }
 
