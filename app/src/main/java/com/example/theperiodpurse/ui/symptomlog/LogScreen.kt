@@ -69,7 +69,17 @@ fun LogScreen(
 
         val logViewModel = LogViewModel(logSquarePrompts)
 
-        LogScreenLayout(day, navController, logPrompts, logViewModel, calendarViewModel)
+        LogScreenLayout(
+            day, navController, logPrompts, logViewModel,
+            onSave = {
+                calendarViewModel.saveDayInfo(
+                    day,
+                    CalendarDayUIState(
+                        exerciseType = logViewModel.getSquareSelected(LogPrompt.Exercise) ?: ""
+                    )
+                )
+                navController.navigateUp()
+            })
     }
 }
 
@@ -80,7 +90,7 @@ fun LogScreenLayout(
     navController: NavController,
     logPrompts: List<LogPrompt>,
     logViewModel: LogViewModel,
-    calendarViewModel: CalendarViewModel
+    onSave: () -> Unit,
 ) {
     Box() {
         Column(
@@ -107,15 +117,7 @@ fun LogScreenLayout(
                 .weight(1f)
             )
 
-            SaveButton(onClick = {
-                calendarViewModel.saveDayInfo(
-                    date,
-                    CalendarDayUIState(
-                        exerciseType = logViewModel.getSquareSelected(LogPrompt.Exercise) ?: ""
-                    )
-                )
-                navController.navigateUp()
-            })
+            SaveButton(onClick = onSave)
         }
 
     }
@@ -417,7 +419,7 @@ fun LogScreenLayoutPreview() {
         navController = rememberNavController(),
         logPrompts = logPrompts,
         logViewModel = LogViewModel(logPrompts),
-        calendarViewModel = viewModel()
+        onSave = {}
     )
 }
 
