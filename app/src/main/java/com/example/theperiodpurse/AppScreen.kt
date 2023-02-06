@@ -19,7 +19,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.ui.component.BottomNavigation
 import com.example.theperiodpurse.ui.component.FloatingActionButton
 import com.example.theperiodpurse.ui.onboarding.*
+import com.example.theperiodpurse.ui.symptomlog.LoggingOptionsPopup
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
+import java.time.LocalDate
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -47,15 +49,17 @@ fun ScreenApp(
     skipOnboarding: Boolean = false,
     navController: NavHostController = rememberNavController()
 ) {
+    var loggingOptionsVisible by remember { mutableStateOf(false) }
     Scaffold(
         bottomBar = {
-            if (currentRoute(navController) in Screen.values().map{ it.name }) {
+            if (currentRoute(navController) in Screen.values().map { it.name }) {
                 BottomNavigation(navController = navController)
             }
         },
         floatingActionButton = {
             FloatingActionButton(
-                navController = navController
+                navController = navController,
+                onClickInCalendar = { loggingOptionsVisible = true }
             )
         },
         floatingActionButtonPosition = FabPosition.Center,
@@ -67,11 +71,31 @@ fun ScreenApp(
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds
         )
-        NavigationGraph(
-            navController = navController,
-            startDestination = if (skipOnboarding) Screen.Calendar.name else OnboardingScreen.Welcome.name,
-            viewModel,
-            modifier = modifier.padding(innerPadding)
-        )
+        Box {
+            NavigationGraph(
+                navController = navController,
+                startDestination = if (skipOnboarding) Screen.Calendar.name else OnboardingScreen.Welcome.name,
+                viewModel,
+                modifier = modifier.padding(innerPadding)
+            )
+
+            if (loggingOptionsVisible) {
+                LoggingOptionsPopup(
+                    onLogDailySymptomsClick = {
+                        navController.navigate(
+                            route = "%s/%s/%s"
+                                .format(
+                                    Screen.Calendar,
+                                    Screen.Log,
+                                    LocalDate.now().toString()
+                                )
+                        )
+                    },
+                    {},
+                    onExit = { loggingOptionsVisible = false },
+                    modifier = modifier.padding(innerPadding)
+                )
+            }
+        }
     }
 }
