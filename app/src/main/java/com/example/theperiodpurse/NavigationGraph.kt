@@ -21,6 +21,7 @@ import com.example.theperiodpurse.ui.calendar.CalendarScreen
 import com.example.theperiodpurse.ui.calendar.CalendarViewModel
 import com.example.theperiodpurse.ui.calendar.LogScreen
 import com.example.theperiodpurse.ui.cycle.CycleScreenLayout
+import com.example.theperiodpurse.ui.education.*
 import com.example.theperiodpurse.ui.onboarding.OnboardViewModel
 import com.example.theperiodpurse.ui.onboarding.QuestionOneScreen
 import com.example.theperiodpurse.ui.onboarding.QuestionTwoScreen
@@ -86,9 +87,13 @@ fun NavigationGraph(
             CycleScreenLayout()
         }
 
+        // Education Screens
+
         composable(route = Screen.Learn.name) {
-            /* TODO Put Screen for Info page here */
+            EducationScreenLayout()
         }
+
+
 
         // Onboard Screens
 
