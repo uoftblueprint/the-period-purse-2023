@@ -7,9 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -63,10 +60,4 @@ fun EducationBackground() {
         modifier = Modifier
             .fillMaxSize(),
         contentScale = ContentScale.FillBounds)
-}
-
-@Preview
-@Composable
-fun Preview() {
-    EducationScreenLayout()
 }
