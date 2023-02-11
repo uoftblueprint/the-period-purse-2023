@@ -30,7 +30,6 @@ fun EducationPrivacyScreen() {
         modifier = Modifier
             .padding(28.dp)
             .verticalScroll(rememberScrollState())
-//            .weight(1f)
     ) {
         Text(
             fontSize = 32.sp,
