@@ -6,7 +6,6 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.Spring
-import com.example.theperiodpurse.ui.theme.Teal
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -26,6 +25,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -33,10 +33,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.AppViewModel
+import com.example.theperiodpurse.R
 import com.example.theperiodpurse.Screen
 import com.example.theperiodpurse.data.LogPrompt
 import com.example.theperiodpurse.data.LogSquare
@@ -59,21 +59,17 @@ fun LogScreen(
 ) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val day = LocalDate.parse(date)
+        val appUiState by appViewModel.uiState.collectAsState()
 
-        val logPrompts = listOf(
-            LogPrompt.Flow,
-            LogPrompt.Mood,
-            LogPrompt.Sleep,
-            LogPrompt.Cramps,
-            LogPrompt.Exercise,
-            LogPrompt.Notes
-        )
+        val logPrompts: MutableList<LogPrompt> = mutableListOf()
 
-        val logSquarePrompts = listOf( // log prompts that use selectable squares
-            LogPrompt.Flow
-        )
+        for (symptom in appUiState.trackedSymptoms) {
+            (LogPrompt from symptom.nameId)?.let { logPrompts.add(it) }
+        }
 
-        val logViewModel = LogViewModel(logSquarePrompts, appViewModel)
+        (LogPrompt from R.string.notes)?.let { logPrompts.add(it) }
+
+        val logViewModel = LogViewModel(logPrompts)
 
         LogScreenLayout(day, navController, logPrompts, logViewModel)
     }
@@ -287,7 +283,7 @@ fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
                 logPrompt.icon(tabColor.value)
                 Spacer(Modifier.size(10.dp))
                 Text(
-                    text = logPrompt.title,
+                    text = stringResource(logPrompt.title),
                     fontWeight = FontWeight.Bold,
                     color = tabColor.value,
                     fontSize = 16.sp
@@ -405,18 +401,18 @@ fun SaveButton(navController: NavController) {
 @Composable
 fun LogScreenLayoutPreview() {
     val logPrompts = listOf(
-        LogPrompt.Flow,
-        LogPrompt.Mood,
-        LogPrompt.Sleep,
-        LogPrompt.Cramps,
-        LogPrompt.Exercise,
-        LogPrompt.Notes
+        LogPrompt.FLOW,
+        LogPrompt.MOOD,
+        LogPrompt.SLEEP,
+        LogPrompt.CRAMPS,
+        LogPrompt.EXERCISE,
+        LogPrompt.NOTES
     )
     LogScreenLayout(
         date = LocalDate.parse("2022-12-07"),
         navController = rememberNavController(),
         logPrompts = logPrompts,
-        logViewModel = LogViewModel(logPrompts, viewModel())
+        logViewModel = LogViewModel(logPrompts)
     )
 }
 
@@ -434,32 +430,32 @@ fun LogScreenTopBarPreview() {
 @Preview
 @Composable
 fun LogPromptCardPreview() {
-    val logPrompts = listOf(LogPrompt.Flow)
-    val logViewModel = LogViewModel(logPrompts, viewModel())
+    val logPrompts = listOf(LogPrompt.FLOW)
+    val logViewModel = LogViewModel(logPrompts)
 
-    LogPromptCard(logPrompt = LogPrompt.Flow, logViewModel)
+    LogPromptCard(logPrompt = LogPrompt.FLOW, logViewModel)
 }
 
 @Preview
 @Composable
 fun LogPromptCardsPreview() {
     val logPrompts = listOf(
-        LogPrompt.Flow,
-        LogPrompt.Mood,
-        LogPrompt.Sleep,
-        LogPrompt.Cramps,
-        LogPrompt.Exercise,
-        LogPrompt.Notes
+        LogPrompt.FLOW,
+        LogPrompt.MOOD,
+        LogPrompt.SLEEP,
+        LogPrompt.CRAMPS,
+        LogPrompt.EXERCISE,
+        LogPrompt.NOTES
     )
-    val logViewModel = LogViewModel(logPrompts, viewModel())
+    val logViewModel = LogViewModel(logPrompts)
     LogPromptCards(logPrompts = logPrompts, logViewModel)
 }
 
 @Preview
 @Composable
 fun LogSelectableSquarePreview() {
-    val logPrompts = listOf(LogPrompt.Flow)
-    val logViewModel = LogViewModel(logPrompts, viewModel())
+    val logPrompts = listOf(LogPrompt.FLOW)
+    val logViewModel = LogViewModel(logPrompts)
     var selected by remember { mutableStateOf<String?>(null) }
 
     LogSelectableSquare(

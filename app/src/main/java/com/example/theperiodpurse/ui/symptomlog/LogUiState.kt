@@ -1,6 +1,6 @@
 package com.example.theperiodpurse.ui.symptomlog
 
 data class LogUiState (
-    var selectSquares: LinkedHashMap<String, Any>,
-    var promptToText: LinkedHashMap<String, String>
+    var selectSquares: LinkedHashMap<Int, Any>,
+    var promptToText: LinkedHashMap<Int, String>
 )

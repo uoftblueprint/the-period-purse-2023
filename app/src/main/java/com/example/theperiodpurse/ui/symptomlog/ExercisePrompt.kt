@@ -22,7 +22,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.data.LogPrompt
 import com.example.theperiodpurse.data.LogSquare
@@ -33,7 +32,7 @@ import java.sql.Time
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ExercisePrompt(logViewModel: LogViewModel) {
-    val selectedTime = logViewModel.getText(LogPrompt.Exercise)
+    val selectedTime = logViewModel.getText(LogPrompt.EXERCISE)
     var hoursExercised by remember {
         mutableStateOf(
             if (selectedTime != "")
@@ -139,7 +138,7 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
             Spacer(modifier = Modifier.size(6.dp))
             Button(
                 onClick = {
-                    logViewModel.resetText(LogPrompt.Exercise)
+                    logViewModel.resetText(LogPrompt.EXERCISE)
                     hoursExercised = ""
                     minutesExercised = ""
                 },
@@ -153,7 +152,7 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
             }
         }
         var selected by remember {
-            mutableStateOf(logViewModel.getSquareSelected(logPrompt = LogPrompt.Exercise))
+            mutableStateOf(logViewModel.getSquareSelected(logPrompt = LogPrompt.EXERCISE))
         }
 
         val flowSquares = listOf(
@@ -207,7 +206,7 @@ private fun saveTextData(
         if (minutesExercised != "") minutesExercised.toInt() else 0,
         0
     )
-    logViewModel.setText(LogPrompt.Exercise, time.toString())
+    logViewModel.setText(LogPrompt.EXERCISE, time.toString())
 }
 
 @Preview
@@ -215,8 +214,7 @@ private fun saveTextData(
 fun ExercisePromptPreview() {
     ExercisePrompt(
         logViewModel = LogViewModel(
-            logPrompts = listOf(LogPrompt.Exercise),
-            viewModel()
+            logPrompts = listOf(LogPrompt.EXERCISE)
         )
     )
 }

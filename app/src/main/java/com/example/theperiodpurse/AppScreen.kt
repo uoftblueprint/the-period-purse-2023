@@ -14,18 +14,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.ui.component.BottomNavigation
 import com.example.theperiodpurse.ui.component.FloatingActionButton
 import com.example.theperiodpurse.ui.onboarding.*
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
-import com.example.theperiodpurse.ui.component.BottomNavigation
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -56,6 +53,8 @@ fun ScreenApp(
     skipOnboarding: Boolean = false,
     navController: NavHostController = rememberNavController()
 ) {
+    appViewModel.loadData()
+
     Scaffold(
         bottomBar = {
             if (currentRoute(navController) in Screen.values().map{ it.name }) {

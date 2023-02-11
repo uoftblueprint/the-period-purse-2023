@@ -10,7 +10,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.theperiodpurse.data.LogPrompt
 import com.example.theperiodpurse.data.LogSquare
 import com.example.theperiodpurse.ui.calendar.LogSelectableSquare
@@ -18,7 +17,7 @@ import com.example.theperiodpurse.ui.calendar.LogSelectableSquare
 @Composable
 fun FlowPrompt (logViewModel: LogViewModel) {
     var selected by remember {
-        mutableStateOf(logViewModel.getSquareSelected(logPrompt = LogPrompt.Flow))
+        mutableStateOf(logViewModel.getSquareSelected(logPrompt = LogPrompt.FLOW))
     }
     Column() {
         val flowSquares = listOf(
@@ -64,8 +63,7 @@ fun FlowPrompt (logViewModel: LogViewModel) {
 fun FlowPromptPreview() {
     FlowPrompt(
         logViewModel = LogViewModel(
-            logPrompts = listOf(LogPrompt.Flow),
-            viewModel()
+            logPrompts = listOf(LogPrompt.FLOW)
         )
     )
 }

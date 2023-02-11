@@ -1,10 +1,9 @@
 package com.example.theperiodpurse
 
-import android.os.Bundle
-import androidx.activity.compose.setContent
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-// data class
-class AppUiState {
+import com.example.theperiodpurse.data.Symptom
 
-}
+// data class
+data class AppUiState (
+    // Preffered Symptoms to be tracked
+    val trackedSymptoms: List<Symptom> = listOf()
+)

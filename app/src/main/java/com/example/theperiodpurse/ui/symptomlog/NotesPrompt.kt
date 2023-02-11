@@ -1,6 +1,5 @@
 package com.example.theperiodpurse.ui.symptomlog
 
-import android.content.res.Resources
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -21,18 +20,13 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.dp
-import com.example.theperiodpurse.R
 import com.example.theperiodpurse.data.LogPrompt
-import com.example.theperiodpurse.ui.onboarding.EditNumberField
-import java.sql.Time
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun NotesPrompt(logViewModel: LogViewModel) {
-    var notesText by remember { mutableStateOf(logViewModel.getText(LogPrompt.Notes)) }
+    var notesText by remember { mutableStateOf(logViewModel.getText(LogPrompt.NOTES)) }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
@@ -51,7 +45,7 @@ fun NotesPrompt(logViewModel: LogViewModel) {
                 .fillMaxSize()
                 .pointerInput(Unit) {
                     detectTapGestures(onTap = {
-                        logViewModel.setText(LogPrompt.Notes, notesText)
+                        logViewModel.setText(LogPrompt.NOTES, notesText)
                         focusManager.clearFocus()
                     })
                 }
@@ -82,7 +76,7 @@ fun NotesPrompt(logViewModel: LogViewModel) {
 }
 
 private fun saveTextData(logViewModel: LogViewModel, notesText: String) {
-    logViewModel.setText(LogPrompt.Notes, notesText)
+    logViewModel.setText(LogPrompt.NOTES, notesText)
     Log.d("Type", notesText)
 }
 

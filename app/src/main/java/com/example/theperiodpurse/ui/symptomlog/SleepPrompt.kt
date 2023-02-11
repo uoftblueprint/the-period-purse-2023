@@ -18,7 +18,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.data.LogPrompt
 import com.example.theperiodpurse.ui.onboarding.EditNumberField
@@ -27,7 +26,7 @@ import java.sql.Time
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SleepPrompt(logViewModel: LogViewModel) {
-    val selectedTime = logViewModel.getText(LogPrompt.Sleep)
+    val selectedTime = logViewModel.getText(LogPrompt.SLEEP)
     var hoursSlept by remember {
         mutableStateOf(
             if (selectedTime != "")
@@ -125,7 +124,7 @@ fun SleepPrompt(logViewModel: LogViewModel) {
             Spacer(modifier = Modifier.size(6.dp))
             Button(
                 onClick = {
-                    logViewModel.resetText(LogPrompt.Sleep)
+                    logViewModel.resetText(LogPrompt.SLEEP)
                     hoursSlept = ""
                     minutesSlept = ""
                 },
@@ -147,7 +146,7 @@ private fun saveTextData(logViewModel: LogViewModel, hoursSlept: String, minutes
         if (minutesSlept != "") minutesSlept.toInt() else 0,
         0
     )
-    logViewModel.setText(LogPrompt.Sleep, time.toString())
+    logViewModel.setText(LogPrompt.SLEEP, time.toString())
 }
 
 @Preview
@@ -155,8 +154,7 @@ private fun saveTextData(logViewModel: LogViewModel, hoursSlept: String, minutes
 fun SleepPromptPreview() {
     SleepPrompt(
         logViewModel = LogViewModel(
-            logPrompts = listOf(LogPrompt.Sleep),
-            viewModel()
+            logPrompts = listOf(LogPrompt.SLEEP)
         )
     )
 }

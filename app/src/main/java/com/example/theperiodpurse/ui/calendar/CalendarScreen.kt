@@ -280,7 +280,7 @@ fun CalendarScreenLayout(navController: NavController, appViewModel: AppViewMode
     // Contains the swappable content
     ThePeriodPurseTheme {
         val bg = painterResource(R.drawable.colourwatercolour)
-
+        val appUiState by appViewModel.uiState.collectAsState()
         var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
         val currentMonth = remember { YearMonth.now() }
         val startMonth = remember { currentMonth.minusMonths(12) } // Previous months
@@ -304,7 +304,7 @@ fun CalendarScreenLayout(navController: NavController, appViewModel: AppViewMode
             )
             Column {
                 SymptomTab(
-                    trackedSymptoms = previewTrackedSymptoms
+                    trackedSymptoms = appUiState.trackedSymptoms
 //                trackedSymptoms = userDAO.get().symptomsToTrack
                 )
                 VerticalCalendar(
