@@ -10,6 +10,7 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
@@ -60,8 +61,6 @@ fun EducationScreen(
                     Card(
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
-                            .height(IntrinsicSize.Min)
-                            .width(IntrinsicSize.Max)
                             .padding(12.dp),
 
                         shape = RoundedCornerShape(12.dp),
@@ -70,14 +69,28 @@ fun EducationScreen(
                         onClick = { navController.navigate(Destination.DYK.route) },
                     ) {
                         Row() {
-                            Column() {
-                                Text(modifier = Modifier.padding(12.dp),
+                            Column(
+//                                modifier = Modifier.wrapContentSize(Alignment.Center),
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Text(modifier = Modifier
+                                    .width(200.dp)
+                                    .padding(vertical = 18.dp, horizontal = 24.dp),
+                                    textAlign = TextAlign.Left,
+                                    color = Color.White,
                                     text = "Did you know?")
-                                Text(modifier = Modifier.padding(12.dp),
-                                    text = "Text")
+
+                                Text(modifier = Modifier
+                                    .width(200.dp)
+                                    .padding(horizontal = 24.dp),
+                                    textAlign = TextAlign.Left,
+                                    text = "There are 4 phases in your cycle: ...")
                             }
-                            Image(modifier = Modifier.padding(12.dp),
-                                painter = painterResource(R.drawable.app_logo),
+
+                            Image(modifier = Modifier
+                                .height(120.dp)
+                                .padding(12.dp),
+                                painter = painterResource(R.drawable.dykpad),
                                 contentDescription = null
                             )
                         }
@@ -91,6 +104,7 @@ fun EducationScreen(
                 }
             }
 
+            /* Grid for Period Products */
             items(products,
             span = { GridItemSpan(1) }) {
                 PeriodProducts(navController, it)
@@ -120,8 +134,7 @@ fun EducationScreen(
                         modifier = Modifier
                             .wrapContentHeight()
                             .padding(horizontal = 12.dp)
-                            .align(Alignment.CenterHorizontally)
-                            .border(BorderStroke(2.dp, Color.Red)),
+                            .align(Alignment.CenterHorizontally),
                         horizontalArrangement = Arrangement.Center,
                         ) {
                         ClickableText(
@@ -159,11 +172,12 @@ fun EducationScreen(
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PeriodProducts(navController: NavHostController, it: String) {
+fun PeriodProducts (navController: NavHostController, it: String) {
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .height(IntrinsicSize.Min),
+            .height(IntrinsicSize.Min)
+            .aspectRatio(1f),
         shape = RoundedCornerShape(12.dp), elevation = 8.dp,
         backgroundColor = Color.Gray,
         onClick = { navController.navigate(Destination.Info.createRoute(it)) },
@@ -171,15 +185,30 @@ fun PeriodProducts(navController: NavHostController, it: String) {
         Column(
             modifier = Modifier
                 .padding(8.dp)
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.Center
         ) {
             Image(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                painter = painterResource(R.drawable.app_logo),
-                contentDescription = null
+                modifier = Modifier
+                    .height(90.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .padding(12.dp),
+                painter = painterResource(
+                    id = when (it) {
+                        "Period Underwear" -> R.drawable.period_underwear
+                        "Menstrual Cup" -> R.drawable.menstrual_cup
+                        "Pads" -> R.drawable.pads
+                        "Cloth Pads" -> R.drawable.cloth_pads
+                        "Tampons" -> R.drawable.tampons
+                        "Menstrual Disc" -> R.drawable.menstrual_disc
+                        else -> null
+                    }!!
+                ),
+                contentDescription = "$it Image"
             )
+
             Text(
                 modifier = Modifier
-                    .weight(1f)
                     .padding(8.dp)
                     .align(Alignment.CenterHorizontally),
                 textAlign = TextAlign.Center,
