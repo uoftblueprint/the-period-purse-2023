@@ -9,12 +9,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.theperiodpurse.R
 
 @Composable
 fun EducationInfoScreen(
     elementId: String,
 ) {
+    EducationBackground()
+
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -24,4 +27,10 @@ fun EducationInfoScreen(
         Text(elementId)
 
     }
+}
+
+@Preview
+@Composable
+fun EducationInfoPreview() {
+    EducationInfoScreen("Pads")
 }
