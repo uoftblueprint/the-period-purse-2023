@@ -1,8 +1,6 @@
 package com.example.theperiodpurse.ui.education
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,7 +8,6 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
@@ -68,7 +65,7 @@ fun EducationScreen(
                         backgroundColor = Color.Gray,
                         onClick = { navController.navigate(Destination.DYK.route) },
                     ) {
-                        Row() {
+                        Row {
                             Column(
 //                                modifier = Modifier.wrapContentSize(Alignment.Center),
                                 verticalArrangement = Arrangement.Center
