@@ -254,7 +254,7 @@ fun TPPCard(uriHandler: UriHandler) {
                     backgroundColor = Color.Green,
                     contentColor = Color.Black
                 ),
-                onClick = { uriHandler.openUri("https://www.google.ca/") }) {
+                onClick = { uriHandler.openUri("https://www.theperiodpurse.com/") }) {
                 Text(text = "Visit the website")
             }
         }
