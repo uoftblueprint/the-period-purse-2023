@@ -93,7 +93,7 @@ fun ScreenApp(
                                 )
                         )
                     },
-                    {},
+                    { /* TODO: Go to logging page for multiple dates */ },
                     onExit = { loggingOptionsVisible = false },
                     modifier = modifier.padding(innerPadding)
                 )

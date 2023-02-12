@@ -34,7 +34,7 @@ fun LoggingOptionsPopup(
             verticalArrangement = Arrangement.Bottom,
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White.copy(0.5f))
+                .background(Color.White.copy(0.8f))
                 .then(modifier)
                 .offset(y = 35.dp)
         ) {
@@ -77,7 +77,7 @@ fun CloseOverlayButton(
     ) {
         Icon(
             painterResource(R.drawable.close_black_24dp),
-            contentDescription = "Close logging options overlay",
+            contentDescription = "Close logging options",
             tint = Red
         )
     }
