@@ -10,9 +10,10 @@ import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class OnboardViewModel @Inject constructor (private val userRepository: UserRepository,
-                                            private val dateRepository: DateRepository,
-                                            ): ViewModel() {
+class OnboardViewModel @Inject constructor (
+    private val userRepository: UserRepository,
+    private val dateRepository: DateRepository,
+): ViewModel() {
     private val _uiState = MutableStateFlow(OnboardUIState(dateOptions = dateOptions()))
     val uiState: StateFlow<OnboardUIState> = _uiState.asStateFlow()
 
