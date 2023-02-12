@@ -104,6 +104,7 @@ fun NavigationGraph(
         }
         composable(route = OnboardingScreen.QuestionTwo.name) {
             QuestionTwoScreen(
+                onboardUiState = uiState,
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionThree.name) },
                 options = uiState.dateOptions,
                 onSelectionChanged = { viewModel.setDate(it) }

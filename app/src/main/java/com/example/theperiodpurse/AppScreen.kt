@@ -23,6 +23,8 @@ import com.example.theperiodpurse.ui.symptomlog.LoggingOptionsPopup
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import java.time.LocalDate
 
+
+
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
