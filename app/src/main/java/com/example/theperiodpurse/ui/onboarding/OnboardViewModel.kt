@@ -115,10 +115,6 @@ class OnboardViewModel @Inject constructor (
         }
     }
 
-    fun getAllUsers() {
-        userRepository.getAllUsers()
-    }
-
     private fun createDate(date: java.util.Date, flow: FlowSeverity, mood: Mood,
                            exerciseLength: java.util.Date, exerciseType: Exercise,
                            crampSeverity: CrampSeverity, sleep: java.util.Date): Date {
