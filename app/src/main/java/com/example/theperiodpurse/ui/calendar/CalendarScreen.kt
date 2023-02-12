@@ -2,6 +2,7 @@ package com.example.theperiodpurse.ui.calendar
 
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -63,9 +64,13 @@ val tabModifier = Modifier
     .fillMaxWidth()
 
 @Composable
-fun SymptomTab(modifier: Modifier = Modifier, trackedSymptoms: List<Symptom>) {
+fun SymptomTab(
+    trackedSymptoms: List<Symptom>,
+    activeSymptom: Symptom?,
+    onSymptomClick: (Symptom) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     var expanded by remember { mutableStateOf(false) }
-    var activeSymptom: Symptom? by remember { mutableStateOf(null) }
     Column(modifier = modifier) {
         DisplaySymptomTab(
             activeSymptom = activeSymptom,
@@ -77,7 +82,7 @@ fun SymptomTab(modifier: Modifier = Modifier, trackedSymptoms: List<Symptom>) {
             SwitchSymptomTab(
                 activeSymptom = activeSymptom,
                 symptoms = trackedSymptoms,
-                onSymptomOnClicks = trackedSymptoms.map { { activeSymptom = it } },
+                onSymptomOnClicks = trackedSymptoms.map { { onSymptomClick(it) } },
                 modifier = tabModifier
             )
         }
@@ -288,6 +293,7 @@ fun CalendarScreenLayout(calendarUIState: CalendarUIState, navController: NavCon
         val bg = painterResource(R.drawable.colourwatercolour)
 
         var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
+        var activeSymptom: Symptom? by remember { mutableStateOf(null) }
         val currentMonth = remember { YearMonth.now() }
         val startMonth = remember { currentMonth.minusMonths(12) } // Previous months
         val endMonth = remember { currentMonth.plusMonths(0) } // Next months
@@ -311,7 +317,9 @@ fun CalendarScreenLayout(calendarUIState: CalendarUIState, navController: NavCon
             )
             Column {
                 SymptomTab(
-                    trackedSymptoms = previewTrackedSymptoms
+                    trackedSymptoms = previewTrackedSymptoms,
+                    activeSymptom = activeSymptom,
+                    onSymptomClick = { activeSymptom = it }
 //                trackedSymptoms = userDAO.get().symptomsToTrack
                 )
                 VerticalCalendar(
@@ -323,21 +331,24 @@ fun CalendarScreenLayout(calendarUIState: CalendarUIState, navController: NavCon
                         MonthHeader(month)
                     },
                     dayContent = { day ->
-                        Day(
-                            day = day,
-                            calendarDayUIState = calendarUIState.days[day.date],
-                            isSelected = selectedDate == day.date
-                        ) { date ->
-                            selectedDate = if (selectedDate == date.date) null
-                            else date.date
-                            navController.navigate(
-                                route = "%s/%s/%s"
-                                    .format(
-                                        Screen.Calendar,
-                                        Screen.Log,
-                                        day.date.toString()
-                                    )
-                            )
+                        (if (activeSymptom == null) Symptom.FLOW else activeSymptom)?.let {
+                            Day(
+                                day = day,
+                                calendarDayUIState = calendarUIState.days[day.date],
+                                isSelected = selectedDate == day.date,
+                                activeSymptom = it
+                            ) { date ->
+                                selectedDate = if (selectedDate == date.date) null
+                                else date.date
+                                navController.navigate(
+                                    route = "%s/%s/%s"
+                                        .format(
+                                            Screen.Calendar,
+                                            Screen.Log,
+                                            day.date.toString()
+                                        )
+                                )
+                            }
                         }
                     }
                 )
@@ -346,6 +357,33 @@ fun CalendarScreenLayout(calendarUIState: CalendarUIState, navController: NavCon
     }
 }
 
+private fun getDayColorAndIcon(
+    day: CalendarDay,
+    activeSymptom: Symptom,
+    calendarDayUIState: CalendarDayUIState?
+): Pair<Color, Int> {
+    val default = Pair(Color.White, R.drawable.blank)
+    if (day.date.isAfter(LocalDate.now())) {
+        return Pair(Color(237, 237, 237), R.drawable.blank)
+    }
+    if (calendarDayUIState == null) {
+        return default
+    }
+    return when (activeSymptom) {
+        Symptom.FLOW ->
+            when (calendarDayUIState.flow) {
+                "Light" -> Pair(Color(215, 125, 125), R.drawable.water_drop_black_24dp)
+                "Medium" -> Pair(Color(210, 80, 75), R.drawable.opacity_black_24dp)
+                "Heavy" -> Pair(Color(195, 50, 50), R.drawable.flow_heavy)
+                "Spotting" -> Pair(Color(245, 192, 192), R.drawable.spotting)
+                else -> default
+            }
+        Symptom.CRAMPS -> default
+        Symptom.EXERCISE -> default
+        Symptom.MOOD -> default
+        Symptom.SLEEP -> default
+    }
+}
 // Creates the days
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -353,12 +391,14 @@ fun Day(
     day: CalendarDay,
     calendarDayUIState: CalendarDayUIState?,
     isSelected: Boolean,
-    onClick: (CalendarDay) -> Unit
+    activeSymptom: Symptom,
+    onClick: (CalendarDay) -> Unit,
 ) {
+    val (dayColor, iconId) = getDayColorAndIcon(day, activeSymptom, calendarDayUIState)
     Box(
         modifier = Modifier
             .padding(1.dp)
-            .aspectRatio(1f),
+            .aspectRatio(1f)
     )
     {
         if (day.position == DayPosition.MonthDate) {
@@ -367,19 +407,7 @@ fun Day(
                     .size(64.dp)
                     .clip(shape = RoundedCornerShape(8.dp))
                     .fillMaxSize()
-                    .background(
-                        color = if (day.date.isAfter(LocalDate.now())) {
-                            Color(237, 237, 237)
-                        } else {
-                                when (calendarDayUIState?.flow) {
-                                    "Light" -> Color(215, 125, 125)
-                                    "Medium" -> Color(210, 80, 75)
-                                    "Heavy" -> Color(195, 50, 50)
-                                    "Spotting" -> Color(245, 192, 192)
-                                    else -> Color.White
-                                }
-                        }
-                    )
+                    .background(dayColor)
                     .semantics { contentDescription = day.date.toString() }
                     .border(
                         color = Color(200, 205, 205),
@@ -411,24 +439,11 @@ fun Day(
                     if (calendarDayUIState != null) {
                         /* TODO: Update day box according to DayUIState
                             example: */
-                        Text(
-                            text = calendarDayUIState.exerciseType,
-                        )
-
                         Image(
                             modifier = Modifier
                                 .size(20.dp)
                                 .offset(y = 6.dp),
-                            painter = painterResource(
-                                id =
-                                when (calendarDayUIState.flow) {
-                                    "Light" -> R.drawable.water_drop_black_24dp
-                                    "Medium" -> R.drawable.opacity_black_24dp
-                                    "Heavy" -> R.drawable.flow_heavy
-                                    "Spotting" -> R.drawable.spotting
-                                    else -> R.drawable.blank
-                                }
-                            ),
+                            painter = painterResource(id = iconId),
                             contentDescription = "DateFlowIcon"
                         )
 
@@ -516,5 +531,5 @@ fun TabsPreview() {
 @Preview
 @Composable
 fun DisplaySymptomTabPreview() {
-    SymptomTab(trackedSymptoms = previewTrackedSymptoms)
+    SymptomTab(trackedSymptoms = previewTrackedSymptoms, Symptom.FLOW, {})
 }
