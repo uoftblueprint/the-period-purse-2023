@@ -4,6 +4,7 @@ import com.example.theperiodpurse.data.DateDAO
 import com.example.theperiodpurse.data.DateRepository
 import com.example.theperiodpurse.data.UserDAO
 import com.example.theperiodpurse.data.UserRepository
+import com.example.theperiodpurse.ui.onboarding.OnboardViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,4 +25,9 @@ object AppModule {
     fun provideDateRepository(dateDAO: DateDAO): DateRepository {
         return DateRepository(dateDAO)
     }
+
+    @Singleton
+    @Provides
+    fun provideOnboardViewModel(userRepository: UserRepository, dateRepository: DateRepository):
+            OnboardViewModel { return OnboardViewModel(userRepository, dateRepository) }
 }
