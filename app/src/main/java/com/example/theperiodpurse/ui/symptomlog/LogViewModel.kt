@@ -1,8 +1,7 @@
 package com.example.theperiodpurse.ui.symptomlog
 
 import androidx.lifecycle.ViewModel
-import com.example.theperiodpurse.data.LogPrompt
-import com.example.theperiodpurse.data.LogSquare
+import com.example.theperiodpurse.data.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,6 +30,32 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
         } else {
             return(uiState.value.selectSquares[logPrompt.title] as String)
         }
+    }
+
+    fun getSelectedFlow(): FlowSeverity? {
+        var selectedFlow = uiState.value.selectSquares["Flow"]
+        if (selectedFlow is String) {
+            if (selectedFlow == "") selectedFlow = "None"
+            return FlowSeverity.valueOf(selectedFlow)
+        }
+        return null
+    }
+
+    fun getSelectedCrampSeverity(): CrampSeverity? {
+        var selectedCrampSeverity = uiState.value.selectSquares["Cramps"]
+        if (selectedCrampSeverity is String) {
+            if (selectedCrampSeverity == "") selectedCrampSeverity = "None"
+            return CrampSeverity.valueOf(selectedCrampSeverity)
+        }
+        return null
+    }
+
+    fun getSelectedMood(): Mood? {
+        var selectedMood = uiState.value.selectSquares["Mood"]
+        if (selectedMood is String) {
+            return Mood.valueOf(selectedMood)
+        }
+        return null
     }
 
     fun resetSquareSelected(logSquare: LogSquare) {

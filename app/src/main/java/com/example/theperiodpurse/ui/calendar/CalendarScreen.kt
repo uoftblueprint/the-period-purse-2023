@@ -2,7 +2,6 @@ package com.example.theperiodpurse.ui.calendar
 
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -43,9 +42,13 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.Screen
+import com.example.theperiodpurse.data.CrampSeverity
+import com.example.theperiodpurse.data.ExerciseSeverity
+import com.example.theperiodpurse.data.FlowSeverity
 import com.example.theperiodpurse.ui.theme.HeaderColor1
 import com.example.theperiodpurse.ui.theme.SelectedColor1
 import com.example.theperiodpurse.data.Symptom
+import com.example.theperiodpurse.ui.calendar.components.getDayColorAndIcon
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import com.google.accompanist.pager.*
 import com.kizitonwose.calendar.compose.VerticalCalendar
@@ -357,33 +360,6 @@ fun CalendarScreenLayout(calendarUIState: CalendarUIState, navController: NavCon
     }
 }
 
-private fun getDayColorAndIcon(
-    day: CalendarDay,
-    activeSymptom: Symptom,
-    calendarDayUIState: CalendarDayUIState?
-): Pair<Color, Int> {
-    val default = Pair(Color.White, R.drawable.blank)
-    if (day.date.isAfter(LocalDate.now())) {
-        return Pair(Color(237, 237, 237), R.drawable.blank)
-    }
-    if (calendarDayUIState == null) {
-        return default
-    }
-    return when (activeSymptom) {
-        Symptom.FLOW ->
-            when (calendarDayUIState.flow) {
-                "Light" -> Pair(Color(215, 125, 125), R.drawable.water_drop_black_24dp)
-                "Medium" -> Pair(Color(210, 80, 75), R.drawable.opacity_black_24dp)
-                "Heavy" -> Pair(Color(195, 50, 50), R.drawable.flow_heavy)
-                "Spotting" -> Pair(Color(245, 192, 192), R.drawable.spotting)
-                else -> default
-            }
-        Symptom.CRAMPS -> default
-        Symptom.EXERCISE -> default
-        Symptom.MOOD -> default
-        Symptom.SLEEP -> default
-    }
-}
 // Creates the days
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -435,15 +411,15 @@ fun Day(
                 )
 
                 Box(modifier = Modifier.padding(12.dp)
-                    .align(Alignment.BottomCenter)) {
+                    .align(Alignment.Center)) {
                     if (calendarDayUIState != null) {
                         /* TODO: Update day box according to DayUIState
                             example: */
                         Image(
+                            painterResource(id = iconId),
                             modifier = Modifier
                                 .size(20.dp)
-                                .offset(y = 6.dp),
-                            painter = painterResource(id = iconId),
+                                .offset(y = 2.dp),
                             contentDescription = "DateFlowIcon"
                         )
 
