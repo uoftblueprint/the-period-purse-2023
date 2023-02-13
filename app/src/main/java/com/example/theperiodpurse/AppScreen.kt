@@ -22,9 +22,9 @@ import com.example.theperiodpurse.ui.onboarding.*
 import com.example.theperiodpurse.ui.symptomlog.LoggingOptionsPopup
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import java.time.LocalDate
+import dagger.hilt.android.AndroidEntryPoint
 
-
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
