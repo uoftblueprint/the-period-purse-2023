@@ -1,20 +1,23 @@
 package com.example.theperiodpurse.ui.onboarding
+import androidx.lifecycle.*
+import com.example.theperiodpurse.data.*
+import com.example.theperiodpurse.data.Date
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
-import androidx.lifecycle.ViewModel
-import com.example.theperiodpurse.data.*
-import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class OnboardViewModel @Inject constructor (private val userRepository: UserRepository,
-                                            private val dateRepository: DateRepository
-                                            ): ViewModel() {
+class OnboardViewModel @Inject constructor (
+    private val userRepository: UserRepository,
+    private val dateRepository: DateRepository,
+): ViewModel() {
     private val _uiState = MutableStateFlow(OnboardUIState(dateOptions = dateOptions()))
     val uiState: StateFlow<OnboardUIState> = _uiState.asStateFlow()
 
@@ -29,6 +32,8 @@ class OnboardViewModel @Inject constructor (private val userRepository: UserRepo
                 )
         }
     }
+
+
 
     /**
      * Set the [logSymptoms] to track for onboarding session.
@@ -50,10 +55,11 @@ class OnboardViewModel @Inject constructor (private val userRepository: UserRepo
     /**
      * Set the [lastDate] of last period for current onboarding session
      */
-    fun setDate(pickupDate: String) {
+    fun setDate(startDate: String) {
+        var dates= startDate.split("|")
         _uiState.update { currentState ->
             currentState.copy(
-                date = pickupDate,
+                date = dates[0] + " to " + dates[1],
             )
         }
     }
@@ -103,10 +109,10 @@ class OnboardViewModel @Inject constructor (private val userRepository: UserRepo
                    averagePeriodLength: Int, averageCycleLength: Int, daysSinceLastPeriod: Int) {
         saveUser(createUser(symptomsToTrack, periodHistory, averagePeriodLength, averageCycleLength,
             daysSinceLastPeriod))
-    }
-
-    fun getAllUsers() {
-        userRepository.getAllUsers()
+        viewModelScope.launch {
+            val user = withContext(Dispatchers.Main) { userRepository.getUser(1) }
+            _uiState.value = _uiState.value.copy(user = user)
+        }
     }
 
     private fun createDate(date: java.util.Date, flow: FlowSeverity, mood: Mood,

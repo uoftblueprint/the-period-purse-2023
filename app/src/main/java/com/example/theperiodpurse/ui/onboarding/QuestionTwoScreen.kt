@@ -1,7 +1,6 @@
 package com.example.theperiodpurse.ui.onboarding
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -10,26 +9,48 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.theperiodpurse.R
 import android.app.DatePickerDialog
-import android.os.Bundle
 import android.widget.DatePicker
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.*
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import com.example.theperiodpurse.data.OnboardUIState
+import java.text.SimpleDateFormat
 import java.util.*
 
 
 @Composable
 fun QuestionTwoScreen(
+    onboardUiState: OnboardUIState,
     onNextButtonClicked: () -> Unit,
     onSelectionChanged: (String) -> Unit = {},
     options: List<String>,
     modifier: Modifier = Modifier
 ) {
+    val mYear: Int
+    val mMonth: Int
+    val mDay: Int
+    val mContext = LocalContext.current
 
-    var selectedValue by rememberSaveable { mutableStateOf("") }
+    val mDate = remember { mutableStateOf("Select Date") }
+    val mDateTo = remember { mutableStateOf("") }
+    val mCalendar = Calendar.getInstance()
+
+    mYear = mCalendar.get(Calendar.YEAR)
+    mMonth = mCalendar.get(Calendar.MONTH)
+    mDay = mCalendar.get(Calendar.DAY_OF_MONTH)
+
+    var entered by remember { mutableStateOf(false) }
+
+    val mDatePickerDialog = DatePickerDialog(
+        mContext,
+        { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
+            mDate.value = setDateTo(mDayOfMonth, mMonth, mYear, 0)
+            mDateTo.value = setDateTo(mDayOfMonth, mMonth, mYear, onboardUiState.days)
+        }, mYear, mMonth, mDay
+    )
+
 
 
 
@@ -52,27 +73,14 @@ fun QuestionTwoScreen(
 
 
         Divider(thickness = 1.dp, modifier = modifier.padding(bottom = 16.dp))
-        options.forEach { item ->
-            Row(
-                modifier = Modifier.selectable(
-                    selected = selectedValue == item,
-                    onClick = {
-                        selectedValue = item
-                        onSelectionChanged(item)
-                    }
-                ),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                RadioButton(
-                    selected = selectedValue == item,
-                    onClick = {
-                        selectedValue = item
-                        onSelectionChanged(item)
-                    }
-                )
-                Text(item)
-            }
+        Button(onClick = {
+            mDatePickerDialog.show()
+            entered = true
+        }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.White) ) {
+            Text(text = "${mDate.value}", color = Color.Black)
+
         }
+
         Spacer(Modifier.height(24.dp))
         Divider(thickness = 1.dp, modifier = modifier.padding(bottom = 16.dp))
 
@@ -86,15 +94,18 @@ fun QuestionTwoScreen(
             OutlinedButton(
                 onClick = onNextButtonClicked,
                 modifier = modifier.weight(1f),
+
             ) {
                 Text(stringResource(R.string.skip))
             }
             Button(
                 onClick = onNextButtonClicked,
-                enabled = selectedValue.isNotEmpty(),
+                enabled = entered,
                 modifier = modifier.weight(1f),
             ) {
                 Text(stringResource(R.string.next))
+                onSelectionChanged(mDate.value+"|"+mDateTo.value)
+
             }
 
         }
@@ -103,10 +114,13 @@ fun QuestionTwoScreen(
 
 }
 
-
-@Preview
-@Composable
-fun QuestionTwoPreview() {
-    QuestionTwoScreen(onNextButtonClicked = { }, options = listOf(""))
+fun setDateTo(day: Int, month: Int, year: Int, range: Int): String {
+    val date = Calendar.getInstance()
+    val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    date.set(year, month, day);
+    date.add(Calendar.DATE, range)
+    return formatter.format(date.time)
 
 }
+
+

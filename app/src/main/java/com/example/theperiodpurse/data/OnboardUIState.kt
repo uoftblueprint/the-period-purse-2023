@@ -7,5 +7,6 @@ data class OnboardUIState(/** Selected days quantity  */
                           /** Available Symptoms dates for the order*/
                           val symptomsOptions: List<String> = listOf(),
                           /** Available dates for the track*/
-                          val dateOptions: List<String> = listOf()
+                          val dateOptions: List<String> = listOf(),
+                          val user: User? = null,
 )
