@@ -123,7 +123,7 @@ fun NavigationGraph(
             )
         }
         composable(route = OnboardingScreen.Summary.name) {
-            val symptomList = arrayListOf(Symptom.MOOD);
+            val symptomList = arrayListOf(Symptom.MOOD, Symptom.CRAMPS);
             val currentDate = java.util.Date()
             val dateList = arrayListOf(Date(2, currentDate, FlowSeverity.HEAVY, Mood.ANGRY,
                 currentDate, Exercise.YOGA, CrampSeverity.Bad, currentDate))
@@ -136,6 +136,7 @@ fun NavigationGraph(
                     onboardViewModel.addNewUser(symptomList, dateList, 0, 0, 0)
                     navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
                     navController.navigate(Screen.Calendar.name)
+                    appViewModel.loadData()
                 },
                 onCancelButtonClicked = {
                     cancelOrderAndNavigateToStart(onboardViewModel, navController)

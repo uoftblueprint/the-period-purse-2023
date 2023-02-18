@@ -17,4 +17,8 @@ class UserRepository(private val userDAO: UserDAO) {
     suspend fun getUser(id: Int): User {
         return userDAO.get(id)
     }
+
+    suspend fun isEmpty(): Boolean {
+        return userDAO.getUsers().isEmpty()
+    }
 }

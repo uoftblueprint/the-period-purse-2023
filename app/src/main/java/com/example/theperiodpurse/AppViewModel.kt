@@ -1,14 +1,19 @@
 package com.example.theperiodpurse
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.theperiodpurse.data.DateRepository
 import com.example.theperiodpurse.data.Symptom
 import com.example.theperiodpurse.data.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,19 +24,17 @@ class AppViewModel @Inject constructor (private val userRepository: UserReposito
     val uiState: StateFlow<AppUiState> = _uiState.asStateFlow()
 
     fun loadData() {
-        val exc = Symptom from R.string.exercise
-        val cram = Symptom from R.string.cramps
-
-        val symptoms: MutableList<Symptom> = mutableListOf()
-
-        for (symptom in listOf(exc, cram)) {
-            if (symptom != null) {
-                symptoms.add(symptom)
+        val trackedSymptoms: MutableList<Symptom> = mutableListOf()
+        viewModelScope.launch {
+            Log.d("Lookies Here", withContext(Dispatchers.Main) { !userRepository.isEmpty() }.toString())
+            if (withContext(Dispatchers.Main) { !userRepository.isEmpty() }) {
+                val user = withContext(Dispatchers.Main) { userRepository.getUser(1) }
+                trackedSymptoms.add(Symptom.FLOW)
+                trackedSymptoms.addAll(user.symptomsToTrack)
+                _uiState.update { currentState ->
+                    currentState.copy(trackedSymptoms = trackedSymptoms)
+                }
             }
-        }
-
-        _uiState.update { currentState ->
-            currentState.copy(trackedSymptoms = symptoms)
         }
     }
 }

@@ -2,6 +2,7 @@ package com.example.theperiodpurse
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -50,11 +51,9 @@ fun ScreenApp(
     modifier: Modifier = Modifier,
     appViewModel: AppViewModel = viewModel(),
     onboardViewModel: OnboardViewModel = viewModel(),
-    skipOnboarding: Boolean = false,
     navController: NavHostController = rememberNavController()
 ) {
     appViewModel.loadData()
-
     Scaffold(
         bottomBar = {
             if (currentRoute(navController) in Screen.values().map{ it.name }) {
@@ -77,7 +76,9 @@ fun ScreenApp(
         )
         NavigationGraph(
             navController = navController,
-            startDestination = if (skipOnboarding) Screen.Calendar.name else OnboardingScreen.Welcome.name,
+            startDestination =
+                if (appViewModel.uiState.collectAsState().value.trackedSymptoms.isNotEmpty()) Screen.Calendar.name
+                else OnboardingScreen.Welcome.name,
             onboardViewModel,
             appViewModel,
             modifier = modifier.padding(innerPadding)
