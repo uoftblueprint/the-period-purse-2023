@@ -47,7 +47,7 @@ fun QuestionOneScreen(onNextButtonClicked: () -> Unit,
         Image(
             painter = painterResource(R.drawable.pad_2x),
             contentDescription = null,
-            modifier = Modifier.size(200 .dp),
+            modifier = Modifier.size(200.dp),
         )
 
         Spacer(modifier = Modifier.height(100.dp))

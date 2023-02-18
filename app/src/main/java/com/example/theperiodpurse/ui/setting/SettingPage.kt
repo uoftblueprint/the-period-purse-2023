@@ -41,3 +41,5 @@ fun SettingPage(mainActivity: MainActivity){
     }
 
 }
+
+
