@@ -25,6 +25,7 @@ import com.example.theperiodpurse.ui.onboarding.QuestionOneScreen
 import com.example.theperiodpurse.ui.onboarding.QuestionTwoScreen
 import com.example.theperiodpurse.ui.onboarding.WelcomeScreen
 import com.example.theperiodpurse.ui.setting.SettingsScreen
+import kotlinx.coroutines.flow.last
 
 enum class Screen() {
     Calendar,
@@ -106,7 +107,7 @@ fun NavigationGraph(
         }
         composable(route = OnboardingScreen.QuestionTwo.name) {
             QuestionTwoScreen(
-                onboardUiState = uiState,
+                onboardUiState = onboardUIState,
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionThree.name) },
                 options = onboardUIState.dateOptions,
                 onSelectionChanged = { onboardViewModel.setDate(it) }
