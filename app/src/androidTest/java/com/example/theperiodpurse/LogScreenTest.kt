@@ -2,6 +2,7 @@ package com.example.theperiodpurse
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -42,8 +43,7 @@ class LogScreenTest {
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
-            ScreenApp(navController = navController, skipOnboarding = true, viewModel =
-            onboardViewModel)
+            ScreenApp(navController = navController, skipOnboarding = true)
         }
     }
 
@@ -70,14 +70,14 @@ class LogScreenTest {
     @Test
     fun appLogScreen_clickOnFlowTab_opensFlowTab() {
         navigateToLogScreen()
-        composeTestRule.onNodeWithText(LogPrompt.Flow.title).performClick()
+        composeTestRule.onNodeWithStringId(LogPrompt.FLOW.title).performClick()
         composeTestRule.onNodeWithText(LogSquare.FlowHeavy.description).assertIsDisplayed()
     }
 
     @Test
     fun appLogScreen_clickOnSave_navigatesToCalendar() {
         navigateToLogScreen()
-        composeTestRule.onNodeWithText(LogPrompt.Mood.title).performClick()
+        composeTestRule.onNodeWithStringId(LogPrompt.MOOD.title).performClick()
         composeTestRule
             .onNodeWithContentDescription(LogSquare.MoodHappy.description).performClick()
         composeTestRule
