@@ -26,10 +26,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.R
-
-
-val products = listOf("Period Underwear", "Menstrual Cup", "Pads", "Cloth Pads", "Tampons",
-    "Menstrual Disc")
+import com.example.theperiodpurse.data.Product
+import com.example.theperiodpurse.data.ProductsList
 
 const val gray = 0xFF6D6E71
 const val teal = 0xFF72C6B7
@@ -78,7 +76,8 @@ fun EducationScreen(
             }
 
             /* Grid for Period Products */
-            items(products,
+            items(
+                ProductsList,
             span = { GridItemSpan(1) }) {
                 PeriodProducts(navController, it)
             }
@@ -164,7 +163,7 @@ fun DYKCard(navController: NavHostController) {
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PeriodProducts (navController: NavHostController, it: String) {
+fun PeriodProducts (navController: NavHostController, it: Product) {
     Card(
         modifier = Modifier
             .padding(12.dp)
@@ -172,7 +171,7 @@ fun PeriodProducts (navController: NavHostController, it: String) {
             .aspectRatio(1f),
         shape = RoundedCornerShape(12.dp), elevation = 10.dp,
         backgroundColor = Color(pink),
-        onClick = { navController.navigate(Destination.Info.createRoute(it)) },
+        onClick = { navController.navigate(Destination.Info.createRoute(it.ProductName)) },
     ) {
         Column(
             modifier = Modifier
@@ -186,15 +185,7 @@ fun PeriodProducts (navController: NavHostController, it: String) {
                     .align(Alignment.CenterHorizontally)
                     .padding(12.dp),
                 painter = painterResource(
-                    id = when (it) {
-                        "Period Underwear" -> R.drawable.period_underwear
-                        "Menstrual Cup" -> R.drawable.menstrual_cup
-                        "Pads" -> R.drawable.pads
-                        "Cloth Pads" -> R.drawable.cloth_pads
-                        "Tampons" -> R.drawable.tampons
-                        "Menstrual Disc" -> R.drawable.menstrual_disc
-                        else -> null
-                    }!!
+                    id = it.imageID
                 ),
                 contentDescription = "$it Image"
             )
@@ -204,7 +195,7 @@ fun PeriodProducts (navController: NavHostController, it: String) {
                     .padding(8.dp)
                     .align(Alignment.CenterHorizontally),
                 textAlign = TextAlign.Center,
-                text = it,
+                text = it.ProductName,
                 fontWeight = Bold
             )
         }
