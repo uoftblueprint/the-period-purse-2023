@@ -195,8 +195,9 @@ fun PeriodProducts (navController: NavHostController, it: Product) {
                     .padding(8.dp)
                     .align(Alignment.CenterHorizontally),
                 textAlign = TextAlign.Center,
-                text = it.ProductName,
-                fontWeight = Bold
+                fontWeight = Bold,
+                maxLines = 2,
+                text = it.ProductName + "\n"
             )
         }
     }
@@ -260,7 +261,7 @@ fun SocialMedia(uriHandler: UriHandler) {
     ) {
         Icon(
             modifier = Modifier
-                .clickable { uriHandler.openUri("https://www.google.ca/") }
+                .clickable { uriHandler.openUri("https://www.instagram.com/theperiodpurse/") }
                 .padding(horizontal = 8.dp)
                 .size(24.dp),
             painter = painterResource(R.drawable.instagram),
@@ -270,7 +271,7 @@ fun SocialMedia(uriHandler: UriHandler) {
 
         Icon(
             modifier = Modifier
-                .clickable { uriHandler.openUri("https://www.google.ca/") }
+                .clickable { uriHandler.openUri("https://www.tiktok.com/@theperiodpurse") }
                 .padding(horizontal = 8.dp)
                 .size(24.dp),
             painter = painterResource(R.drawable.tiktok),
@@ -280,7 +281,8 @@ fun SocialMedia(uriHandler: UriHandler) {
 
         Icon(
             modifier = Modifier
-                .clickable { uriHandler.openUri("https://www.google.ca/") }
+                .clickable { uriHandler.openUri("https://www.youtube.com/channel/" +
+                        "UC2YgDU_9XxbjJsGGvXwxwyA") }
                 .padding(horizontal = 8.dp)
                 .size(24.dp),
             painter = painterResource(R.drawable.youtube),
@@ -290,7 +292,7 @@ fun SocialMedia(uriHandler: UriHandler) {
 
         Icon(
             modifier = Modifier
-                .clickable { uriHandler.openUri("https://www.google.ca/") }
+                .clickable { uriHandler.openUri("https://twitter.com/ThePeriodPurse") }
                 .padding(horizontal = 8.dp)
                 .size(24.dp),
             painter = painterResource(R.drawable.twitter),
@@ -300,7 +302,7 @@ fun SocialMedia(uriHandler: UriHandler) {
 
         Icon(
             modifier = Modifier
-                .clickable { uriHandler.openUri("https://www.google.ca/") }
+                .clickable { uriHandler.openUri("https://www.facebook.com/theperiodpurse") }
                 .padding(horizontal = 8.dp)
                 .size(24.dp),
             painter = painterResource(R.drawable.facebook),
