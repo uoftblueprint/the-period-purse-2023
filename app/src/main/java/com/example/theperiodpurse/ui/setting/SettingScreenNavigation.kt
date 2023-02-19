@@ -1,6 +1,8 @@
 package com.example.theperiodpurse.ui.setting
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
@@ -12,13 +14,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -63,6 +65,7 @@ fun SettingAppBar(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SettingsScreen(
+    hasNotificationsPermission: Boolean,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
@@ -103,10 +106,22 @@ fun SettingsScreen(
                     onDeleteClicked = {
                         navController.navigate(SettingScreenNavigation.DeleteAccount.name)
                     },
+                    hasNotificationsPermission = hasNotificationsPermission
                 )
             }
             composable(route = SettingScreenNavigation.Notification.name) {
-                TimeWheel(context= LocalContext.current)
+                var context = LocalContext.current
+                var hasNotificationPermission by remember {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        mutableStateOf(
+                            ContextCompat.checkSelfPermission(
+                                context,
+                                Manifest.permission.POST_NOTIFICATIONS
+                            ) == PackageManager.PERMISSION_GRANTED
+                        )
+                    } else mutableStateOf(true)
+                }
+                TimeWheel(context= context, hasNotificationPermission)
             }
             composable(route = SettingScreenNavigation.BackUpAccount.name) {
                 BackUpAccountScreen()

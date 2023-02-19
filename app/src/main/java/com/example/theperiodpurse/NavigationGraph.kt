@@ -43,7 +43,8 @@ fun NavigationGraph(
     navController: NavHostController,
     startDestination: String,
     viewModel: OnboardViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    hasNotificationsPermission: Boolean,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     NavHost(
@@ -56,7 +57,7 @@ fun NavigationGraph(
         }
 
         composable(route = Screen.Settings.name) {
-            SettingsScreen()
+            SettingsScreen(hasNotificationsPermission)
         }
 
         composable(route = Screen.Cycle.name) {

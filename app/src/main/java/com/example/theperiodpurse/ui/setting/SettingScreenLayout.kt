@@ -28,6 +28,7 @@ fun SettingScreenLayout(
     onNotificationClicked: () -> Unit,
     onBackUpClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
+    hasNotificationsPermission: Boolean
 ){
     val textModifier = modifier.padding(top = 50.dp, start = 10.dp)
    Column(modifier = modifier
@@ -67,7 +68,7 @@ fun SettingScreenLayout(
        }
       TabOption(
           stringResource(id = R.string.customize_notifications),
-          onTabClicked = onNotificationClicked
+          onTabClicked = onNotificationClicked,
       )
        Text(
            text = stringResource(R.string.account_settings_heading),

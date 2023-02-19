@@ -1,10 +1,12 @@
 package com.example.theperiodpurse.ui.setting
 
 
+import android.Manifest
 import android.content.Context
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
@@ -19,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import com.example.theperiodpurse.data.Alarm
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
@@ -35,14 +38,25 @@ class NotificationsScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            TimeWheel(LocalContext.current)
+            var context = LocalContext.current
+            var hasNotificationPermission by remember {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    mutableStateOf(
+                        ContextCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.POST_NOTIFICATIONS
+                        ) == PackageManager.PERMISSION_GRANTED
+                    )
+                } else mutableStateOf(true)
+            }
+            TimeWheel(LocalContext.current, hasNotificationPermission)
         }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TimeWheel(context: Context){
+fun TimeWheel(context: Context, hasNotificationsPermission: Boolean){
     var pickedTime by remember { mutableStateOf(LocalTime.NOON) }
     val formattedTime by remember {
         derivedStateOf {
@@ -90,7 +104,12 @@ fun TimeWheel(context: Context){
         }
     }
     Button(onClick = {
-        setAlarm(context)
+
+        if(hasNotificationsPermission){
+            println("working")
+            setAlarm(context)
+        }
+
     }
     ) {
       Text(text = "notification")
