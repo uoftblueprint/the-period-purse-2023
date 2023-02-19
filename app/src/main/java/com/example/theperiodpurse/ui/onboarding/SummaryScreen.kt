@@ -1,12 +1,17 @@
 package com.example.theperiodpurse.ui
 
+import android.os.Build
+import android.provider.Settings.Global.getString
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -16,11 +21,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.data.OnboardUIState
+import com.example.theperiodpurse.data.DataSource
+import com.example.theperiodpurse.ui.onboarding.backbutton1
 
 /**
  * This composable expects [onboardUIState] that represents the onboarding state, [onCancelButtonClicked] lambda
  * that triggers canceling the order and passes the final order to [onSendButtonClicked] lambda
  */
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SummaryScreen(
     onboardUiState: OnboardUIState,
@@ -36,8 +44,10 @@ fun SummaryScreen(
         onboardUiState.days,
     )
 
+    backbutton1()
+
     Column(
-        modifier = modifier.padding(16.dp),
+        modifier = modifier.padding(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
 
@@ -57,27 +67,139 @@ fun SummaryScreen(
 
 
 
-        Spacer(modifier = Modifier.height(100.dp))
+        Spacer(modifier = Modifier.height(60.dp))
+
+        if (onboardUiState.days != 0) {
+            Column(Modifier.padding(start = 25.dp)) {
 
 
 
-        Text(stringResource(R.string.average_period_length).uppercase())
-        Text(text = numberOfDays, fontWeight = FontWeight.Bold)
-        Divider(thickness = 1.dp)
+            Text(
+                text = stringResource(R.string.average_period_length),
+                modifier = Modifier.fillMaxWidth(),
+                color = Color(97, 153, 154),
+                fontWeight = FontWeight.Bold,
+                fontSize = 15.sp
+            )
+            Text(text = numberOfDays, modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 10.dp),
+                fontSize = 17.sp)
 
-        Text(stringResource(R.string.last_period).uppercase())
-        Text(text = onboardUiState.date, fontWeight = FontWeight.Bold)
-        Divider(thickness = 1.dp)
 
-        Text(stringResource(R.string.symptoms_to_log).uppercase())
-
-        onboardUiState.symptomsOptions.forEach { item ->
-            Text(text = item, fontWeight = FontWeight.Bold)
+            }
+            Divider(thickness = 1.dp, color = Color(97, 153, 154), modifier = Modifier.fillMaxWidth())
         }
-        Divider(thickness = 1.dp)
+
+        if (!onboardUiState.date.contains("Choose date to")) {
+
+            Column(Modifier.padding(start = 25.dp)) {
+                Text(
+                    stringResource(R.string.last_period),
+                    modifier = Modifier.fillMaxWidth(),
+                    color = Color(97, 153, 154),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp
+                )
+
+                Text(
+                    text = onboardUiState.date,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 10.dp),
+                    fontSize = 17.sp
+                )
+
+
+            }
+
+
+
+
+            Divider(thickness = 1.dp, color = Color(97, 153, 154), modifier = Modifier.fillMaxWidth())
+        }
+
+
+        Column(Modifier.padding(start = 25.dp)){
+            Text(stringResource(R.string.symptoms_to_log),
+                modifier = Modifier.fillMaxWidth(),
+                color = Color(97, 153, 154),
+                fontWeight = FontWeight.Bold,
+                fontSize = 15.sp)
+
+            val symptoms = listOf(
+                "Mood",
+                "Exercise",
+                "Cramps",
+                "Sleep",
+
+                )
+
+
+            Row() {
+                var dontprint = false
+
+                Column(Modifier.padding(top = 10.dp, bottom = 10.dp, end = 5.dp)){
+                    Image(
+                        painter = painterResource(R.drawable.opacity_black_24dp),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(25.dp)
+
+                    )
+
+                }
+
+                symptoms.forEach { symptom ->
+                    onboardUiState.symptomsOptions.forEach { select ->
+                        if (symptom == select || symptom == "Flow") {
+                            Column(modifier = Modifier.padding(all = 10.dp)){
+
+                                var painter = painterResource(R.drawable.self_improvement_black_24dp)
+
+
+                                when (symptom) {
+                                    "Mood" -> painter = painterResource(R.drawable.sentiment_neutral_black_24dp)
+                                    "Exercise" -> painter = painterResource(R.drawable.self_improvement_black_24dp)
+                                    "Cramps" -> painter = painterResource(R.drawable.sick_black_24dp)
+                                    "Sleep" -> painter = painterResource(R.drawable.nightlight_black_24dp)
+                                    else -> { // Note the block
+                                        dontprint = true
+                                    }
+                                }
+
+                                if (!dontprint){
+                                    Image(
+                                        painter = painter,
+                                        contentDescription = null,
+                                        modifier = Modifier
+                                            .size(25.dp)
+
+
+                                    )
+
+                                }
+
+
+
+                            }
+
+                        }
+
+                    }
+                }
+            }
+
+        }
+
+        Divider(thickness = 1.dp, color = Color(97, 153, 154), modifier = Modifier.fillMaxWidth())
+
+        Spacer(modifier = Modifier.height(60.dp))
+
+
 
         Button(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.padding(horizontal = 15.dp).fillMaxWidth(),
             onClick = { onSendButtonClicked() },
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
 

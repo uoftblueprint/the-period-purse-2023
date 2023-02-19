@@ -93,7 +93,8 @@ fun NavigationGraph(
         composable(route = OnboardingScreen.QuestionOne.name) {
             QuestionOneScreen(
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionTwo.name) },
-                onSelectionChanged = { viewModel.setQuantity(it.toInt()) }
+                onSelectionChanged = { viewModel.setQuantity(it.toInt()) },
+                mainActivity = mainActivity
             )
         }
         composable(route = OnboardingScreen.QuestionTwo.name) {

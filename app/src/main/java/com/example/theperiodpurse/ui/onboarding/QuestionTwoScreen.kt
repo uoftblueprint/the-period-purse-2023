@@ -9,12 +9,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.theperiodpurse.R
 import android.app.DatePickerDialog
+import android.os.Build
 import android.widget.DatePicker
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.Keyboard
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -24,6 +35,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun QuestionTwoScreen(
     onboardUiState: OnboardUIState,
@@ -55,6 +67,15 @@ fun QuestionTwoScreen(
         }, mYear, mMonth, mDay
     )
 
+    mDatePickerDialog.getDatePicker().setMaxDate(Date().getTime())
+
+
+    backbutton1()
+
+    drawconcave()
+
+    progress1()
+
 
 
 
@@ -64,30 +85,34 @@ fun QuestionTwoScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        Spacer(modifier = Modifier.height(100.dp))
+        Spacer(modifier = Modifier.height(85.dp))
 
         Image(
-            painter = painterResource(R.drawable.pad_2x),
+            painter = painterResource(R.drawable.flow_with_heart),
             contentDescription = null,
-            modifier = Modifier.size(200 .dp),
+            modifier = Modifier.size(200 .dp).padding(top=40.dp),
         )
 
-        Spacer(modifier = Modifier.height(100.dp))
+        Spacer(modifier = Modifier.height(80.dp))
 
 
 
         Text(
             text = stringResource(R.string.question_two),
             fontSize = 30.sp,
-            modifier = Modifier.align(Alignment.CenterHorizontally).width(250.dp),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .width(250.dp),
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
         )
 
         Text(
             text = stringResource(R.string.description_two),
-            fontSize = 15.sp,
-            modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
+            fontSize = 18.sp,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .width(200.dp),
             textAlign = TextAlign.Center
         )
         Spacer(Modifier.height(16.dp))
@@ -97,8 +122,55 @@ fun QuestionTwoScreen(
         Button(onClick = {
             mDatePickerDialog.show()
             entered = true
-        }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.White) ) {
-            Text(text = "${mDate.value}", color = Color.Black)
+        }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+            modifier = modifier
+                .width(175.dp)) {
+
+            if (mDate.value != "Choose date"){
+
+                Row (modifier = Modifier
+                    .padding(
+                        start = 12.dp,
+                        end = 16.dp,
+                        top = 12.dp,
+                        bottom = 12.dp
+                    ),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center){
+                    Text(text = "${mDate.value}", color = Color.Black,  fontSize = 18.sp)
+                }
+
+            }
+            else {
+
+                Row (modifier = Modifier
+                    .padding(
+                        start = 12.dp,
+                        end = 16.dp,
+                        top = 12.dp,
+                        bottom = 12.dp
+                    ),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center) {
+
+                    Text(
+                        text = "${mDate.value}",
+                        color = Color.Black,
+                        textAlign = TextAlign.Center,
+
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    Image(
+                        painter = painterResource(R.drawable.onboard_calendar),
+                        contentDescription = null,
+                    )
+
+                }
+
+            }
+
+
 
         }
 
@@ -112,7 +184,7 @@ fun QuestionTwoScreen(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            OutlinedButton(
+            TextButton(
                 onClick = onNextButtonClicked,
                 modifier = modifier.weight(1f),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
@@ -148,4 +220,70 @@ fun setDateTo(day: Int, month: Int, year: Int, range: Int): String {
 
 }
 
+@Composable
+fun progress1(){
+    val configuration = LocalConfiguration.current
+    Column(
+        modifier = Modifier
+            .padding(PaddingValues(top = 175.dp, start = 10.dp))
+            .width(configuration.screenWidthDp.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(PaddingValues(top = 200.dp))
+
+
+        ) {
+            Canvas(
+                modifier = Modifier
+                    .size(20.dp)
+                    .padding(PaddingValues(top = 20.dp))
+            ) {
+
+                drawRoundRect(
+                    color = Color(android.graphics.Color.rgb(142, 212, 193)).copy(alpha = 0.5f),
+                    cornerRadius = CornerRadius(60f, 60f),
+                    size = Size(width = 10.dp.toPx(), height = 10.dp.toPx())
+
+                )
+
+
+            }
+            Canvas(
+                modifier = Modifier
+                    .size(40.dp)
+                    .padding(PaddingValues(top = 20.dp))
+            ) {
+
+                drawRoundRect(
+                    color = Color(android.graphics.Color.rgb(142, 212, 193)),
+                    cornerRadius = CornerRadius(60f, 60f),
+                    size = Size(width = 30.dp.toPx(), height =10.dp.toPx())
+
+                )
+
+
+            }
+            Canvas(
+                modifier = Modifier
+                    .size(30.dp)
+                    .padding(PaddingValues(top = 20.dp))
+            ) {
+
+                drawRoundRect(
+                    color = Color(android.graphics.Color.rgb(142, 212, 193)).copy(alpha = 0.5f),
+                    cornerRadius = CornerRadius(60f, 60f),
+                    size = Size(width = 10.dp.toPx(), height = 10.dp.toPx())
+
+                )
+
+
+            }
+
+
+        }
+    }
+}
 
