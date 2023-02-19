@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.util.*
 import javax.inject.Inject
 
@@ -116,8 +117,8 @@ class OnboardViewModel @Inject constructor (
     }
 
     private fun createDate(date: java.util.Date, flow: FlowSeverity, mood: Mood,
-                           exerciseLength: java.util.Date, exerciseType: Exercise,
-                           crampSeverity: CrampSeverity, sleep: java.util.Date): Date {
+                           exerciseLength: Duration?, exerciseType: Exercise,
+                           crampSeverity: CrampSeverity, sleep: Duration?): Date {
         return Date(
             date = date,
             flow = flow,
@@ -125,7 +126,8 @@ class OnboardViewModel @Inject constructor (
             exerciseLength = exerciseLength,
             exerciseType = exerciseType,
             crampSeverity = crampSeverity,
-            sleep = sleep
+            sleep = sleep,
+            notes = ""
         )
     }
 
@@ -134,8 +136,8 @@ class OnboardViewModel @Inject constructor (
     }
 
     fun addNewDate(date: java.util.Date, flow: FlowSeverity, mood: Mood,
-                   exerciseLength: java.util.Date, exerciseType: Exercise,
-                   crampSeverity: CrampSeverity, sleep: java.util.Date) {
+                   exerciseLength: Duration?, exerciseType: Exercise,
+                   crampSeverity: CrampSeverity, sleep: Duration?) {
         saveDate(createDate(date, flow, mood, exerciseLength, exerciseType, crampSeverity, sleep))
     }
 }

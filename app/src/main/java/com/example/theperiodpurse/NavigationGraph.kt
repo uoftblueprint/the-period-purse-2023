@@ -26,6 +26,7 @@ import com.example.theperiodpurse.ui.onboarding.QuestionTwoScreen
 import com.example.theperiodpurse.ui.onboarding.WelcomeScreen
 import com.example.theperiodpurse.ui.setting.SettingsScreen
 import kotlinx.coroutines.flow.last
+import java.time.Duration
 
 enum class Screen() {
     Calendar,
@@ -125,14 +126,21 @@ fun NavigationGraph(
         composable(route = OnboardingScreen.Summary.name) {
             val symptomList = arrayListOf(Symptom.MOOD, Symptom.CRAMPS);
             val currentDate = java.util.Date()
+            val duration = Duration.ofHours(1)
             val dateList = arrayListOf(Date(2, currentDate, FlowSeverity.HEAVY, Mood.ANGRY,
-                currentDate, Exercise.YOGA, CrampSeverity.Bad, currentDate))
+                duration, Exercise.YOGA, CrampSeverity.Bad, duration, ""))
             SummaryScreen(
                 onboardUiState = onboardUIState,
                 onSendButtonClicked = {
-                    onboardViewModel.addNewDate(dateList[0].date, dateList[0].flow, dateList[0].mood,
-                        dateList[0].exerciseLength, dateList[0].exerciseType,
-                        dateList[0].crampSeverity, dateList[0].sleep)
+                    onboardViewModel.addNewDate(
+                        currentDate,
+                        FlowSeverity.HEAVY,
+                        Mood.ANGRY,
+                        duration,
+                        Exercise.YOGA,
+                        CrampSeverity.Bad,
+                        duration
+                    )
                     onboardViewModel.addNewUser(symptomList, dateList, 0, 0, 0)
                     navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
                     navController.navigate(Screen.Calendar.name)

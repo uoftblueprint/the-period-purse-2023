@@ -5,5 +5,10 @@ enum class CrampSeverity {
     Bad,
     Terrible,
     Good,
-    None
+    None;
+
+    companion object {
+        private val map = CrampSeverity.values().associateBy { it.name }
+        infix fun from(name: String?) = map[name]
+    }
 }

@@ -9,5 +9,10 @@ enum class Exercise {
     WATER_SPORTS,
     CYCLE_SPORTS,
     RACKET_SPORTS,
-    WINTER_SPORTS
+    WINTER_SPORTS;
+
+    companion object {
+        private val map = Exercise.values().associateBy { it.name }
+        infix fun from(name: String?) = map[name]
+    }
 }

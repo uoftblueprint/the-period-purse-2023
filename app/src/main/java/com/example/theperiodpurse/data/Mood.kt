@@ -9,5 +9,10 @@ enum class Mood {
     GREAT,
     SICK,
     ANGRY,
-    LOVED
+    LOVED;
+
+    companion object {
+        private val map = Mood.values().associateBy { it.name }
+        infix fun from(name: String?) = map[name]
+    }
 }

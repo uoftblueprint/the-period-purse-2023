@@ -3,6 +3,7 @@ package com.example.theperiodpurse
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.theperiodpurse.data.Date
 import com.example.theperiodpurse.data.DateRepository
 import com.example.theperiodpurse.data.Symptom
 import com.example.theperiodpurse.data.UserRepository
@@ -36,5 +37,9 @@ class AppViewModel @Inject constructor (private val userRepository: UserReposito
                 }
             }
         }
+    }
+
+    fun saveDate(date: Date) {
+        dateRepository.addDate(date)
     }
 }

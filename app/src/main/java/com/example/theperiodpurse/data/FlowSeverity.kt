@@ -5,5 +5,10 @@ enum class FlowSeverity {
     MEDIUM,
     HEAVY,
     SPOTTING,
-    NONE
+    NONE;
+
+    companion object {
+        private val map = values().associateBy { it.name }
+        infix fun from(name: String?) = map[name]
+    }
 }

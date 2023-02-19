@@ -3,6 +3,7 @@ package com.example.theperiodpurse.data
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.time.Duration
 
 class SymptomConverter {
     @TypeConverter
@@ -44,5 +45,17 @@ class DaysConverter {
     @TypeConverter
     fun dateToTimestamp(date: java.util.Date?): Long? {
         return date?.time
+    }
+}
+
+class DurationConverter {
+    @TypeConverter
+    fun fromDuration(value: Duration?): Long? {
+        return value?.toMinutes()
+    }
+
+    @TypeConverter
+    fun toDuration(value: Long?): Duration? {
+        return value?.let { Duration.ofMinutes(it) }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.theperiodpurse.ui.calendar
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
@@ -38,17 +39,17 @@ import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.AppViewModel
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.Screen
-import com.example.theperiodpurse.data.LogPrompt
-import com.example.theperiodpurse.data.LogSquare
+import com.example.theperiodpurse.data.*
 import com.example.theperiodpurse.ui.symptomlog.LogViewModel
 import com.example.theperiodpurse.ui.theme.HeaderColor1
 import com.example.theperiodpurse.ui.theme.SecondaryFontColor
 import com.example.theperiodpurse.ui.theme.SelectedColor1
 import com.kizitonwose.calendar.core.atStartOfMonth
-import java.time.LocalDate
-import java.time.YearMonth
+import java.sql.Time
+import java.time.*
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.Date as Date1
 
 
 @Composable
@@ -69,9 +70,48 @@ fun LogScreen(
 
         (LogPrompt from R.string.notes)?.let { logPrompts.add(it) }
 
+        (FlowSeverity from "LIGHT")?.let { Log.d("Testing dat", it.name) }
+
         val logViewModel = LogViewModel(logPrompts)
 
-        LogScreenLayout(day, navController, logPrompts, logViewModel)
+        LogScreenLayout(day, navController, logPrompts, logViewModel) {
+            if (logViewModel.isFilled()) {
+                var exercisedDuration: Duration? = null
+                val excTxt = logViewModel.getText(LogPrompt.EXERCISE)
+                if (excTxt != "")
+                    exercisedDuration = Duration.ofHours(
+                        Time.valueOf(excTxt).hours.toLong()
+                    ).plusMinutes(
+                        Time.valueOf(excTxt).minutes.toLong()
+                    )
+
+                var sleepDuration: Duration? = null
+                val sleepTxt = logViewModel.getText(LogPrompt.SLEEP)
+                if (sleepTxt != "")
+                    sleepDuration = Duration.ofHours(
+                        Time.valueOf(sleepTxt).hours.toLong()
+                    ).plusMinutes(
+                        Time.valueOf(excTxt).minutes.toLong()
+                    )
+
+                appViewModel.saveDate(
+                    Date(
+                        date = Date1.from(
+                            LocalDateTime.of(
+                                day, LocalDateTime.now().toLocalTime()
+                            ).atZone(ZoneId.systemDefault()).toInstant()
+                        ),
+                        flow = (FlowSeverity from logViewModel.getSquareSelected(LogPrompt.FLOW)),
+                        mood = (Mood from logViewModel.getSquareSelected(LogPrompt.MOOD)),
+                        exerciseLength = exercisedDuration,
+                        exerciseType = (Exercise from logViewModel.getSquareSelected(LogPrompt.EXERCISE)),
+                        crampSeverity = (CrampSeverity from logViewModel.getSquareSelected(LogPrompt.CRAMPS)),
+                        sleep = sleepDuration,
+                        notes = logViewModel.getText(LogPrompt.NOTES)
+                    )
+                )
+            }
+        }
     }
 }
 
@@ -81,7 +121,8 @@ fun LogScreenLayout(
     date: LocalDate,
     navController: NavController,
     logPrompts: List<LogPrompt>,
-    logViewModel: LogViewModel
+    logViewModel: LogViewModel,
+    onSave: () -> Unit
 ) {
     Box() {
         Column(
@@ -107,7 +148,7 @@ fun LogScreenLayout(
             Spacer(modifier = Modifier
                 .weight(1f)
             )
-            SaveButton(navController = navController)
+            SaveButton(navController = navController, onSave)
         }
 
     }
@@ -370,13 +411,14 @@ fun LogSelectableSquare(
 }
 
 @Composable
-fun SaveButton(navController: NavController) {
+fun SaveButton(navController: NavController, onSave: () -> Unit) {
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
     ) {
         FloatingActionButton(
             onClick = {
+                onSave()
                 navController.navigateUp()
             },
             backgroundColor = SelectedColor1,
@@ -413,7 +455,7 @@ fun LogScreenLayoutPreview() {
         navController = rememberNavController(),
         logPrompts = logPrompts,
         logViewModel = LogViewModel(logPrompts)
-    )
+    ) {}
 }
 
 @Preview
@@ -475,5 +517,5 @@ fun LogSelectableSquarePreview() {
 @Preview
 @Composable
 fun SaveButtonPreview() {
-    SaveButton(navController = rememberNavController())
+    SaveButton(navController = rememberNavController()) {}
 }

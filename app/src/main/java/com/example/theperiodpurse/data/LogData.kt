@@ -84,18 +84,19 @@ enum class LogPrompt(
 open class LogSquare (
     var description: String,
     var icon: ComposableIconFun,
-    var promptTitle: Int
+    var promptTitle: Int,
+    var dataName: String
     ) {
     object FlowLight: LogSquare(
         description = "Light",
         icon = {
             Icon(
-                // Missing asset
                 painter = painterResource(R.drawable.water_drop_black_24dp),
                 contentDescription = "FlowLight"
             )
         },
-        promptTitle = R.string.period_flow
+        promptTitle = R.string.period_flow,
+        dataName = FlowSeverity.LIGHT.name
     )
     object FlowMedium: LogSquare(
         description = "Medium",
@@ -105,7 +106,8 @@ open class LogSquare (
                 contentDescription = "FlowMedium"
             )
         },
-        promptTitle = R.string.period_flow
+        promptTitle = R.string.period_flow,
+        dataName = FlowSeverity.MEDIUM.name
     )
     object FlowHeavy: LogSquare(
         description = "Heavy",
@@ -115,7 +117,8 @@ open class LogSquare (
                 contentDescription = "FlowHeavy"
             )
         },
-        promptTitle = R.string.period_flow
+        promptTitle = R.string.period_flow,
+        dataName = FlowSeverity.HEAVY.name
     )
     object FlowSpotting: LogSquare(
         description = "Spotting",
@@ -125,7 +128,8 @@ open class LogSquare (
                 contentDescription = "FlowSpotting"
             )
         },
-        promptTitle = R.string.period_flow
+        promptTitle = R.string.period_flow,
+        dataName = FlowSeverity.SPOTTING.name
     )
     object FlowNone: LogSquare(
         description = "None",
@@ -135,7 +139,8 @@ open class LogSquare (
                 contentDescription = "FlowNone"
             )
         },
-        promptTitle = R.string.period_flow
+        promptTitle = R.string.period_flow,
+        dataName = FlowSeverity.NONE.name
     )
 
     object MoodHappy: LogSquare(
@@ -146,7 +151,8 @@ open class LogSquare (
                 contentDescription = "MoodHappy"
             )
         },
-        promptTitle = R.string.mood
+        promptTitle = R.string.mood,
+        dataName = Mood.HAPPY.name
     )
 
     object MoodNeutral: LogSquare(
@@ -157,7 +163,8 @@ open class LogSquare (
                 contentDescription = "MoodNeutral"
             )
         },
-        promptTitle = R.string.mood
+        promptTitle = R.string.mood,
+        dataName = Mood.NEUTRAL.name
     )
 
     object MoodSad: LogSquare(
@@ -168,7 +175,8 @@ open class LogSquare (
                 contentDescription = "MoodSad"
             )
         },
-        promptTitle = R.string.mood
+        promptTitle = R.string.mood,
+        dataName = Mood.SAD.name
     )
 
     object MoodSilly: LogSquare(
@@ -179,7 +187,8 @@ open class LogSquare (
                 contentDescription = "MoodSilly"
             )
         },
-        promptTitle = R.string.mood
+        promptTitle = R.string.mood,
+        dataName = Mood.LOL.name
     )
 
     object MoodSick: LogSquare(
@@ -190,7 +199,8 @@ open class LogSquare (
                 contentDescription = "MoodSick",
             )
         },
-        promptTitle = R.string.mood
+        promptTitle = R.string.mood,
+        dataName = Mood.SICK.name
     )
 
     object MoodAngry: LogSquare(
@@ -201,7 +211,8 @@ open class LogSquare (
                 contentDescription = "MoodAngry",
             )
         },
-        promptTitle = R.string.mood
+        promptTitle = R.string.mood,
+        dataName = Mood.ANGRY.name
     )
 
     object MoodLoved: LogSquare(
@@ -212,7 +223,8 @@ open class LogSquare (
                 contentDescription = "MoodLoved",
             )
         },
-        promptTitle = R.string.mood
+        promptTitle = R.string.mood,
+        dataName = Mood.LOVED.name
     )
 
     object CrampsNeutral: LogSquare(
@@ -223,7 +235,8 @@ open class LogSquare (
                 contentDescription = "CrampsNeutral",
             )
         },
-        promptTitle = R.string.cramps
+        promptTitle = R.string.cramps,
+        dataName = CrampSeverity.Neutral.name
     )
 
     object CrampsBad: LogSquare(
@@ -234,7 +247,8 @@ open class LogSquare (
                 contentDescription = "CrampsBad",
             )
         },
-        promptTitle = R.string.cramps
+        promptTitle = R.string.cramps,
+        dataName = CrampSeverity.Bad.name
     )
 
     object CrampsTerrible: LogSquare(
@@ -245,7 +259,8 @@ open class LogSquare (
                 contentDescription = "CrampsTerrible",
             )
         },
-        promptTitle = R.string.cramps
+        promptTitle = R.string.cramps,
+        dataName = CrampSeverity.Terrible.name
     )
 
     object CrampsNone: LogSquare(
@@ -256,7 +271,8 @@ open class LogSquare (
                 contentDescription = "CrampsNone",
             )
         },
-        promptTitle = R.string.cramps
+        promptTitle = R.string.cramps,
+        dataName = CrampSeverity.None.name
     )
 
     object ExerciseCardio : LogSquare(
@@ -267,7 +283,8 @@ open class LogSquare (
                 contentDescription = "ExerciseCardio",
             )
         },
-        promptTitle = R.string.exercise
+        promptTitle = R.string.exercise,
+        dataName = Exercise.CARDIO.name
     )
 
     object ExerciseYoga : LogSquare(
@@ -278,7 +295,8 @@ open class LogSquare (
                 contentDescription = "ExerciseYoga",
             )
         },
-        promptTitle = R.string.exercise
+        promptTitle = R.string.exercise,
+        dataName = Exercise.YOGA.name
     )
 
     object ExerciseStrength : LogSquare(
@@ -289,7 +307,8 @@ open class LogSquare (
                 contentDescription = "ExerciseStrength",
             )
         },
-        promptTitle = R.string.exercise
+        promptTitle = R.string.exercise,
+        dataName = Exercise.STRENGTH.name
     )
 
     object ExerciseBallSports : LogSquare(
@@ -300,7 +319,8 @@ open class LogSquare (
                 contentDescription = "ExerciseBallSports",
             )
         },
-        promptTitle = R.string.exercise
+        promptTitle = R.string.exercise,
+        dataName = Exercise.BALL_SPORTS.name
     )
 
     object ExerciseMartialArts : LogSquare(
@@ -311,7 +331,8 @@ open class LogSquare (
                 contentDescription = "ExerciseMartialArts",
             )
         },
-        promptTitle = R.string.exercise
+        promptTitle = R.string.exercise,
+        dataName = Exercise.MARTIAL_ARTS.name
     )
 
     object ExerciseWaterSports : LogSquare(
@@ -322,7 +343,8 @@ open class LogSquare (
                 contentDescription = "Water Sports",
             )
         },
-        promptTitle = R.string.exercise
+        promptTitle = R.string.exercise,
+        dataName = Exercise.WATER_SPORTS.name
     )
 
     object ExerciseCycling : LogSquare(
@@ -333,7 +355,8 @@ open class LogSquare (
                 contentDescription = "ExerciseCycling",
             )
         },
-        promptTitle = R.string.exercise
+        promptTitle = R.string.exercise,
+        dataName = Exercise.CYCLE_SPORTS.name
     )
 
     object ExerciseRacquetSports : LogSquare(
@@ -344,7 +367,8 @@ open class LogSquare (
                 contentDescription = "ExerciseRacquetSports",
             )
         },
-        promptTitle = R.string.exercise
+        promptTitle = R.string.exercise,
+        dataName = Exercise.RACKET_SPORTS.name
     )
 
     object ExerciseWinterSports : LogSquare(
@@ -355,6 +379,7 @@ open class LogSquare (
                 contentDescription = "ExerciseWinterSports",
             )
         },
-        promptTitle = R.string.exercise
+        promptTitle = R.string.exercise,
+        dataName = Exercise.WINTER_SPORTS.name
     )
 }

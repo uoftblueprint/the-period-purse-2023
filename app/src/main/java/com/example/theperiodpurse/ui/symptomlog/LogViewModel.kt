@@ -14,10 +14,11 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
         getText(logPrompts)
     ))
     val uiState: StateFlow<LogUiState> = _uiState.asStateFlow()
+    val logPrompts = logPrompts
 
     fun setSquareSelected(logSquare: LogSquare) {
         _uiState.update { currentState ->
-            currentState.selectSquares[logSquare.promptTitle] = logSquare.description
+            currentState.selectSquares[logSquare.promptTitle] = logSquare.dataName
             currentState.copy(
                 selectSquares =
                     currentState.selectSquares
@@ -76,10 +77,19 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
     }
 
     private fun getText(logPrompts: List<LogPrompt>): LinkedHashMap<Int, String> {
-        var promptToText = LinkedHashMap<Int, String>()
+        val promptToText = LinkedHashMap<Int, String>()
         for (logPrompt in logPrompts) {
             promptToText[logPrompt.title] = ""
         }
         return(promptToText)
+    }
+
+    fun isFilled(): Boolean {
+        logPrompts.forEach() { it ->
+            if (this.getSquareSelected(it) != null || this.getText(it) != "") {
+                return true
+            }
+        }
+        return false
     }
 }
