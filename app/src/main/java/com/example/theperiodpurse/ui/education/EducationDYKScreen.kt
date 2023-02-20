@@ -1,16 +1,43 @@
 package com.example.theperiodpurse.ui.education
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.foundation.layout.Column
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.theperiodpurse.R
 
 @Composable
 fun EducationDYKScreen() {
     EducationBackground()
 
-    Column() {
-        Text("Did you know?")
+    Column(modifier = Modifier.fillMaxSize()
+        .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(
+            modifier = Modifier.height(150.dp),
+            painter = painterResource(R.drawable.dykpad),
+            contentDescription = "Paddy"
+        )
+
+        Text(modifier = Modifier.padding(24.dp),
+            fontWeight = FontWeight.Bold,
+            text = "Did you know?")
+
+        Text(modifier = Modifier.padding(horizontal = 72.dp, vertical = 0.dp),
+            textAlign = TextAlign.Center,
+            lineHeight = 20.sp,
+            text = "There is a board game that educates youth all about periods, " +
+                "called \"The Period Game\"")
     }
 }
 
