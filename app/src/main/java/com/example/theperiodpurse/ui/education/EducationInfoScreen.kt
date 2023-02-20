@@ -30,7 +30,6 @@ fun EducationInfoScreen(
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.SpaceEvenly
     ) {
         /*
         Product Image

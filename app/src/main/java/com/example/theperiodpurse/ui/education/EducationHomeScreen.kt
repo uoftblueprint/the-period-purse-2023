@@ -135,7 +135,7 @@ fun DYKCard(navController: NavHostController) {
             ) {
                 Text(modifier = Modifier
                     .width(200.dp)
-                    .padding(vertical = 18.dp, horizontal = 24.dp),
+                    .padding(vertical = 12.dp, horizontal = 24.dp),
                     textAlign = TextAlign.Left,
                     color = Color.White,
                     fontWeight = FontWeight.W800,
@@ -145,7 +145,9 @@ fun DYKCard(navController: NavHostController) {
                     .width(200.dp)
                     .padding(horizontal = 24.dp),
                     textAlign = TextAlign.Left,
-                    text = "There are 4 phases in your cycle: ...")
+                    fontSize = 13.sp,
+                    maxLines = 2,
+                    text = "There is a board game that educates youth ...")
             }
 
             Image(modifier = Modifier
@@ -181,9 +183,9 @@ fun PeriodProducts (navController: NavHostController, it: Product) {
         ) {
             Image(
                 modifier = Modifier
-                    .height(90.dp)
+                    .height(60.dp)
                     .align(Alignment.CenterHorizontally)
-                    .padding(12.dp),
+                    .padding(2.dp),
                 painter = painterResource(
                     id = it.imageID
                 ),
@@ -196,8 +198,7 @@ fun PeriodProducts (navController: NavHostController, it: Product) {
                     .align(Alignment.CenterHorizontally),
                 textAlign = TextAlign.Center,
                 fontWeight = Bold,
-                maxLines = 2,
-                text = it.ProductName + "\n"
+                text = it.ProductName
             )
         }
     }

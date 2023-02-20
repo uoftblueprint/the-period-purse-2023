@@ -105,6 +105,6 @@ val clothPads = Product(
     "years, depending on personal usage and care.\n"
 )
 
-val ProductsList: List<Product> = listOf(pads, tampons, menstrualCup, menstrualDisc,
-                                         periodUnderwear, clothPads)
+val ProductsList: List<Product> = listOf(periodUnderwear, menstrualCup, pads,
+                                         clothPads, tampons, menstrualDisc)
 
