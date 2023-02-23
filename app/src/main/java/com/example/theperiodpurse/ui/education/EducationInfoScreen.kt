@@ -1,21 +1,28 @@
 package com.example.theperiodpurse.ui.education
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.theperiodpurse.R
 import com.example.theperiodpurse.data.Product
 import com.example.theperiodpurse.data.ProductsList
 
 @Composable
 fun EducationInfoScreen(
+    navController: NavHostController,
     elementId: String,
 ) {
     var product = Product()
@@ -28,9 +35,23 @@ fun EducationInfoScreen(
     EducationBackground()
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Icon(
+            modifier = Modifier
+                .clickable { navController.navigate(Destination.Home.route) }
+                .size(20.dp)
+                .align(Alignment.Start),
+            painter = painterResource(R.drawable.arrow),
+            contentDescription = "Back Button",
+            tint = Color(teal)
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
         /*
         Product Image
          */
@@ -61,11 +82,13 @@ fun EducationInfoScreen(
             text = product.description
         )
 
+        Spacer(modifier = Modifier.weight(1f))
+
     }
 }
 
 @Preview
 @Composable
 fun EducationInfoPreview() {
-    EducationInfoScreen("Menstrual Cup")
+    EducationInfoScreen(rememberNavController(), "Menstrual Cup")
 }
