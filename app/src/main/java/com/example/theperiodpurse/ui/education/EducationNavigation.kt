@@ -38,15 +38,15 @@ fun NavigationAppHost(navController: NavHostController) {
     NavHost(navController = navController, startDestination = "home") {
 
         composable(Destination.Home.route) { EducationScreen(navController) }
-        composable(Destination.DYK.route) { EducationDYKScreen() }
-        composable(Destination.Terms.route) { EducationTermsScreen() }
-        composable(Destination.Privacy.route) { EducationPrivacyScreen() }
+        composable(Destination.DYK.route) { EducationDYKScreen(navController) }
+        composable(Destination.Terms.route) { EducationTermsScreen(navController) }
+        composable(Destination.Privacy.route) { EducationPrivacyScreen(navController) }
         composable(Destination.Info.route) { navBackStackEntry ->
             val elementId = navBackStackEntry.arguments?.getString("elementId")
             if (elementId == null) {
                 println("ERROR")
             } else {
-                EducationInfoScreen(elementId = elementId)
+                EducationInfoScreen(navController, elementId)
             }
         }
 
