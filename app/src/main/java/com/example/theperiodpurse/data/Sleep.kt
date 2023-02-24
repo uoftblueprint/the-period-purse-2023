@@ -14,5 +14,9 @@ enum class Sleep {
             else if (sleepScore >= 6) Light
             else Little
         }
+
+        fun fromHoursAndMinutes(hours: Int, minutes: Int): Sleep {
+            return fromMinutes(hours * 60 + minutes)
+        }
     }
 }

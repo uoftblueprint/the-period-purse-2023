@@ -13,5 +13,9 @@ enum class ExerciseSeverity {
             else if (minutes >= 20) Light
             else Little
         }
+
+        fun fromHoursAndMinutes(hours: Int, minutes: Int): ExerciseSeverity {
+            return fromMinutes(hours * 60 + minutes)
+        }
     }
 }
