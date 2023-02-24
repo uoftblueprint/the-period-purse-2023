@@ -1,43 +1,12 @@
 package com.example.theperiodpurse.ui.calendar.components
 
-import androidx.compose.material.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.*
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.data.*
 import com.example.theperiodpurse.ui.calendar.CalendarDayUIState
 import com.kizitonwose.calendar.core.CalendarDay
 import java.time.LocalDate
-import java.util.EnumMap
 
-val exerciseIconVectors = EnumMap(
-    mapOf(
-        Exercise.CARDIO to Icons.Rounded.DirectionsRun,
-        Exercise.YOGA to Icons.Rounded.SelfImprovement,
-        Exercise.STRENGTH to Icons.Rounded.FitnessCenter,
-        Exercise.BALL_SPORTS to Icons.Rounded.SportsSoccer,
-        Exercise.MARTIAL_ARTS to Icons.Rounded.SportsMartialArts,
-        Exercise.WATER_SPORTS to Icons.Rounded.Pool,
-        Exercise.CYCLE_SPORTS to Icons.Rounded.DirectionsBike,
-        Exercise.RACKET_SPORTS to Icons.Rounded.SportsTennis,
-        Exercise.WINTER_SPORTS to Icons.Rounded.DownhillSkiing
-    )
-)
-
-@Composable
-fun DayImage(
-    activeSymptom: Symptom,
-    calendarDayUIState: CalendarDayUIState
-) {
-    if (activeSymptom == Symptom.EXERCISE) {
-//       Icon(
-//           imageVector = exerciseIconVectors[calendarDayUIState.exerciseType]!!,
-//           ""
-//       )
-    }
-}
 
 fun getDayColorAndIcon(
     day: CalendarDay,
@@ -91,7 +60,18 @@ fun getDayColorAndIcon(
                     ExerciseSeverity.Heavy -> Color(0xFF2F5B54)
                     null -> defaultColor
                 },
-                R.drawable.blank
+                when (calendarDayUIState.exerciseType) {
+                    "Cardio" -> R.drawable.round_directions_run_24
+                    "Yoga" -> R.drawable.self_improvement_black_24dp
+                    "Strength" -> R.drawable.round_fitness_center_24
+                    "Ball Sports" -> R.drawable.round_sports_soccer_24
+                    "Martial Arts" -> R.drawable.round_sports_martial_arts_24
+                    "Water Sports" -> R.drawable.round_pool_24
+                    "Cycling" -> R.drawable.round_directions_bike_24
+                    "Racquet Sports" -> R.drawable.round_sports_tennis_24
+                    "Winter Sports" -> R.drawable.round_downhill_skiing_24
+                    else -> R.drawable.blank
+                }
             )
         Symptom.MOOD ->
             Pair(
@@ -102,8 +82,8 @@ fun getDayColorAndIcon(
                     "Sad" -> R.drawable.sentiment_dissatisfied_black_24dp
                     "Silly/Goofy" -> R.drawable.sentiment_very_satisfied_black_24dp
                     "Sick" -> R.drawable.sick_black_24dp
-//                    "Angry" -> Icons.Rounded.MoodBad
-//                    "Loved" -> Icons.Rounded.Favorite
+                    "Angry" -> R.drawable.round_mood_bad_24
+                    "Loved" -> R.drawable.round_favorite_24
                     else -> R.drawable.blank
                 }
             )
