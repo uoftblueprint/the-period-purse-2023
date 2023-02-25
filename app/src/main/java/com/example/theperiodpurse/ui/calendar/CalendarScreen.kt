@@ -42,9 +42,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.Screen
-import com.example.theperiodpurse.data.CrampSeverity
-import com.example.theperiodpurse.data.ExerciseSeverity
-import com.example.theperiodpurse.data.FlowSeverity
 import com.example.theperiodpurse.ui.theme.HeaderColor1
 import com.example.theperiodpurse.ui.theme.SelectedColor1
 import com.example.theperiodpurse.data.Symptom
@@ -69,21 +66,21 @@ val tabModifier = Modifier
 @Composable
 fun SymptomTab(
     trackedSymptoms: List<Symptom>,
-    activeSymptom: Symptom?,
+    selectedSymptom: Symptom,
     onSymptomClick: (Symptom) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var expanded by remember { mutableStateOf(false) }
     Column(modifier = modifier) {
         DisplaySymptomTab(
-            activeSymptom = activeSymptom,
+            selectedSymptom = selectedSymptom,
             expanded = expanded,
             onExpandButtonClick = { expanded = !expanded },
             modifier = tabModifier
         )
         if (expanded) {
             SwitchSymptomTab(
-                activeSymptom = activeSymptom,
+                selectedSymptom = selectedSymptom,
                 symptoms = trackedSymptoms,
                 onSymptomOnClicks = trackedSymptoms.map { { onSymptomClick(it) } },
                 modifier = tabModifier
@@ -94,7 +91,7 @@ fun SymptomTab(
 
 @Composable
 private fun DisplaySymptomTab(
-    activeSymptom: Symptom?,
+    selectedSymptom: Symptom,
     expanded: Boolean,
     onExpandButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -106,16 +103,16 @@ private fun DisplaySymptomTab(
         modifier = modifier
     ) {
         Text(
-            text = stringResource(activeSymptom?.nameId ?: Symptom.FLOW.nameId),
+            text = stringResource(selectedSymptom.nameId),
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(end = 2.dp)
         )
         Icon(
             painter = painterResource(
-                id = activeSymptom?.resourceId ?: Symptom.FLOW.resourceId
+                id = selectedSymptom.resourceId
             ),
             tint = Color.Black,
-            contentDescription = activeSymptom?.name,
+            contentDescription = selectedSymptom.name,
             modifier = Modifier
                 .padding(end = 0.dp)
                 .testTag("Selected Symptom")
@@ -144,7 +141,7 @@ private fun SwitchSymptomButton(
 
 @Composable
 private fun SwitchSymptomTab(
-    activeSymptom: Symptom?,
+    selectedSymptom: Symptom,
     symptoms: List<Symptom>,
     onSymptomOnClicks: List<() -> Unit>,
     modifier: Modifier = Modifier
@@ -164,7 +161,7 @@ private fun SwitchSymptomTab(
                 val defaultColor = Color.Black
                 val color = if (isPressed) {
                     defaultColor.copy(ContentAlpha.disabled)
-                } else if (activeSymptom == symptom) {
+                } else if (selectedSymptom == symptom) {
                     Color(0xFFBF3428)
                 } else {
                     defaultColor
@@ -244,11 +241,11 @@ private class NoRippleTheme : RippleTheme {
 fun TabsContent(
     tabs: List<CalendarTabItem>,
     pagerState: PagerState,
-    calendarUIState: CalendarUIState,
+    calendarViewModel: CalendarViewModel,
     navController: NavController
 ) {
     HorizontalPager(state = pagerState, count = tabs.size) { page ->
-        tabs[page].screen(calendarUIState, navController)
+        tabs[page].screen(calendarViewModel, navController)
     }
 }
 
@@ -266,7 +263,6 @@ fun CalendarScreen(
         CalendarTabItem.CycleTab
     )
     val pagerState = rememberPagerState()
-    val calendarUIState by calendarViewModel.uiState.collectAsState()
     ThePeriodPurseTheme {
         Scaffold(topBar = {})
         { padding ->
@@ -278,7 +274,7 @@ fun CalendarScreen(
                 TabsContent(
                     tabs = tabs,
                     pagerState = pagerState,
-                    calendarUIState = calendarUIState,
+                    calendarViewModel = calendarViewModel,
                     navController = navController
                 )
             }
@@ -290,13 +286,14 @@ val previewTrackedSymptoms = Symptom.values().asList()
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarScreenLayout(calendarUIState: CalendarUIState, navController: NavController) {
+fun CalendarScreenLayout(calendarViewModel: CalendarViewModel, navController: NavController) {
+        val calendarUIState by calendarViewModel.uiState.collectAsState()
     // Contains the swappable content
     ThePeriodPurseTheme {
         val bg = painterResource(R.drawable.colourwatercolour)
 
         var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
-        var activeSymptom: Symptom? by remember { mutableStateOf(null) }
+        var selectedSymptom = calendarUIState.selectedSymptom
         val currentMonth = remember { YearMonth.now() }
         val startMonth = remember { currentMonth.minusMonths(12) } // Previous months
         val endMonth = remember { currentMonth.plusMonths(0) } // Next months
@@ -321,8 +318,8 @@ fun CalendarScreenLayout(calendarUIState: CalendarUIState, navController: NavCon
             Column {
                 SymptomTab(
                     trackedSymptoms = previewTrackedSymptoms,
-                    activeSymptom = activeSymptom,
-                    onSymptomClick = { activeSymptom = it }
+                    selectedSymptom = selectedSymptom,
+                    onSymptomClick = { calendarViewModel.setSelectedSymptom(it) }
 //                trackedSymptoms = userDAO.get().symptomsToTrack
                 )
                 VerticalCalendar(
@@ -334,24 +331,22 @@ fun CalendarScreenLayout(calendarUIState: CalendarUIState, navController: NavCon
                         MonthHeader(month)
                     },
                     dayContent = { day ->
-                        (if (activeSymptom == null) Symptom.FLOW else activeSymptom)?.let {
-                            Day(
-                                day = day,
-                                calendarDayUIState = calendarUIState.days[day.date],
-                                isSelected = selectedDate == day.date,
-                                activeSymptom = it
-                            ) { date ->
-                                selectedDate = if (selectedDate == date.date) null
-                                else date.date
-                                navController.navigate(
-                                    route = "%s/%s/%s"
-                                        .format(
-                                            Screen.Calendar,
-                                            Screen.Log,
-                                            day.date.toString()
-                                        )
-                                )
-                            }
+                        Day(
+                            day = day,
+                            calendarDayUIState = calendarUIState.days[day.date],
+                            isSelected = selectedDate == day.date,
+                            activeSymptom = (selectedSymptom)
+                        ) { date ->
+                            selectedDate = if (selectedDate == date.date) null
+                            else date.date
+                            navController.navigate(
+                                route = "%s/%s/%s"
+                                    .format(
+                                        Screen.Calendar,
+                                        Screen.Log,
+                                        day.date.toString()
+                                    )
+                            )
                         }
                     }
                 )

@@ -1,15 +1,13 @@
 package com.example.theperiodpurse.ui.calendar
 
-import com.example.theperiodpurse.data.CrampSeverity
-import com.example.theperiodpurse.data.ExerciseSeverity
-import com.example.theperiodpurse.data.FlowSeverity
-import com.example.theperiodpurse.data.Sleep
+import com.example.theperiodpurse.data.*
 import java.sql.Time
 import java.time.LocalDate
 import kotlin.collections.LinkedHashMap
 
 data class CalendarUIState(
-    var days: LinkedHashMap<LocalDate, CalendarDayUIState>
+    var days: LinkedHashMap<LocalDate, CalendarDayUIState>,
+    var selectedSymptom: Symptom
 )
 
 data class CalendarDayUIState(
