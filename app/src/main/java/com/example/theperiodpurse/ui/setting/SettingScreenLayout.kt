@@ -28,7 +28,6 @@ fun SettingScreenLayout(
     onNotificationClicked: () -> Unit,
     onBackUpClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
-    hasNotificationsPermission: Boolean
 ){
     val textModifier = modifier.padding(top = 50.dp, start = 10.dp)
    Column(modifier = modifier

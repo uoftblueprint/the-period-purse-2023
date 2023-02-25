@@ -1,15 +1,12 @@
 package com.example.theperiodpurse.ui.setting
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -65,7 +62,6 @@ fun SettingAppBar(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SettingsScreen(
-    hasNotificationsPermission: Boolean,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
@@ -106,12 +102,11 @@ fun SettingsScreen(
                     onDeleteClicked = {
                         navController.navigate(SettingScreenNavigation.DeleteAccount.name)
                     },
-                    hasNotificationsPermission = hasNotificationsPermission
                 )
             }
             composable(route = SettingScreenNavigation.Notification.name) {
-                var context = LocalContext.current
-                var hasNotificationPermission by remember {
+                val context = LocalContext.current
+                val hasNotificationPermission by remember {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         mutableStateOf(
                             ContextCompat.checkSelfPermission(

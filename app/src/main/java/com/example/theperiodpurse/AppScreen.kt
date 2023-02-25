@@ -66,15 +66,17 @@ class MainActivity : ComponentActivity() {
                         launcher.launch(POST_NOTIFICATIONS)
                     }
                 }
-                Application(applicationContext, hasNotificationPermission)
+                Application(applicationContext)
             }
         }
+
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
-    fun Application(context: Context, hasNotificationPermission: Boolean) {
-        ScreenApp(hasNotificationPermission)
+    fun Application(context: Context) {
+        ScreenApp()
         createNotificationChannel(context)
     }
 
@@ -96,7 +98,6 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     fun ScreenApp(
-        hasNotificationsPermission: Boolean = true,
         modifier: Modifier = Modifier,
         viewModel: OnboardViewModel = viewModel(),
         skipOnboarding: Boolean = false,
@@ -120,8 +121,7 @@ class MainActivity : ComponentActivity() {
                 navController = navController,
                 startDestination = if (skipOnboarding) Screen.Calendar.name else OnboardingScreen.Welcome.name,
                 viewModel,
-                modifier = modifier.padding(innerPadding),
-                hasNotificationsPermission = hasNotificationsPermission
+                modifier = modifier.padding(innerPadding)
             )
 
         }
