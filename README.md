@@ -1,58 +1,35 @@
-# Menstruation Nation Android
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/75044178/221384329-57ae1471-d0bc-4e89-91ef-cfc98395ebf6.png" width="300" height="300">
+  <h1>Menstruation Nation - Android </h1>
+  <img src="https://badgen.net/badge/Kotlin/1.6.10/green?icon=github"/>
+  <img src="https://badgen.net/github/checks/uoftblueprint/the-period-purse-2023/develop"/>
+  <img src="https://badgen.net/github/issues/uoftblueprint/the-period-purse-2023"/>
+  <img src="https://badgen.net/github/merged-prs/uoftblueprint/the-period-purse-2023"/>
+  <img src="https://badgen.net/github/last-commit/uoftblueprint/the-period-purse-2023/develop"/>
+  <br></br>
+</div>
 
-![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+## About
 
 The Period Purse strives to achieve menstrual equity by providing people who menstruate with access to free menstrual products, and to reduce the stigma surrounding periods through public education and advocacy. This is their [website](https://www.theperiodpurse.com/).
 
-**M.Nation has been launched on the iOS App Store, and you can download it [here](https://apps.apple.com/app/id1621201647).**
+Following the [release of Menstruation Nation on the Apple App Store](https://apps.apple.com/app/id1621201647), UofT Blueprint has partnered with The Period Purse for a second project. This time making the Menstruation Nation more accessible by bringing it to the Google Play Store.
 
-## For Developers
+**Menstruation Nation is scheduled to launch on Google Play Store in late March 2023**
 
-The [wiki](https://github.com/uoftblueprint/the-period-purse/wiki) has a lot of relevant information related to branching, PRs, etc that you should review!
+## Use cases
 
-# Table of Contents
-- [The Period Purse](#the-period-purse)
-  - [For Developers](#for-developers)
-- [Table of Contents](#table-of-contents)
-- [Setup Local Environment (Mac)](#setup-local-environment-mac)
-- [Setup Local Environment (Windows/Linux)](#setup-local-environment-windowslinux)
-  - [Windows](#windows)
-  - [Linux](#linux)
-- [Common Setup Errors](#common-setup-errors)
+* Select a single or multiple symptoms to track, symptoms include Flow, Mood, Sleep, Cramps, Exercises
+* See logs on a chosen symptom 
+* Click on any day to log a symptom
+* See calculated statistics including average period length or predicted days until next period
+* Educational page displaying menstruation products and educational facts
+* No registration required
+* Completely wipe data at any given point
+* Back-up data with Google Firebase
 
-<a name="setup-mac"></a>
-# Setup Local Environment (Mac)
+## Contributors
 
-Prerequisites:
+This project would not be possible without the combined efforts of the TPP Blueprint team:
 
------------------------copied from last year's repo, to be updated-----------------------
-
-  Ensure you have the following prerequisites before trying to run the project locally:
-  - Node.js and npm (https://nodejs.org/en/download/). Alternatively, check if you have this by using command ```node -v```
-  - Once you have Node.js and npm, run command ```npm install -g expo-cli```
-  - You will need an iOS simulator. If you have a Macbook, its recommended you install XCode from the app store as it has a built in iOS simulator. If you have a Windows machine, unfortunately you will have to install a virtual machine to run the iOS simulator.
-
-1. Clone this repository using ```git clone https://github.com/uoftblueprint/the-period-purse.git```
-2. cd into folder tpp-app ```cd ./tpp-app```
-3. run ```npm install```
-4. cd into folder ios ```cd ./ios```
-5. Install pods ```pod install```
-6. cd back out to tpp-app folder ```cd ..```
-7. Run the project using ```npm run ios```
-8. Install debugger with this [tutorial](https://github.com/uoftblueprint/the-period-purse/wiki/Installing-Debugger)
-9. The simulator should open automatically and you should see something like the following image, with the Menstruation Nation app on the home screen:
-
-<img width="378" alt="Screen Shot 2021-10-27 at 11 46 38 AM" src="https://user-images.githubusercontent.com/35851484/139100763-95605bfc-a224-401b-9f17-b3a5e0a3f3fb.png">
-
-<a name="setup-windows-linux"></a>
-# Setup Local Environment (Windows/Linux)
-
-## Windows
-Menstruation Nation does not support development on Windows. You may choose to create a virtual machine with a tutorial like this: [video](https://www.youtube.com/watch?v=Q55e2Tz-818).
-
-## Linux
-Follow this [tutorial](https://www.youtube.com/watch?v=c30RLycIpVY).
-
-<a name="errors"></a>
-# Common Setup Errors
-Please check out the [wiki](https://github.com/uoftblueprint/the-period-purse/wiki/Common-Setup-Errors).
+[Leo Liu](https://github.com/leowrites), 
