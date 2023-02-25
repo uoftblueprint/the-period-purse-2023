@@ -15,6 +15,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.theperiodpurse.ui.calendar.CalendarViewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.ui.component.BottomNavigation
 import com.example.theperiodpurse.ui.component.FloatingActionButton
@@ -46,6 +47,7 @@ fun Application() {
 fun ScreenApp(
     modifier: Modifier = Modifier,
     viewModel: OnboardViewModel = viewModel(),
+    calendarViewModel: CalendarViewModel = viewModel(),
     skipOnboarding: Boolean = false,
     navController: NavHostController = rememberNavController()
 ) {
@@ -73,6 +75,7 @@ fun ScreenApp(
             navController = navController,
             startDestination = if (skipOnboarding) Screen.Calendar.name else OnboardingScreen.Welcome.name,
             viewModel,
+            calendarViewModel,
             modifier = modifier.padding(innerPadding)
         )
     }

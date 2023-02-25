@@ -14,11 +14,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,9 +22,7 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -37,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.R
@@ -44,6 +39,8 @@ import com.example.theperiodpurse.Screen
 import com.example.theperiodpurse.ui.theme.HeaderColor1
 import com.example.theperiodpurse.ui.theme.SelectedColor1
 import com.example.theperiodpurse.data.Symptom
+import com.example.theperiodpurse.ui.calendar.components.SymptomTab
+import com.example.theperiodpurse.ui.calendar.components.getDayColorAndIcon
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import com.google.accompanist.pager.*
 import com.kizitonwose.calendar.compose.VerticalCalendar
@@ -61,121 +58,13 @@ val tabModifier = Modifier
     .background(Color.White)
     .fillMaxWidth()
 
-@Composable
-fun SymptomTab(modifier: Modifier = Modifier, trackedSymptoms: List<Symptom>) {
-    var expanded by remember { mutableStateOf(false) }
-    var activeSymptom: Symptom? by remember { mutableStateOf(null) }
-    Column(modifier = modifier) {
-        DisplaySymptomTab(
-            activeSymptom = activeSymptom,
-            expanded = expanded,
-            onExpandButtonClick = { expanded = !expanded },
-            modifier = tabModifier
-        )
-        if (expanded) {
-            SwitchSymptomTab(
-                activeSymptom = activeSymptom,
-                symptoms = trackedSymptoms,
-                onSymptomOnClicks = trackedSymptoms.map { { activeSymptom = it } },
-                modifier = tabModifier
-            )
-        }
-    }
-}
 
-@Composable
-private fun DisplaySymptomTab(
-    activeSymptom: Symptom?,
-    expanded: Boolean,
-    onExpandButtonClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
-        modifier = modifier
-    ) {
-        Text(
-            text = stringResource(activeSymptom?.nameId ?: Symptom.FLOW.nameId),
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(end = 2.dp)
-        )
-        Icon(
-            painter = painterResource(
-                id = activeSymptom?.resourceId ?: Symptom.FLOW.resourceId
-            ),
-            tint = Color.Black,
-            contentDescription = activeSymptom?.name,
-            modifier = Modifier.padding(end = 0.dp)
-                .testTag("Selected Symptom")
-        )
-        SwitchSymptomButton(
-            expanded = expanded,
-            onClick = onExpandButtonClick
-        )
-    }
-}
-
-@Composable
-private fun SwitchSymptomButton(
-    expanded: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    IconButton(onClick = onClick, modifier = modifier) {
-        Icon(
-            imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
-            tint = Color.Gray,
-            contentDescription = stringResource(R.string.expand_button_symptoms_content_description)
-        )
-    }
-}
-
-@Composable
-private fun SwitchSymptomTab(
-    activeSymptom: Symptom?,
-    symptoms: List<Symptom>,
-    onSymptomOnClicks: List<() -> Unit>,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = modifier.testTag("Symptom Options")
-    ) {
-        symptoms.zip(onSymptomOnClicks).forEach { (symptom, onClick) ->
-            val interactionSource = remember { MutableInteractionSource() }
-            val isPressed by interactionSource.collectIsPressedAsState()
-
-            IconButton(
-                onClick = onClick,
-                interactionSource = interactionSource
-            ) {
-                val defaultColor = Color.Black
-                val color = if (isPressed) {
-                    defaultColor.copy(ContentAlpha.disabled)
-                } else if (activeSymptom == symptom) {
-                    Color(0xFFBF3428)
-                } else {
-                    defaultColor
-                }
-                Icon(
-                    painter = painterResource(id = symptom.resourceId),
-                    tint = color,
-                    contentDescription = stringResource(symptom.nameId)
-                )
-            }
-        }
-    }
-}
-
-inline fun Modifier.noRippleClickable(crossinline onClick: ()->Unit): Modifier = composed {
+inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier = composed {
     clickable(indication = null,
         interactionSource = remember { MutableInteractionSource() }) {
         onClick()
     }
 }
-
 
 
 @OptIn(ExperimentalPagerApi::class)
@@ -226,21 +115,30 @@ private class NoRippleTheme : RippleTheme {
     override fun defaultColor() = RippleTheme.defaultRippleColor(Color.Unspecified, true)
 
     @Composable
-    override fun rippleAlpha(): RippleAlpha = RippleAlpha(draggedAlpha = 0f, focusedAlpha = 0f, hoveredAlpha = 0f, pressedAlpha = 0f)
+    override fun rippleAlpha(): RippleAlpha =
+        RippleAlpha(draggedAlpha = 0f, focusedAlpha = 0f, hoveredAlpha = 0f, pressedAlpha = 0f)
 }
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun TabsContent(tabs: List<CalendarTabItem>, pagerState: PagerState, navController: NavController) {
+fun TabsContent(
+    tabs: List<CalendarTabItem>,
+    pagerState: PagerState,
+    calendarViewModel: CalendarViewModel,
+    navController: NavController
+) {
     HorizontalPager(state = pagerState, count = tabs.size) { page ->
-        tabs[page].screen(navController)
+        tabs[page].screen(calendarViewModel, navController)
     }
 }
 
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun CalendarScreen(navController: NavController) {
+fun CalendarScreen(
+    navController: NavController,
+    calendarViewModel: CalendarViewModel
+) {
     // Main calendar screen which allows navigation to cycle page and calendar
     // By default, opens on to the Calendar
     val tabs = listOf(
@@ -256,7 +154,12 @@ fun CalendarScreen(navController: NavController) {
                 modifier = Modifier.padding(padding)
             ) {
                 Tabs(tabs = tabs, pagerState = pagerState)
-                TabsContent(tabs = tabs, pagerState = pagerState, navController = navController)
+                TabsContent(
+                    tabs = tabs,
+                    pagerState = pagerState,
+                    calendarViewModel = calendarViewModel,
+                    navController = navController
+                )
             }
         }
     }
@@ -266,12 +169,13 @@ val previewTrackedSymptoms = Symptom.values().asList()
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarScreenLayout(navController: NavController) {
+fun CalendarScreenLayout(calendarViewModel: CalendarViewModel, navController: NavController) {
+        val calendarUIState by calendarViewModel.uiState.collectAsState()
     // Contains the swappable content
     ThePeriodPurseTheme {
         val bg = painterResource(R.drawable.colourwatercolour)
 
-        var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
+        var selectedSymptom = calendarUIState.selectedSymptom
         val currentMonth = remember { YearMonth.now() }
         val startMonth = remember { currentMonth.minusMonths(12) } // Previous months
         val endMonth = remember { currentMonth.plusMonths(0) } // Next months
@@ -285,7 +189,8 @@ fun CalendarScreenLayout(navController: NavController) {
         )
 
         Box {
-            Image(painter = bg,
+            Image(
+                painter = bg,
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxSize()
@@ -294,7 +199,9 @@ fun CalendarScreenLayout(navController: NavController) {
             )
             Column {
                 SymptomTab(
-                    trackedSymptoms = previewTrackedSymptoms
+                    trackedSymptoms = previewTrackedSymptoms,
+                    selectedSymptom = selectedSymptom,
+                    onSymptomClick = { calendarViewModel.setSelectedSymptom(it) }
 //                trackedSymptoms = userDAO.get().symptomsToTrack
                 )
                 VerticalCalendar(
@@ -303,19 +210,22 @@ fun CalendarScreenLayout(navController: NavController) {
                         .semantics { contentDescription = "Calendar" },
                     state = state,
                     monthHeader = { month ->
-                        MonthHeader(month) },
+                        MonthHeader(month)
+                    },
                     dayContent = { day ->
-                        Day(day, isSelected = selectedDate == day.date) { date ->
-                            selectedDate = if (selectedDate == date.date) null
-                            else date.date
+                        Day(
+                            day = day,
+                            calendarDayUIState = calendarUIState.days[day.date],
+                            activeSymptom = selectedSymptom
+                        ) {
                             navController.navigate(
-                                    route = "%s/%s/%s"
-                                        .format(
-                                            Screen.Calendar,
-                                            Screen.Log,
-                                            day.date.toString()
-                                        )
-                                )
+                                route = "%s/%s/%s"
+                                    .format(
+                                        Screen.Calendar,
+                                        Screen.Log,
+                                        day.date.toString()
+                                    )
+                            )
                         }
                     }
                 )
@@ -327,15 +237,18 @@ fun CalendarScreenLayout(navController: NavController) {
 // Creates the days
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Day(day: CalendarDay,
-        isSelected: Boolean,
-        onClick: (CalendarDay) -> Unit
+fun Day(
+    day: CalendarDay,
+    calendarDayUIState: CalendarDayUIState?,
+    activeSymptom: Symptom,
+    onClick: (CalendarDay) -> Unit,
 ) {
+    val (dayColor, iconId) = getDayColorAndIcon(day, activeSymptom, calendarDayUIState)
     Box(
         modifier = Modifier
             .padding(1.dp)
-            .aspectRatio(1f),
-        )
+            .aspectRatio(1f)
+    )
     {
         if (day.position == DayPosition.MonthDate) {
             Box(
@@ -343,13 +256,7 @@ fun Day(day: CalendarDay,
                     .size(64.dp)
                     .clip(shape = RoundedCornerShape(8.dp))
                     .fillMaxSize()
-                    .background(
-                        color = if (day.date.isAfter(LocalDate.now())) {
-                            Color(237, 237, 237)
-                        } else {
-                            Color.White
-                        }
-                    )
+                    .background(dayColor)
                     .semantics { contentDescription = day.date.toString() }
                     .border(
                         color = Color(200, 205, 205),
@@ -364,7 +271,8 @@ fun Day(day: CalendarDay,
                         }
                     ),
             ) {
-                Text(modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
+                Text(
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
                     text = day.date.dayOfMonth.toString(),
@@ -372,7 +280,22 @@ fun Day(day: CalendarDay,
                         Color(190, 190, 190)
                     } else {
                         Color.Black
-                    })
+                    }
+                )
+
+                Box(modifier = Modifier.padding(12.dp)
+                    .align(Alignment.Center)) {
+                    if (calendarDayUIState != null) {
+                        Image(
+                            painterResource(id = iconId),
+                            modifier = Modifier
+                                .size(20.dp)
+                                .offset(y = 2.dp),
+                            contentDescription = "DateFlowIcon"
+                        )
+
+                    }
+                }
             }
         }
     }
@@ -387,7 +310,8 @@ fun MonthHeader(calendarMonth: CalendarMonth) {
     Column(
         modifier = Modifier
             .padding(vertical = 18.dp),
-        horizontalAlignment = Alignment.CenterHorizontally) {
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
         // Month
         Text(
@@ -416,7 +340,6 @@ fun MonthHeader(calendarMonth: CalendarMonth) {
 }
 
 
-
 // Function to display Month with Year
 @RequiresApi(Build.VERSION_CODES.O)
 fun YearMonth.displayText(short: Boolean = false): String {
@@ -436,7 +359,7 @@ fun Month.displayText(short: Boolean = true): String {
 @Composable
 fun CalendarScreenPreview() {
     ThePeriodPurseTheme {
-        CalendarScreen(rememberNavController())
+        CalendarScreen(rememberNavController(), viewModel())
     }
 }
 
@@ -451,8 +374,9 @@ fun TabsPreview() {
     val pagerState = rememberPagerState()
     Tabs(tabs = tabs, pagerState = pagerState)
 }
+
 @Preview
 @Composable
 fun DisplaySymptomTabPreview() {
-    SymptomTab(trackedSymptoms = previewTrackedSymptoms)
+    SymptomTab(trackedSymptoms = previewTrackedSymptoms, Symptom.FLOW, {})
 }
