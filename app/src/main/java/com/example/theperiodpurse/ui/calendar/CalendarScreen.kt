@@ -14,11 +14,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,9 +22,7 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -181,7 +175,6 @@ fun CalendarScreenLayout(calendarViewModel: CalendarViewModel, navController: Na
     ThePeriodPurseTheme {
         val bg = painterResource(R.drawable.colourwatercolour)
 
-        var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
         var selectedSymptom = calendarUIState.selectedSymptom
         val currentMonth = remember { YearMonth.now() }
         val startMonth = remember { currentMonth.minusMonths(12) } // Previous months
@@ -223,11 +216,8 @@ fun CalendarScreenLayout(calendarViewModel: CalendarViewModel, navController: Na
                         Day(
                             day = day,
                             calendarDayUIState = calendarUIState.days[day.date],
-                            isSelected = selectedDate == day.date,
-                            activeSymptom = (selectedSymptom)
-                        ) { date ->
-                            selectedDate = if (selectedDate == date.date) null
-                            else date.date
+                            activeSymptom = selectedSymptom
+                        ) {
                             navController.navigate(
                                 route = "%s/%s/%s"
                                     .format(
@@ -250,7 +240,6 @@ fun CalendarScreenLayout(calendarViewModel: CalendarViewModel, navController: Na
 fun Day(
     day: CalendarDay,
     calendarDayUIState: CalendarDayUIState?,
-    isSelected: Boolean,
     activeSymptom: Symptom,
     onClick: (CalendarDay) -> Unit,
 ) {
@@ -297,8 +286,6 @@ fun Day(
                 Box(modifier = Modifier.padding(12.dp)
                     .align(Alignment.Center)) {
                     if (calendarDayUIState != null) {
-                        /* TODO: Update day box according to DayUIState
-                            example: */
                         Image(
                             painterResource(id = iconId),
                             modifier = Modifier
