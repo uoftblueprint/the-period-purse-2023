@@ -14,7 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
-import com.example.theperiodpurse.data.DataSource
+import com.example.theperiodpurse.data.*
 import com.example.theperiodpurse.ui.QuestionThreeScreen
 import com.example.theperiodpurse.ui.SummaryScreen
 import com.example.theperiodpurse.ui.calendar.CalendarScreen
@@ -112,6 +112,7 @@ fun NavigationGraph(
         }
         composable(route = OnboardingScreen.QuestionTwo.name) {
             QuestionTwoScreen(
+                onboardUiState = uiState,
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionThree.name) },
                 options = uiState.dateOptions,
                 onSelectionChanged = { viewModel.setDate(it) }

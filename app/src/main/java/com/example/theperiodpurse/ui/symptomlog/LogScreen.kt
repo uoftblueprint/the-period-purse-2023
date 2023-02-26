@@ -6,7 +6,6 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.Spring
-import com.example.theperiodpurse.ui.theme.Teal
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -79,11 +78,11 @@ fun LogScreen(
                 calendarViewModel.saveDayInfo(
                     day,
                     CalendarDayUIState(
-                        flow = logViewModel.getSquareSelected(LogPrompt.Flow) ?: "",
+                        flow = logViewModel.getSelectedFlow(),
                         mood = logViewModel.getSquareSelected(LogPrompt.Mood) ?: "",
                         exerciseLengthString = logViewModel.getText(LogPrompt.Exercise),
                         exerciseType = logViewModel.getSquareSelected(LogPrompt.Exercise) ?: "",
-                        crampSeverity = logViewModel.getSquareSelected(LogPrompt.Cramps) ?: "",
+                        crampSeverity = logViewModel.getSelectedCrampSeverity(),
                         sleepString = logViewModel.getText(LogPrompt.Sleep)
                     )
                 )
