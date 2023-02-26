@@ -13,15 +13,6 @@ import com.example.theperiodpurse.R
 
 class Alarm: BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
-
-        if (intent != null) {
-            when (intent.action) {
-                AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED -> {
-                    // reschedule all the exact alarms
-                }
-
-            }
-        }
         try {
             showNotification(context, "Reminder to Log Symptoms!", "This is your reminder to log your symptoms")
 

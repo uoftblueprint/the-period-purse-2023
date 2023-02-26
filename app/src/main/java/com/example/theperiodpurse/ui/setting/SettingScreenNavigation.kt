@@ -59,7 +59,7 @@ fun SettingAppBar(
 }
 
 
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
