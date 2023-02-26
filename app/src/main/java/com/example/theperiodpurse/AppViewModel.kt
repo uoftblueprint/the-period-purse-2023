@@ -36,6 +36,11 @@ class AppViewModel @Inject constructor (private val userRepository: UserReposito
                     currentState.copy(trackedSymptoms = trackedSymptoms)
                 }
             }
+            withContext(Dispatchers.IO) {
+                dateRepository.getAllDates().collect { dates ->
+                    _uiState.value = _uiState.value.copy(dates = dates)
+                }
+            }
         }
     }
 
