@@ -21,11 +21,13 @@ import com.example.theperiodpurse.ui.component.FloatingActionButton
 import com.example.theperiodpurse.ui.onboarding.*
 import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import dagger.hilt.android.AndroidEntryPoint
+import net.sqlcipher.database.SQLiteDatabase
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
+        SQLiteDatabase.loadLibs(this)
         super.onCreate(savedInstanceState)
         setContent {
             ThePeriodPurseTheme {

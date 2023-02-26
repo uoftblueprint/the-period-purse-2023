@@ -120,9 +120,17 @@ fun NavigationGraph(
             )
         }
         composable(route = OnboardingScreen.Summary.name) {
+            val symptomList = arrayListOf(Symptom.MOOD)
+            val currentDate = java.util.Date()
+            val dateList = arrayListOf(Date(2, currentDate, FlowSeverity.HEAVY, Mood.ANGRY,
+                currentDate, Exercise.YOGA, CrampSeverity.Bad, currentDate))
             SummaryScreen(
                 onboardUiState = uiState,
                 onSendButtonClicked = {
+                    viewModel.addNewDate(dateList[0].date, dateList[0].flow, dateList[0].mood,
+                        dateList[0].exerciseLength, dateList[0].exerciseType,
+                        dateList[0].crampSeverity, dateList[0].sleep)
+                    viewModel.addNewUser(symptomList, dateList, 3, 2, 1)
                     navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
                     navController.navigate(Screen.Calendar.name)
                 },
