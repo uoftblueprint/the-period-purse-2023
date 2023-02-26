@@ -1,6 +1,8 @@
 package com.example.theperiodpurse.ui.symptomlog
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.FloatingActionButton
@@ -34,12 +36,19 @@ fun LoggingOptionsPopup(
             verticalArrangement = Arrangement.Bottom,
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White.copy(0.8f))
+                .background(Color.White.copy(0.95f))
                 .then(modifier)
                 .offset(y = 35.dp)
+                .clickable(
+                    interactionSource = MutableInteractionSource(),
+                    indication = null
+                ) { onExit() }
         ) {
             Row(
-                verticalAlignment = Alignment.Bottom
+                verticalAlignment = Alignment.Bottom,
+                modifier = Modifier
+                    .clickable(enabled = false) {}
+                    .padding(start = 5.dp, end = 5.dp, bottom = 10.dp)
             ) {
                 LoggingOptionButton(
                     title = "Log daily symptoms",
@@ -49,7 +58,7 @@ fun LoggingOptionsPopup(
                         onExit()
                     }
                 )
-                Spacer(modifier = Modifier.width(20.dp))
+                Spacer(modifier = Modifier.width(30.dp))
                 LoggingOptionButton(
                     title = "Log multiple period dates",
                     icon = R.drawable.today_black_24dp,
@@ -59,7 +68,11 @@ fun LoggingOptionsPopup(
                     }
                 )
             }
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(
+                modifier = Modifier
+                .height(20.dp)
+                .clickable(enabled = false) {}
+            )
             CloseOverlayButton(onClick = onExit)
         }
     }
@@ -96,7 +109,7 @@ private fun LoggingOptionButton(
         Text(
             text = title,
             textAlign = TextAlign.Center,
-            modifier = Modifier.width(80.dp)
+            modifier = Modifier.width(100.dp)
         )
         Spacer(modifier = Modifier.height(4.dp))
         FloatingActionButton(
@@ -104,7 +117,12 @@ private fun LoggingOptionButton(
             backgroundColor = Red,
             modifier = modifier.size(70.dp)
         ) {
-            Icon(painterResource(icon), contentDescription = title, tint = Color.White)
+            Icon(
+                painterResource(icon),
+                contentDescription = title,
+                tint = Color.White,
+                modifier = Modifier.size(24.dp)
+            )
         }
     }
 }
