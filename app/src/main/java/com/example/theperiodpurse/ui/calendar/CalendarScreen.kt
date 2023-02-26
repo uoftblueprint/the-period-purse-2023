@@ -371,7 +371,13 @@ fun Day(
                         color = if (day.date.isAfter(LocalDate.now())) {
                             Color(237, 237, 237)
                         } else {
-                            Color.White
+                                when (calendarDayUIState?.flow) {
+                                    "Light" -> Color(215, 125, 125)
+                                    "Medium" -> Color(210, 80, 75)
+                                    "Heavy" -> Color(195, 50, 50)
+                                    "Spotting" -> Color(245, 192, 192)
+                                    else -> Color.White
+                                }
                         }
                     )
                     .semantics { contentDescription = day.date.toString() }
@@ -389,7 +395,7 @@ fun Day(
                     ),
             ) {
                 Text(
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
                     text = day.date.dayOfMonth.toString(),
@@ -399,12 +405,34 @@ fun Day(
                         Color.Black
                     }
                 )
-                if (calendarDayUIState != null) {
-                    /* TODO: Update day box according to DayUIState
-                        example: */
-                    Text(
-                        text = calendarDayUIState.exerciseType,
-                    )
+
+                Box(modifier = Modifier.padding(12.dp)
+                    .align(Alignment.BottomCenter)) {
+                    if (calendarDayUIState != null) {
+                        /* TODO: Update day box according to DayUIState
+                            example: */
+                        Text(
+                            text = calendarDayUIState.exerciseType,
+                        )
+
+                        Image(
+                            modifier = Modifier
+                                .size(20.dp)
+                                .offset(y = 6.dp),
+                            painter = painterResource(
+                                id =
+                                when (calendarDayUIState.flow) {
+                                    "Light" -> R.drawable.water_drop_black_24dp
+                                    "Medium" -> R.drawable.opacity_black_24dp
+                                    "Heavy" -> R.drawable.flow_heavy
+                                    "Spotting" -> R.drawable.spotting
+                                    else -> R.drawable.blank
+                                }
+                            ),
+                            contentDescription = "DateFlowIcon"
+                        )
+
+                    }
                 }
             }
         }
