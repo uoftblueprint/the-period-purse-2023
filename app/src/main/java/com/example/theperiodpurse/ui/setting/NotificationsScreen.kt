@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -34,7 +35,7 @@ import java.util.*
 
 
 class NotificationsScreen : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -49,12 +50,24 @@ class NotificationsScreen : ComponentActivity() {
                     )
                 } else mutableStateOf(true)
             }
+
+//            var hasAlarmPermission by remember {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//                    mutableStateOf(
+//                        ContextCompat.checkSelfPermission(
+//                            context,
+//                            Manifest.permission.POST_NOTIFICATIONS
+//                        ) == PackageManager.PERMISSION_GRANTED
+//                    )
+//                } else mutableStateOf(false)
+//            }
+
             TimeWheel(LocalContext.current, hasNotificationPermission)
         }
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun TimeWheel(context: Context, hasNotificationsPermission: Boolean){
     var pickedTime by remember { mutableStateOf(LocalTime.NOON) }
@@ -107,7 +120,7 @@ fun TimeWheel(context: Context, hasNotificationsPermission: Boolean){
 
         if(hasNotificationsPermission){
             println("working")
-            setAlarm(context)
+            setAlarm(context, pickedTime)
         }
 
     }
@@ -117,12 +130,37 @@ fun TimeWheel(context: Context, hasNotificationsPermission: Boolean){
 
 }
 
-fun setAlarm(context: Context){
+@RequiresApi(Build.VERSION_CODES.S)
+fun setAlarm(context: Context, pickedTime: LocalTime){
     val time = System.currentTimeMillis() + 2000
+
+    val calendar=Calendar.getInstance().apply {
+        timeInMillis = System.currentTimeMillis()
+    }
+    calendar.apply {
+        set(Calendar.HOUR_OF_DAY,pickedTime.hour)
+        set(Calendar.MINUTE,pickedTime.minute)
+        set(Calendar.SECOND, pickedTime.second)
+    }
+
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    val intent = Intent(context, Alarm::class.java)
+    val intent = Intent(context, Alarm::class.java).apply {
+        action = ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+
+    }
     val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
     alarmManager.set(AlarmManager.RTC_WAKEUP, time, pendingIntent)
+    val hasAlarmPermission: Boolean = alarmManager.canScheduleExactAlarms()
+
+    if(hasAlarmPermission){
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+    }
+
+//    val intent = Intent().apply {
+//        action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+//    }
+
+
 }
 
 

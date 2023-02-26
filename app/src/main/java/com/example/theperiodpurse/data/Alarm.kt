@@ -1,5 +1,6 @@
 package com.example.theperiodpurse.data
 
+import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
@@ -12,6 +13,15 @@ import com.example.theperiodpurse.R
 
 class Alarm: BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
+
+        if (intent != null) {
+            when (intent.action) {
+                AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED -> {
+                    // reschedule all the exact alarms
+                }
+
+            }
+        }
         try {
             showNotification(context, "Reminder to Log Symptoms!", "This is your reminder to log your symptoms")
 
@@ -19,6 +29,7 @@ class Alarm: BroadcastReceiver() {
             println("didn't work rip")
             Log.d("Recieved an Exception", e.printStackTrace().toString())
         }
+
     }
 
     private fun showNotification(context: Context, title: String, description:String) {
