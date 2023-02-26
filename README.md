@@ -32,7 +32,7 @@ Following the [release of Menstruation Nation on the Apple App Store](https://ap
 
 This project would not be possible without the combined efforts of the TPP Blueprint team:
 
-[Leo Liu](https://github.com/leowrites), [Manpreet Bhatti](https://github.com/Manpreet-Bhatti),
+[Leo Liu](https://github.com/leowrites), [Manpreet Bhatti](https://github.com/Manpreet-Bhatti), [Manya Mittal](https://github.com/manya-mittal),
 
 ## Contributing
 
