@@ -2,6 +2,7 @@ package com.example.theperiodpurse
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.navigation.compose.ComposeNavigator
@@ -15,6 +16,7 @@ import org.junit.Rule
 import org.junit.Test
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import javax.inject.Inject
 
 @HiltAndroidTest
@@ -93,5 +95,16 @@ class CalendarScreenTest {
                 DateTimeFormatter.ofPattern("yyyy-MM-dd")
             ).toString()
         ).performClick()
+    }
+
+    @Test
+    fun calendarScreen_OpenLoggingOptionsOverlay() {
+        composeTestRule.onNodeWithContentDescription("Open logging options").performClick()
+        composeTestRule.onNodeWithContentDescription("Log daily symptoms").performClick()
+        var date = composeTestRule
+            .onNodeWithTag("DateLabel").fetchSemanticsNode()
+            .config[SemanticsProperties.Text][0].text
+        var today = LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL))
+        assert(date == today)
     }
 }
