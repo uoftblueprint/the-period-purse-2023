@@ -2,12 +2,14 @@ package com.example.theperiodpurse.ui.education
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +31,7 @@ import com.example.theperiodpurse.R
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun EducationPrivacyScreen(navController: NavHostController) {
+    val interactionSource = remember { MutableInteractionSource() }
     val scaffoldState = rememberScaffoldState()
     EducationBackground()
 
@@ -47,7 +50,9 @@ fun EducationPrivacyScreen(navController: NavHostController) {
                 ) {
                     Icon(
                         modifier = Modifier
-                            .clickable { navController.navigate(Destination.Home.route) }
+                            .clickable(
+                                interactionSource = interactionSource, indication = null
+                            ) { navController.navigate(Destination.Home.route) }
                             .size(20.dp),
                         painter = painterResource(R.drawable.arrow),
                         contentDescription = "Back Button",
@@ -90,19 +95,20 @@ fun EducationPrivacyScreen(navController: NavHostController) {
                 Header("Privacy Statement")
 
                 Body(
-                    "The Period Purse strives to achieve menstrual equity by providing people " +
-                            "who menstruate with access to free menstrual products, and to reduce the stigma " +
-                            "surrounding periods through public education and advocacy.\n\n" +
-                            "With the help of UofT Blueprint from the University of Toronto, we have developed " +
-                            "this app to enable you to keep track of your periods and provide you with useful " +
-                            "information. \n\n" +
-                            "We understand that recording intimate information about your body in an app can " +
-                            "be scary. Who can access this information? How will it be used? Is it well " +
-                            "protected?\n\n" +
-                            "This is why we build this app with your privacy first in mind. Contrary to other " +
-                            "period tracking apps, with your Period Purse app, no one but you can access any " +
-                            "of the information you provide. This document provides you with more information " +
-                            "about how this works, and answers some commonly asked questions."
+                    "The Period Purse strives to achieve menstrual equity by providing " +
+                            "people who menstruate with access to free menstrual products, and " +
+                            "to reduce the stigma surrounding periods through public education " +
+                            "and advocacy.\n\n" + "With the help of UofT Blueprint from the " +
+                            "University of Toronto, we have developed this app to enable you to " +
+                            "keep track of your periods and provide you with useful information. " +
+                            "\n\n" + "We understand that recording intimate information about " +
+                            "your body in an app can be scary. Who can access this information?" +
+                            " How will it be used? Is it well protected?\n\n" + "This is why we " +
+                            "build this app with your privacy first in mind. Contrary to other " +
+                            "period tracking apps, with your Period Purse app, no one but you " +
+                            "can access any " + "of the information you provide. This document " +
+                            "provides you with more information " + "about how this works, " +
+                            "and answers some commonly asked questions."
                 )
                 ReachOut(
                     "You can also always reach out at hello@periodpurse.com " +
@@ -113,16 +119,16 @@ fun EducationPrivacyScreen(navController: NavHostController) {
                 Header("What do we do with your information?")
 
                 Body(
-                    "Nothing! Nor the Period Purse, nor any other organization, can access your " +
-                            "personal information. "
+                    "Nothing! Nor the Period Purse, nor any other organization, can access " +
+                            "your personal information. "
                 )
 
 
                 Header("Did you get my consent?")
 
                 Body(
-                    "We did not ask for your consent, because we do not want your data. Your data " +
-                            "is yours and yours only."
+                    "We did not ask for your consent, because we do not want your data. " +
+                            "Your data is yours and yours only."
                 )
 
 
@@ -150,8 +156,9 @@ fun EducationPrivacyScreen(navController: NavHostController) {
                 Header("Is my information protected?")
 
                 Body(
-                    "We built this app so that you would feel comfortable tracking your periods on" +
-                            " your phone. Not accessing it is the best way for us to protect it. "
+                    "We built this app so that you would feel comfortable tracking your " +
+                            "periods on your phone. Not accessing it is the best way for us " +
+                            "to protect it. "
                 )
 
 
@@ -164,7 +171,8 @@ fun EducationPrivacyScreen(navController: NavHostController) {
 
                 Header("Changes to this privacy policy.")
 
-                Body("If any of the above were to change, we will update this document to inform you.")
+                Body("If any of the above were to change, we will update this document to " +
+                        "inform you.")
 
                 Header("Questions and contact information")
                 ReachOut("Any question? Just email us: hello@periodpurse.com.")

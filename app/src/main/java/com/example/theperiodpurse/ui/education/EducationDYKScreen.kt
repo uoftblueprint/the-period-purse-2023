@@ -2,10 +2,12 @@ package com.example.theperiodpurse.ui.education
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,6 +23,8 @@ import com.example.theperiodpurse.R
 
 @Composable
 fun EducationDYKScreen(navController: NavHostController) {
+    val interactionSource = remember { MutableInteractionSource() }
+
     EducationBackground()
 
     Column(modifier = Modifier
@@ -31,7 +35,9 @@ fun EducationDYKScreen(navController: NavHostController) {
     ) {
         Icon(
             modifier = Modifier
-                .clickable { navController.navigate(Destination.Home.route) }
+                .clickable(interactionSource = interactionSource,
+                    indication = null)
+                { navController.navigate(Destination.Home.route) }
                 .size(20.dp)
                 .align(Alignment.Start),
             painter = painterResource(R.drawable.arrow),

@@ -33,7 +33,6 @@ const val gray = 0xFF6D6E71
 const val teal = 0xFF72C6B7
 const val pink = 0xFFFFA3A4
 
-
 /**
  * Education Home Screen for the Learn/Info Tab on the App.
  */
