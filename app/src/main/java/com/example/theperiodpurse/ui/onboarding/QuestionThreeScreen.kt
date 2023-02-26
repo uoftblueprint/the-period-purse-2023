@@ -3,7 +3,6 @@ package com.example.theperiodpurse.ui
 import android.graphics.Color.rgb
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.selection.selectable
@@ -16,20 +15,13 @@ import androidx.compose.ui.unit.dp
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.data.DataSource.symptoms
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement.Absolute.Center
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.platform.LocalConfiguration
-
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -37,15 +29,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.example.theperiodpurse.ui.onboarding.backbutton1
 import com.example.theperiodpurse.ui.onboarding.background_shape
-import com.example.theperiodpurse.ui.onboarding.drawconcave
-
-/**
- * Composable that displays the list of items as [RadioButton] options,
- * [onSelectionChanged] lambda that notifies the parent composable when a new value is selected,
- * [onCancelButtonClicked] lambda that cancels the order when user clicks cancel and
- * [onNextButtonClicked] lambda that triggers the navigation to next screen
- */
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -405,113 +388,6 @@ fun SelectOptionPreview() {
 
         options = symptoms.map { id -> context.resources.getString(id) }
     )
-}
-
-@Composable
-fun drawconcave3() {
-
-    Canvas(
-        modifier = Modifier
-            .size(400.dp))
-    {
-
-        val path = Path().apply {
-            moveTo(0f, 300f)
-            lineTo(1600f, 300f)
-            lineTo(1600f, 1100f)
-
-            arcTo(Rect(offset = Offset(0F, 1100F), size = Size(width = 1600f, height =300F )),0f, -180f, false)
-            lineTo(0f, 700f)
-
-
-
-            close()
-        }
-
-        val path2 = Path().apply {
-            moveTo(0f, 300f)
-            lineTo(1600f, 300f)
-            lineTo(1600f, 0f)
-
-            arcTo(Rect(offset = Offset(0F, 0F), size = Size(width = 1600f, height =300F )),0f, 180f, false)
-            lineTo(0f, 700f)
-
-
-
-            close()
-        }
-
-        drawPath(path = path, color = Color(android.graphics.Color.rgb(142, 212, 193)))
-
-        drawPath(path = path2, color = Color(android.graphics.Color.rgb(142, 212, 193)))
-    }
-}
-
-@Composable
-fun progress2(){
-    val configuration = LocalConfiguration.current
-    Column(
-        modifier = Modifier
-            .padding(PaddingValues(top = 130.dp, start = 10.dp))
-            .width(configuration.screenWidthDp.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(PaddingValues(top = 200.dp))
-
-
-        ) {
-            Canvas(
-                modifier = Modifier
-                    .size(20.dp)
-                    .padding(PaddingValues(top = 20.dp))
-            ) {
-
-                drawRoundRect(
-                    color = Color(android.graphics.Color.rgb(142, 212, 193)).copy(alpha = 0.5f),
-                    cornerRadius = CornerRadius(60f, 60f),
-                    size = Size(width = 10.dp.toPx(), height = 10.dp.toPx())
-
-                )
-
-
-            }
-            Canvas(
-                modifier = Modifier
-                    .size(20.dp)
-                    .padding(PaddingValues(top = 20.dp))
-            ) {
-
-                drawRoundRect(
-                    color = Color(android.graphics.Color.rgb(142, 212, 193)).copy(alpha = 0.5f),
-                    cornerRadius = CornerRadius(60f, 60f),
-                    size = Size(width = 10.dp.toPx(), height =10.dp.toPx())
-
-                )
-
-
-            }
-            Canvas(
-                modifier = Modifier
-                    .size(40.dp)
-                    .padding(PaddingValues(top = 20.dp))
-            ) {
-
-                drawRoundRect(
-                    color = Color(android.graphics.Color.rgb(142, 212, 193)),
-                    cornerRadius = CornerRadius(60f, 60f),
-                    size = Size(width = 30.dp.toPx(), height = 10.dp.toPx())
-
-                )
-
-
-            }
-
-
-        }
-    }
 }
 
 

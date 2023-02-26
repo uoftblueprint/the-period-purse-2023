@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.theperiodpurse.R
@@ -12,18 +11,10 @@ import android.app.DatePickerDialog
 import android.os.Build
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarToday
-import androidx.compose.material.icons.filled.Keyboard
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -75,26 +66,22 @@ fun QuestionTwoScreen(
 
     mDatePickerDialog.getDatePicker().setMaxDate(Date().getTime())
 
-
     backbutton1()
-
-
-
-
-
-
 
     Column(
         modifier = Modifier.fillMaxHeight(1f),
         verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
         val ratio = 0.5
         val ratioimage = 0.17
-        val height = (screenheight*ratio)
-        val imageheight = (screenheight*ratioimage)
-        Box(modifier = Modifier.width(screenwidth.dp).height(height.dp)
+        val height = (screenheight * ratio)
+        val imageheight = (screenheight * ratioimage)
+        Box(
+            modifier = Modifier
+                .width(screenwidth.dp)
+                .height(height.dp)
 
         )
         {
@@ -103,20 +90,21 @@ fun QuestionTwoScreen(
             Image(
                 painter = painterResource(R.drawable.flow_with_heart),
                 contentDescription = null,
-                modifier = Modifier.size(imageheight.dp).align(Alignment.Center),
+                modifier = Modifier
+                    .size(imageheight.dp)
+                    .align(Alignment.Center),
             )
-            val barheight1 = (screenheight*(0.09))
+            val barheight1 = (screenheight * (0.09))
 
             Image(
                 painter = painterResource(R.drawable.onboard_bar2),
                 contentDescription = null,
-                modifier = Modifier.size(barheight1.dp).align(Alignment.BottomCenter),
+                modifier = Modifier
+                    .size(barheight1.dp)
+                    .align(Alignment.BottomCenter),
             )
 
         }
-
-
-
 
         Text(
             text = stringResource(R.string.question_two),
@@ -133,54 +121,59 @@ fun QuestionTwoScreen(
             fontSize = 18.sp,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .width((screenwidth*(0.6)).dp),
+                .width((screenwidth * (0.6)).dp),
             textAlign = TextAlign.Center
         )
-        Spacer(Modifier.height((screenheight*(0.02)).dp))
+        Spacer(Modifier.height((screenheight * (0.02)).dp))
 
 
 
-        Button(onClick = {
-            mDatePickerDialog.show()
-            entered = true
-        }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+        Button(
+            onClick = {
+                mDatePickerDialog.show()
+                entered = true
+            }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
             modifier = modifier
                 .width(175.dp),
-            shape = RoundedCornerShape(20)) {
+            shape = RoundedCornerShape(20)
+        ) {
 
-            if (mDate.value != "Choose date"){
+            if (mDate.value != "Choose date") {
 
-                Row (modifier = Modifier
-                    .padding(
-                        start = 12.dp,
-                        end = 16.dp,
-                        top = 12.dp,
-                        bottom = 12.dp
-                    ),
+                Row(
+                    modifier = Modifier
+                        .padding(
+                            start = 12.dp,
+                            end = 16.dp,
+                            top = 12.dp,
+                            bottom = 12.dp
+                        ),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center){
-                    Text(text = "${mDate.value}", color = Color.Black,  fontSize = 18.sp)
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(text = "${mDate.value}", color = Color.Black, fontSize = 18.sp)
                 }
 
-            }
-            else {
+            } else {
 
-                Row (modifier = Modifier
-                    .padding(
-                        start = 12.dp,
-                        end = 16.dp,
-                        top = 12.dp,
-                        bottom = 12.dp
-                    ),
+                Row(
+                    modifier = Modifier
+                        .padding(
+                            start = 12.dp,
+                            end = 16.dp,
+                            top = 12.dp,
+                            bottom = 12.dp
+                        ),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center) {
+                    horizontalArrangement = Arrangement.Center
+                ) {
 
                     Text(
                         text = "${mDate.value}",
                         color = Color.Black,
                         textAlign = TextAlign.Center,
 
-                    )
+                        )
                     Spacer(modifier = Modifier.width(10.dp))
 
                     Image(
@@ -193,10 +186,9 @@ fun QuestionTwoScreen(
             }
 
 
-
         }
 
-        Spacer(Modifier.height((screenwidth*(0.02)).dp))
+        Spacer(Modifier.height((screenwidth * (0.02)).dp))
 
 
 
@@ -208,26 +200,29 @@ fun QuestionTwoScreen(
         ) {
             TextButton(
                 onClick = onNextButtonClicked,
-                modifier = modifier.padding(start=(screenwidth*(0.1)).dp).weight(1f),
+                modifier = modifier
+                    .padding(start = (screenwidth * (0.1)).dp)
+                    .weight(1f),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
 
             ) {
-                Text(stringResource(R.string.skip),color = Color(97, 153, 154), fontSize = 20.sp)
+                Text(stringResource(R.string.skip), color = Color(97, 153, 154), fontSize = 20.sp)
             }
             Button(
                 onClick = onNextButtonClicked,
                 enabled = entered,
-                modifier = modifier.padding(end=(screenwidth*(0.1)).dp).weight(1f),
+                modifier = modifier
+                    .padding(end = (screenwidth * (0.1)).dp)
+                    .weight(1f),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
             ) {
-                Text(stringResource(R.string.next),color = Color.White, fontSize = 20.sp)
-                onSelectionChanged(mDate.value+"|"+mDateTo.value)
+                Text(stringResource(R.string.next), color = Color.White, fontSize = 20.sp)
+                onSelectionChanged(mDate.value + "|" + mDateTo.value)
                 // ADD SIGN IN FUNCTION CALL HERE
 
             }
 
         }
-
 
     }
 
@@ -242,70 +237,4 @@ fun setDateTo(day: Int, month: Int, year: Int, range: Int): String {
 
 }
 
-@Composable
-fun progress1(){
-    val configuration = LocalConfiguration.current
-    Column(
-        modifier = Modifier
-            .padding(PaddingValues(top = 175.dp, start = 10.dp))
-            .width(configuration.screenWidthDp.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(PaddingValues(top = 200.dp))
-
-
-        ) {
-            Canvas(
-                modifier = Modifier
-                    .size(20.dp)
-                    .padding(PaddingValues(top = 20.dp))
-            ) {
-
-                drawRoundRect(
-                    color = Color(android.graphics.Color.rgb(142, 212, 193)).copy(alpha = 0.5f),
-                    cornerRadius = CornerRadius(60f, 60f),
-                    size = Size(width = 10.dp.toPx(), height = 10.dp.toPx())
-
-                )
-
-
-            }
-            Canvas(
-                modifier = Modifier
-                    .size(40.dp)
-                    .padding(PaddingValues(top = 20.dp))
-            ) {
-
-                drawRoundRect(
-                    color = Color(android.graphics.Color.rgb(142, 212, 193)),
-                    cornerRadius = CornerRadius(60f, 60f),
-                    size = Size(width = 30.dp.toPx(), height =10.dp.toPx())
-
-                )
-
-
-            }
-            Canvas(
-                modifier = Modifier
-                    .size(30.dp)
-                    .padding(PaddingValues(top = 20.dp))
-            ) {
-
-                drawRoundRect(
-                    color = Color(android.graphics.Color.rgb(142, 212, 193)).copy(alpha = 0.5f),
-                    cornerRadius = CornerRadius(60f, 60f),
-                    size = Size(width = 10.dp.toPx(), height = 10.dp.toPx())
-
-                )
-
-
-            }
-
-
-        }
-    }
-}
 

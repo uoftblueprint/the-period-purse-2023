@@ -70,7 +70,9 @@ fun QuestionOneScreen(onNextButtonClicked: () -> Unit,
 
         Spacer(Modifier.height((screenheight*(0.02)).dp))
 
-        Box(modifier = Modifier.width(screenwidth.dp).height(height.dp)
+        Box(modifier = Modifier
+            .width(screenwidth.dp)
+            .height(height.dp)
 
             )
         {
@@ -79,14 +81,18 @@ fun QuestionOneScreen(onNextButtonClicked: () -> Unit,
             Image(
                 painter = painterResource(R.drawable.last_period_length),
                 contentDescription = null,
-                modifier = Modifier.size(imageheight.dp).align(Alignment.Center),
+                modifier = Modifier
+                    .size(imageheight.dp)
+                    .align(Alignment.Center),
             )
             val barheight1 = (screenheight*(0.09))
 
             Image(
                 painter = painterResource(R.drawable.onboard_bar1),
                 contentDescription = null,
-                modifier = Modifier.size(barheight1.dp).align(Alignment.BottomCenter),
+                modifier = Modifier
+                    .size(barheight1.dp)
+                    .align(Alignment.BottomCenter),
             )
 
         }
@@ -114,7 +120,7 @@ fun QuestionOneScreen(onNextButtonClicked: () -> Unit,
             fontSize = 18.sp,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .width((screenwidth*(0.6)).dp),
+                .width((screenwidth * (0.6)).dp),
             textAlign = TextAlign.Center
         )
         Spacer(Modifier.height((screenheight*(0.02)).dp))
@@ -142,7 +148,9 @@ fun QuestionOneScreen(onNextButtonClicked: () -> Unit,
         ) {
             TextButton(
                 onClick = onNextButtonClicked,
-                modifier = modifier.padding(start=(screenwidth*(0.1)).dp).weight(1f),
+                modifier = modifier
+                    .padding(start = (screenwidth * (0.1)).dp)
+                    .weight(1f),
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.Transparent,
                     disabledBackgroundColor = Color.Transparent,
@@ -155,7 +163,9 @@ fun QuestionOneScreen(onNextButtonClicked: () -> Unit,
             Button(
                 onClick = onNextButtonClicked,
                 enabled = entered,
-                modifier =modifier.padding(end=(screenwidth*(0.1)).dp).weight(1f),
+                modifier = modifier
+                    .padding(end = (screenwidth * (0.1)).dp)
+                    .weight(1f),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 150))
             ) {
                 Text(stringResource(R.string.next),color = Color.White, fontSize = 20.sp)
@@ -240,7 +250,10 @@ fun EditDaysField(
             .width(175.dp)
             .height(60.dp)
             .background(color = Color.White, shape = RoundedCornerShape(20))
-            .border(BorderStroke(2.dp, SolidColor(Color.Transparent)), shape = RoundedCornerShape(20)),
+            .border(
+                BorderStroke(2.dp, SolidColor(Color.Transparent)),
+                shape = RoundedCornerShape(20)
+            ),
         trailingIcon = { if (entered){
             Text(text = "days", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.Black, modifier = Modifier.padding(end=20.dp))
 
@@ -263,176 +276,18 @@ fun EditDaysField(
     )
 }
 
-@Composable
-fun backgroundshape(){
-
-
-    val configuration = LocalConfiguration.current
-
-    Canvas(modifier = Modifier
-        .size(100.dp)
-        .padding(PaddingValues(top = 125.dp))){
-
-        drawRect(
-            color = Color(rgb(142, 212, 193)),
-            size = Size(width = configuration.screenWidthDp.dp.toPx(), height = 230.dp.toPx())
-
-        )
-
-
-
-    }
-}
 
 @Composable
-fun background_shape(){
+fun background_shape() {
 
     val configuration = LocalConfiguration.current
 
     Image(
         painter = painterResource(R.drawable.background_shape__1_),
         contentDescription = null,
-        modifier = Modifier.size(1000.dp) )
-
-
+        modifier = Modifier.size(1000.dp)
+    )
 
 
 }
 
-@Composable
-fun questionmark(){
-    val configuration = LocalConfiguration.current
-    Column(
-        modifier = Modifier
-            .padding(PaddingValues(top = 200.dp))
-            .width(configuration.screenWidthDp.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-
-    ) {
-        Image(
-            painter = painterResource(R.drawable.redquestion),
-            contentDescription = null,
-            modifier = Modifier
-                .size(60.dp)
-        )
-    }
-}
-
-@Composable
-fun progress(){
-    val configuration = LocalConfiguration.current
-    Column(
-        modifier = Modifier
-            .padding(PaddingValues(top = 175.dp, start = 10.dp))
-            .width(configuration.screenWidthDp.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(PaddingValues(top = 200.dp))
-
-
-            ) {
-            Canvas(
-                modifier = Modifier
-                    .size(40.dp)
-                    .padding(PaddingValues(top = 20.dp))
-            ) {
-
-                drawRoundRect(
-                    color = Color(rgb(142, 212, 193)),
-                    cornerRadius = CornerRadius(60f, 60f),
-                    size = Size(width = 30.dp.toPx(), height = 10.dp.toPx())
-
-                )
-
-
-            }
-            Canvas(
-                modifier = Modifier
-                    .size(20.dp)
-                    .padding(PaddingValues(top = 20.dp))
-            ) {
-
-                drawRoundRect(
-                    color = Color(rgb(142, 212, 193)).copy(alpha = 0.5f),
-                    cornerRadius = CornerRadius(60f, 60f),
-                    size = Size(width = 10.dp.toPx(), height =10.dp.toPx())
-
-                )
-
-
-            }
-            Canvas(
-                modifier = Modifier
-                    .size(30.dp)
-                    .padding(PaddingValues(top = 20.dp))
-            ) {
-
-                drawRoundRect(
-                    color = Color(rgb(142, 212, 193)).copy(alpha = 0.5f),
-                    cornerRadius = CornerRadius(60f, 60f),
-                    size = Size(width = 10.dp.toPx(), height = 10.dp.toPx())
-
-                )
-
-
-            }
-
-
-        }
-    }
-}
-
-@Composable
-fun drawconcave() {
-
-    Canvas(
-        modifier = Modifier
-            .size(400.dp)
-            .padding(PaddingValues(top = 45.dp)))
-     {
-
-        val path = Path().apply {
-            moveTo(0f, 300f)
-            lineTo(1600f, 300f)
-            lineTo(1600f, 1100f)
-
-            arcTo(Rect(offset = Offset(0F, 1100F), size = Size(width = 1600f, height =300F )),0f, -180f, false)
-            lineTo(0f, 700f)
-
-
-
-            close()
-        }
-
-        val path2 = Path().apply {
-            moveTo(0f, 300f)
-            lineTo(1600f, 300f)
-            lineTo(1600f, 0f)
-
-            arcTo(Rect(offset = Offset(0F, 0F), size = Size(width = 1600f, height =300F )),0f, 180f, false)
-            lineTo(0f, 700f)
-
-
-
-            close()
-        }
-
-        drawPath(path = path, color = Color(rgb(142, 212, 193)))
-
-        drawPath(path = path2, color = Color(rgb(142, 212, 193)))
-    }
-}
-
-
-
-
-@Preview
-@Composable
-fun TestPreview(){
-    drawconcave()
-
-}

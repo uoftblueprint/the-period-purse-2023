@@ -26,8 +26,6 @@ class OnboardViewModel : ViewModel() {
         }
     }
 
-
-
     /**
      * Set the [logSymptoms] to track for onboarding session.
      */

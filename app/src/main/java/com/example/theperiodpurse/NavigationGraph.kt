@@ -89,6 +89,15 @@ fun NavigationGraph(
             /* TODO Put Screen for Info page here */
         }
 
+        // Welcome Screen
+        composable(route = OnboardingScreen.Welcome.name) {
+            WelcomeScreen(
+                onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionTwo.name) },
+                mainActivity = mainActivity
+            )
+        }
+
+
         // Onboard Screens
         composable(route = OnboardingScreen.QuestionOne.name) {
             QuestionOneScreen(
