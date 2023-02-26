@@ -37,7 +37,7 @@ enum class OnboardingScreen() {
     Summary,
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun NavigationGraph(
     navController: NavHostController,
