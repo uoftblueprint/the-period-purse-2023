@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -44,6 +45,13 @@ fun SummaryScreen(
         onboardUiState.days,
     )
 
+    val configuration = LocalConfiguration.current
+
+    val screenwidth = configuration.screenWidthDp;
+
+    val screenheight = configuration.screenHeightDp;
+
+
     backbutton1()
 
     Column(
@@ -53,13 +61,13 @@ fun SummaryScreen(
 
     ) {
 
-        Spacer(modifier = Modifier.height(100.dp))
+        Spacer(modifier = Modifier.height((screenheight*(0.13)).dp))
 
 
         Image(
             painter = painterResource(R.drawable.pad_3_2x),
             contentDescription = null,
-            modifier = Modifier.size(200 .dp),
+            modifier = Modifier.size((screenheight*0.25).dp),
         )
 
         Text(text ="You're all set!", style = MaterialTheme.typography.h4, fontWeight = FontWeight.Bold)
@@ -67,7 +75,7 @@ fun SummaryScreen(
 
 
 
-        Spacer(modifier = Modifier.height(60.dp))
+        Spacer(modifier = Modifier.height((screenheight*0.08).dp))
 
         if (onboardUiState.days != 0) {
             Column(Modifier.padding(start = 25.dp)) {
@@ -194,12 +202,12 @@ fun SummaryScreen(
 
         Divider(thickness = 1.dp, color = Color(97, 153, 154), modifier = Modifier.fillMaxWidth())
 
-        Spacer(modifier = Modifier.height(60.dp))
+        Spacer(modifier = Modifier.height((screenheight*0.08).dp))
 
 
 
         Button(
-            modifier = Modifier.padding(horizontal = 15.dp).fillMaxWidth(),
+            modifier = Modifier.padding(horizontal = (screenheight*0.02).dp).fillMaxWidth(),
             onClick = { onSendButtonClicked() },
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
 
@@ -210,6 +218,7 @@ fun SummaryScreen(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun OrderSummaryPreview() {

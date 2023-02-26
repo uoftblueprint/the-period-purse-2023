@@ -37,6 +37,7 @@ import androidx.compose.material.ContentAlpha.medium
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -169,6 +170,15 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     fun LoginScreen() {
+
+        val configuration = LocalConfiguration.current
+
+        val screenwidth = configuration.screenWidthDp;
+
+        val screenheight = configuration.screenHeightDp;
+
+
+
         Image(
             painter = painterResource(id = R.drawable.background),
             contentDescription = null,
@@ -177,28 +187,30 @@ class MainActivity : ComponentActivity() {
         )
 
 
+
+
         Column(
             modifier = Modifier
-                .padding(16.dp)
+                .padding((screenheight*0.02).dp)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
 
 
-            Spacer(modifier = Modifier.height(70.dp))
+            Spacer(modifier = Modifier.height((screenheight*0.09).dp))
 
             // Logo Image
             Image(
                 painter = painterResource(R.drawable.app_logo),
                 contentDescription = null,
-                modifier = Modifier.size(200 .dp)
+                modifier = Modifier.size((screenheight*0.25).dp)
             )
-            Spacer(modifier = Modifier.height(60.dp))
+            Spacer(modifier = Modifier.height((screenheight*0.09).dp))
 
             // Welcome text
             Text(text = stringResource(R.string.welcome), style = MaterialTheme.typography.h4, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height(100.dp))
+            Spacer(modifier = Modifier.height((screenheight*0.13).dp))
 
             // Quick Start button
             QuickStartButton(
@@ -213,7 +225,7 @@ class MainActivity : ComponentActivity() {
             GoogleSignInButton {
                 signIn()
             }
-            Spacer(modifier = Modifier.height(5.dp))
+            Spacer(modifier = Modifier.height((screenheight*0.006).dp))
 
             val annotatedLinkString = buildAnnotatedString {
                 val str = "Terms and Conditions and Privacy Policy"

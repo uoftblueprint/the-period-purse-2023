@@ -77,7 +77,7 @@ fun QuickStartButton(
 //        color = Color(52, 235, 161)
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
     ) {
-        Text("Quick Start", color = Color.White, fontSize = 20.sp)
+        Text("Quick Start", color = Color.White, fontSize = 20.sp,)
     }
 }
 

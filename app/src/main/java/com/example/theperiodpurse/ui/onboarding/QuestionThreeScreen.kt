@@ -36,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.example.theperiodpurse.ui.onboarding.backbutton1
+import com.example.theperiodpurse.ui.onboarding.background_shape
 import com.example.theperiodpurse.ui.onboarding.drawconcave
 
 /**
@@ -57,15 +58,19 @@ fun QuestionThreeScreen(
 ) {
     var selectedValue by rememberSaveable { mutableStateOf("") }
 
-    backbutton1()
+    val configuration = LocalConfiguration.current
 
-    drawconcave3()
+    val screenwidth = configuration.screenWidthDp;
 
-    progress2()
+    val screenheight = configuration.screenHeightDp;
+
+
+
+
 
 
     Column(
-        modifier = Modifier.padding(32.dp),
+        modifier = Modifier.fillMaxHeight(1f),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
 
@@ -73,18 +78,30 @@ fun QuestionThreeScreen(
 
     ) {
 
-        Spacer(modifier = Modifier.height(65.dp))
+        val ratio = 0.45
+        val ratioimage = 0.20
+        val height = (screenheight*ratio)
+        val imageheight = (screenheight*ratioimage)
+        Box(modifier = Modifier.width(screenwidth.dp).height(height.dp)
 
-        Image(
-            painter = painterResource(R.drawable.menstruation_calendar__1_),
-            contentDescription = null,
-            modifier = Modifier.size(200 .dp),
         )
+        {
+            background_shape()
 
-        Spacer(modifier = Modifier.height(60.dp))
+            Image(
+                painter = painterResource(R.drawable.menstruation_calendar__1_),
+                contentDescription = null,
+                modifier = Modifier.size(imageheight.dp).align(Alignment.Center),
+            )
+            val barheight1 = (screenheight*(0.09))
 
+            Image(
+                painter = painterResource(R.drawable.onboard_bar3),
+                contentDescription = null,
+                modifier = Modifier.size(barheight1.dp).align(Alignment.BottomCenter),
+            )
 
-
+        }
         Text(
             text = stringResource(R.string.question_three),
             fontSize = 28.sp,
@@ -98,7 +115,7 @@ fun QuestionThreeScreen(
 
         Text(
             text = stringResource(R.string.description_three),
-            fontSize = 15.sp,
+            fontSize = 16.sp,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .fillMaxWidth(),
@@ -160,7 +177,8 @@ fun QuestionThreeScreen(
 
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height((screenheight*(0.005)).dp))
+
 
         Row(){
             Column(modifier = Modifier.selectable(
@@ -179,7 +197,7 @@ fun QuestionThreeScreen(
                     }
                     onSelectionChanged(selectedValue)
                 }
-            ).padding(horizontal = 13.dp),
+            ).padding(horizontal = (screenheight*0.02).dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,) {
                 Box(modifier = Modifier
@@ -301,6 +319,7 @@ fun QuestionThreeScreen(
             }
 
 
+
             Column(modifier = Modifier.selectable(
                 selected = selectedValue.contains("Sleep"),
                 onClick = {
@@ -350,17 +369,17 @@ fun QuestionThreeScreen(
 
 
         }
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height((screenheight*(0.01)).dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                TextButton(modifier = Modifier.weight(1f), onClick = onNextButtonClicked, colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)) {
+                TextButton(modifier = Modifier.padding(start=(screenwidth*(0.1)).dp).weight(1f), onClick = onNextButtonClicked, colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)) {
                     Text(stringResource(R.string.skip),color = Color(97, 153, 154), fontSize = 20.sp)
                 }
                 Button(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.padding(end=(screenwidth*(0.1)).dp).weight(1f),
                     // the button is enabled when the user makes a selection
                     enabled = selectedValue.isNotEmpty(),
                     onClick = onNextButtonClicked,
@@ -371,9 +390,12 @@ fun QuestionThreeScreen(
             }
 
     }
+
+    backbutton1()
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun SelectOptionPreview() {

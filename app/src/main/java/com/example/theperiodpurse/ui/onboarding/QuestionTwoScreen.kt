@@ -67,33 +67,54 @@ fun QuestionTwoScreen(
         }, mYear, mMonth, mDay
     )
 
+    val configuration = LocalConfiguration.current
+
+    val screenwidth = configuration.screenWidthDp;
+
+    val screenheight = configuration.screenHeightDp;
+
     mDatePickerDialog.getDatePicker().setMaxDate(Date().getTime())
 
 
     backbutton1()
 
-    drawconcave()
 
-    progress1()
+
 
 
 
 
     Column(
-        modifier = Modifier.padding(32.dp),
+        modifier = Modifier.fillMaxHeight(1f),
         verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        Spacer(modifier = Modifier.height(85.dp))
+        val ratio = 0.5
+        val ratioimage = 0.17
+        val height = (screenheight*ratio)
+        val imageheight = (screenheight*ratioimage)
+        Box(modifier = Modifier.width(screenwidth.dp).height(height.dp)
 
-        Image(
-            painter = painterResource(R.drawable.flow_with_heart),
-            contentDescription = null,
-            modifier = Modifier.size(200 .dp).padding(top=40.dp),
         )
+        {
+            background_shape()
 
-        Spacer(modifier = Modifier.height(80.dp))
+            Image(
+                painter = painterResource(R.drawable.flow_with_heart),
+                contentDescription = null,
+                modifier = Modifier.size(imageheight.dp).align(Alignment.Center),
+            )
+            val barheight1 = (screenheight*(0.09))
+
+            Image(
+                painter = painterResource(R.drawable.onboard_bar2),
+                contentDescription = null,
+                modifier = Modifier.size(barheight1.dp).align(Alignment.BottomCenter),
+            )
+
+        }
+
 
 
 
@@ -112,10 +133,10 @@ fun QuestionTwoScreen(
             fontSize = 18.sp,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .width(200.dp),
+                .width((screenwidth*(0.6)).dp),
             textAlign = TextAlign.Center
         )
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height((screenheight*(0.02)).dp))
 
 
 
@@ -124,7 +145,8 @@ fun QuestionTwoScreen(
             entered = true
         }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
             modifier = modifier
-                .width(175.dp)) {
+                .width(175.dp),
+            shape = RoundedCornerShape(20)) {
 
             if (mDate.value != "Choose date"){
 
@@ -174,7 +196,7 @@ fun QuestionTwoScreen(
 
         }
 
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height((screenwidth*(0.02)).dp))
 
 
 
@@ -186,7 +208,7 @@ fun QuestionTwoScreen(
         ) {
             TextButton(
                 onClick = onNextButtonClicked,
-                modifier = modifier.weight(1f),
+                modifier = modifier.padding(start=(screenwidth*(0.1)).dp).weight(1f),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
 
             ) {
@@ -195,7 +217,7 @@ fun QuestionTwoScreen(
             Button(
                 onClick = onNextButtonClicked,
                 enabled = entered,
-                modifier = modifier.weight(1f),
+                modifier = modifier.padding(end=(screenwidth*(0.1)).dp).weight(1f),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
             ) {
                 Text(stringResource(R.string.next),color = Color.White, fontSize = 20.sp)
