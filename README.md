@@ -33,3 +33,7 @@ Following the [release of Menstruation Nation on the Apple App Store](https://ap
 This project would not be possible without the combined efforts of the TPP Blueprint team:
 
 [Leo Liu](https://github.com/leowrites), 
+
+## Contributing
+
+If you would like to use software for social good and contribute to a project like this, consider joining [UofT Blueprint](https://uoftblueprint.org/#/)!
