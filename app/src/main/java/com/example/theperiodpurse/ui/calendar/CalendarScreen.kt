@@ -208,6 +208,7 @@ fun CalendarScreenLayout(calendarViewModel: CalendarViewModel, navController: Na
                     modifier = Modifier
                         .padding(horizontal = 12.dp)
                         .semantics { contentDescription = "Calendar" },
+                    contentPadding = PaddingValues(bottom = 48.dp),
                     state = state,
                     monthHeader = { month ->
                         MonthHeader(month)
@@ -229,6 +230,10 @@ fun CalendarScreenLayout(calendarViewModel: CalendarViewModel, navController: Na
                         }
                     }
                 )
+
+                Spacer(modifier = Modifier.size(36.dp))
+
+
             }
         }
     }
