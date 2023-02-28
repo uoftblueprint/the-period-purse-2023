@@ -230,10 +230,6 @@ fun CalendarScreenLayout(calendarViewModel: CalendarViewModel, navController: Na
                         }
                     }
                 )
-
-                Spacer(modifier = Modifier.size(36.dp))
-
-
             }
         }
     }
