@@ -26,6 +26,7 @@ import com.example.theperiodpurse.ui.onboarding.QuestionOneScreen
 import com.example.theperiodpurse.ui.onboarding.QuestionTwoScreen
 import com.example.theperiodpurse.ui.onboarding.WelcomeScreen
 import com.example.theperiodpurse.ui.setting.SettingsScreen
+import com.example.theperiodpurse.ui.symptomlog.LogMultipleDatesScreen
 import java.time.LocalDate
 
 enum class Screen() {
@@ -33,8 +34,14 @@ enum class Screen() {
     Log,
     Cycle,
     Settings,
-    Learn
+    Learn,
+    LogMultipleDates
 }
+
+val screensWithNavigationBar = arrayOf(
+    Screen.Calendar.name, Screen.Log.name, Screen.Cycle.name,
+    Screen.Settings.name, Screen.Learn.name
+)
 
 enum class OnboardingScreen() {
     Welcome,
@@ -77,6 +84,13 @@ fun NavigationGraph(
                     calendarViewModel = calendarViewModel
                 )
             }
+        }
+
+        composable(route = Screen.LogMultipleDates.name) {
+            LogMultipleDatesScreen(
+                onClose = { navController.navigateUp() },
+                calendarViewModel
+            )
         }
 
         composable(route = Screen.Settings.name) {

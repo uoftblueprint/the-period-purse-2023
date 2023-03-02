@@ -238,8 +238,8 @@ fun CalendarDay(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-        val (dayColor, iconId) = getDayColorAndIcon(day, activeSymptom, calendarDayUIState)
-        Day(day.date, dayColor, iconId, onClick, modifier)
+    val (dayColor, iconId) = getDayColorAndIcon(day, activeSymptom, calendarDayUIState)
+    Day(day.date, dayColor, iconId, onClick, modifier)
 }
 
 

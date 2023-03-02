@@ -56,15 +56,17 @@ fun ScreenApp(
     var loggingOptionsVisible by remember { mutableStateOf(false) }
     Scaffold(
         bottomBar = {
-            if (currentRoute(navController) in Screen.values().map { it.name }) {
+            if (currentRoute(navController) in screensWithNavigationBar) {
                 BottomNavigation(navController = navController)
             }
         },
         floatingActionButton = {
-            FloatingActionButton(
-                navController = navController,
-                onClickInCalendar = { loggingOptionsVisible = true }
-            )
+            if (currentRoute(navController) in screensWithNavigationBar) {
+                FloatingActionButton(
+                    navController = navController,
+                    onClickInCalendar = { loggingOptionsVisible = true }
+                )
+            }
         },
         floatingActionButtonPosition = FabPosition.Center,
         isFloatingActionButtonDocked = true
@@ -87,16 +89,12 @@ fun ScreenApp(
             if (loggingOptionsVisible) {
                 LoggingOptionsPopup(
                     onLogDailySymptomsClick = {
-                        navController.navigate(
-                            route = "%s/%s/%s"
-                                .format(
-                                    Screen.Calendar,
-                                    Screen.Log,
-                                    LocalDate.now().toString()
-                                )
+                        navigateToLogScreenWithDate(
+                            LocalDate.now(),
+                            navController
                         )
                     },
-                    { /* TODO: Go to logging page for multiple dates */ },
+                    onLogMultiplePeriodDates = { navController.navigate(Screen.LogMultipleDates.name) },
                     onExit = { loggingOptionsVisible = false },
                     modifier = modifier.padding(innerPadding)
                 )
