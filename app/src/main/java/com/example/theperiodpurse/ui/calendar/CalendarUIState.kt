@@ -12,11 +12,11 @@ data class CalendarUIState(
 
 data class CalendarDayUIState(
     val flow: FlowSeverity?,
-    val mood: String = "",
-    private val exerciseLengthString: String = "",
-    val exerciseType: String = "",
+    val mood: Mood?,
+    val exerciseLengthString: String = "",
+    val exerciseType: Exercise?,
     val crampSeverity: CrampSeverity?,
-    private val sleepString: String = ""
+    val sleepString: String = ""
 ) {
     private val exerciseLength =
         if (exerciseLengthString != "") Time.valueOf(exerciseLengthString) else null

@@ -51,9 +51,17 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
     }
 
     fun getSelectedMood(): Mood? {
-        var selectedMood = uiState.value.selectSquares["Mood"]
+        val selectedMood = uiState.value.selectSquares["Mood"]
         if (selectedMood is String) {
-            return Mood.valueOf(selectedMood)
+            return Mood.getMoodByDisplayName(selectedMood)
+        }
+        return null
+    }
+
+    fun getSelectedExercise(): Exercise? {
+        val selectedExercise = uiState.value.selectSquares["Exercise"]
+        if (selectedExercise is String) {
+            return Exercise.getExerciseByDisplayName(selectedExercise)
         }
         return null
     }
