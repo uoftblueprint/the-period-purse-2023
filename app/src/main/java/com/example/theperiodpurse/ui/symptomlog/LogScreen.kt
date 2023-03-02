@@ -71,6 +71,11 @@ fun LogScreen(
         )
 
         val logViewModel = LogViewModel(logSquarePrompts)
+        val calendarState by calendarViewModel.uiState.collectAsState()
+        val dayUIState = calendarState.days[day]
+        if (dayUIState != null) {
+            logViewModel.populateWithUIState(dayUIState)
+        }
 
         LogScreenLayout(
             day, navController, logPrompts, logViewModel,

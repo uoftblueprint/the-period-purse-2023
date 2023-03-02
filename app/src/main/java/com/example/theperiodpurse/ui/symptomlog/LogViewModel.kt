@@ -2,6 +2,7 @@ package com.example.theperiodpurse.ui.symptomlog
 
 import androidx.lifecycle.ViewModel
 import com.example.theperiodpurse.data.*
+import com.example.theperiodpurse.ui.calendar.CalendarDayUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,6 +15,30 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
     ))
     val uiState: StateFlow<LogUiState> = _uiState.asStateFlow()
 
+    fun populateWithUIState(dayUIState: CalendarDayUIState) {
+        _uiState.update { currentState ->
+            val selectSquares = currentState.selectSquares
+            if (dayUIState.crampSeverity != null) {
+                selectSquares[LogPrompt.Cramps.title] = dayUIState.crampSeverity.name
+            }
+            if (dayUIState.flow != null) {
+                selectSquares[LogPrompt.Flow.title] = dayUIState.flow.name
+            }
+            if (dayUIState.mood != null) {
+                selectSquares[LogPrompt.Mood.title] = dayUIState.mood.displayName
+            }
+            if (dayUIState.exerciseType != null) {
+                selectSquares[LogPrompt.Exercise.title] = dayUIState.exerciseType.displayName
+            }
+            if (dayUIState.exerciseLengthString != "") {
+                currentState.promptToText[LogPrompt.Exercise.title] = dayUIState.exerciseLengthString
+            }
+            if (dayUIState.sleepString != "") {
+                currentState.promptToText[LogPrompt.Sleep.title] = dayUIState.sleepString
+            }
+            currentState.copy(selectSquares = currentState.selectSquares)
+        }
+    }
     fun setSquareSelected(logSquare: LogSquare) {
         _uiState.update { currentState ->
             currentState.selectSquares[logSquare.promptTitle] = logSquare.description
