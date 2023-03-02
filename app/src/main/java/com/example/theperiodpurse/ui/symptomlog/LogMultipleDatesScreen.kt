@@ -30,6 +30,7 @@ import com.example.theperiodpurse.ui.calendar.CalendarDayUIState
 import com.example.theperiodpurse.ui.calendar.CalendarViewModel
 import com.example.theperiodpurse.ui.calendar.MonthHeader
 import com.example.theperiodpurse.ui.calendar.components.Day
+import com.example.theperiodpurse.ui.calendar.components.greyedOutColor
 import com.example.theperiodpurse.ui.component.PopupTopBar
 import com.example.theperiodpurse.ui.theme.Red
 import com.example.theperiodpurse.ui.theme.SelectedColor1

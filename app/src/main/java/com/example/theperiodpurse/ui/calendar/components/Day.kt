@@ -22,8 +22,13 @@ import androidx.compose.ui.unit.sp
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.data.*
 import com.example.theperiodpurse.ui.calendar.CalendarDayUIState
-import com.kizitonwose.calendar.core.CalendarDay
 import java.time.LocalDate
+
+val greyedOutColor = Color(237, 237, 237)
+
+fun dayDisabled(date: LocalDate): Boolean {
+    return date.isAfter(LocalDate.now())
+}
 
 @Composable
 fun Day(
@@ -44,7 +49,7 @@ fun Day(
                 .size(64.dp)
                 .clip(shape = RoundedCornerShape(8.dp))
                 .fillMaxSize()
-                .background(color)
+                .background(if (dayDisabled(date)) greyedOutColor else color)
                 .semantics { contentDescription = date.toString() }
                 .border(
                     color = Color(200, 205, 205),
@@ -52,7 +57,7 @@ fun Day(
                     shape = RoundedCornerShape(8.dp)
                 )
                 .clickable(
-                    enabled = !date.isAfter(LocalDate.now()),
+                    enabled = !dayDisabled(date),
                     onClick = onClick
                 ),
         ) {
@@ -61,11 +66,7 @@ fun Day(
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
                 text = date.dayOfMonth.toString(),
-                color = if (date.isAfter(LocalDate.now())) {
-                    Color(190, 190, 190)
-                } else {
-                    Color.Black
-                }
+                color = if (dayDisabled(date)) Color(190, 190, 190) else Color.Black
             )
 
             Box(
@@ -73,7 +74,7 @@ fun Day(
                     .padding(12.dp)
                     .align(Alignment.Center)
             ) {
-                if (iconId != null) {
+                if (iconId != null && !dayDisabled(date)) {
                     Image(
                         painterResource(id = iconId),
                         modifier = Modifier
@@ -89,16 +90,12 @@ fun Day(
 
 
 fun getDayColorAndIcon(
-    day: CalendarDay,
     activeSymptom: Symptom,
     calendarDayUIState: CalendarDayUIState?
 ): Pair<Color, Int> {
     val defaultColor = Color.White
     val defaultImage = R.drawable.blank
     val default = Pair(defaultColor, defaultImage)
-    if (day.date.isAfter(LocalDate.now())) {
-        return Pair(Color(237, 237, 237), R.drawable.blank)
-    }
     if (calendarDayUIState == null) {
         return default
     }
