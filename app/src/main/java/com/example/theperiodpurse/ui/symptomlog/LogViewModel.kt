@@ -19,10 +19,10 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
         _uiState.update { currentState ->
             val selectSquares = currentState.selectSquares
             if (dayUIState.crampSeverity != null) {
-                selectSquares[LogPrompt.Cramps.title] = dayUIState.crampSeverity.name
+                selectSquares[LogPrompt.Cramps.title] = dayUIState.crampSeverity.displayName
             }
             if (dayUIState.flow != null) {
-                selectSquares[LogPrompt.Flow.title] = dayUIState.flow.name
+                selectSquares[LogPrompt.Flow.title] = dayUIState.flow.displayName
             }
             if (dayUIState.mood != null) {
                 selectSquares[LogPrompt.Mood.title] = dayUIState.mood.displayName
@@ -61,7 +61,7 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
         var selectedFlow = uiState.value.selectSquares["Flow"]
         if (selectedFlow is String) {
             if (selectedFlow == "") selectedFlow = "None"
-            return FlowSeverity.valueOf(selectedFlow)
+            return FlowSeverity.getSeverityByDisplayName(selectedFlow)
         }
         return null
     }
@@ -70,7 +70,7 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
         var selectedCrampSeverity = uiState.value.selectSquares["Cramps"]
         if (selectedCrampSeverity is String) {
             if (selectedCrampSeverity == "") selectedCrampSeverity = "None"
-            return CrampSeverity.valueOf(selectedCrampSeverity)
+            return CrampSeverity.getSeverityByDisplayName(selectedCrampSeverity)
         }
         return null
     }
