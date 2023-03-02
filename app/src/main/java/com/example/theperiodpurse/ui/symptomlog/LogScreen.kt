@@ -108,7 +108,7 @@ fun LogScreenLayout(
                 .fillMaxSize()
                 .background(Color.White)
         ) {
-            LogScreenTopBar2(
+            LogScreenTopBar(
                 navController = navController,
                 date = date
             )
@@ -133,7 +133,7 @@ fun LogScreenLayout(
 }
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun LogScreenTopBar2(navController: NavController, date: LocalDate) {
+fun LogScreenTopBar(navController: NavController, date: LocalDate) {
     PopupTopBar( onClose = { navController.navigateUp() }) {
         LogScreenTopBarContent(navController = navController, date = date)
     }
@@ -223,117 +223,6 @@ private fun LogScreenTopBarContent(navController: NavController, date: LocalDate
                         contentDescription = "Log Forward Arrow"
                     )
                 }
-        }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun LogScreenTopBar(navController: NavController, date: LocalDate) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(color = HeaderColor1)
-    ) {
-        Row (modifier = Modifier
-            .padding(start = 10.dp, top = 10.dp, end = 0.dp)
-        ) {
-            IconButton(
-                onClick = { navController.navigateUp() },
-                modifier = Modifier
-                    .then(Modifier.size(24.dp))
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Close,
-                    contentDescription = "Log Close Button"
-                )
-            }
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 0.dp, bottom = 0.dp, start = 35.dp, end = 35.dp)
-                .height(65.dp)
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .weight(.1f),
-            ) {
-                if (date.minusDays(1) >=
-                    YearMonth.now().minusMonths(12).atStartOfMonth())
-                    IconButton(onClick = {
-                    navController.navigate(
-                        "%s/%s/%s".format(
-                            Screen.Calendar.name,
-                            Screen.Log.name,
-                            date.minusDays(1).toString()
-                        )
-                    ) {
-                        popUpTo(Screen.Calendar.name) {
-                            inclusive = false
-                        }
-                    } },
-                    modifier = Modifier
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Log Back Arrow"
-                    )
-                }
-            }
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .weight(.8f)
-            ) {
-                Text(
-                    text = "Log your symptoms for:",
-                    color = Color(50,50,50),
-                    fontSize = 12.sp
-                )
-                Text(
-                    text = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)),
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .testTag("DateLabel")
-                        .semantics { contentDescription = "DateLabel" }
-                )
-            }
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .weight(.1f)
-            ) {
-                if (date.plusDays(1)<=LocalDate.now())
-                    IconButton(onClick = {
-                        navController.navigate("%s/%s/%s"
-                            .format(
-                                Screen.Calendar.name,
-                                Screen.Log.name,
-                                date.plusDays(1)
-                            )
-                        ) {
-                            popUpTo(Screen.Calendar.name) {
-                                inclusive = false
-                            }
-                        }
-                },
-                modifier = Modifier
-                    .semantics { contentDescription = "ClickNextDay" }
-                    ) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowForward,
-                        contentDescription = "Log Forward Arrow"
-                    )
-                }
-            }
-
         }
     }
 }
@@ -527,17 +416,6 @@ fun LogScreenLayoutPreview() {
         logViewModel = LogViewModel(logPrompts),
         onSave = {}
     )
-}
-
-@Preview
-@Composable
-fun LogScreenTopBar2Preview() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        LogScreenTopBar2(
-            date = LocalDate.parse("2000-01-01"),
-            navController = rememberNavController()
-        )
-    }
 }
 
 @Preview
