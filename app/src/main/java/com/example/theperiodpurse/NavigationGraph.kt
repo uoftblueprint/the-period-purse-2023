@@ -26,6 +26,7 @@ import com.example.theperiodpurse.ui.onboarding.QuestionOneScreen
 import com.example.theperiodpurse.ui.onboarding.QuestionTwoScreen
 import com.example.theperiodpurse.ui.onboarding.WelcomeScreen
 import com.example.theperiodpurse.ui.setting.SettingsScreen
+import java.time.LocalDate
 
 enum class Screen() {
     Calendar,
@@ -146,6 +147,11 @@ private fun cancelOrderAndNavigateToStart(
 ) {
     viewModel.resetOrder()
     navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = false)
+}
+
+fun navigateToLogScreenWithDate(date: LocalDate, navController: NavController) {
+    navController.navigate(route = "%s/%s/%s"
+        .format(Screen.Calendar, Screen.Log, date.toString()))
 }
 
 @Composable

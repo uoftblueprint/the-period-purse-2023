@@ -1,11 +1,91 @@
 package com.example.theperiodpurse.ui.calendar.components
 
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.data.*
 import com.example.theperiodpurse.ui.calendar.CalendarDayUIState
 import com.kizitonwose.calendar.core.CalendarDay
 import java.time.LocalDate
+
+@Composable
+fun Day(
+    date: LocalDate,
+    color: Color,
+    @DrawableRes iconId: Int?,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = Modifier
+            .padding(1.dp)
+            .aspectRatio(1f)
+    )
+    {
+        Box(
+            modifier = modifier
+                .size(64.dp)
+                .clip(shape = RoundedCornerShape(8.dp))
+                .fillMaxSize()
+                .background(color)
+                .semantics { contentDescription = date.toString() }
+                .border(
+                    color = Color(200, 205, 205),
+                    width = 1.dp,
+                    shape = RoundedCornerShape(8.dp)
+                )
+                .clickable(
+                    enabled = !date.isAfter(LocalDate.now()),
+                    onClick = onClick
+                ),
+        ) {
+            Text(
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold,
+                text = date.dayOfMonth.toString(),
+                color = if (date.isAfter(LocalDate.now())) {
+                    Color(190, 190, 190)
+                } else {
+                    Color.Black
+                }
+            )
+
+            Box(
+                modifier = Modifier
+                    .padding(12.dp)
+                    .align(Alignment.Center)
+            ) {
+                if (iconId != null) {
+                    Image(
+                        painterResource(id = iconId),
+                        modifier = Modifier
+                            .size(20.dp)
+                            .offset(y = 2.dp),
+                        contentDescription = "DateFlowIcon"
+                    )
+                }
+            }
+        }
+    }
+}
 
 
 fun getDayColorAndIcon(

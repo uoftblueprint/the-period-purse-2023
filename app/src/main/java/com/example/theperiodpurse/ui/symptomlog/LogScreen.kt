@@ -37,6 +37,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.Screen
 import com.example.theperiodpurse.data.LogPrompt
 import com.example.theperiodpurse.data.LogSquare
+import com.example.theperiodpurse.ui.component.PopupTopBar
 import com.example.theperiodpurse.ui.symptomlog.LogViewModel
 import com.example.theperiodpurse.ui.theme.HeaderColor1
 import com.example.theperiodpurse.ui.theme.SecondaryFontColor
@@ -107,7 +108,7 @@ fun LogScreenLayout(
                 .fillMaxSize()
                 .background(Color.White)
         ) {
-            LogScreenTopBar(
+            LogScreenTopBar2(
                 navController = navController,
                 date = date
             )
@@ -129,8 +130,101 @@ fun LogScreenLayout(
         }
 
     }
+}
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun LogScreenTopBar2(navController: NavController, date: LocalDate) {
+    PopupTopBar( onClose = { navController.navigateUp() }) {
+        LogScreenTopBarContent(navController = navController, date = date)
+    }
+}
 
+@Composable
+private fun LogScreenTopBarContent(navController: NavController, date: LocalDate) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 0.dp, bottom = 0.dp, start = 35.dp, end = 35.dp)
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .weight(.1f),
+        ) {
+            if (date.minusDays(1) >=
+                YearMonth.now().minusMonths(12).atStartOfMonth())
+                IconButton(onClick = {
+                    navController.navigate(
+                        "%s/%s/%s".format(
+                            Screen.Calendar.name,
+                            Screen.Log.name,
+                            date.minusDays(1).toString()
+                        )
+                    ) {
+                        popUpTo(Screen.Calendar.name) {
+                            inclusive = false
+                        }
+                    } },
+                    modifier = Modifier
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Log Back Arrow"
+                    )
+                }
+        }
 
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .weight(.8f)
+        ) {
+            Text(
+                text = "Log your symptoms for:",
+                color = Color(50, 50, 50),
+                fontSize = 12.sp
+            )
+            Text(
+                text = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)),
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .testTag("DateLabel")
+                    .semantics { contentDescription = "DateLabel" }
+            )
+        }
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .weight(.1f)
+        ) {
+            if (date.plusDays(1) <= LocalDate.now())
+                IconButton(onClick = {
+                    navController.navigate(
+                        "%s/%s/%s"
+                            .format(
+                                Screen.Calendar.name,
+                                Screen.Log.name,
+                                date.plusDays(1)
+                            )
+                    ) {
+                        popUpTo(Screen.Calendar.name) {
+                            inclusive = false
+                        }
+                    }
+                },
+                    modifier = Modifier
+                        .semantics { contentDescription = "ClickNextDay" }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowForward,
+                        contentDescription = "Log Forward Arrow"
+                    )
+                }
+        }
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -433,6 +527,17 @@ fun LogScreenLayoutPreview() {
         logViewModel = LogViewModel(logPrompts),
         onSave = {}
     )
+}
+
+@Preview
+@Composable
+fun LogScreenTopBar2Preview() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        LogScreenTopBar2(
+            date = LocalDate.parse("2000-01-01"),
+            navController = rememberNavController()
+        )
+    }
 }
 
 @Preview
