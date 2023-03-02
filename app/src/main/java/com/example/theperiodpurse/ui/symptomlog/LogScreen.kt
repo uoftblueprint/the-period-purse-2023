@@ -76,7 +76,7 @@ fun LogScreen(
         LogScreenLayout(
             day, navController, logPrompts, logViewModel,
             onSave = {
-                calendarViewModel.saveDayInfo(
+                calendarViewModel.setDayInfo(
                     day,
                     CalendarDayUIState(
                         flow = logViewModel.getSelectedFlow(),

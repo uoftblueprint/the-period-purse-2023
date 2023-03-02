@@ -22,15 +22,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.data.FlowSeverity
 import com.example.theperiodpurse.ui.calendar.CalendarDayUIState
 import com.example.theperiodpurse.ui.calendar.CalendarViewModel
 import com.example.theperiodpurse.ui.calendar.MonthHeader
 import com.example.theperiodpurse.ui.calendar.components.Day
-import com.example.theperiodpurse.ui.calendar.components.greyedOutColor
 import com.example.theperiodpurse.ui.component.PopupTopBar
 import com.example.theperiodpurse.ui.theme.Red
 import com.example.theperiodpurse.ui.theme.SelectedColor1
@@ -99,7 +96,7 @@ fun LogMultipleDatesScreen(
 
             FloatingActionButton(onClick = {
                 selectedDates.forEach {
-                    calendarViewModel.saveDayInfo(it, CalendarDayUIState(FlowSeverity.Medium)) 
+                    calendarViewModel.updateDayInfo(it, CalendarDayUIState(FlowSeverity.Medium))
                 }
                 onClose()},
                 backgroundColor = SelectedColor1,
