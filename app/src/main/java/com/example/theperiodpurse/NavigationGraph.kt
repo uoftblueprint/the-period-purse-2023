@@ -26,8 +26,10 @@ import com.example.theperiodpurse.data.*
 import com.example.theperiodpurse.ui.QuestionThreeScreen
 import com.example.theperiodpurse.ui.SummaryScreen
 import com.example.theperiodpurse.ui.calendar.CalendarScreen
+import com.example.theperiodpurse.ui.calendar.CalendarViewModel
 import com.example.theperiodpurse.ui.calendar.LogScreen
 import com.example.theperiodpurse.ui.cycle.CycleScreenLayout
+import com.example.theperiodpurse.ui.education.*
 import com.example.theperiodpurse.ui.onboarding.OnboardViewModel
 import com.example.theperiodpurse.ui.onboarding.QuestionOneScreen
 import com.example.theperiodpurse.ui.onboarding.QuestionTwoScreen
@@ -89,6 +91,8 @@ fun NavigationGraph(
     navController: NavHostController,
     startDestination: String,
     viewModel: OnboardViewModel,
+    calendarViewModel: CalendarViewModel,
+    modifier: Modifier = Modifier
     modifier: Modifier = Modifier,
     mainActivity: MainActivity,
     signIn: () -> Unit
@@ -100,7 +104,7 @@ fun NavigationGraph(
         modifier = modifier
     ) {
         composable(route = Screen.Calendar.name) {
-            CalendarScreen(navController = navController)
+            CalendarScreen(navController = navController, calendarViewModel)
         }
 
         composable(
@@ -113,7 +117,8 @@ fun NavigationGraph(
             if (date != null) {
                 LogScreen(
                     date = date,
-                    navController = navController
+                    navController = navController,
+                    calendarViewModel = calendarViewModel
                 )
             }
         }
@@ -126,9 +131,13 @@ fun NavigationGraph(
             CycleScreenLayout()
         }
 
+        // Education Screens
+
         composable(route = Screen.Learn.name) {
             /* TODO Put Screen for Info page here */
         }
+
+
 
         // Welcome Screen
         composable(route = OnboardingScreen.Welcome.name) {

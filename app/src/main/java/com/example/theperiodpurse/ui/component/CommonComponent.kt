@@ -95,7 +95,8 @@ private fun BottomNavigation(
 fun FloatingActionButton(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    contentColor: Color = Color.White
+    contentColor: Color = Color.White,
+    onClickInCalendar: () -> Unit
 ) {
     val circle = MaterialTheme.shapes.large.copy(CornerSize(percent = 50))
     var iconId by remember { mutableStateOf(R.drawable.add_black_24dp) }
@@ -117,7 +118,7 @@ fun FloatingActionButton(
             onClick =
             {
                 if (navController.currentDestination?.route == Screen.Calendar.name) {
-                    /* TODO onAddActionClicked */
+                    onClickInCalendar()
                 } else {
                     navController.navigate(Screen.Calendar.name) {
                         popUpTo(navController.graph.findStartDestination().id) {
