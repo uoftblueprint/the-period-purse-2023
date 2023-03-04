@@ -39,7 +39,7 @@ class NavigationTest {
                 ComposeNavigator()
             )
             ScreenApp(navController = navController, skipOnboarding = true, viewModel =
-            onboardViewModel)
+            onboardViewModel) { signIn() }
         }
     }
 
@@ -80,5 +80,10 @@ class NavigationTest {
             .performClick()
         navController.assertCurrentRouteName(Screen.Calendar.name)
     }
+
+    fun signIn(){
+
+    }
+
 }
 

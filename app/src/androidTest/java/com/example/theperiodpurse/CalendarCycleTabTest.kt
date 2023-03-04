@@ -40,7 +40,7 @@ class CalendarCycleTabTest {
                 ComposeNavigator()
             )
             ScreenApp(navController = navController, skipOnboarding = true, viewModel =
-            onboardViewModel)
+            onboardViewModel) { signIn() }
         }
     }
 
@@ -130,6 +130,9 @@ class CalendarCycleTabTest {
         composeTestRule.onNodeWithText(CalendarTabItem.CalendarTab.title).performClick()
 
         composeTestRule.onNodeWithContentDescription("Calendar Page").assertIsDisplayed()
+    }
+    fun signIn(){
+
     }
 
 }

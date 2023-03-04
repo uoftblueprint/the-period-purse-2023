@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             if (mAuth.currentUser == null) {
-                Application() { signIn() }
+                Application { signIn() }
             } else {
 //                val user: FirebaseUser = mAuth.currentUser!!
                 Application(true) { signIn() }
@@ -106,7 +106,7 @@ class MainActivity : ComponentActivity() {
                     // SignIn Successful
                     Toast.makeText(this, "SignIn Successful", Toast.LENGTH_SHORT).show()
                     setContent {
-                        Application() { signIn() }
+                        Application { signIn() }
                     }
                 } else {
                     // SignIn Failed
@@ -134,13 +134,13 @@ class MainActivity : ComponentActivity() {
             .addOnSuccessListener {
                 Toast.makeText(this, "Sign Out Successful", Toast.LENGTH_SHORT).show()
                 setContent {
-                    Application() { signIn() }
+                    Application { signIn() }
                 }
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Sign Out Failed", Toast.LENGTH_SHORT).show()
                 setContent {
-                    Application() { signIn() }
+                    Application { signIn() }
                 }
             }
     }
