@@ -92,7 +92,6 @@ fun NavigationGraph(
     startDestination: String,
     viewModel: OnboardViewModel,
     calendarViewModel: CalendarViewModel,
-    modifier: Modifier = Modifier
     modifier: Modifier = Modifier,
     mainActivity: MainActivity,
     signIn: () -> Unit

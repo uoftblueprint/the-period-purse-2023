@@ -189,21 +189,16 @@ fun ScreenApp(
             contentScale = ContentScale.FillBounds
         )
 
-        NavigationGraph(
-            navController = navController,
-            startDestination = if (skipOnboarding) Screen.Calendar.name else OnboardingScreen.Welcome.name,
-            viewModel,
-            modifier = modifier.padding(innerPadding),
-            mainActivity = mainActivity,
-            signIn = signIn
-        )
+
         Box {
             NavigationGraph(
                 navController = navController,
                 startDestination = if (skipOnboarding) Screen.Calendar.name else OnboardingScreen.Welcome.name,
                 viewModel = viewModel,
                 calendarViewModel = calendarViewModel,
-                modifier = modifier.padding(innerPadding)
+                modifier = modifier.padding(innerPadding),
+                mainActivity = MainActivity(),
+                signIn = signIn
             )
 
             if (loggingOptionsVisible) {
