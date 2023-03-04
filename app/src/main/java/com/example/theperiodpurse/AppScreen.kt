@@ -29,7 +29,6 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.example.theperiodpurse.ui.symptomlog.LoggingOptionsPopup
-import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import java.time.LocalDate
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -58,10 +57,10 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             if (mAuth.currentUser == null) {
-                Application(false, this) { signIn() }
+                Application() { signIn() }
             } else {
 //                val user: FirebaseUser = mAuth.currentUser!!
-                Application(true, this) { signIn() }
+                Application(true) { signIn() }
 
 
             }
@@ -107,7 +106,7 @@ class MainActivity : ComponentActivity() {
                     // SignIn Successful
                     Toast.makeText(this, "SignIn Successful", Toast.LENGTH_SHORT).show()
                     setContent {
-                        Application(mainActivity = this) { signIn() }
+                        Application() { signIn() }
                     }
                 } else {
                     // SignIn Failed
@@ -135,13 +134,13 @@ class MainActivity : ComponentActivity() {
             .addOnSuccessListener {
                 Toast.makeText(this, "Sign Out Successful", Toast.LENGTH_SHORT).show()
                 setContent {
-                    Application(mainActivity = this) { signIn() }
+                    Application() { signIn() }
                 }
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Sign Out Failed", Toast.LENGTH_SHORT).show()
                 setContent {
-                    Application(mainActivity = this) { signIn() }
+                    Application() { signIn() }
                 }
             }
     }
@@ -150,8 +149,8 @@ class MainActivity : ComponentActivity() {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Application(skipOnboarding: Boolean = false, mainActivity: MainActivity, signIn: () -> Unit) {
-    ScreenApp(skipOnboarding = skipOnboarding, mainActivity = mainActivity, signIn = signIn)
+fun Application(skipOnboarding: Boolean = false, signIn: () -> Unit) {
+    ScreenApp(skipOnboarding = skipOnboarding, signIn = signIn)
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -162,7 +161,6 @@ fun ScreenApp(
     calendarViewModel: CalendarViewModel = viewModel(),
     skipOnboarding: Boolean = false,
     navController: NavHostController = rememberNavController(),
-    mainActivity: MainActivity,
     signIn: () -> Unit
 ) {
     var loggingOptionsVisible by remember { mutableStateOf(false) }
