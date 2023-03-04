@@ -8,24 +8,38 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
+import com.example.theperiodpurse.ui.onboarding.OnboardViewModel
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import javax.inject.Inject
 
+@HiltAndroidTest
 class NavigationTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
     private lateinit var navController: TestNavHostController
 
+    @Inject
+    lateinit var onboardViewModel: OnboardViewModel
+
+    @get:Rule
+    // Used to manage the components' state and is used to perform injection on tests
+    var hiltRule = HiltAndroidRule(this)
+
     @Before
     fun setupNavHost() {
+        hiltRule.inject()
         composeTestRule.setContent {
             navController =
                 TestNavHostController(LocalContext.current)
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
-            ScreenApp(navController = navController, skipOnboarding = true, mainActivity = MainActivity())
+            ScreenApp(navController = navController, skipOnboarding = true, viewModel =
+            onboardViewModel)
         }
     }
 

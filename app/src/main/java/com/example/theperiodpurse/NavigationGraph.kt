@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -21,7 +22,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
-import com.example.theperiodpurse.data.DataSource
+import com.example.theperiodpurse.data.*
 import com.example.theperiodpurse.ui.QuestionThreeScreen
 import com.example.theperiodpurse.ui.SummaryScreen
 import com.example.theperiodpurse.ui.calendar.CalendarScreen
@@ -91,9 +92,6 @@ fun NavigationGraph(
     mainActivity: MainActivity,
     signIn: () -> Unit
 ) {
-
-
-
     val uiState by viewModel.uiState.collectAsState()
     NavHost(
         navController = navController,
@@ -120,7 +118,7 @@ fun NavigationGraph(
         }
 
         composable(route = Screen.Settings.name) {
-            SettingPage(mainActivity)
+            SettingsScreen()
         }
 
         composable(route = Screen.Cycle.name) {
@@ -206,7 +204,7 @@ private fun cancelOrderAndNavigateToStart(
 }
 
 @Composable
-fun currentRoute(navController: NavHostController): String? {
+fun currentRoute(navController: NavController): String? {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     return navBackStackEntry?.destination?.route
 }

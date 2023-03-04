@@ -10,6 +10,11 @@ import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.FabPosition
+import androidx.compose.material.Scaffold
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.runtime.Composable
@@ -17,6 +22,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.theperiodpurse.ui.component.BottomNavigation
+import com.example.theperiodpurse.ui.component.FloatingActionButton
 import com.example.theperiodpurse.ui.onboarding.*
 import com.example.theperiodpurse.ui.component.BottomNavigation
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -44,7 +52,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseUser
 import kotlin.math.sign
 
+import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     companion object {
@@ -180,7 +191,14 @@ fun ScreenApp(
             if (currentRoute(navController) in Screen.values().map{ it.name }) {
                 BottomNavigation(navController = navController)
             }
-        }
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                navController = navController
+            )
+        },
+        floatingActionButtonPosition = FabPosition.Center,
+        isFloatingActionButtonDocked = true
     ) { innerPadding ->
 
         Image(
@@ -189,7 +207,7 @@ fun ScreenApp(
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds
         )
-
+        
         NavigationGraph(
             navController = navController,
             startDestination = if (skipOnboarding) Screen.Calendar.name else OnboardingScreen.Welcome.name,
@@ -198,10 +216,5 @@ fun ScreenApp(
             mainActivity = mainActivity,
             signIn = signIn
         )
-
     }
 }
-
-
-
-
