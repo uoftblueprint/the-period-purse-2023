@@ -51,7 +51,8 @@ fun NavigationGraph(
     startDestination: String,
     viewModel: OnboardViewModel,
     calendarViewModel: CalendarViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+
 ) {
     val uiState by viewModel.uiState.collectAsState()
     NavHost(
@@ -137,6 +138,7 @@ fun NavigationGraph(
                 onCancelButtonClicked = {
                     cancelOrderAndNavigateToStart(viewModel, navController)
                 },
+                viewModel = viewModel
             )
         }
     }

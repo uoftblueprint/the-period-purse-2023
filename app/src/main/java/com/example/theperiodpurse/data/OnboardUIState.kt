@@ -9,4 +9,6 @@ data class OnboardUIState(/** Selected days quantity  */
                           /** Available dates for the track*/
                           val dateOptions: List<String> = listOf(),
                           val user: User? = null,
+
+                          val onboarded: Boolean = false
 )

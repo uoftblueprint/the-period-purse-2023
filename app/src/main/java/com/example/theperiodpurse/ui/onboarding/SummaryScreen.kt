@@ -13,10 +13,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.theperiodpurse.R
+import com.example.theperiodpurse.data.Date
+import com.example.theperiodpurse.data.DateConverter
 import com.example.theperiodpurse.data.OnboardUIState
+import com.example.theperiodpurse.data.Symptom
+import com.example.theperiodpurse.ui.onboarding.OnboardViewModel
+import com.example.theperiodpurse.ui.onboarding.setDateTo
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoField
+import java.time.temporal.ChronoUnit
 
 /**
  * This composable expects [onboardUIState] that represents the onboarding state, [onCancelButtonClicked] lambda
@@ -27,9 +36,12 @@ fun SummaryScreen(
     onboardUiState: OnboardUIState,
     onCancelButtonClicked: () -> Unit,
     onSendButtonClicked: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: OnboardViewModel,
 ) {
     val resources = LocalContext.current.resources
+
+    val viewModel: OnboardViewModel = viewModel
 
     val numberOfDays = resources.getQuantityString(
         R.plurals.period_length,
@@ -66,7 +78,15 @@ fun SummaryScreen(
 
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = { onSendButtonClicked() }
+            onClick = {
+//                viewModel.addNewUser(getSymptomsToTrack(onboardUiState.symptomsOptions),
+//                    arrayListOf<Date>(),
+//                    onboardUiState.days,
+//                    0,
+//                    getDaysSince(onboardUiState.date)
+//                )
+
+                onSendButtonClicked() }
         ) {
             Text(stringResource(R.string.lets_go))
         }
@@ -74,12 +94,35 @@ fun SummaryScreen(
     }
 }
 
-@Preview
-@Composable
-fun OrderSummaryPreview() {
-    SummaryScreen(
-        onboardUiState = OnboardUIState(5, "June 1st", listOf("test1", "test2")),
-        onSendButtonClicked = { },
-        onCancelButtonClicked = {}
-    )
+fun getDaysSince(date: String): Int {
+
+    val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
+    var date= date.split("|")[0]
+
+    val from = LocalDate.parse(date, dateFormatter)
+
+    val today = LocalDate.now()
+
+    return ChronoUnit.DAYS.between(today, from).toInt()
+
 }
+
+fun getSymptomsToTrack(strList: List<String>): ArrayList<Symptom> {
+
+    val list_so_far = arrayListOf<Symptom>()
+
+    strList.forEach {
+        symptom ->
+        when (symptom) {
+            "Mood" -> {list_so_far.add(Symptom.MOOD)}
+            "Exercise" -> {list_so_far.add(Symptom.EXERCISE)}
+            "Flow" -> {list_so_far.add(Symptom.FLOW)}
+            "Cramps" -> {list_so_far.add(Symptom.CRAMPS)}
+            "Sleep" -> {list_so_far.add(Symptom.SLEEP)}
+        }
+
+    }
+    return list_so_far
+
+}
+

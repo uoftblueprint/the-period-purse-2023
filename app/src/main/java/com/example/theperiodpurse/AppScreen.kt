@@ -17,6 +17,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.theperiodpurse.ui.calendar.CalendarViewModel
 import androidx.navigation.compose.rememberNavController
+import com.example.theperiodpurse.data.OnboardUIState
 import com.example.theperiodpurse.ui.component.BottomNavigation
 import com.example.theperiodpurse.ui.component.FloatingActionButton
 import com.example.theperiodpurse.ui.onboarding.*
@@ -53,6 +54,14 @@ fun ScreenApp(
     skipOnboarding: Boolean = false,
     navController: NavHostController = rememberNavController()
 ) {
+
+    var skipOnboard = skipOnboarding
+
+//    skipOnboard = viewModel.userOnboarded()
+
+
+
+
     var loggingOptionsVisible by remember { mutableStateOf(false) }
     Scaffold(
         bottomBar = {
@@ -78,10 +87,10 @@ fun ScreenApp(
         Box {
             NavigationGraph(
                 navController = navController,
-                startDestination = if (skipOnboarding) Screen.Calendar.name else OnboardingScreen.Welcome.name,
+                startDestination = if (skipOnboard) Screen.Calendar.name else OnboardingScreen.Welcome.name,
                 viewModel = viewModel,
                 calendarViewModel = calendarViewModel,
-                modifier = modifier.padding(innerPadding)
+                modifier = modifier.padding(innerPadding),
             )
 
             if (loggingOptionsVisible) {

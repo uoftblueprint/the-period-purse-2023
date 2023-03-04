@@ -17,4 +17,7 @@ class UserRepository(private val userDAO: UserDAO) {
     suspend fun getUser(id: Int): User {
         return userDAO.get(id)
     }
+    fun getUsers(): List<User> {
+        return userDAO.getUsers()
+    }
 }

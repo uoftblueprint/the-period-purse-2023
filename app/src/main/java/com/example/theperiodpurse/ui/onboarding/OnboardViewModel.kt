@@ -12,6 +12,11 @@ import kotlinx.coroutines.flow.update
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.example.theperiodpurse.data.User
+import com.example.theperiodpurse.data.UserDAO
 
 @HiltViewModel
 class OnboardViewModel @Inject constructor (
@@ -35,6 +40,7 @@ class OnboardViewModel @Inject constructor (
 
 
 
+
     /**
      * Set the [logSymptoms] to track for onboarding session.
      */
@@ -51,6 +57,8 @@ class OnboardViewModel @Inject constructor (
             currentState.copy(symptomsOptions = listOfSymptoms)
         }
     }
+
+
 
     /**
      * Set the [lastDate] of last period for current onboarding session
@@ -113,6 +121,11 @@ class OnboardViewModel @Inject constructor (
             val user = withContext(Dispatchers.Main) { userRepository.getUser(1) }
             _uiState.value = _uiState.value.copy(user = user)
         }
+    }
+
+    fun userOnboarded(): Boolean{
+        return userRepository.getUsers().isNotEmpty()
+
     }
 
     private fun createDate(date: java.util.Date, flow: FlowSeverity, mood: Mood,
