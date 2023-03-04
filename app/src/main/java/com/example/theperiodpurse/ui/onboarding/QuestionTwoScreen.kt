@@ -33,7 +33,8 @@ fun QuestionTwoScreen(
     onNextButtonClicked: () -> Unit,
     onSelectionChanged: (String) -> Unit = {},
     options: List<String>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateUp: () -> Unit
 ) {
     val mYear: Int
     val mMonth: Int
@@ -66,7 +67,7 @@ fun QuestionTwoScreen(
 
     mDatePickerDialog.getDatePicker().setMaxDate(Date().getTime())
 
-    backbutton1()
+    backbutton1(navigateUp)
 
     Column(
         modifier = Modifier.fillMaxHeight(1f),

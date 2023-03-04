@@ -1,11 +1,7 @@
 package com.example.theperiodpurse.ui.onboarding
 
 
-import android.graphics.Color.rgb
-import android.graphics.Paint
 import android.os.Build
-import android.util.DisplayMetrics
-import android.view.RoundedCorner
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.*
@@ -14,15 +10,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.SnackbarDefaults.backgroundColor
-import androidx.compose.material.TextFieldDefaults.TextFieldDecorationBox
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
@@ -32,7 +22,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.theperiodpurse.MainActivity
@@ -41,10 +30,12 @@ import com.example.theperiodpurse.R
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun QuestionOneScreen(onNextButtonClicked: () -> Unit,
-                      onSelectionChanged: (String) -> Unit = {},
-                      onCancelButtonClicked: () -> Unit = {},
-                      modifier: Modifier = Modifier, mainActivity: MainActivity) {
+fun QuestionOneScreen(
+    onNextButtonClicked: () -> Unit,
+    onSelectionChanged: (String) -> Unit = {},
+    onCancelButtonClicked: () -> Unit = {},
+    modifier: Modifier = Modifier, mainActivity: MainActivity, navigateUp: () -> Unit
+) {
     var periodCycle by remember { mutableStateOf("") }
     var entered by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
@@ -53,10 +44,7 @@ fun QuestionOneScreen(onNextButtonClicked: () -> Unit,
     val screenwidth = configuration.screenWidthDp;
 
     val screenheight = configuration.screenHeightDp;
-    backbutton1()
-
-
-
+    backbutton1(navigateUp)
     Column(
         modifier = Modifier.fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -96,13 +84,6 @@ fun QuestionOneScreen(onNextButtonClicked: () -> Unit,
             )
 
         }
-
-
-
-
-
-
-
 
         Text(
             text = stringResource(R.string.question_one),
@@ -171,17 +152,13 @@ fun QuestionOneScreen(onNextButtonClicked: () -> Unit,
                 Text(stringResource(R.string.next),color = Color.White, fontSize = 20.sp)
             }
         }
-
-
-
-
     }
 
 
 }
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun backbutton1() {
+fun backbutton1(navigateUp: () -> Unit) {
     Column(
         modifier = Modifier
             .padding(
@@ -189,6 +166,7 @@ fun backbutton1() {
                 horizontal = 20.dp
             )
             .clickable(enabled = true, onClick = {
+                navigateUp
 
             }),
     ) {
@@ -209,7 +187,6 @@ fun EditNumberField(
     onValueChange: (String) -> Unit,
     keyboardActions: KeyboardActions,
 ){
-
 
     TextField(
         value = value,
@@ -234,8 +211,6 @@ fun EditDaysField(
     keyboardActions: KeyboardActions,
     entered: Boolean,
 ){
-
-
     TextField(
         shape = RoundedCornerShape(20),
         colors = TextFieldDefaults.textFieldColors(backgroundColor=Color.White),
@@ -275,12 +250,8 @@ fun EditDaysField(
 
     )
 }
-
-
 @Composable
 fun background_shape() {
-
-    val configuration = LocalConfiguration.current
 
     Image(
         painter = painterResource(R.drawable.background_shape__1_),

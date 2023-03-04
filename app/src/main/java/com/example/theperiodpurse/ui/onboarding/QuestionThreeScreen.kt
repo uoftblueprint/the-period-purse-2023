@@ -37,7 +37,8 @@ fun QuestionThreeScreen(
     onSelectionChanged: (String) -> Unit = {},
     onCancelButtonClicked: () -> Unit = {},
     onNextButtonClicked: () -> Unit = {},
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateUp: () -> Unit
 ) {
     var selectedValue by rememberSaveable { mutableStateOf("") }
 
@@ -374,20 +375,7 @@ fun QuestionThreeScreen(
 
     }
 
-    backbutton1()
-}
-
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview
-@Composable
-fun SelectOptionPreview() {
-    val context = LocalContext.current
-    QuestionThreeScreen(
-
-
-        options = symptoms.map { id -> context.resources.getString(id) }
-    )
+    backbutton1(navigateUp)
 }
 
 

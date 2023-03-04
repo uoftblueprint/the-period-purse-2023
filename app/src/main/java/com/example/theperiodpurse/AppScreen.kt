@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseUser
+import kotlin.math.sign
 
 
 class MainActivity : ComponentActivity() {
@@ -68,10 +69,10 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             if (mAuth.currentUser == null) {
-                LoginScreen()
+                Application(false, this) { signIn() }
             } else {
                 val user: FirebaseUser = mAuth.currentUser!!
-                Application(true, this)
+                Application(true, this) { signIn() }
 
 
             }
@@ -117,7 +118,7 @@ class MainActivity : ComponentActivity() {
                     // SignIn Successful
                     Toast.makeText(this, "SignIn Successful", Toast.LENGTH_SHORT).show()
                     setContent {
-                        Application(mainActivity = this)
+                        Application(mainActivity = this) { signIn() }
                     }
                 } else {
                     // SignIn Failed
@@ -145,180 +146,23 @@ class MainActivity : ComponentActivity() {
             .addOnSuccessListener {
                 Toast.makeText(this, "Sign Out Successful", Toast.LENGTH_SHORT).show()
                 setContent {
-                    LoginScreen()
+                    Application(mainActivity = this) { signIn() }
                 }
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Sign Out Failed", Toast.LENGTH_SHORT).show()
                 setContent {
-                    LoginScreen()
+                    Application(mainActivity = this) { signIn() }
                 }
             }
-    }
-
-
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    @Composable
-    fun LoginScreen() {
-
-        val configuration = LocalConfiguration.current
-
-        val screenwidth = configuration.screenWidthDp;
-
-        val screenheight = configuration.screenHeightDp;
-
-
-
-        Image(
-            painter = painterResource(id = R.drawable.background),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.FillBounds
-        )
-
-
-
-
-        Column(
-            modifier = Modifier
-                .padding((screenheight*0.02).dp)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-
-
-            Spacer(modifier = Modifier.height((screenheight*0.09).dp))
-
-            // Logo Image
-            Image(
-                painter = painterResource(R.drawable.app_logo),
-                contentDescription = null,
-                modifier = Modifier.size((screenheight*0.25).dp)
-            )
-            Spacer(modifier = Modifier.height((screenheight*0.09).dp))
-
-            // Welcome text
-            Text(text = stringResource(R.string.welcome), style = MaterialTheme.typography.h4, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height((screenheight*0.13).dp))
-
-            // Quick Start button
-            QuickStartButton(
-                onClick = {setContent {
-                    Application(mainActivity = MainActivity())
-                }}
-            )
-
-            Spacer(modifier = Modifier.height(5.dp))
-
-            // Sign in with Google Button
-            GoogleSignInButton {
-                signIn()
-            }
-            Spacer(modifier = Modifier.height((screenheight*0.006).dp))
-
-            val annotatedLinkString = buildAnnotatedString {
-                val str = "Terms and Conditions and Privacy Policy"
-                var startIndex = str.indexOf("Terms and Conditions")
-                var endIndex = startIndex + 20
-                addStyle(
-                    style = SpanStyle(
-                        textDecoration = TextDecoration.Underline,
-                        fontWeight = FontWeight.Bold
-                    ), start = startIndex, end = endIndex
-                )
-                startIndex = str.indexOf("Privacy Policy")
-                endIndex = startIndex + 14
-                addStyle(
-                    style = SpanStyle(
-                        textDecoration = TextDecoration.Underline,
-                                fontWeight = FontWeight.Bold
-                    ), start = startIndex, end = endIndex
-                )
-                append(str)
-            }
-
-            Text("By continuing, you accept the", textAlign = TextAlign.Center, )
-            Text(text = annotatedLinkString, textAlign = TextAlign.Center)
-        }
-
-    }
-}
-
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun GoogleSignInButton(
-    signInClicked: () -> Unit
-) {
-
-    Surface(onClick = signInClicked,
-            modifier = Modifier.widthIn(min = 350.dp).height(50.dp),
-            shape= RoundedCornerShape(15),
-            border = BorderStroke(width = 1.dp, color=Color.LightGray),
-            color = MaterialTheme.colors.surface
-    ) {
-        Row (modifier = Modifier
-            .padding(
-                start = 12.dp,
-                end = 16.dp,
-                top = 12.dp,
-                bottom = 12.dp
-            ),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center){
-            Icon(
-                painter = painterResource(id = R.drawable.ic_google_logo),
-                contentDescription = "Google Button",
-                tint=Color.Unspecified,
-
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Text(
-                text = "Sign in with Google",
-                color = Color.Black, fontSize = 20.sp,
-            )
-
-        }
-
-    }
-
-}
-
-@ExperimentalMaterialApi
-@Composable
-@Preview
-private fun GoogleButtonPreview(){
-    GoogleSignInButton {
-
-    }
-}
-
-
-@Composable
-fun GoogleSignOutButton(
-    signOutClicked: () -> Unit
-) {
-
-    Button(onClick = signOutClicked) {
-        Text(
-            modifier = Modifier
-                .padding(start = 20.dp)
-                .align(Alignment.CenterVertically),
-            text = "Sign Out Of Google",
-            fontSize = MaterialTheme.typography.h6.fontSize,
-        )
     }
 
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Application(skipOnboarding: Boolean = false, mainActivity: MainActivity) {
-    ScreenApp(skipOnboarding = skipOnboarding, mainActivity = mainActivity)
+fun Application(skipOnboarding: Boolean = false, mainActivity: MainActivity,signIn: () -> Unit) {
+    ScreenApp(skipOnboarding = skipOnboarding, mainActivity = mainActivity, signIn = signIn)
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -328,7 +172,8 @@ fun ScreenApp(
     viewModel: OnboardViewModel = viewModel(),
     skipOnboarding: Boolean = false,
     navController: NavHostController = rememberNavController(),
-    mainActivity: MainActivity
+    mainActivity: MainActivity,
+    signIn: () -> Unit
 ) {
     Scaffold(
         bottomBar = {
@@ -346,10 +191,11 @@ fun ScreenApp(
 
         NavigationGraph(
             navController = navController,
-            startDestination = if (skipOnboarding) Screen.Calendar.name else OnboardingScreen.QuestionOne.name,
+            startDestination = if (skipOnboarding) Screen.Calendar.name else OnboardingScreen.Welcome.name,
             viewModel,
             modifier = modifier.padding(innerPadding),
             mainActivity = mainActivity,
+            signIn = signIn
         )
 
     }

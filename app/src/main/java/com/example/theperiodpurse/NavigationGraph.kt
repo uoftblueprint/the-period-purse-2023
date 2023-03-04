@@ -1,13 +1,20 @@
 package com.example.theperiodpurse
 
-import androidx.activity.result.ActivityResultRegistry
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -25,7 +32,7 @@ import com.example.theperiodpurse.ui.onboarding.QuestionOneScreen
 import com.example.theperiodpurse.ui.onboarding.QuestionTwoScreen
 import com.example.theperiodpurse.ui.onboarding.WelcomeScreen
 import com.example.theperiodpurse.ui.setting.SettingPage
-import com.example.theperiodpurse.ui.setting.SettingsScreen
+import com.example.theperiodpurse.ui.setting.SettingScreenNavigation
 
 enum class Screen() {
     Calendar,
@@ -43,6 +50,37 @@ enum class OnboardingScreen() {
     Summary,
 }
 
+/**
+ * Composable that displays the topBar and displays back button if back navigation is possible.
+ */
+@Composable
+fun AppBar(
+    currentScreen: OnboardingScreen,
+    canNavigateBack: Boolean,
+    navigateUp: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+
+
+    TopAppBar(
+        title = { "" },
+        navigationIcon = {
+            if (canNavigateBack) {
+                IconButton(onClick = navigateUp) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.back_button)
+                    )
+                }
+            }
+        },
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp
+
+    )
+}
+
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationGraph(
@@ -50,8 +88,12 @@ fun NavigationGraph(
     startDestination: String,
     viewModel: OnboardViewModel,
     modifier: Modifier = Modifier,
-    mainActivity: MainActivity
+    mainActivity: MainActivity,
+    signIn: () -> Unit
 ) {
+
+
+
     val uiState by viewModel.uiState.collectAsState()
     NavHost(
         navController = navController,
@@ -92,8 +134,9 @@ fun NavigationGraph(
         // Welcome Screen
         composable(route = OnboardingScreen.Welcome.name) {
             WelcomeScreen(
-                onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionTwo.name) },
-                mainActivity = mainActivity
+                onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionOne.name) },
+                mainActivity = mainActivity,
+                signIn = signIn
             )
         }
 
@@ -103,7 +146,10 @@ fun NavigationGraph(
             QuestionOneScreen(
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionTwo.name) },
                 onSelectionChanged = { viewModel.setQuantity(it.toInt()) },
-                mainActivity = mainActivity
+                mainActivity = mainActivity,
+                navigateUp = { navController.navigateUp() }
+
+
             )
         }
         composable(route = OnboardingScreen.QuestionTwo.name) {
@@ -111,7 +157,8 @@ fun NavigationGraph(
                 onboardUiState = uiState,
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionThree.name) },
                 options = uiState.dateOptions,
-                onSelectionChanged = { viewModel.setDate(it) }
+                onSelectionChanged = { viewModel.setDate(it) },
+                navigateUp = { navController.navigateUp() }
             )
         }
 
@@ -121,6 +168,7 @@ fun NavigationGraph(
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.Summary.name) },
                 onSelectionChanged = { viewModel.setSymptoms(it) },
                 options = DataSource.symptoms.map { id -> context.resources.getString(id) },
+                navigateUp = { navController.navigateUp() }
             )
         }
         composable(route = OnboardingScreen.Summary.name) {
@@ -133,6 +181,7 @@ fun NavigationGraph(
                 onCancelButtonClicked = {
                     cancelOrderAndNavigateToStart(viewModel, navController)
                 },
+                navigateUp = { navController.navigateUp() }
             )
         }
     }

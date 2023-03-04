@@ -15,9 +15,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.theperiodpurse.Application
-import com.example.theperiodpurse.GoogleSignInButton
-import com.example.theperiodpurse.GoogleSignOutButton
 import com.example.theperiodpurse.MainActivity
+import com.example.theperiodpurse.ui.onboarding.GoogleSignOutButton
 import com.example.theperiodpurse.ui.onboarding.QuickStartButton
 
 @RequiresApi(Build.VERSION_CODES.O)

@@ -1,17 +1,14 @@
 package com.example.theperiodpurse.ui
 
 import android.os.Build
-import android.provider.Settings.Global.getString
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -22,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.data.OnboardUIState
-import com.example.theperiodpurse.data.DataSource
 import com.example.theperiodpurse.ui.onboarding.backbutton1
 
 /**
@@ -35,7 +31,8 @@ fun SummaryScreen(
     onboardUiState: OnboardUIState,
     onCancelButtonClicked: () -> Unit,
     onSendButtonClicked: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateUp: () -> Unit
 ) {
     val resources = LocalContext.current.resources
 
@@ -52,7 +49,7 @@ fun SummaryScreen(
     val screenheight = configuration.screenHeightDp;
 
 
-    backbutton1()
+    backbutton1(navigateUp)
 
     Column(
         modifier = modifier.padding(vertical = 16.dp),
@@ -232,15 +229,4 @@ fun SummaryScreen(
         }
 
     }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview
-@Composable
-fun OrderSummaryPreview() {
-    SummaryScreen(
-        onboardUiState = OnboardUIState(5, "June 1st", listOf("test1", "test2")),
-        onSendButtonClicked = { },
-        onCancelButtonClicked = {}
-    )
 }
