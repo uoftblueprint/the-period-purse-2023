@@ -27,7 +27,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import com.example.theperiodpurse.ui.onboarding.backbutton1
+import com.example.theperiodpurse.ui.onboarding.backbutton
+
 import com.example.theperiodpurse.ui.onboarding.background_shape
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -38,7 +39,8 @@ fun QuestionThreeScreen(
     onCancelButtonClicked: () -> Unit = {},
     onNextButtonClicked: () -> Unit = {},
     modifier: Modifier = Modifier,
-    navigateUp: () -> Unit
+    navigateUp: () -> Unit,
+    canNavigateBack: Boolean
 ) {
     var selectedValue by rememberSaveable { mutableStateOf("") }
 
@@ -375,7 +377,7 @@ fun QuestionThreeScreen(
 
     }
 
-    backbutton1(navigateUp)
+    backbutton(navigateUp, canNavigateBack)
 }
 
 

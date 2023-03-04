@@ -10,6 +10,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,7 +36,8 @@ fun QuestionOneScreen(
     onNextButtonClicked: () -> Unit,
     onSelectionChanged: (String) -> Unit = {},
     onCancelButtonClicked: () -> Unit = {},
-    modifier: Modifier = Modifier, mainActivity: MainActivity, navigateUp: () -> Unit
+    modifier: Modifier = Modifier, mainActivity: MainActivity, navigateUp: () -> Unit,
+    canNavigateBack: Boolean
 ) {
     var periodCycle by remember { mutableStateOf("") }
     var entered by remember { mutableStateOf(false) }
@@ -44,7 +47,7 @@ fun QuestionOneScreen(
     val screenwidth = configuration.screenWidthDp;
 
     val screenheight = configuration.screenHeightDp;
-    backbutton1(navigateUp)
+    backbutton(navigateUp, canNavigateBack)
     Column(
         modifier = Modifier.fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -158,23 +161,24 @@ fun QuestionOneScreen(
 }
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun backbutton1(navigateUp: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .padding(
-                vertical = 30.dp,
-                horizontal = 20.dp
-            )
-            .clickable(enabled = true, onClick = {
-                navigateUp
+fun backbutton(navigateUp: () -> Unit, canNavigateBack: Boolean) {
 
-            }),
-    ) {
-        Image(
-            painter = painterResource(R.drawable.back_icon),
-            contentDescription = null
-        )
-    }
+    TopAppBar(
+        title = { "" },
+        navigationIcon = {
+            if (canNavigateBack) {
+                IconButton(onClick = navigateUp) {
+                    Image(
+                        painter = painterResource(R.drawable.back_icon),
+                        contentDescription = null
+                    )
+                }
+            }
+        },
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp
+
+    )
 
 }
 

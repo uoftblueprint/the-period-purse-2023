@@ -182,6 +182,7 @@ fun ScreenApp(
             }
         }
     ) { innerPadding ->
+
         Image(
             painter = painterResource(id = R.drawable.background),
             contentDescription = null,

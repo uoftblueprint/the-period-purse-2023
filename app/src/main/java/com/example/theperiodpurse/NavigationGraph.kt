@@ -147,7 +147,10 @@ fun NavigationGraph(
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionTwo.name) },
                 onSelectionChanged = { viewModel.setQuantity(it.toInt()) },
                 mainActivity = mainActivity,
-                navigateUp = { navController.navigateUp() }
+                navigateUp = { navController.navigateUp() },
+                canNavigateBack = navController.previousBackStackEntry != null
+
+
 
 
             )
@@ -158,7 +161,8 @@ fun NavigationGraph(
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionThree.name) },
                 options = uiState.dateOptions,
                 onSelectionChanged = { viewModel.setDate(it) },
-                navigateUp = { navController.navigateUp() }
+                navigateUp = { navController.navigateUp() },
+                canNavigateBack = navController.previousBackStackEntry != null
             )
         }
 
@@ -168,7 +172,8 @@ fun NavigationGraph(
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.Summary.name) },
                 onSelectionChanged = { viewModel.setSymptoms(it) },
                 options = DataSource.symptoms.map { id -> context.resources.getString(id) },
-                navigateUp = { navController.navigateUp() }
+                navigateUp = { navController.navigateUp() },
+                canNavigateBack = navController.previousBackStackEntry != null
             )
         }
         composable(route = OnboardingScreen.Summary.name) {
@@ -181,7 +186,8 @@ fun NavigationGraph(
                 onCancelButtonClicked = {
                     cancelOrderAndNavigateToStart(viewModel, navController)
                 },
-                navigateUp = { navController.navigateUp() }
+                navigateUp = { navController.navigateUp() },
+                canNavigateBack = navController.previousBackStackEntry != null
             )
         }
     }

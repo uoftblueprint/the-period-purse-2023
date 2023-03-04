@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.theperiodpurse.R
 import com.example.theperiodpurse.data.OnboardUIState
-import com.example.theperiodpurse.ui.onboarding.backbutton1
+import com.example.theperiodpurse.ui.onboarding.backbutton
 
 /**
  * This composable expects [onboardUIState] that represents the onboarding state, [onCancelButtonClicked] lambda
@@ -32,7 +32,8 @@ fun SummaryScreen(
     onCancelButtonClicked: () -> Unit,
     onSendButtonClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    navigateUp: () -> Unit
+    navigateUp: () -> Unit,
+    canNavigateBack: Boolean
 ) {
     val resources = LocalContext.current.resources
 
@@ -49,7 +50,7 @@ fun SummaryScreen(
     val screenheight = configuration.screenHeightDp;
 
 
-    backbutton1(navigateUp)
+    backbutton(navigateUp, canNavigateBack)
 
     Column(
         modifier = modifier.padding(vertical = 16.dp),
