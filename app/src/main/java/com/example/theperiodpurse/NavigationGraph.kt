@@ -34,6 +34,7 @@ import com.example.theperiodpurse.ui.onboarding.QuestionTwoScreen
 import com.example.theperiodpurse.ui.onboarding.WelcomeScreen
 import com.example.theperiodpurse.ui.setting.SettingPage
 import com.example.theperiodpurse.ui.setting.SettingScreenNavigation
+import com.example.theperiodpurse.ui.setting.SettingsScreen
 
 enum class Screen() {
     Calendar,
@@ -118,7 +119,7 @@ fun NavigationGraph(
         }
 
         composable(route = Screen.Settings.name) {
-            SettingsScreen()
+            SettingPage(mainActivity)
         }
 
         composable(route = Screen.Cycle.name) {
@@ -133,7 +134,6 @@ fun NavigationGraph(
         composable(route = OnboardingScreen.Welcome.name) {
             WelcomeScreen(
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionOne.name) },
-                mainActivity = mainActivity,
                 signIn = signIn
             )
         }
@@ -144,7 +144,6 @@ fun NavigationGraph(
             QuestionOneScreen(
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionTwo.name) },
                 onSelectionChanged = { viewModel.setQuantity(it.toInt()) },
-                mainActivity = mainActivity,
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null
 
@@ -169,7 +168,6 @@ fun NavigationGraph(
             QuestionThreeScreen(
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.Summary.name) },
                 onSelectionChanged = { viewModel.setSymptoms(it) },
-                options = DataSource.symptoms.map { id -> context.resources.getString(id) },
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null
             )
@@ -180,9 +178,6 @@ fun NavigationGraph(
                 onSendButtonClicked = {
                     navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
                     navController.navigate(Screen.Calendar.name)
-                },
-                onCancelButtonClicked = {
-                    cancelOrderAndNavigateToStart(viewModel, navController)
                 },
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null

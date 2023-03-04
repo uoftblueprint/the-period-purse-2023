@@ -10,8 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,7 +24,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.theperiodpurse.MainActivity
 import com.example.theperiodpurse.R
 
 
@@ -35,8 +32,7 @@ import com.example.theperiodpurse.R
 fun QuestionOneScreen(
     onNextButtonClicked: () -> Unit,
     onSelectionChanged: (String) -> Unit = {},
-    onCancelButtonClicked: () -> Unit = {},
-    modifier: Modifier = Modifier, mainActivity: MainActivity, navigateUp: () -> Unit,
+    modifier: Modifier = Modifier, navigateUp: () -> Unit,
     canNavigateBack: Boolean
 ) {
     var periodCycle by remember { mutableStateOf("") }
@@ -156,8 +152,6 @@ fun QuestionOneScreen(
             }
         }
     }
-
-
 }
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -181,8 +175,6 @@ fun backbutton(navigateUp: () -> Unit, canNavigateBack: Boolean) {
     )
 
 }
-
-
 @Composable
 fun EditNumberField(
     @StringRes label: Int,
@@ -221,9 +213,6 @@ fun EditDaysField(
         value = value,
         onValueChange = onValueChange,
         placeholder = {Text("Tap to input", modifier = Modifier.padding(start=10.dp))},
-
-
-
 
         modifier = Modifier
             .width(175.dp)

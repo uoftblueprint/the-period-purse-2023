@@ -8,16 +8,11 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.FabPosition
-import androidx.compose.material.Scaffold
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.rememberNavController
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -26,33 +21,13 @@ import androidx.navigation.compose.rememberNavController
 import com.example.theperiodpurse.ui.component.BottomNavigation
 import com.example.theperiodpurse.ui.component.FloatingActionButton
 import com.example.theperiodpurse.ui.onboarding.*
-import com.example.theperiodpurse.ui.component.BottomNavigation
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseUser
-import kotlin.math.sign
-
-import com.example.theperiodpurse.ui.theme.ThePeriodPurseTheme
+import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -82,7 +57,7 @@ class MainActivity : ComponentActivity() {
             if (mAuth.currentUser == null) {
                 Application(false, this) { signIn() }
             } else {
-                val user: FirebaseUser = mAuth.currentUser!!
+//                val user: FirebaseUser = mAuth.currentUser!!
                 Application(true, this) { signIn() }
 
 
@@ -172,7 +147,7 @@ class MainActivity : ComponentActivity() {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Application(skipOnboarding: Boolean = false, mainActivity: MainActivity,signIn: () -> Unit) {
+fun Application(skipOnboarding: Boolean = false, mainActivity: MainActivity, signIn: () -> Unit) {
     ScreenApp(skipOnboarding = skipOnboarding, mainActivity = mainActivity, signIn = signIn)
 }
 
@@ -188,7 +163,7 @@ fun ScreenApp(
 ) {
     Scaffold(
         bottomBar = {
-            if (currentRoute(navController) in Screen.values().map{ it.name }) {
+            if (currentRoute(navController) in Screen.values().map { it.name }) {
                 BottomNavigation(navController = navController)
             }
         },
@@ -207,7 +182,7 @@ fun ScreenApp(
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds
         )
-        
+
         NavigationGraph(
             navController = navController,
             startDestination = if (skipOnboarding) Screen.Calendar.name else OnboardingScreen.Welcome.name,

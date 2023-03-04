@@ -29,7 +29,6 @@ import com.example.theperiodpurse.ui.onboarding.backbutton
 @Composable
 fun SummaryScreen(
     onboardUiState: OnboardUIState,
-    onCancelButtonClicked: () -> Unit,
     onSendButtonClicked: () -> Unit,
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
@@ -72,10 +71,6 @@ fun SummaryScreen(
             style = MaterialTheme.typography.h4,
             fontWeight = FontWeight.Bold
         )
-
-
-
-
         Spacer(modifier = Modifier.height((screenheight * 0.08).dp))
 
         if (onboardUiState.days != 0) {
@@ -95,8 +90,6 @@ fun SummaryScreen(
                         .padding(vertical = 10.dp),
                     fontSize = 17.sp
                 )
-
-
             }
             Divider(
                 thickness = 1.dp,
@@ -123,8 +116,6 @@ fun SummaryScreen(
                         .padding(vertical = 10.dp),
                     fontSize = 17.sp
                 )
-
-
             }
 
             Divider(
@@ -150,8 +141,6 @@ fun SummaryScreen(
                 "Sleep",
 
                 )
-
-
             Row() {
                 var dontprint = false
 
@@ -165,7 +154,6 @@ fun SummaryScreen(
                     )
 
                 }
-
                 symptoms.forEach { symptom ->
                     onboardUiState.symptomsOptions.forEach { select ->
                         if (symptom == select || symptom == "Flow") {
@@ -195,13 +183,8 @@ fun SummaryScreen(
                                         contentDescription = null,
                                         modifier = Modifier
                                             .size(25.dp)
-
-
                                     )
-
                                 }
-
-
                             }
 
                         }
@@ -211,13 +194,8 @@ fun SummaryScreen(
             }
 
         }
-
         Divider(thickness = 1.dp, color = Color(97, 153, 154), modifier = Modifier.fillMaxWidth())
-
         Spacer(modifier = Modifier.height((screenheight * 0.05).dp))
-
-
-
         Button(
             modifier = Modifier
                 .padding(horizontal = (screenheight * 0.02).dp)

@@ -2,7 +2,6 @@ package com.example.theperiodpurse.ui.onboarding
 
 
 import android.os.Build
-import android.provider.Settings.Global.getString
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -22,29 +21,18 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.ActivityCompat.startActivityForResult
 import com.example.theperiodpurse.MainActivity
 import com.example.theperiodpurse.R
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.auth.FirebaseAuth
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun WelcomeScreen(signIn: () -> Unit, onNextButtonClicked: () -> Unit, modifier: Modifier = Modifier, mainActivity: MainActivity) {
+fun WelcomeScreen(signIn: () -> Unit, onNextButtonClicked: () -> Unit) {
 
     val configuration = LocalConfiguration.current
 
-    val screenwidth = configuration.screenWidthDp;
-
     val screenheight = configuration.screenHeightDp;
-
-
 
     Image(
         painter = painterResource(id = R.drawable.background),
@@ -55,7 +43,7 @@ fun WelcomeScreen(signIn: () -> Unit, onNextButtonClicked: () -> Unit, modifier:
 
     Column(
         modifier = Modifier
-            .padding((screenheight*0.02).dp)
+            .padding((screenheight * 0.02).dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -87,9 +75,6 @@ fun WelcomeScreen(signIn: () -> Unit, onNextButtonClicked: () -> Unit, modifier:
         GoogleSignInButton {
 
             signIn()
-
-
-
         }
         Spacer(modifier = Modifier.height((screenheight*0.006).dp))
 
@@ -118,15 +103,15 @@ fun WelcomeScreen(signIn: () -> Unit, onNextButtonClicked: () -> Unit, modifier:
         Text(text = annotatedLinkString, textAlign = TextAlign.Center)
     }
 }
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GoogleSignInButton(
     signInClicked: () -> Unit
 ) {
-
     Surface(onClick = signInClicked,
-        modifier = Modifier.widthIn(min = 350.dp).height(50.dp),
+        modifier = Modifier
+            .widthIn(min = 350.dp)
+            .height(50.dp),
         shape= RoundedCornerShape(15),
         border = BorderStroke(width = 1.dp, color=Color.LightGray),
         color = MaterialTheme.colors.surface
@@ -146,22 +131,14 @@ fun GoogleSignInButton(
                 tint=Color.Unspecified,
 
                 )
-
             Spacer(modifier = Modifier.width(8.dp))
-
             Text(
                 text = "Sign in with Google",
                 color = Color.Black, fontSize = 20.sp,
             )
-
         }
-
     }
-
 }
-
-
-
 @Composable
 fun GoogleSignOutButton(
     signOutClicked: () -> Unit
@@ -176,11 +153,7 @@ fun GoogleSignOutButton(
             fontSize = MaterialTheme.typography.h6.fontSize,
         )
     }
-
 }
-
-
-
 @Composable
 fun QuickStartButton(
     onClick: () -> Unit,
@@ -188,7 +161,9 @@ fun QuickStartButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier.widthIn(min = 350.dp).height(50.dp),
+        modifier = modifier
+            .widthIn(min = 350.dp)
+            .height(50.dp),
         shape= RoundedCornerShape(15),
 //        color = Color(52, 235, 161)
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
