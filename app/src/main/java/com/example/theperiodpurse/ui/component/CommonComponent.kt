@@ -15,29 +15,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import com.example.theperiodpurse.Screen
 import com.example.theperiodpurse.R
+import com.example.theperiodpurse.currentRoute
 import com.example.theperiodpurse.ui.theme.Red
 import com.example.theperiodpurse.ui.theme.Teal
 
 @Composable
 fun BottomNavigation(navController: NavController) {
-    var fabIconId by remember { mutableStateOf(R.drawable.add_black_24dp) }
-    var fabBackgroundColor by remember { mutableStateOf(Red) }
-    var fabContentDescriptionId by remember { mutableStateOf(R.string.fab_to_calendar) }
-    navController.addOnDestinationChangedListener { _, destination, _ ->
-        if (destination.route == Screen.Calendar.name) {
-            fabIconId = R.drawable.add_black_24dp
-            fabBackgroundColor = Red
-            fabContentDescriptionId = R.string.fab_see_log_options
-        } else {
-            fabIconId = R.drawable.today_black_24dp
-            fabBackgroundColor = Teal
-            fabContentDescriptionId = R.string.fab_to_calendar
-        }
-    }
-
-    BottomNavigationWithFAB(
+    BottomNavigation(
         onInfoNavigationClicked = {
             navController.navigate(Screen.Learn.name) {
                 popUpTo(navController.graph.findStartDestination().id) {
@@ -56,36 +43,15 @@ fun BottomNavigation(navController: NavController) {
                 restoreState = true
             }
         },
-        onFABClicked = {
-            if (navController.currentDestination?.route == Screen.Calendar.name) {
-                /* TODO onAddActionClicked */
-            } else {
-                navController.navigate(Screen.Calendar.name) {
-                    popUpTo(navController.graph.findStartDestination().id) {
-                        saveState = true
-                    }
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            }
-        },
-        fabIconId = fabIconId,
-        fabBackgroundColor = fabBackgroundColor,
-        fabContentDescription = stringResource(id = fabContentDescriptionId)
     )
 }
 
 @Composable
-private fun BottomNavigationWithFAB(
+private fun BottomNavigation(
     onInfoNavigationClicked: () -> Unit,
     onSettingsNavigationClicked: () -> Unit,
-    onFABClicked: () -> Unit,
-    fabIconId: Int,
-    fabBackgroundColor: Color,
-    fabContentDescription: String,
     modifier: Modifier = Modifier,
-    navItemModifier: Modifier = Modifier,
-    fabModifier: Modifier = Modifier
+    navItemModifier: Modifier = Modifier
 ) {
     Box {
         BottomNavigation(
@@ -122,64 +88,69 @@ private fun BottomNavigationWithFAB(
             )
         }
 
-        FloatingActionButton(
-            onClick = onFABClicked,
-            iconId = fabIconId,
-            contentDescription = fabContentDescription,
-            backgroundColor = fabBackgroundColor,
-            modifier = fabModifier
-                .align(Alignment.BottomCenter)
-                .padding(15.dp)
-        )
 
     }
 }
-
 @Composable
 fun FloatingActionButton(
-    onClick: () -> Unit,
-    iconId: Int,
-    contentDescription: String,
-    backgroundColor: Color,
     modifier: Modifier = Modifier,
-    contentColor: Color = Color.White
+    navController: NavHostController,
+    contentColor: Color = Color.White,
+    onClickInCalendar: () -> Unit
 ) {
     val circle = MaterialTheme.shapes.large.copy(CornerSize(percent = 50))
-    FloatingActionButton(
-        onClick = onClick,
-        shape = circle,
-        contentColor = contentColor,
-        backgroundColor = backgroundColor,
-        modifier = modifier
-            .border(color = Color.White, width = 2.dp, shape = circle)
-            .size(70.dp)
-    ) {
-        Icon(
-            painter = painterResource(iconId),
-            contentDescription = contentDescription,
-            modifier = Modifier
-                .width(30.dp)
-                .aspectRatio(1f)
-        )
+    var iconId by remember { mutableStateOf(R.drawable.add_black_24dp) }
+    var backgroundColor by remember { mutableStateOf(Red) }
+    var contentId by remember { mutableStateOf(R.string.fab_to_calendar) }
+    navController.addOnDestinationChangedListener { _, destination, _ ->
+        if (destination.route == Screen.Calendar.name) {
+            iconId = R.drawable.add_black_24dp
+            backgroundColor = Red
+            contentId = R.string.fab_see_log_options
+        } else {
+            iconId = R.drawable.today_black_24dp
+            backgroundColor = Teal
+            contentId = R.string.fab_to_calendar
+        }
+    }
+    if (currentRoute(navController) in Screen.values().map{ it.name }) {
+        FloatingActionButton(
+            onClick =
+            {
+                if (navController.currentDestination?.route == Screen.Calendar.name) {
+                    onClickInCalendar()
+                } else {
+                    navController.navigate(Screen.Calendar.name) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
+            },
+            backgroundColor = backgroundColor,
+            contentColor = contentColor,
+            modifier = modifier
+                .padding(14.dp)
+                .border(color = Color.White, width = 2.dp, shape = circle)
+                .size(70.dp)
+        ) {
+            Icon(
+                painter = painterResource(iconId),
+                contentDescription = stringResource(contentId),
+                modifier = Modifier
+                    .width(30.dp)
+                    .aspectRatio(1f)
+            )
+        }
     }
 }
 
 @Preview
 @Composable
-fun BottomNavigationPreviewNonCalendar() {
-    BottomNavigationWithFAB({}, {}, {},
-        fabIconId = R.drawable.today_black_24dp,
-        fabBackgroundColor = Teal,
-        fabContentDescription = stringResource(id = R.string.fab_to_calendar))
+fun BottomNavigationPreview() {
+    BottomNavigation({}, {})
 }
 
-@Preview
-@Composable
-fun BottomNavigationPreviewCalendar() {
-    BottomNavigationWithFAB({}, {}, {},
-        fabIconId = R.drawable.add_black_24dp,
-        fabBackgroundColor = Red,
-        fabContentDescription = stringResource(id = R.string.fab_to_calendar)
-    )
-}
 

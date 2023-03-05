@@ -7,18 +7,21 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
-import com.example.theperiodpurse.data.DataSource
+import com.example.theperiodpurse.data.*
 import com.example.theperiodpurse.ui.QuestionThreeScreen
 import com.example.theperiodpurse.ui.SummaryScreen
 import com.example.theperiodpurse.ui.calendar.CalendarScreen
+import com.example.theperiodpurse.ui.calendar.CalendarViewModel
 import com.example.theperiodpurse.ui.calendar.LogScreen
 import com.example.theperiodpurse.ui.cycle.CycleScreenLayout
+import com.example.theperiodpurse.ui.education.*
 import com.example.theperiodpurse.ui.onboarding.OnboardViewModel
 import com.example.theperiodpurse.ui.onboarding.QuestionOneScreen
 import com.example.theperiodpurse.ui.onboarding.QuestionTwoScreen
@@ -47,6 +50,7 @@ fun NavigationGraph(
     navController: NavHostController,
     startDestination: String,
     viewModel: OnboardViewModel,
+    calendarViewModel: CalendarViewModel,
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -56,7 +60,7 @@ fun NavigationGraph(
         modifier = modifier
     ) {
         composable(route = Screen.Calendar.name) {
-            CalendarScreen(navController = navController)
+            CalendarScreen(navController = navController, calendarViewModel)
         }
 
         composable(
@@ -69,7 +73,8 @@ fun NavigationGraph(
             if (date != null) {
                 LogScreen(
                     date = date,
-                    navController = navController
+                    navController = navController,
+                    calendarViewModel = calendarViewModel
                 )
             }
         }
@@ -82,9 +87,13 @@ fun NavigationGraph(
             CycleScreenLayout()
         }
 
+        // Education Screens
+
         composable(route = Screen.Learn.name) {
-            /* TODO Put Screen for Info page here */
+            EducationScreenLayout()
         }
+
+
 
         // Onboard Screens
 
@@ -103,6 +112,7 @@ fun NavigationGraph(
         }
         composable(route = OnboardingScreen.QuestionTwo.name) {
             QuestionTwoScreen(
+                onboardUiState = uiState,
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionThree.name) },
                 options = uiState.dateOptions,
                 onSelectionChanged = { viewModel.setDate(it) }
@@ -144,7 +154,7 @@ private fun cancelOrderAndNavigateToStart(
 }
 
 @Composable
-fun currentRoute(navController: NavHostController): String? {
+fun currentRoute(navController: NavController): String? {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     return navBackStackEntry?.destination?.route
 }
