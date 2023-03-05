@@ -56,6 +56,8 @@ fun LogScreen(
 ) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val day = LocalDate.parse(date)
+        var saveClose by remember { mutableStateOf(false) }
+        var exitClose by remember { mutableStateOf(false) }
 
         val logPrompts = listOf(
             LogPrompt.Flow,
@@ -75,19 +77,32 @@ fun LogScreen(
         LogScreenLayout(
             day, navController, logPrompts, logViewModel,
             onSave = {
-                calendarViewModel.saveDayInfo(
-                    day,
-                    CalendarDayUIState(
-                        flow = logViewModel.getSelectedFlow(),
-                        mood = logViewModel.getSquareSelected(LogPrompt.Mood) ?: "",
-                        exerciseLengthString = logViewModel.getText(LogPrompt.Exercise),
-                        exerciseType = logViewModel.getSquareSelected(LogPrompt.Exercise) ?: "",
-                        crampSeverity = logViewModel.getSelectedCrampSeverity(),
-                        sleepString = logViewModel.getText(LogPrompt.Sleep)
+                if (saveClose) {
+                    calendarViewModel.saveDayInfo(
+                        day,
+                        CalendarDayUIState(
+                            flow = logViewModel.getSelectedFlow(),
+                            mood = logViewModel.getSquareSelected(LogPrompt.Mood) ?: "",
+                            exerciseLengthString = logViewModel.getText(LogPrompt.Exercise),
+                            exerciseType = logViewModel.getSquareSelected(LogPrompt.Exercise) ?: "",
+                            crampSeverity = logViewModel.getSelectedCrampSeverity(),
+                            sleepString = logViewModel.getText(LogPrompt.Sleep)
+                        )
                     )
-                )
-                navController.navigateUp()
-            })
+                    navController.navigateUp()
+                }
+            },
+            onExit = {
+                exitClose = true
+            },
+            onSaveExit = {
+                saveClose = true
+            },
+            saveVisible = (!saveClose) && (!exitClose),
+        )
+        if (exitClose) {
+            navController.navigateUp()
+        }
     }
 }
 
@@ -99,6 +114,9 @@ fun LogScreenLayout(
     logPrompts: List<LogPrompt>,
     logViewModel: LogViewModel,
     onSave: () -> Unit,
+    onExit: () -> Unit,
+    onSaveExit: () -> Unit,
+    saveVisible: Boolean
 ) {
     Box() {
         Column(
@@ -109,7 +127,8 @@ fun LogScreenLayout(
         ) {
             LogScreenTopBar(
                 navController = navController,
-                date = date
+                date = date,
+                onClose = onExit
             )
             LogPromptCards(logPrompts = logPrompts, logViewModel = logViewModel)
             Spacer(modifier = Modifier
@@ -125,7 +144,7 @@ fun LogScreenLayout(
                 .weight(1f)
             )
 
-            SaveButton(onClick = onSave)
+            SaveButton(onClick = onSave, onClose = onSaveExit, saveVisible)
         }
 
     }
@@ -135,7 +154,7 @@ fun LogScreenLayout(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun LogScreenTopBar(navController: NavController, date: LocalDate) {
+fun LogScreenTopBar(navController: NavController, date: LocalDate, onClose: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -145,7 +164,7 @@ fun LogScreenTopBar(navController: NavController, date: LocalDate) {
             .padding(start = 10.dp, top = 10.dp, end = 0.dp)
         ) {
             IconButton(
-                onClick = { navController.navigateUp() },
+                onClick = { onClose() },
                 modifier = Modifier
                     .then(Modifier.size(24.dp))
             ) {
@@ -389,28 +408,34 @@ fun LogSelectableSquare(
 
 @Composable
 fun SaveButton(
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onClose: () -> Unit,
+    saveVisible: Boolean
 ) {
-    Column (
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-    ) {
-        FloatingActionButton(
-            onClick = onClick,
-            backgroundColor = SelectedColor1,
+    if (saveVisible) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .padding(20.dp)
-                .width(350.dp)
-                .height(40.dp)
         ) {
-            Text(
-                text = "Save",
-                textAlign = TextAlign.Center,
+            FloatingActionButton(
+                onClick = { onClose() },
+                backgroundColor = SelectedColor1,
                 modifier = Modifier
-                    .semantics { contentDescription = "Save Button" },
-                color = Color.White
-            )
+                    .padding(20.dp)
+                    .width(350.dp)
+                    .height(40.dp)
+            ) {
+                Text(
+                    text = "Save",
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .semantics { contentDescription = "Save Button" },
+                    color = Color.White
+                )
+            }
         }
+    } else {
+        onClick()
     }
 }
 
@@ -431,7 +456,10 @@ fun LogScreenLayoutPreview() {
         navController = rememberNavController(),
         logPrompts = logPrompts,
         logViewModel = LogViewModel(logPrompts),
-        onSave = {}
+        onSave = {},
+        onExit = {},
+        onSaveExit = {},
+        saveVisible = true
     )
 }
 
@@ -441,7 +469,8 @@ fun LogScreenTopBarPreview() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         LogScreenTopBar(
             date = LocalDate.parse("2000-01-01"),
-            navController = rememberNavController()
+            navController = rememberNavController(),
+            onClose = {}
         )
     }
 }
@@ -489,10 +518,4 @@ fun LogSelectableSquarePreview() {
             logViewModel.setSquareSelected(logSquare)
         }
     }
-}
-
-@Preview
-@Composable
-fun SaveButtonPreview() {
-    SaveButton {}
 }
