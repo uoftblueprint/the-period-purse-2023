@@ -2,9 +2,7 @@ package com.example.theperiodpurse.ui.cycle
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
@@ -12,7 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.foundation.Image
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -27,8 +28,7 @@ fun CurrentCycleBox(modifier: Modifier = Modifier) {
     Card(
         modifier
             .fillMaxWidth()
-            .height(300.dp),
-        elevation = 2.dp, shape = RoundedCornerShape(5)
+            .height(300.dp), elevation = 2.dp, shape = RoundedCornerShape(5)
     ) {
         Text(
             text = stringResource(R.string.current_cycle),
@@ -42,10 +42,17 @@ fun CurrentCycleBox(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun AverageLengthBox(modifier: Modifier = Modifier, title: String,
-                     image: String = "Change this into Image later", color: Color) {
-    Card(modifier.width(177.dp), elevation = 2.dp,
-        backgroundColor = color, shape = RoundedCornerShape(10)
+fun AverageLengthBox(
+    modifier: Modifier = Modifier,
+    title: String,
+    image: String = "Change this into Image later",
+    color: Color
+) {
+    Card(
+        modifier.width(177.dp),
+        elevation = 2.dp,
+        backgroundColor = color,
+        shape = RoundedCornerShape(10)
     ) {
         Column(modifier.padding(18.dp)) {
             Text(
@@ -67,7 +74,8 @@ fun AverageLengthBox(modifier: Modifier = Modifier, title: String,
                     modifier
                         .size(50.dp)
                         .clip(RoundedCornerShape(50))
-                        .background(Color.Red)) {}
+                        .background(Color.Red)
+                ) {}
             }
         }
     }
@@ -75,8 +83,9 @@ fun AverageLengthBox(modifier: Modifier = Modifier, title: String,
 
 @Composable
 fun CycleHistoryBox(modifier: Modifier = Modifier) {
-    Card(modifier.fillMaxWidth(), elevation = 2.dp, shape =
-    RoundedCornerShape(10)) {
+    Card(
+        modifier.fillMaxWidth(), elevation = 2.dp, shape = RoundedCornerShape(10)
+    ) {
         Column(modifier.padding(horizontal = 30.dp, vertical = 25.dp)) {
             Text(
                 text = stringResource(R.string.cycle_history),
@@ -84,9 +93,12 @@ fun CycleHistoryBox(modifier: Modifier = Modifier) {
                 fontWeight = FontWeight(700),
                 color = Color(0xFF868083),
             )
-            Divider(color = Color(0xFF868083), modifier = modifier
-                .padding(vertical = 15.dp)
-                .fillMaxWidth())
+            Divider(
+                color = Color(0xFF868083),
+                modifier = modifier
+                    .padding(vertical = 15.dp)
+                    .fillMaxWidth()
+            )
             Text(text = stringResource(R.string.log_to_learn))
         }
     }
@@ -94,28 +106,40 @@ fun CycleHistoryBox(modifier: Modifier = Modifier) {
 
 @Composable
 fun CycleScreenLayout(modifier: Modifier = Modifier) {
-    Column(
-        modifier
-            .verticalScroll(rememberScrollState())
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .padding(
-                horizontal = 20.dp,
-                vertical = 25.dp
+    ThePeriodPurseTheme {
+        val bg = painterResource(R.drawable.colourwatercolour)
+        Box {
+            Image(
+                painter = bg,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .semantics { contentDescription = "Cycle Page" },
+                contentScale = ContentScale.FillBounds,
             )
-            .semantics { contentDescription = "Cycle Page" }
-    ) {
-        CurrentCycleBox()
-        Spacer(modifier.height(30.dp))
-        Row {
-            AverageLengthBox(title = stringResource(R.string.avg_period_len),
-                color = Color(0xFFFEDBDB))
-            Spacer(modifier.width(16.dp))
-            AverageLengthBox(title = stringResource(R.string.avg_cycle_len),
-                color = Color(0xFFBAE0D8))
+            Column(
+                modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .padding(
+                        horizontal = 20.dp, vertical = 25.dp
+                    )
+            ) {
+                CurrentCycleBox()
+                Spacer(modifier.height(30.dp))
+                Row {
+                    AverageLengthBox(
+                        title = stringResource(R.string.avg_period_len), color = Color(0xFFFEDBDB)
+                    )
+                    Spacer(modifier.width(16.dp))
+                    AverageLengthBox(
+                        title = stringResource(R.string.avg_cycle_len), color = Color(0xFFBAE0D8)
+                    )
+                }
+                Spacer(modifier.height(30.dp))
+                CycleHistoryBox()
+            }
         }
-        Spacer(modifier.height(30.dp))
-        CycleHistoryBox()
     }
 }
 
