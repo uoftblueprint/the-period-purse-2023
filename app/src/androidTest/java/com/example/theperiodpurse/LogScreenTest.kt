@@ -88,7 +88,7 @@ class LogScreenTest {
     @Test
     fun appLogScreen_clickOnX_navigatesToCalendar() {
         navigateToLogScreen()
-        composeTestRule.onNodeWithContentDescription("Log Close Button").performClick()
+        composeTestRule.onNodeWithContentDescription("Close Button").performClick()
         navController.assertCurrentRouteName(Screen.Calendar.name)
     }
 }
