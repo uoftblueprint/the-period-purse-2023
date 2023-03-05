@@ -93,7 +93,7 @@ fun NavigationGraph(
         }
 
         composable(route = Screen.Settings.name) {
-            SettingPage(mainActivity)
+            SettingsScreen()
         }
 
         composable(route = Screen.Cycle.name) {
