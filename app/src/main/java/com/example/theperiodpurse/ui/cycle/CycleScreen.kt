@@ -124,7 +124,7 @@ fun CycleScreenLayout(modifier: Modifier = Modifier) {
                     .padding(
                         horizontal = 20.dp, vertical = 25.dp
                     )
-                    .semantics { contentDescription = "Cycle Page" }) {
+            ) {
                 CurrentCycleBox()
                 Spacer(modifier.height(30.dp))
                 Row {
