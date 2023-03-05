@@ -50,7 +50,7 @@ fun WelcomeScreen(signIn: () -> Unit, onNextButtonClicked: () -> Unit) {
     ) {
 
 
-        Spacer(modifier = Modifier.height((screenheight*0.09).dp))
+        Spacer(modifier = Modifier.height((screenheight*0.05).dp))
 
         // Logo Image
         Image(
@@ -58,7 +58,7 @@ fun WelcomeScreen(signIn: () -> Unit, onNextButtonClicked: () -> Unit) {
             contentDescription = null,
             modifier = Modifier.size((screenheight*0.25).dp)
         )
-        Spacer(modifier = Modifier.height((screenheight*0.09).dp))
+        Spacer(modifier = Modifier.height((screenheight*0.05).dp))
 
         // Welcome text
         Text(text = stringResource(R.string.welcome), style = MaterialTheme.typography.h4, fontWeight = FontWeight.Bold)

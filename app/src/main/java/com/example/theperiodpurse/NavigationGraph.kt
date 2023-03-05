@@ -54,36 +54,6 @@ enum class OnboardingScreen() {
     Summary,
 }
 
-/**
- * Composable that displays the topBar and displays back button if back navigation is possible.
- */
-@Composable
-fun AppBar(
-    currentScreen: OnboardingScreen,
-    canNavigateBack: Boolean,
-    navigateUp: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-
-
-    TopAppBar(
-        title = { "" },
-        navigationIcon = {
-            if (canNavigateBack) {
-                IconButton(onClick = navigateUp) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.back_button)
-                    )
-                }
-            }
-        },
-        backgroundColor = Color.Transparent,
-        elevation = 0.dp
-
-    )
-}
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -153,7 +123,8 @@ fun NavigationGraph(
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionTwo.name) },
                 onSelectionChanged = { viewModel.setQuantity(it.toInt()) },
                 navigateUp = { navController.navigateUp() },
-                canNavigateBack = navController.previousBackStackEntry != null
+                canNavigateBack = navController.previousBackStackEntry != null,
+                onboardUiState = uiState,
 
 
 
@@ -164,7 +135,6 @@ fun NavigationGraph(
             QuestionTwoScreen(
                 onboardUiState = uiState,
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionThree.name) },
-                options = uiState.dateOptions,
                 onSelectionChanged = { viewModel.setDate(it) },
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null
@@ -172,7 +142,6 @@ fun NavigationGraph(
         }
 
         composable(route = OnboardingScreen.QuestionThree.name) {
-            val context = LocalContext.current
             QuestionThreeScreen(
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.Summary.name) },
                 onSelectionChanged = { viewModel.setSymptoms(it) },

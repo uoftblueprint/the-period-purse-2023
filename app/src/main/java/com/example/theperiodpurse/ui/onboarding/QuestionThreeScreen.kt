@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.theperiodpurse.ui.onboarding.backbutton
 
@@ -33,7 +34,6 @@ import com.example.theperiodpurse.ui.onboarding.background_shape
 fun QuestionThreeScreen(
     onSelectionChanged: (String) -> Unit = {},
     onNextButtonClicked: () -> Unit = {},
-    modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
     canNavigateBack: Boolean
 ) {
@@ -45,351 +45,352 @@ fun QuestionThreeScreen(
 
     val screenheight = configuration.screenHeightDp;
 
-    Column(
-        modifier = Modifier.fillMaxHeight(1f),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Box(Modifier.fillMaxHeight().fillMaxWidth()) {
 
 
-        ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy((screenheight * (0.0025)).dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
 
-        val ratio = 0.45
-        val ratioimage = 0.20
-        val height = (screenheight * ratio)
-        val imageheight = (screenheight * ratioimage)
-        Box(
-            modifier = Modifier
-                .width(screenwidth.dp)
-                .height(height.dp)
-
-        )
-        {
-            background_shape()
-
-            Image(
-                painter = painterResource(R.drawable.menstruation_calendar__1_),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(imageheight.dp)
-                    .align(Alignment.Center),
-            )
-            val barheight1 = (screenheight * (0.09))
-
-            Image(
-                painter = painterResource(R.drawable.onboard_bar3),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(barheight1.dp)
-                    .align(Alignment.BottomCenter),
-            )
-
-        }
-        Text(
-            text = stringResource(R.string.question_three),
-            fontSize = 28.sp,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .width(300.dp),
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
-        )
-
-
-        Text(
-            text = stringResource(R.string.description_three),
-            fontSize = 16.sp,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
-
-        Spacer(modifier = Modifier.height(10.dp))
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 10.dp)
-                .height(110.dp)
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(15))
-                .background(Color(rgb(188, 235, 214))),
 
             ) {
-            Row(
-                modifier = Modifier.padding(20.dp),
-                horizontalArrangement = Arrangement.spacedBy(25.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+            val ratio = 0.45
+            val ratioimage = 0.20
+            val height = (screenheight * ratio)
+            val imageheight = (screenheight * ratioimage)
+            Box(
+                modifier = Modifier
+                    .width(screenwidth.dp)
+                    .height(height.dp)
+            )
+            {
+                background_shape()
+
+
+                Image(
+                    painter = painterResource(R.drawable.menstruation_calendar__1_),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(imageheight.dp)
+                        .align(Alignment.Center),
+                )
+                Image(
+                    painter = painterResource(R.drawable.onboard_bar3),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size((screenheight * (0.09)).dp)
+                        .align(Alignment.BottomCenter),
+                )
+
+            }
+            Text(
+                text = stringResource(R.string.question_three),
+                fontSize = 28.sp,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .width(300.dp),
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+
+
+            Text(
+                text = stringResource(R.string.description_three),
+                fontSize = 16.sp,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height((screenheight * (0.005)).dp))
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .height(110.dp)
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(15))
+                    .background(Color(rgb(188, 235, 214))),
+
+                ) {
+                Row(
+                    modifier = Modifier.padding(20.dp),
+                    horizontalArrangement = Arrangement.spacedBy(25.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+                        Box(
+                            modifier = Modifier
+                                .height(50.dp)
+                                .width(50.dp)
+                                .clip(RoundedCornerShape(30))
+                                .background(Color(rgb(220, 242, 240)))
+                        ) {
+
+                            Image(
+                                painter = painterResource(R.drawable.opacity_black_24dp),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(25.dp)
+                                    .align(Alignment.Center),
+                                colorFilter = ColorFilter.tint(Color.Gray)
+
+                            )
+
+                        }
+
+
+                        Text(
+                            text = stringResource(R.string.flow),
+                            fontSize = 15.sp,
+                            color = Color.Gray
+
+                        )
+
+                    }
+
+                    Text(
+                        text = stringResource(R.string.caption_three),
+                        fontSize = 15.sp,
+
+                        )
+
+                }
+
+            }
+
+            Spacer(modifier = Modifier.height((screenheight * (0.005)).dp))
+
+
+            Row() {
+                Column(
+                    modifier = Modifier
+                        .selectable(
+                            selected = selectedValue.contains("Mood"),
+                            onClick = {
+                                val item = "Mood"
+
+                                if (selectedValue.contains(item)) {
+
+                                    selectedValue = selectedValue.replace(item, "")
+
+
+                                } else if (!selectedValue.contains(item)) {
+                                    selectedValue = selectedValue + "|" + item
+
+                                }
+                                onSelectionChanged(selectedValue)
+                            }
+                        )
+                        .padding(horizontal = (screenheight * 0.02).dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .height(50.dp)
+                            .width(50.dp)
+                            .clip(RoundedCornerShape(30))
+                            .then(
+                                if (!selectedValue.contains("Mood")) Modifier.background(Color.White) else Modifier.background(
+                                    Color(rgb(142, 212, 193))
+                                )
+                            )
+                    ) {
+
+                        Image(
+                            painter = painterResource(R.drawable.sentiment_neutral_black_24dp),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(25.dp)
+                                .align(Alignment.Center)
+
+                        )
+
+                    }
+
+                    Text(
+                        text = stringResource(R.string.mood),
+                        fontSize = 15.sp,
+
+                        )
+                }
+
+                Column(
+                    modifier = Modifier
+                        .selectable(
+                            selected = selectedValue.contains("Exercise"),
+                            onClick = {
+                                val item = "Exercise"
+
+                                if (selectedValue.contains(item)) {
+
+                                    selectedValue = selectedValue.replace(item, "")
+
+
+                                } else if (!selectedValue.contains(item)) {
+                                    selectedValue = selectedValue + "|" + item
+
+                                }
+                                onSelectionChanged(selectedValue)
+                            })
+                        .padding(horizontal = 13.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .height(50.dp)
+                            .width(50.dp)
+                            .clip(RoundedCornerShape(30))
+                            .then(
+                                if (!selectedValue.contains("Exercise")) Modifier.background(Color.White) else Modifier.background(
+                                    Color(rgb(142, 212, 193))
+                                )
+                            )
+                    ) {
+
+                        Image(
+                            painter = painterResource(R.drawable.self_improvement_black_24dp),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(25.dp)
+                                .align(Alignment.Center),
+
+                            )
+
+                    }
+
+
+                    Text(
+                        text = stringResource(R.string.exercise),
+                        fontSize = 15.sp,
+
+                        )
+
+                }
+
+                Column(
+                    modifier = Modifier
+                        .selectable(
+                            selected = selectedValue.contains("Cramps"),
+                            onClick = {
+                                val item = "Cramps"
+
+                                if (selectedValue.contains(item)) {
+
+                                    selectedValue = selectedValue.replace(item, "")
+
+
+                                } else if (!selectedValue.contains(item)) {
+                                    selectedValue = selectedValue + "|" + item
+
+                                }
+                                onSelectionChanged(selectedValue)
+                            })
+                        .padding(horizontal = 13.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
 
                     Box(
                         modifier = Modifier
                             .height(50.dp)
                             .width(50.dp)
                             .clip(RoundedCornerShape(30))
-                            .background(Color(rgb(220, 242, 240)))
+                            .then(
+                                if (!selectedValue.contains("Cramps")) Modifier.background(Color.White) else Modifier.background(
+                                    Color(rgb(142, 212, 193))
+                                )
+                            )
                     ) {
 
                         Image(
-                            painter = painterResource(R.drawable.opacity_black_24dp),
+                            painter = painterResource(R.drawable.sick_black_24dp),
                             contentDescription = null,
                             modifier = Modifier
                                 .size(25.dp)
                                 .align(Alignment.Center),
-                            colorFilter = ColorFilter.tint(Color.Gray)
 
-                        )
+                            )
 
                     }
 
 
                     Text(
-                        text = stringResource(R.string.flow),
+                        text = stringResource(R.string.cramps),
                         fontSize = 15.sp,
-                        color = Color.Gray
 
-                    )
+                        )
 
                 }
 
-                Text(
-                    text = stringResource(R.string.caption_three),
-                    fontSize = 15.sp,
-
-                    )
-
-            }
-
-        }
-
-        Spacer(modifier = Modifier.height((screenheight * (0.005)).dp))
 
 
-        Row() {
-            Column(
-                modifier = Modifier
-                    .selectable(
-                        selected = selectedValue.contains("Mood"),
-                        onClick = {
-                            val item = "Mood"
-
-                            if (selectedValue.contains(item)) {
-
-                                selectedValue = selectedValue.replace(item, "")
-
-
-                            } else if (!selectedValue.contains(item)) {
-                                selectedValue = selectedValue + "|" + item
-
-                            }
-                            onSelectionChanged(selectedValue)
-                        }
-                    )
-                    .padding(horizontal = (screenheight * 0.02).dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Box(
+                Column(
                     modifier = Modifier
-                        .height(50.dp)
-                        .width(50.dp)
-                        .clip(RoundedCornerShape(30))
-                        .then(
-                            if (!selectedValue.contains("Mood")) Modifier.background(Color.White) else Modifier.background(
-                                Color(rgb(142, 212, 193))
-                            )
-                        )
+                        .selectable(
+                            selected = selectedValue.contains("Sleep"),
+                            onClick = {
+                                val item = "Sleep"
+
+                                if (selectedValue.contains(item)) {
+
+                                    selectedValue = selectedValue.replace(item, "")
+
+
+                                } else if (!selectedValue.contains(item)) {
+                                    selectedValue = selectedValue + "|" + item
+
+                                }
+                                onSelectionChanged(selectedValue)
+                            })
+                        .padding(horizontal = 13.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    Image(
-                        painter = painterResource(R.drawable.sentiment_neutral_black_24dp),
-                        contentDescription = null,
+                    Box(
                         modifier = Modifier
-                            .size(25.dp)
-                            .align(Alignment.Center)
-
-                    )
-
-                }
-
-                Text(
-                    text = stringResource(R.string.mood),
-                    fontSize = 15.sp,
-
-                    )
-            }
-
-            Column(
-                modifier = Modifier
-                    .selectable(
-                        selected = selectedValue.contains("Exercise"),
-                        onClick = {
-                            val item = "Exercise"
-
-                            if (selectedValue.contains(item)) {
-
-                                selectedValue = selectedValue.replace(item, "")
-
-
-                            } else if (!selectedValue.contains(item)) {
-                                selectedValue = selectedValue + "|" + item
-
-                            }
-                            onSelectionChanged(selectedValue)
-                        })
-                    .padding(horizontal = 13.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Box(
-                    modifier = Modifier
-                        .height(50.dp)
-                        .width(50.dp)
-                        .clip(RoundedCornerShape(30))
-                        .then(
-                            if (!selectedValue.contains("Exercise")) Modifier.background(Color.White) else Modifier.background(
-                                Color(rgb(142, 212, 193))
+                            .height(50.dp)
+                            .width(50.dp)
+                            .clip(RoundedCornerShape(30))
+                            .then(
+                                if (!selectedValue.contains("Sleep")) Modifier.background(Color.White) else Modifier.background(
+                                    Color(rgb(142, 212, 193))
+                                )
                             )
-                        )
-                ) {
+                    ) {
 
-                    Image(
-                        painter = painterResource(R.drawable.self_improvement_black_24dp),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(25.dp)
-                            .align(Alignment.Center),
+                        Image(
+                            painter = painterResource(R.drawable.nightlight_black_24dp),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(25.dp)
+                                .align(Alignment.Center),
 
-                        )
-
-                }
-
-
-                Text(
-                    text = stringResource(R.string.exercise),
-                    fontSize = 15.sp,
-
-                    )
-
-            }
-
-            Column(
-                modifier = Modifier
-                    .selectable(
-                        selected = selectedValue.contains("Cramps"),
-                        onClick = {
-                            val item = "Cramps"
-
-                            if (selectedValue.contains(item)) {
-
-                                selectedValue = selectedValue.replace(item, "")
-
-
-                            } else if (!selectedValue.contains(item)) {
-                                selectedValue = selectedValue + "|" + item
-
-                            }
-                            onSelectionChanged(selectedValue)
-                        })
-                    .padding(horizontal = 13.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-
-                Box(
-                    modifier = Modifier
-                        .height(50.dp)
-                        .width(50.dp)
-                        .clip(RoundedCornerShape(30))
-                        .then(
-                            if (!selectedValue.contains("Cramps")) Modifier.background(Color.White) else Modifier.background(
-                                Color(rgb(142, 212, 193))
                             )
-                        )
-                ) {
 
-                    Image(
-                        painter = painterResource(R.drawable.sick_black_24dp),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(25.dp)
-                            .align(Alignment.Center),
+                    }
+
+
+                    Text(
+                        text = stringResource(R.string.sleep),
+                        fontSize = 15.sp,
 
                         )
 
                 }
 
-
-                Text(
-                    text = stringResource(R.string.cramps),
-                    fontSize = 15.sp,
-
-                    )
-
-            }
-
-
-
-            Column(
-                modifier = Modifier
-                    .selectable(
-                        selected = selectedValue.contains("Sleep"),
-                        onClick = {
-                            val item = "Sleep"
-
-                            if (selectedValue.contains(item)) {
-
-                                selectedValue = selectedValue.replace(item, "")
-
-
-                            } else if (!selectedValue.contains(item)) {
-                                selectedValue = selectedValue + "|" + item
-
-                            }
-                            onSelectionChanged(selectedValue)
-                        })
-                    .padding(horizontal = 13.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-
-                Box(
-                    modifier = Modifier
-                        .height(50.dp)
-                        .width(50.dp)
-                        .clip(RoundedCornerShape(30))
-                        .then(
-                            if (!selectedValue.contains("Sleep")) Modifier.background(Color.White) else Modifier.background(
-                                Color(rgb(142, 212, 193))
-                            )
-                        )
-                ) {
-
-                    Image(
-                        painter = painterResource(R.drawable.nightlight_black_24dp),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(25.dp)
-                            .align(Alignment.Center),
-
-                        )
-
-                }
-
-
-                Text(
-                    text = stringResource(R.string.sleep),
-                    fontSize = 15.sp,
-
-                    )
 
             }
 
 
         }
-        Spacer(modifier = Modifier.height((screenheight * (0.01)).dp))
-
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter).padding(bottom = (screenheight * (0.03)).dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             TextButton(
@@ -399,7 +400,11 @@ fun QuestionThreeScreen(
                 onClick = onNextButtonClicked,
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
             ) {
-                Text(stringResource(R.string.skip), color = Color(97, 153, 154), fontSize = 20.sp)
+                Text(
+                    stringResource(R.string.skip),
+                    color = Color(97, 153, 154),
+                    fontSize = 20.sp
+                )
             }
             Button(
                 modifier = Modifier
@@ -418,5 +423,6 @@ fun QuestionThreeScreen(
 
     backbutton(navigateUp, canNavigateBack)
 }
+
 
 

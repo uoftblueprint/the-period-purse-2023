@@ -15,6 +15,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -24,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.example.theperiodpurse.data.OnboardUIState
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.function.Predicate.not
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -32,7 +34,6 @@ fun QuestionTwoScreen(
     onboardUiState: OnboardUIState,
     onNextButtonClicked: () -> Unit,
     onSelectionChanged: (String) -> Unit = {},
-    options: List<String>,
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
     canNavigateBack: Boolean
@@ -42,7 +43,12 @@ fun QuestionTwoScreen(
     val mDay: Int
     val mContext = LocalContext.current
 
-    val mDate = remember { mutableStateOf("Choose date") }
+    val mDate = rememberSaveable { mutableStateOf("Choose date") }
+
+    if ((onboardUiState.date.equals("/"))){
+        mDate.value = onboardUiState.date
+    }
+
     val mDateTo = remember { mutableStateOf("") }
     val mCalendar = Calendar.getInstance()
 
@@ -70,134 +76,111 @@ fun QuestionTwoScreen(
 
     backbutton(navigateUp, canNavigateBack)
 
-    Column(
-        modifier = Modifier.fillMaxHeight(1f),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-
-        val ratio = 0.5
-        val ratioimage = 0.17
-        val height = (screenheight * ratio)
-        val imageheight = (screenheight * ratioimage)
-        Box(
-            modifier = Modifier
-                .width(screenwidth.dp)
-                .height(height.dp)
-
-        )
-        {
-            background_shape()
-
-            Image(
-                painter = painterResource(R.drawable.flow_with_heart),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(imageheight.dp)
-                    .align(Alignment.Center),
-            )
-            val barheight1 = (screenheight * (0.09))
-
-            Image(
-                painter = painterResource(R.drawable.onboard_bar2),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(barheight1.dp)
-                    .align(Alignment.BottomCenter),
-            )
-
-        }
-
-        Text(
-            text = stringResource(R.string.question_two),
-            fontSize = 30.sp,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .width(250.dp),
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
-        )
-
-        Text(
-            text = stringResource(R.string.description_two),
-            fontSize = 18.sp,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .width((screenwidth * (0.6)).dp),
-            textAlign = TextAlign.Center
-        )
-        Spacer(Modifier.height((screenheight * (0.02)).dp))
+    Box(modifier = Modifier
+        .fillMaxHeight()
+        .fillMaxWidth()) {
 
 
-
-        Button(
-            onClick = {
-                mDatePickerDialog.show()
-                entered = true
-            }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
-            modifier = modifier
-                .width(175.dp),
-            shape = RoundedCornerShape(20)
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            if (mDate.value != "Choose date") {
+            val ratio = 0.5
+            val ratioimage = 0.17
+            val height = (screenheight * ratio)
+            val imageheight = (screenheight * ratioimage)
+            Box(
+                modifier = Modifier
+                    .width(screenwidth.dp)
+                    .height(height.dp)
 
-                Row(
+            )
+            {
+                background_shape()
+
+                Image(
+                    painter = painterResource(R.drawable.flow_with_heart),
+                    contentDescription = null,
                     modifier = Modifier
-                        .padding(
-                            start = 12.dp,
-                            end = 16.dp,
-                            top = 12.dp,
-                            bottom = 12.dp
-                        ),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(text = "${mDate.value}", color = Color.Black, fontSize = 18.sp)
-                }
+                        .size(imageheight.dp)
+                        .align(Alignment.Center),
+                )
+                val barheight1 = (screenheight * (0.09))
 
-            } else {
-
-                Row(
+                Image(
+                    painter = painterResource(R.drawable.onboard_bar2),
+                    contentDescription = null,
                     modifier = Modifier
-                        .padding(
-                            start = 12.dp,
-                            end = 16.dp,
-                            top = 12.dp,
-                            bottom = 12.dp
-                        ),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-
-                    Text(
-                        text = "${mDate.value}",
-                        color = Color.Black,
-                        textAlign = TextAlign.Center,
-
-                        )
-                    Spacer(modifier = Modifier.width(10.dp))
-
-                    Image(
-                        painter = painterResource(R.drawable.onboard_calendar),
-                        contentDescription = null,
-                    )
-
-                }
+                        .size(barheight1.dp)
+                        .align(Alignment.BottomCenter),
+                )
 
             }
 
+            Text(
+                text = stringResource(R.string.question_two),
+                fontSize = 30.sp,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .width(250.dp),
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+
+            Text(
+                text = stringResource(R.string.description_two),
+                fontSize = 18.sp,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .width((screenwidth * (0.6)).dp),
+                textAlign = TextAlign.Center
+            )
+            Spacer(Modifier.height((screenheight * (0.02)).dp))
+
+
+
+            Button(
+                onClick = {
+                    mDatePickerDialog.show()
+                    entered = true
+                }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                modifier = modifier
+                    .width(175.dp),
+                shape = RoundedCornerShape(20)
+            ) {
+                    Row(
+                        modifier = Modifier
+                            .padding(
+                                start = 12.dp,
+                                end = 16.dp,
+                                top = 12.dp,
+                                bottom = 12.dp
+                            ),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+
+                        Text(text = onboardUiState.date.split(" to ")[0], color = Color.Black, fontSize = 18.sp)
+
+                    }
+
+
+
+
+
+
+            }
+
+            Spacer(Modifier.height((screenwidth * (0.02)).dp))
+
 
         }
-
-        Spacer(Modifier.height((screenwidth * (0.02)).dp))
-
-
-
-
-
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .padding(bottom = (screenheight * (0.05)).dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             TextButton(
@@ -220,13 +203,15 @@ fun QuestionTwoScreen(
             ) {
                 Text(stringResource(R.string.next), color = Color.White, fontSize = 20.sp)
                 onSelectionChanged(mDate.value + "|" + mDateTo.value)
-                // ADD SIGN IN FUNCTION CALL HERE
 
             }
 
         }
-
     }
+
+
+
+
 
 }
 

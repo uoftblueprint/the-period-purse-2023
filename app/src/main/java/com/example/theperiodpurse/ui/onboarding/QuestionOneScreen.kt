@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.theperiodpurse.R
+import com.example.theperiodpurse.data.OnboardUIState
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -33,9 +34,13 @@ fun QuestionOneScreen(
     onNextButtonClicked: () -> Unit,
     onSelectionChanged: (String) -> Unit = {},
     modifier: Modifier = Modifier, navigateUp: () -> Unit,
-    canNavigateBack: Boolean
+    canNavigateBack: Boolean,
+    onboardUiState: OnboardUIState
 ) {
     var periodCycle by remember { mutableStateOf("") }
+    if (onboardUiState.days != 0){
+        periodCycle = onboardUiState.days.toString()
+    }
     var entered by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val configuration = LocalConfiguration.current
@@ -44,86 +49,94 @@ fun QuestionOneScreen(
 
     val screenheight = configuration.screenHeightDp;
     backbutton(navigateUp, canNavigateBack)
-    Column(
-        modifier = Modifier.fillMaxHeight(),
-        horizontalAlignment = Alignment.CenterHorizontally,
 
-    ) {
+    Box(modifier = Modifier.fillMaxHeight().fillMaxWidth()) {
 
-        val ratio = 0.5
-        val ratioimage = 0.2
-        val height = (screenheight*ratio)
-        val imageheight = (screenheight*ratioimage)
 
-        Spacer(Modifier.height((screenheight*(0.02)).dp))
+        Column(
 
-        Box(modifier = Modifier
-            .width(screenwidth.dp)
-            .height(height.dp)
+            horizontalAlignment = Alignment.CenterHorizontally,
 
-            )
-        {
-            background_shape()
+            ) {
 
-            Image(
-                painter = painterResource(R.drawable.last_period_length),
-                contentDescription = null,
+            val ratio = 0.5
+            val ratioimage = 0.2
+            val height = (screenheight * ratio)
+            val imageheight = (screenheight * ratioimage)
+
+            Spacer(Modifier.height((screenheight * (0.02)).dp))
+
+            Box(
                 modifier = Modifier
-                    .size(imageheight.dp)
-                    .align(Alignment.Center),
-            )
-            val barheight1 = (screenheight*(0.09))
+                    .width(screenwidth.dp)
+                    .height(height.dp)
 
-            Image(
-                painter = painterResource(R.drawable.onboard_bar1),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(barheight1.dp)
-                    .align(Alignment.BottomCenter),
             )
+            {
+                background_shape()
+
+                Image(
+                    painter = painterResource(R.drawable.last_period_length),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(imageheight.dp)
+                        .align(Alignment.Center),
+                )
+                val barheight1 = (screenheight * (0.09))
+
+                Image(
+                    painter = painterResource(R.drawable.onboard_bar1),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(barheight1.dp)
+                        .align(Alignment.BottomCenter),
+                )
+
+            }
+
+            Text(
+                text = stringResource(R.string.question_one),
+                fontSize = 28.sp,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .width(250.dp),
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+            Spacer(Modifier.height((screenheight * (0.02)).dp))
+
+            Text(
+                text = stringResource(R.string.description_one),
+                fontSize = 18.sp,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .width((screenwidth * (0.6)).dp),
+                textAlign = TextAlign.Center
+            )
+            Spacer(Modifier.height((screenheight * (0.02)).dp))
+
+            EditDaysField(
+                label = R.string.tap_to_input,
+                value = periodCycle,
+                onValueChange = { periodCycle = it },
+
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        focusManager.clearFocus(); onSelectionChanged(periodCycle); entered = true
+                    },
+                ),
+                entered = entered,
+                onboardUiState = onboardUiState
+            )
+            Spacer(Modifier.height((screenheight * (0.03)).dp))
 
         }
-
-        Text(
-            text = stringResource(R.string.question_one),
-            fontSize = 28.sp,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .width(250.dp),
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
-        )
-        Spacer(Modifier.height((screenheight*(0.02)).dp))
-
-        Text(
-            text = stringResource(R.string.description_one),
-            fontSize = 18.sp,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .width((screenwidth * (0.6)).dp),
-            textAlign = TextAlign.Center
-        )
-        Spacer(Modifier.height((screenheight*(0.02)).dp))
-
-        EditDaysField(
-            label = R.string.tap_to_input,
-            value = periodCycle,
-            onValueChange = { periodCycle = it },
-
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    focusManager.clearFocus(); onSelectionChanged(periodCycle); entered = true
-                },
-            ),
-            entered = entered
-        )
-        Spacer(Modifier.height((screenheight*(0.03)).dp))
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter).padding(bottom = (screenheight * (0.05)).dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             TextButton(
@@ -136,8 +149,12 @@ fun QuestionOneScreen(
                     disabledBackgroundColor = Color.Transparent,
                 ),
 
-            ) {
-                Text(stringResource(R.string.skip),color = Color(97, 153, 150), fontSize = 20.sp)
+                ) {
+                Text(
+                    stringResource(R.string.skip),
+                    color = Color(97, 153, 150),
+                    fontSize = 20.sp
+                )
             }
 
             Button(
@@ -148,9 +165,10 @@ fun QuestionOneScreen(
                     .weight(1f),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 150))
             ) {
-                Text(stringResource(R.string.next),color = Color.White, fontSize = 20.sp)
+                Text(stringResource(R.string.next), color = Color.White, fontSize = 20.sp)
             }
         }
+
     }
 }
 @RequiresApi(Build.VERSION_CODES.O)
@@ -206,6 +224,7 @@ fun EditDaysField(
     onValueChange: (String) -> Unit,
     keyboardActions: KeyboardActions,
     entered: Boolean,
+    onboardUiState: OnboardUIState
 ){
     TextField(
         shape = RoundedCornerShape(20),
@@ -222,7 +241,7 @@ fun EditDaysField(
                 BorderStroke(2.dp, SolidColor(Color.Transparent)),
                 shape = RoundedCornerShape(20)
             ),
-        trailingIcon = { if (entered){
+        trailingIcon = { if (entered || onboardUiState.days != 0){
             Text(text = "days", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.Black, modifier = Modifier.padding(end=20.dp))
 
         }

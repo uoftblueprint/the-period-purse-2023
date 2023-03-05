@@ -30,7 +30,6 @@ import com.example.theperiodpurse.ui.onboarding.backbutton
 fun SummaryScreen(
     onboardUiState: OnboardUIState,
     onSendButtonClicked: () -> Unit,
-    modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
     canNavigateBack: Boolean
 ) {
@@ -44,7 +43,6 @@ fun SummaryScreen(
 
     val configuration = LocalConfiguration.current
 
-    val screenwidth = configuration.screenWidthDp;
 
     val screenheight = configuration.screenHeightDp;
 
@@ -52,12 +50,11 @@ fun SummaryScreen(
     backbutton(navigateUp, canNavigateBack)
 
     Column(
-        modifier = modifier.padding(vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
 
         ) {
 
-        Spacer(modifier = Modifier.height((screenheight * (0.13)).dp))
+        Spacer(modifier = Modifier.height((screenheight * (0.15)).dp))
 
 
         Image(
