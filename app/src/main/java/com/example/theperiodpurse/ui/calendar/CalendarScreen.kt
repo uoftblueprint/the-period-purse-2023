@@ -226,7 +226,9 @@ fun CalendarScreenLayout(calendarViewModel: CalendarViewModel, navController: Na
                                         Screen.Log,
                                         day.date.toString()
                                     )
-                            )
+                            ) {popUpTo(Screen.Calendar.name) {
+                                inclusive = false
+                            }}
                         }
                     }
                 )
