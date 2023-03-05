@@ -82,6 +82,11 @@ class LogScreenTest {
             .onNodeWithContentDescription(LogSquare.MoodHappy.description).performClick()
         composeTestRule
             .onNodeWithContentDescription("Save Button").performClick()
+        composeTestRule.waitUntil {
+            composeTestRule
+                .onAllNodesWithContentDescription("Save Button")
+                .fetchSemanticsNodes().isEmpty()
+        }
         navController.assertCurrentRouteName(Screen.Calendar.name)
     }
 
@@ -89,6 +94,11 @@ class LogScreenTest {
     fun appLogScreen_clickOnX_navigatesToCalendar() {
         navigateToLogScreen()
         composeTestRule.onNodeWithContentDescription("Log Close Button").performClick()
+        composeTestRule.waitUntil {
+            composeTestRule
+                .onAllNodesWithContentDescription("Save Button")
+                .fetchSemanticsNodes().isEmpty()
+        }
         navController.assertCurrentRouteName(Screen.Calendar.name)
     }
 }
