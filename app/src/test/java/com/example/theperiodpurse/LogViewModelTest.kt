@@ -2,7 +2,6 @@ package com.example.theperiodpurse
 
 import com.example.theperiodpurse.data.*
 import com.example.theperiodpurse.ui.calendar.CalendarDayUIState
-import com.example.theperiodpurse.ui.calendar.CalendarUIState
 import com.example.theperiodpurse.ui.symptomlog.LogViewModel
 import org.junit.Test
 
