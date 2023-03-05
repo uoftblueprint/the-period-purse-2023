@@ -2,9 +2,7 @@ package com.example.theperiodpurse.ui.cycle
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
@@ -12,7 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.foundation.Image
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -105,27 +106,40 @@ fun CycleHistoryBox(modifier: Modifier = Modifier) {
 
 @Composable
 fun CycleScreenLayout(modifier: Modifier = Modifier) {
-    Column(
-        modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .padding(
-                horizontal = 20.dp, vertical = 25.dp
+    ThePeriodPurseTheme {
+        val bg = painterResource(R.drawable.colourwatercolour)
+        Box {
+            Image(
+                painter = bg,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .semantics { contentDescription = "Cycle Page" },
+                contentScale = ContentScale.FillBounds,
             )
-            .semantics { contentDescription = "Cycle Page" }) {
-        CurrentCycleBox()
-        Spacer(modifier.height(30.dp))
-        Row {
-            AverageLengthBox(
-                title = stringResource(R.string.avg_period_len), color = Color(0xFFFEDBDB)
-            )
-            Spacer(modifier.width(16.dp))
-            AverageLengthBox(
-                title = stringResource(R.string.avg_cycle_len), color = Color(0xFFBAE0D8)
-            )
+            Column(
+                modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .padding(
+                        horizontal = 20.dp, vertical = 25.dp
+                    )
+                    .semantics { contentDescription = "Cycle Page" }) {
+                CurrentCycleBox()
+                Spacer(modifier.height(30.dp))
+                Row {
+                    AverageLengthBox(
+                        title = stringResource(R.string.avg_period_len), color = Color(0xFFFEDBDB)
+                    )
+                    Spacer(modifier.width(16.dp))
+                    AverageLengthBox(
+                        title = stringResource(R.string.avg_cycle_len), color = Color(0xFFBAE0D8)
+                    )
+                }
+                Spacer(modifier.height(30.dp))
+                CycleHistoryBox()
+            }
         }
-        Spacer(modifier.height(30.dp))
-        CycleHistoryBox()
     }
 }
 
