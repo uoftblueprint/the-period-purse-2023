@@ -61,29 +61,29 @@ fun getDayColorAndIcon(
                     null -> defaultColor
                 },
                 when (calendarDayUIState.exerciseType) {
-                    "Cardio" -> R.drawable.round_directions_run_24
-                    "Yoga" -> R.drawable.self_improvement_black_24dp
-                    "Strength" -> R.drawable.round_fitness_center_24
-                    "Ball Sports" -> R.drawable.round_sports_soccer_24
-                    "Martial Arts" -> R.drawable.round_sports_martial_arts_24
-                    "Water Sports" -> R.drawable.round_pool_24
-                    "Cycling" -> R.drawable.round_directions_bike_24
-                    "Racquet Sports" -> R.drawable.round_sports_tennis_24
-                    "Winter Sports" -> R.drawable.round_downhill_skiing_24
-                    else -> R.drawable.blank
+                    Exercise.CARDIO -> R.drawable.round_directions_run_24
+                    Exercise.YOGA -> R.drawable.self_improvement_black_24dp
+                    Exercise.STRENGTH -> R.drawable.round_fitness_center_24
+                    Exercise.BALL_SPORTS -> R.drawable.round_sports_soccer_24
+                    Exercise.MARTIAL_ARTS -> R.drawable.round_sports_martial_arts_24
+                    Exercise.WATER_SPORTS -> R.drawable.round_pool_24
+                    Exercise.CYCLING -> R.drawable.round_directions_bike_24
+                    Exercise.RACKET_SPORTS -> R.drawable.round_sports_tennis_24
+                    Exercise.WINTER_SPORTS -> R.drawable.round_downhill_skiing_24
+                    null -> R.drawable.blank
                 }
             )
         Symptom.MOOD ->
             Pair(
                 defaultColor,
                 when (calendarDayUIState.mood) {
-                    "Happy" -> R.drawable.sentiment_satisfied_black_24dp
-                    "Meh" -> R.drawable.sentiment_neutral_black_24dp
-                    "Sad" -> R.drawable.sentiment_dissatisfied_black_24dp
-                    "Silly/Goofy" -> R.drawable.sentiment_very_satisfied_black_24dp
-                    "Sick" -> R.drawable.sick_black_24dp
-                    "Angry" -> R.drawable.round_mood_bad_24
-                    "Loved" -> R.drawable.round_favorite_24
+                    Mood.HAPPY -> R.drawable.sentiment_satisfied_black_24dp
+                    Mood.NEUTRAL -> R.drawable.sentiment_neutral_black_24dp
+                    Mood.SAD -> R.drawable.sentiment_dissatisfied_black_24dp
+                    Mood.SILLY -> R.drawable.sentiment_very_satisfied_black_24dp
+                    Mood.SICK -> R.drawable.sick_black_24dp
+                    Mood.ANGRY -> R.drawable.round_mood_bad_24
+                    Mood.LOVED -> R.drawable.round_favorite_24
                     else -> R.drawable.blank
                 }
             )
