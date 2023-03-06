@@ -2,6 +2,7 @@ package com.example.theperiodpurse.ui.symptomlog
 
 import androidx.lifecycle.ViewModel
 import com.example.theperiodpurse.data.*
+import com.example.theperiodpurse.ui.calendar.CalendarDayUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,6 +15,30 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
     ))
     val uiState: StateFlow<LogUiState> = _uiState.asStateFlow()
 
+    fun populateWithUIState(dayUIState: CalendarDayUIState) {
+        _uiState.update { currentState ->
+            val selectSquares = currentState.selectSquares
+            if (dayUIState.crampSeverity != null) {
+                selectSquares[LogPrompt.Cramps.title] = dayUIState.crampSeverity.displayName
+            }
+            if (dayUIState.flow != null) {
+                selectSquares[LogPrompt.Flow.title] = dayUIState.flow.displayName
+            }
+            if (dayUIState.mood != null) {
+                selectSquares[LogPrompt.Mood.title] = dayUIState.mood.displayName
+            }
+            if (dayUIState.exerciseType != null) {
+                selectSquares[LogPrompt.Exercise.title] = dayUIState.exerciseType.displayName
+            }
+            if (dayUIState.exerciseLengthString != "") {
+                currentState.promptToText[LogPrompt.Exercise.title] = dayUIState.exerciseLengthString
+            }
+            if (dayUIState.sleepString != "") {
+                currentState.promptToText[LogPrompt.Sleep.title] = dayUIState.sleepString
+            }
+            currentState.copy(selectSquares = currentState.selectSquares)
+        }
+    }
     fun setSquareSelected(logSquare: LogSquare) {
         _uiState.update { currentState ->
             currentState.selectSquares[logSquare.promptTitle] = logSquare.description
@@ -36,7 +61,7 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
         var selectedFlow = uiState.value.selectSquares["Flow"]
         if (selectedFlow is String) {
             if (selectedFlow == "") selectedFlow = "None"
-            return FlowSeverity.valueOf(selectedFlow)
+            return FlowSeverity.getSeverityByDisplayName(selectedFlow)
         }
         return null
     }
@@ -45,15 +70,23 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
         var selectedCrampSeverity = uiState.value.selectSquares["Cramps"]
         if (selectedCrampSeverity is String) {
             if (selectedCrampSeverity == "") selectedCrampSeverity = "None"
-            return CrampSeverity.valueOf(selectedCrampSeverity)
+            return CrampSeverity.getSeverityByDisplayName(selectedCrampSeverity)
         }
         return null
     }
 
     fun getSelectedMood(): Mood? {
-        var selectedMood = uiState.value.selectSquares["Mood"]
+        val selectedMood = uiState.value.selectSquares["Mood"]
         if (selectedMood is String) {
-            return Mood.valueOf(selectedMood)
+            return Mood.getMoodByDisplayName(selectedMood)
+        }
+        return null
+    }
+
+    fun getSelectedExercise(): Exercise? {
+        val selectedExercise = uiState.value.selectSquares["Exercise"]
+        if (selectedExercise is String) {
+            return Exercise.getExerciseByDisplayName(selectedExercise)
         }
         return null
     }
