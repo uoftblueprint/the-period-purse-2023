@@ -7,17 +7,17 @@ plugins {
 }
 
 android {
-    namespace 'com.example.theperiodpurse'
+    namespace 'com.tpp.theperiodpurse'
     compileSdk 33
 
 
     defaultConfig {
-        applicationId "com.example.theperiodpurse"
+        applicationId "com.tpp.theperiodpurse"
         minSdk 21
         targetSdk 33
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "com.example.theperiodpurse.CustomTestRunner"
+        testInstrumentationRunner "com.tpp.theperiodpurse.CustomTestRunner"
         vectorDrawables {
             useSupportLibrary true
         }
