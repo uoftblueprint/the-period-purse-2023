@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.education.SocialMedia
@@ -42,14 +43,16 @@ fun SettingScreenLayout(
        Text(
            text = stringResource(R.string.tracking_preferences),
            modifier = modifier.padding(top = 30.dp, start = 10.dp),
-           color = Color.Gray
+           color = Color.DarkGray,
+           fontWeight = FontWeight.Bold
        )
 
        TrackingPreferencesRow()
        Text(
            text = stringResource(R.string.notifications_heading),
            modifier = modifier.padding(top = 5.dp, start = 10.dp),
-           color = Color.Gray
+           color = Color.DarkGray,
+           fontWeight = FontWeight.Bold
        )
        Row(modifier = modifier.padding(20.dp)) {
            var checked by remember { mutableStateOf(false) }
@@ -58,7 +61,11 @@ fun SettingScreenLayout(
                    R.string.remind_me_to_log_symptoms),
                    fontWeight = FontWeight.Bold)
                Spacer(modifier = modifier.padding(3.dp))
-               Text(text = stringResource(R.string.sample_notification))
+               Text(text = stringResource(R.string.sample_notification),
+                   modifier = Modifier.padding(start = 5.dp),
+                   color = Color.Gray,
+                   fontSize = 15.sp,
+               )
            }
            Switch(
                checked = checked,
@@ -72,10 +79,6 @@ fun SettingScreenLayout(
            )
        }
        Divider(modifier = Modifier.padding(start= 10.dp, end = 10.dp))
-//      TabOption(
-//          stringResource(id = R.string.customize_notifications),
-//          onTabClicked = onNotificationClicked
-//      )
 
        NavigateButton(stringResource(id = R.string.customize_notifications),
            onClicked = onNotificationClicked
@@ -86,13 +89,13 @@ fun SettingScreenLayout(
        Text(
            text = stringResource(R.string.account_settings_heading),
            modifier = Modifier.padding(start= 10.dp, top = 30.dp),
-           color = Color.Gray
+           color = Color.DarkGray,
+           fontWeight = FontWeight.Bold
        )
        NavigateButton( text = stringResource(R.string.back_up_account),
            onClicked = onBackUpClicked
        )
        Divider(modifier = Modifier.padding(start= 10.dp, end = 10.dp))
-       Spacer(modifier = Modifier.padding(10.dp))
        NavigateButton(text = stringResource(id = R.string.delete_account),
            onClicked = onDeleteClicked
        )
