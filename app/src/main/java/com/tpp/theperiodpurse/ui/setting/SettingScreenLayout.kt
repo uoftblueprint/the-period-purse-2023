@@ -120,6 +120,7 @@ fun SettingScreenLayout(
         */
        Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
            TermsAndPrivacyFooter(navController)
+           Spacer(modifier = Modifier.size(80.dp))
        }
    }
 }
