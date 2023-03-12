@@ -4,84 +4,19 @@ import com.example.theperiodpurse.data.*
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Assert.*
 import org.junit.Test
-import java.text.SimpleDateFormat
 
 @HiltAndroidTest
 class PeriodPredictionTest {
-    private val periodHistoryEmpty = arrayListOf<Date>()
 
-    private val periodHistoryOneCycle = arrayListOf(
-        Date(
-            date = SimpleDateFormat("dd/MM/yyyy").parse("01/01/2023")!!,
-            flow = FlowSeverity.Light,
-            mood = Mood.HAPPY,
-            exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("01/01/2023")!!,
-            exerciseType = Exercise.CARDIO,
-            crampSeverity = CrampSeverity.None,
-            sleep = SimpleDateFormat("dd/MM/YYYY").parse("01/01/2023")!!
-        ),
-        Date(
-            date = SimpleDateFormat("dd/MM/yyyy").parse("02/01/2023")!!,
-            flow = FlowSeverity.Light,
-            mood = Mood.HAPPY,
-            exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("02/01/2023")!!,
-            exerciseType = Exercise.CARDIO,
-            crampSeverity = CrampSeverity.None,
-            sleep = SimpleDateFormat("dd/MM/YYYY").parse("02/01/2023")!!
+    @Test
+    fun sortPeriodHistory() {
+        val testedList = periodHistoryUnsorted
+        sortPeriodHistory(testedList)
+
+        assertEquals(
+            testedList, periodHistoryOneCycle
         )
-    )
-
-    private val periodHistoryTwoCycles = arrayListOf(
-        Date(
-            date = SimpleDateFormat("dd/MM/yyyy").parse("01/01/2023")!!,
-            flow = FlowSeverity.Light,
-            mood = Mood.HAPPY,
-            exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("01/01/2023")!!,
-            exerciseType = Exercise.CARDIO,
-            crampSeverity = CrampSeverity.None,
-            sleep = SimpleDateFormat("dd/MM/YYYY").parse("01/01/2023")!!
-        ),
-        Date(
-            date = SimpleDateFormat("dd/MM/yyyy").parse("02/01/2023")!!,
-            flow = FlowSeverity.Light,
-            mood = Mood.HAPPY,
-            exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("02/01/2023")!!,
-            exerciseType = Exercise.CARDIO,
-            crampSeverity = CrampSeverity.None,
-            sleep = SimpleDateFormat("dd/MM/YYYY").parse("02/01/2023")!!
-        ),
-        Date(
-            date = SimpleDateFormat("dd/MM/yyyy").parse("01/02/2023")!!,
-            flow = FlowSeverity.Light,
-            mood = Mood.HAPPY,
-            exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("01/02/2023")!!,
-            exerciseType = Exercise.CARDIO,
-            crampSeverity = CrampSeverity.None,
-            sleep = SimpleDateFormat("dd/MM/YYYY").parse("01/02/2023")!!
-        ),
-    )
-//    TODO: Write more tests
-//    private val periodHistoryThreeCycles = arrayListOf(
-//        Date(
-//            date = SimpleDateFormat("dd/MM/yyyy").parse("01/01/2023")!!,
-//            flow = FlowSeverity.Light,
-//            mood = Mood.HAPPY,
-//            exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("01/01/2023")!!,
-//            exerciseType = Exercise.CARDIO,
-//            crampSeverity = CrampSeverity.None,
-//            sleep = SimpleDateFormat("dd/MM/YYYY").parse("01/01/2023")!!
-//        ),
-//        Date(
-//            date = SimpleDateFormat("dd/MM/yyyy").parse("02/01/2023")!!,
-//            flow = FlowSeverity.Light,
-//            mood = Mood.HAPPY,
-//            exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("02/01/2023")!!,
-//            exerciseType = Exercise.CARDIO,
-//            crampSeverity = CrampSeverity.None,
-//            sleep = SimpleDateFormat("dd/MM/YYYY").parse("02/01/2023")!!
-//        ),
-//    )
-
+    }
 
 
     @Test
@@ -90,11 +25,18 @@ class PeriodPredictionTest {
             (-1).toFloat(), calculateAveragePeriodLength(periodHistoryEmpty)
         )
     }
+//
+//    @Test
+//    fun calculatePeriodLength_Unsorted() {
+//        assertEquals(
+//            3.toFloat(), calculateAveragePeriodLength(periodHistoryUnsorted)
+//        )
+//    }
 
     @Test
     fun calculatePeriodLength_OneCycle() {
         assertEquals(
-            2.0.toFloat(), calculateAveragePeriodLength(periodHistoryOneCycle)
+            3.0.toFloat(), calculateAveragePeriodLength(periodHistoryOneCycle)
         )
     }
 
@@ -102,6 +44,13 @@ class PeriodPredictionTest {
     fun calculatePeriodLength_TwoCycles() {
         assertEquals(
             1.5.toFloat(), calculateAveragePeriodLength(periodHistoryTwoCycles)
+        )
+    }
+
+    @Test
+    fun calculatePeriodLength_ThreeCycles() {
+        assertEquals(
+            2.toFloat(), calculateAveragePeriodLength(periodHistoryThreeCycles)
         )
     }
 
@@ -130,4 +79,12 @@ class PeriodPredictionTest {
             31.toFloat(), calculateAverageCycleLength(periodHistoryTwoCycles)
         )
     }
+
+    @Test
+    fun calculateCycleLength_ThreeCycles() {
+        assertEquals(
+            6.toFloat(), calculateAverageCycleLength(periodHistoryThreeCycles)
+        )
+    }
+
 }
