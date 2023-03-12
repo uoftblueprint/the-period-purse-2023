@@ -12,7 +12,7 @@ class LogViewModelTest {
     private val viewModel = LogViewModel(logSquarePrompts)
 
     @Test
-    fun calendarViewModel_UpdateUIState() {
+    fun logViewModel_UpdateUIState() {
         val flow = FlowSeverity.Light; val cramp = CrampSeverity.Bad;
         val mood = Mood.SAD; val exercise = Exercise.CYCLING
         val exerciseString = "10:01:00"; val sleepString = "11:00:00"
