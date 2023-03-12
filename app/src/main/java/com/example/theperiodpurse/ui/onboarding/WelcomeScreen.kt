@@ -16,6 +16,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -163,7 +165,7 @@ fun QuickStartButton(
         onClick = onClick,
         modifier = modifier
             .widthIn(min = 350.dp)
-            .height(50.dp),
+            .height(50.dp).semantics { contentDescription = "Next" },
         shape= RoundedCornerShape(15),
 //        color = Color(52, 235, 161)
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))

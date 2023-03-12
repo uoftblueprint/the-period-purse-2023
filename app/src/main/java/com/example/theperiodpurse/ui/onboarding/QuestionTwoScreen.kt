@@ -20,6 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.example.theperiodpurse.data.OnboardUIState
@@ -65,6 +67,7 @@ fun QuestionTwoScreen(
             mDateTo.value = setDateTo(mDayOfMonth, mMonth, mYear, onboardUiState.days)
         }, mYear, mMonth, mDay
     )
+
 
     val configuration = LocalConfiguration.current
 
@@ -146,7 +149,7 @@ fun QuestionTwoScreen(
                     entered = true
                 }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
                 modifier = modifier
-                    .width(175.dp),
+                    .width(175.dp).semantics { contentDescription = "datepick" },
                 shape = RoundedCornerShape(20)
             ) {
                     Row(
@@ -187,7 +190,7 @@ fun QuestionTwoScreen(
                 onClick = onNextButtonClicked,
                 modifier = modifier
                     .padding(start = (screenwidth * (0.1)).dp)
-                    .weight(1f),
+                    .weight(1f).semantics { contentDescription = "Skip" },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
 
             ) {
@@ -198,7 +201,7 @@ fun QuestionTwoScreen(
                 enabled = entered,
                 modifier = modifier
                     .padding(end = (screenwidth * (0.1)).dp)
-                    .weight(1f),
+                    .weight(1f).semantics { contentDescription = "Next" },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
             ) {
                 Text(stringResource(R.string.next), color = Color.White, fontSize = 20.sp)

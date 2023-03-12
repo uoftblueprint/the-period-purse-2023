@@ -18,6 +18,8 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -132,6 +134,7 @@ fun QuestionOneScreen(
                 entered = entered,
                 onboardUiState = onboardUiState
             )
+
             Spacer(Modifier.height((screenheight * (0.03)).dp))
 
         }
@@ -143,7 +146,7 @@ fun QuestionOneScreen(
                 onClick = onNextButtonClicked,
                 modifier = modifier
                     .padding(start = (screenwidth * (0.1)).dp)
-                    .weight(1f),
+                    .weight(1f).semantics { contentDescription = "Skip" },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.Transparent,
                     disabledBackgroundColor = Color.Transparent,
@@ -162,11 +165,12 @@ fun QuestionOneScreen(
                 enabled = entered,
                 modifier = modifier
                     .padding(end = (screenwidth * (0.1)).dp)
-                    .weight(1f),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 150))
+                    .weight(1f).semantics { contentDescription = "Next" },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 150)),
             ) {
                 Text(stringResource(R.string.next), color = Color.White, fontSize = 20.sp)
             }
+
         }
 
     }
@@ -182,7 +186,7 @@ fun backbutton(navigateUp: () -> Unit, canNavigateBack: Boolean) {
                 IconButton(onClick = navigateUp) {
                     Image(
                         painter = painterResource(R.drawable.back_icon),
-                        contentDescription = null
+                        contentDescription = "Back"
                     )
                 }
             }
@@ -240,7 +244,7 @@ fun EditDaysField(
             .border(
                 BorderStroke(2.dp, SolidColor(Color.Transparent)),
                 shape = RoundedCornerShape(20)
-            ),
+            ).semantics { contentDescription = "Pick Days" },
         trailingIcon = { if (entered || onboardUiState.days != 0){
             Text(text = "days", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.Black, modifier = Modifier.padding(end=20.dp))
 
@@ -258,9 +262,11 @@ fun EditDaysField(
 
         singleLine = true,
         keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions
+        keyboardActions = keyboardActions,
+
 
     )
+
 }
 @Composable
 fun background_shape() {

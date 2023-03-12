@@ -21,6 +21,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -184,7 +186,7 @@ fun QuestionThreeScreen(
                                 onSelectionChanged(selectedValue)
                             }
                         )
-                        .padding(horizontal = (screenheight * 0.02).dp),
+                        .padding(horizontal = (screenheight * 0.02).dp).semantics { contentDescription = "Mood" },
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
@@ -202,7 +204,7 @@ fun QuestionThreeScreen(
 
                         Image(
                             painter = painterResource(R.drawable.sentiment_neutral_black_24dp),
-                            contentDescription = null,
+                            contentDescription = "Mood",
                             modifier = Modifier
                                 .size(25.dp)
                                 .align(Alignment.Center)
@@ -236,7 +238,7 @@ fun QuestionThreeScreen(
                                 }
                                 onSelectionChanged(selectedValue)
                             })
-                        .padding(horizontal = 13.dp),
+                        .padding(horizontal = 13.dp).semantics { contentDescription = "fitness" },
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -254,7 +256,7 @@ fun QuestionThreeScreen(
 
                         Image(
                             painter = painterResource(R.drawable.self_improvement_black_24dp),
-                            contentDescription = null,
+                            contentDescription = "Exercise",
                             modifier = Modifier
                                 .size(25.dp)
                                 .align(Alignment.Center),
@@ -290,7 +292,7 @@ fun QuestionThreeScreen(
                                 }
                                 onSelectionChanged(selectedValue)
                             })
-                        .padding(horizontal = 13.dp),
+                        .padding(horizontal = 13.dp).semantics { contentDescription = "Cramps" },
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -309,7 +311,7 @@ fun QuestionThreeScreen(
 
                         Image(
                             painter = painterResource(R.drawable.sick_black_24dp),
-                            contentDescription = null,
+                            contentDescription = "Cramps",
                             modifier = Modifier
                                 .size(25.dp)
                                 .align(Alignment.Center),
@@ -347,7 +349,7 @@ fun QuestionThreeScreen(
                                 }
                                 onSelectionChanged(selectedValue)
                             })
-                        .padding(horizontal = 13.dp),
+                        .padding(horizontal = 13.dp).semantics { contentDescription = "Exercise" },
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -356,7 +358,7 @@ fun QuestionThreeScreen(
                         modifier = Modifier
                             .height(50.dp)
                             .width(50.dp)
-                            .clip(RoundedCornerShape(30))
+                            .clip(RoundedCornerShape(30)).semantics { contentDescription = "Sleep" }
                             .then(
                                 if (!selectedValue.contains("Sleep")) Modifier.background(Color.White) else Modifier.background(
                                     Color(rgb(142, 212, 193))
@@ -366,7 +368,7 @@ fun QuestionThreeScreen(
 
                         Image(
                             painter = painterResource(R.drawable.nightlight_black_24dp),
-                            contentDescription = null,
+                            contentDescription = "Sleep",
                             modifier = Modifier
                                 .size(25.dp)
                                 .align(Alignment.Center),
@@ -396,7 +398,7 @@ fun QuestionThreeScreen(
             TextButton(
                 modifier = Modifier
                     .padding(start = (screenwidth * (0.1)).dp)
-                    .weight(1f),
+                    .weight(1f).semantics { contentDescription = "Skip" },
                 onClick = onNextButtonClicked,
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
             ) {
@@ -409,7 +411,7 @@ fun QuestionThreeScreen(
             Button(
                 modifier = Modifier
                     .padding(end = (screenwidth * (0.1)).dp)
-                    .weight(1f),
+                    .weight(1f).semantics { contentDescription = "Next" },
                 // the button is enabled when the user makes a selection
                 enabled = selectedValue.isNotEmpty(),
                 onClick = onNextButtonClicked,

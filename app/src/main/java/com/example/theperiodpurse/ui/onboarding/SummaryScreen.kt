@@ -13,6 +13,8 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -85,7 +87,8 @@ fun SummaryScreen(
                     text = numberOfDays, modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 10.dp),
-                    fontSize = 17.sp
+                    fontSize = 17.sp,
+
                 )
             }
             Divider(
@@ -154,7 +157,7 @@ fun SummaryScreen(
                 symptoms.forEach { symptom ->
                     onboardUiState.symptomsOptions.forEach { select ->
                         if (symptom == select || symptom == "Flow") {
-                            Column(modifier = Modifier.padding(all = 10.dp)) {
+                            Column(modifier = Modifier.padding(all = 10.dp).semantics { contentDescription = symptom }) {
 
                                 var painter =
                                     painterResource(R.drawable.self_improvement_black_24dp)
