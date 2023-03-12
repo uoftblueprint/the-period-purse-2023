@@ -39,6 +39,7 @@ fun SettingScreenLayout(
 ){
    Column(modifier = modifier
        .fillMaxSize()
+       .padding(10.dp)
        .verticalScroll(rememberScrollState())) {
        Text(
            text = stringResource(R.string.tracking_preferences),
@@ -100,7 +101,7 @@ fun SettingScreenLayout(
            onClicked = onDeleteClicked
        )
        Divider(modifier = Modifier.padding(start= 10.dp, end = 10.dp))
-       Spacer(modifier = Modifier.padding(10.dp))
+       Spacer(modifier = Modifier.padding(20.dp))
        val uriHandler = LocalUriHandler.current
        val navController = rememberNavController()
        Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
@@ -129,7 +130,7 @@ fun SettingScreenLayout(
 fun TrackingPreferencesRow(modifier: Modifier = Modifier){
     Row(modifier = modifier
         .fillMaxWidth()
-        .padding(30.dp),
+        .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center) {
         TrackingOptionButton(
