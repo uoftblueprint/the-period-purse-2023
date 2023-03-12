@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "670833659413",
+    "project_id": "the-period-purse-5ca7e",
+    "storage_bucket": "the-period-purse-5ca7e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:670833659413:android:22bf87498bdcbcc146481c",
+        "android_client_info": {
+          "package_name": "com.example.theperiodpurse"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "670833659413-6q9jgb44besuj2hdr8sa2uuv5fr6e19j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYvYRSQkEWUd-kxpXzfDUrmtRRFm2eR9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "670833659413-6q9jgb44besuj2hdr8sa2uuv5fr6e19j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
