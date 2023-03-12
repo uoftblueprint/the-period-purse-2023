@@ -1,6 +1,6 @@
-package com.example.theperiodpurse
+package com.tpp.theperiodpurse
 
-import com.example.theperiodpurse.data.*
+import com.tpp.theperiodpurse.data.*
 import java.text.SimpleDateFormat
 
 val periodHistoryEmpty = arrayListOf<Date>()

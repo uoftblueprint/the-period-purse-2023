@@ -1,6 +1,7 @@
-package com.example.theperiodpurse
+package com.tpp.theperiodpurse
 
-import com.example.theperiodpurse.data.*
+import com.tpp.theperiodpurse.data.calculateAverageCycleLength
+import com.tpp.theperiodpurse.data.calculateAveragePeriodLength
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Assert.*
 import org.junit.Test
@@ -11,13 +12,12 @@ class PeriodPredictionTest {
     @Test
     fun sortPeriodHistory() {
         val testedList = periodHistoryUnsorted
-        sortPeriodHistory(testedList)
+        com.tpp.theperiodpurse.data.sortPeriodHistory(testedList)
 
         assertEquals(
             testedList, periodHistoryOneCycle
         )
     }
-
 
     @Test
     fun calculatePeriodLength_EmptyList() {
@@ -25,13 +25,13 @@ class PeriodPredictionTest {
             (-1).toFloat(), calculateAveragePeriodLength(periodHistoryEmpty)
         )
     }
-//
-//    @Test
-//    fun calculatePeriodLength_Unsorted() {
-//        assertEquals(
-//            3.toFloat(), calculateAveragePeriodLength(periodHistoryUnsorted)
-//        )
-//    }
+
+    @Test
+    fun calculatePeriodLength_Unsorted() {
+        assertEquals(
+            3.toFloat(), calculateAveragePeriodLength(periodHistoryUnsorted)
+        )
+    }
 
     @Test
     fun calculatePeriodLength_OneCycle() {
@@ -53,11 +53,6 @@ class PeriodPredictionTest {
             2.toFloat(), calculateAveragePeriodLength(periodHistoryThreeCycles)
         )
     }
-
-
-    /**
-     * Cycle Length Tests
-     */
 
     @Test
     fun calculateCycleLength_EmptyList() {

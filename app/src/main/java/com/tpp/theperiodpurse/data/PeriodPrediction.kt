@@ -1,4 +1,4 @@
-package com.example.theperiodpurse.data
+package com.tpp.theperiodpurse.data
 
 import java.util.*
 import kotlin.collections.ArrayList
