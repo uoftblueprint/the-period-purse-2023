@@ -71,7 +71,7 @@ fun NotificationsLayout(context: Context){
 
         Text(text = stringResource(id = R.string.remind_me_to_log_symptoms),
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(15.dp))
+            modifier = Modifier.padding(15.dp, top = 60.dp))
         Text(text = "We'll remind you to log your symptoms.",
             modifier = Modifier.padding(start = 15.dp),
             fontWeight = FontWeight.Light)

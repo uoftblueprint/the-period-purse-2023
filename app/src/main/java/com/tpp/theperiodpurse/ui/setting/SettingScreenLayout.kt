@@ -15,11 +15,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.ui.education.SocialMedia
+import com.tpp.theperiodpurse.ui.education.TermsAndPrivacyFooter
+import com.tpp.theperiodpurse.ui.education.teal
 
 
 @Composable
@@ -29,13 +36,12 @@ fun SettingScreenLayout(
     onBackUpClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
 ){
-    val textModifier = modifier.padding(top = 50.dp, start = 10.dp)
    Column(modifier = modifier
        .fillMaxSize()
        .verticalScroll(rememberScrollState())) {
        Text(
            text = stringResource(R.string.tracking_preferences),
-           modifier = textModifier,
+           modifier = modifier.padding(top = 30.dp, start = 10.dp),
            color = Color.Gray
        )
 
@@ -65,26 +71,53 @@ fun SettingScreenLayout(
                )
            )
        }
-      TabOption(
-          stringResource(id = R.string.customize_notifications),
-          onTabClicked = onNotificationClicked
-      )
+       Divider(modifier = Modifier.padding(start= 10.dp, end = 10.dp))
+//      TabOption(
+//          stringResource(id = R.string.customize_notifications),
+//          onTabClicked = onNotificationClicked
+//      )
+
+       NavigateButton(stringResource(id = R.string.customize_notifications),
+           onClicked = onNotificationClicked
+           )
+
+       Divider(modifier = Modifier.padding(start= 10.dp, end = 10.dp))
+
        Text(
            text = stringResource(R.string.account_settings_heading),
-           modifier = textModifier,
+           modifier = Modifier.padding(start= 10.dp, top = 30.dp),
            color = Color.Gray
        )
-       TabOption(
-           text = stringResource(R.string.back_up_account),
-           onTabClicked = onBackUpClicked
+       NavigateButton( text = stringResource(R.string.back_up_account),
+           onClicked = onBackUpClicked
        )
+       Divider(modifier = Modifier.padding(start= 10.dp, end = 10.dp))
        Spacer(modifier = Modifier.padding(10.dp))
-       TabOption(
-           text = stringResource(id = R.string.delete_account),
-           onTabClicked = onDeleteClicked
+       NavigateButton(text = stringResource(id = R.string.delete_account),
+           onClicked = onDeleteClicked
        )
+       Divider(modifier = Modifier.padding(start= 10.dp, end = 10.dp))
        Spacer(modifier = Modifier.padding(10.dp))
-       Text(text = stringResource(id = R.string.copyright))
+       val uriHandler = LocalUriHandler.current
+       val navController = rememberNavController()
+       Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+           SocialMedia(uriHandler)
+       }
+
+       Text(modifier = Modifier
+           .padding(horizontal = 8.dp, vertical = 12.dp)
+           .align(Alignment.CenterHorizontally),
+           text = "© 2023 The Period Purse. All rights reserved.",
+           textAlign = TextAlign.Center,
+           color = Color.DarkGray
+       )
+
+       /*
+       Terms & Conditions, and Privacy Policy
+        */
+       Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+           TermsAndPrivacyFooter(navController)
+       }
    }
 }
 
@@ -125,7 +158,7 @@ fun TrackingPreferencesRow(modifier: Modifier = Modifier){
 @Composable
 fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter, contentDescription: String) {
     var checked by remember { mutableStateOf(false) }
-    val color = if (checked) Color.Green else Color.White
+    val color = if (checked) Color(teal) else Color.White
     Column(
         modifier = modifier
             .padding(10.dp),
@@ -153,26 +186,39 @@ fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter, conte
 }
 
 @Composable
-fun TabOption(text: String, onTabClicked: () -> Unit){
-    TabRow(modifier = Modifier.fillMaxWidth(), selectedTabIndex = 0, backgroundColor = Color.Transparent) {
-        Tab(modifier = Modifier.fillMaxWidth(), selected = true, onClick = { onTabClicked() }) {
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween) {
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = text,
-                    fontWeight = FontWeight.Bold
-                )
-                Icon(
-                    imageVector = Icons.Filled.KeyboardArrowRight,
-                    contentDescription = "arrow",
-                    modifier = Modifier.wrapContentWidth(Alignment.End)
-                )
-            }
-        }
-
+fun NavigateButton(text: String, onClicked: () -> Unit ){
+    Button(onClick = onClicked, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(
+        Color.Transparent), elevation = ButtonDefaults.elevation(0.dp)) {
+        Text(
+            modifier = Modifier.weight(1f),
+            text = text,
+            fontWeight = FontWeight.Bold
+        )
+        Icon(
+            imageVector = Icons.Filled.KeyboardArrowRight,
+            contentDescription = "arrow",
+            modifier = Modifier.wrapContentWidth(Alignment.End)
+        )
+        
     }
+}
+
+/**
+ * Preview for Settings Home Page
+ */
+@Preview
+@Composable
+fun SettingsScreenPreview() {
+    val navController = rememberNavController()
+    SettingScreenLayout(
+        onNotificationClicked = {
+            navController.navigate(SettingScreenNavigation.Notification.name)
+        },
+        onBackUpClicked = {
+            navController.navigate(SettingScreenNavigation.BackUpAccount.name)
+        },
+        onDeleteClicked = {
+            navController.navigate(SettingScreenNavigation.DeleteAccount.name)
+        },
+    )
 }

@@ -12,10 +12,12 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -35,14 +37,14 @@ enum class SettingScreenNavigation(@StringRes val title: Int) {
  */
 @Composable
 fun SettingAppBar(
-    currentScreen: SettingScreenNavigation,
+    currentScreen: String,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
-        title = { Text(stringResource(currentScreen.title)) },
-        modifier = modifier,
+        title = { Text(currentScreen)},
+        modifier = modifier.padding(0.dp),
         navigationIcon = {
             if (canNavigateBack) {
                 IconButton(onClick = navigateUp) {
@@ -52,7 +54,9 @@ fun SettingAppBar(
                     )
                 }
             }
-        }
+        },
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp
     )
 }
 
@@ -69,19 +73,24 @@ fun SettingsScreen(
     )
 
     Scaffold(
-        topBar = {
-            SettingAppBar(
-                currentScreen = currentScreen,
-                canNavigateBack = navController.previousBackStackEntry != null,
-                navigateUp = { navController.navigateUp() }
-            )
-        }
     ) { innerPadding ->
         Image(
             painter = painterResource(id = R.drawable.background),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds
+        )
+
+        val title = if(currentScreen.title == R.string.settings_home){
+            " "
+        } else {
+            stringResource(id = R.string.customize_notifications)
+        }
+
+        SettingAppBar(
+            currentScreen = title,
+            canNavigateBack = navController.previousBackStackEntry != null,
+            navigateUp = { navController.navigateUp() }
         )
 
         NavHost(
