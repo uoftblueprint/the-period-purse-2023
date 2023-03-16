@@ -59,7 +59,7 @@ fun ScreenApp(
     skipOnboarding: Boolean = false,
     navController: NavHostController = rememberNavController()
 ) {
-    appViewModel.loadData()
+    appViewModel.loadData(calendarViewModel)
     var loggingOptionsVisible by remember { mutableStateOf(false) }
     Scaffold(
         bottomBar = {

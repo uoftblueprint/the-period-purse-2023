@@ -7,6 +7,8 @@ import com.tpp.theperiodpurse.data.Date
 import com.tpp.theperiodpurse.data.DateRepository
 import com.tpp.theperiodpurse.data.Symptom
 import com.tpp.theperiodpurse.data.UserRepository
+import com.tpp.theperiodpurse.ui.calendar.CalendarDayUIState
+import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,6 +17,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.sql.Time
+import java.time.ZoneId
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,7 +28,7 @@ class AppViewModel @Inject constructor (private val userRepository: UserReposito
     private val _uiState = MutableStateFlow(AppUiState())
     val uiState: StateFlow<AppUiState> = _uiState.asStateFlow()
 
-    fun loadData() {
+    fun loadData(calendarViewModel: CalendarViewModel) {
         val trackedSymptoms: MutableList<Symptom> = mutableListOf()
         viewModelScope.launch {
             Log.d(
@@ -42,8 +46,35 @@ class AppViewModel @Inject constructor (private val userRepository: UserReposito
             withContext(Dispatchers.IO) {
                 dateRepository.getAllDates().collect { dates ->
                     _uiState.value = _uiState.value.copy(dates = dates)
+
+                    for (date in dates) {
+                        if (date.date != null) {
+                            var convertedExcLen = ""
+                            if (date.exerciseLength != null){
+                                convertedExcLen = Time(0, date.exerciseLength.toMinutes().toInt(), 0).toString()
+                            }
+
+                            var convertedSleepLen = ""
+                            if (date.sleep != null) {
+                                convertedSleepLen = Time(0, date.sleep.toMinutes().toInt(), 0).toString()
+                            }
+
+                            calendarViewModel.saveDayInfo(
+                                date.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+                                CalendarDayUIState(
+                                    flow = date.flow,
+                                    mood = date.mood,
+                                    exerciseLengthString = convertedExcLen,
+                                    exerciseType = date.exerciseType,
+                                    crampSeverity = date.crampSeverity,
+                                    sleepString = convertedSleepLen
+                                )
+                            )
+                        }
+                    }
                 }
             }
+
         }
     }
 

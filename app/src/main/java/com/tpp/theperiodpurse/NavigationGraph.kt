@@ -155,7 +155,7 @@ fun NavigationGraph(
                     onboardViewModel.addNewUser(symptomList, dateList, 0, 0, 0)
                     navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
                     navController.navigate(Screen.Calendar.name)
-                    appViewModel.loadData()
+                    appViewModel.loadData(calendarViewModel)
                 },
                 onCancelButtonClicked = {
                     cancelOrderAndNavigateToStart(onboardViewModel, navController)
