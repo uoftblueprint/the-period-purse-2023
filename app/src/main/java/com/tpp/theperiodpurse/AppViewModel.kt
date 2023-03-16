@@ -22,9 +22,10 @@ import java.time.ZoneId
 import javax.inject.Inject
 
 @HiltViewModel
-class AppViewModel @Inject constructor (private val userRepository: UserRepository,
-                                        private val dateRepository: DateRepository
-                                        ): ViewModel() {
+class AppViewModel @Inject constructor (
+    private val userRepository: UserRepository,
+    private val dateRepository: DateRepository,
+): ViewModel() {
     private val _uiState = MutableStateFlow(AppUiState())
     val uiState: StateFlow<AppUiState> = _uiState.asStateFlow()
 
@@ -49,14 +50,19 @@ class AppViewModel @Inject constructor (private val userRepository: UserReposito
 
                     for (date in dates) {
                         if (date.date != null) {
+                            // for it convert correctly we subtract 19 hours worth of milliseconds
                             var convertedExcLen = ""
                             if (date.exerciseLength != null){
-                                convertedExcLen = Time(0, date.exerciseLength.toMinutes().toInt(), 0).toString()
+                                convertedExcLen = Time(
+                                    date.exerciseLength.toMillis()-19*36*100000
+                                ).toString()
                             }
 
                             var convertedSleepLen = ""
                             if (date.sleep != null) {
-                                convertedSleepLen = Time(0, date.sleep.toMinutes().toInt(), 0).toString()
+                                convertedSleepLen = Time(
+                                    date.sleep.toMillis()-19*36*100000
+                                ).toString()
                             }
 
                             calendarViewModel.saveDayInfo(
