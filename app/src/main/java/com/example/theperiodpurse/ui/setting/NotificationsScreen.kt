@@ -1,3 +1,4 @@
+
 package com.example.theperiodpurse.ui.setting
 
 
@@ -138,6 +139,5 @@ fun setAlarm(context: Context, pickedTime: LocalTime){
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
     }
 }
-
 
 

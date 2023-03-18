@@ -9,6 +9,9 @@
     <string name="question_one">How long does your period usually last?</string>
     <string name="description_one">This will help us make our reminders more accurate.</string>
     <string name="tap_to_input">Tap to input</string>
+    <string name="hours">Hours</string>
+    <string name="minutes">Minutes</string>
+    <string name="notes_description">Record a symptom or make a note</string>
     <string name="question_two">When did your period last start?</string>
     <string name="description_two">Record your last period or skip if you do not know.</string>
     <string name="choose_date">Choose date</string>
@@ -36,6 +39,10 @@
     <string name="cycle_history">Cycle history</string>
     <string name="avg_period_len">Average period length</string>
     <string name="avg_cycle_len">Average cycle length</string>
+    <string name="fab_to_calender">Average cycle length</string>
+
+    <string name="period_flow">Period Flow</string>
+    <string name="expand_button_symptoms_content_description">Expand to switch symptoms</string>
     <string name="fab_to_calendar">Navigate to Calendar page</string>
     <string name="fab_see_log_options">Open logging options</string>
 
