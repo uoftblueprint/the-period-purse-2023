@@ -13,10 +13,12 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -39,14 +41,14 @@ enum class SettingScreenNavigation(@StringRes val title: Int) {
  */
 @Composable
 fun SettingAppBar(
-    currentScreen: SettingScreenNavigation,
+    currentScreen: String,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
-        title = { Text(stringResource(currentScreen.title)) },
-        modifier = modifier,
+        title = { Text(currentScreen)},
+        modifier = modifier.padding(0.dp),
         navigationIcon = {
             if (canNavigateBack) {
                 IconButton(onClick = navigateUp) {
@@ -56,7 +58,9 @@ fun SettingAppBar(
                     )
                 }
             }
-        }
+        },
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp
     )
 }
 
@@ -75,20 +79,28 @@ fun SettingsScreen(
 
     // use appViewModel.getTrackedSymptoms to get a list of symptoms
     // use appViewModel.setTrackedSymptoms to set the symptoms to a new list of symptoms
+    // remove this line below after using the appViewModel
+    Log.d("tracked symptoms", appViewModel.getTrackedSymptoms().toString())
+
     Scaffold(
-        topBar = {
-            SettingAppBar(
-                currentScreen = currentScreen,
-                canNavigateBack = navController.previousBackStackEntry != null,
-                navigateUp = { navController.navigateUp() }
-            )
-        }
     ) { innerPadding ->
         Image(
             painter = painterResource(id = R.drawable.background),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds
+        )
+
+        val title = if(currentScreen.title == R.string.settings_home){
+            " "
+        } else {
+            stringResource(id = R.string.customize_notifications)
+        }
+
+        SettingAppBar(
+            currentScreen = title,
+            canNavigateBack = navController.previousBackStackEntry != null,
+            navigateUp = { navController.navigateUp() }
         )
 
         NavHost(
@@ -110,7 +122,7 @@ fun SettingsScreen(
                 )
             }
             composable(route = SettingScreenNavigation.Notification.name) {
-                TimeWheel(context= LocalContext.current)
+                NotificationsLayout(context= LocalContext.current)
             }
             composable(route = SettingScreenNavigation.BackUpAccount.name) {
                 BackUpAccountScreen()
