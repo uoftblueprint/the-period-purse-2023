@@ -36,7 +36,6 @@ import com.tpp.theperiodpurse.ui.education.SocialMedia
 import com.tpp.theperiodpurse.ui.education.TermsAndPrivacyFooter
 import com.tpp.theperiodpurse.ui.education.teal
 import androidx.core.content.ContextCompat
-import com.example.theperiodpurse.R
 
 
 @Composable
@@ -102,11 +101,11 @@ fun SettingScreenLayout(
                contract = ActivityResultContracts.RequestPermission(),
                onResult = { isGranted ->
                    hasAlarmPermission = isGranted
-                   if (!isGranted) {
-                       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//                           shouldShowRequestPermissionRationale(SCHEDULE_EXACT_ALARM)
-                       }
-                   }
+//                   if (!isGranted) {
+//                       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+////                           shouldShowRequestPermissionRationale(SCHEDULE_EXACT_ALARM)
+//                       }
+//                   }
                }
            )
            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -124,10 +123,10 @@ fun SettingScreenLayout(
 
        Divider(modifier = Modifier.padding(start= 10.dp, end = 10.dp))
 
-      TabOption(
-          stringResource(id = R.string.customize_notifications),
-          onTabClicked = onNotificationClicked,
-      )
+//      NavigateButton(
+//          stringResource(id = R.string.customize_notifications),
+//          onClicked = onNotificationClicked,
+//      )
        Text(
            text = stringResource(R.string.account_settings_heading),
            modifier = Modifier.padding(start= 10.dp, top = 30.dp),

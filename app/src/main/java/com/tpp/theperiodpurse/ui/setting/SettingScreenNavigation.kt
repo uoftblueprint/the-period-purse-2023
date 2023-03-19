@@ -114,7 +114,7 @@ fun SettingsScreen(
                 )
             }
             composable(route = SettingScreenNavigation.Notification.name) {
-                NotificationsLayout(context= LocalContext.current)
+//                TimeWheel(context= LocalContext.current)
                 val context = LocalContext.current
                 val hasNotificationPermission by remember {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -126,7 +126,7 @@ fun SettingsScreen(
                         )
                     } else mutableStateOf(true)
                 }
-                TimeWheel(context= context, hasNotificationPermission)
+                NotificationsLayout(context= context, hasNotificationPermission)
             }
             composable(route = SettingScreenNavigation.BackUpAccount.name) {
                 BackUpAccountScreen()
