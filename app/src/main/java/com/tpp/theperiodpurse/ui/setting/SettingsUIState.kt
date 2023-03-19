@@ -1,8 +1,10 @@
 package com.tpp.theperiodpurse.ui.setting
 
+import com.tpp.theperiodpurse.data.Symptom
+
 data class SettingsUIState (
 
-    /** Available Symptoms dates for the order*/
-    val symptomsOptions: List<String> = listOf(),
+    /** Available Symptoms to track*/
+    val symptomsOptions: ArrayList<Symptom>,
     val allowReminders: Boolean = false,
 )
