@@ -10,6 +10,7 @@ import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import com.tpp.theperiodpurse.data.LogPrompt
 import com.tpp.theperiodpurse.data.LogSquare
+import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -28,7 +29,13 @@ class LogScreenTest {
     private lateinit var navController: TestNavHostController
 
     @Inject
+    lateinit var appViewModel: AppViewModel
+
+    @Inject
     lateinit var onboardViewModel: OnboardViewModel
+
+    @Inject
+    lateinit var calendarViewModel: CalendarViewModel
 
     @get:Rule
     // Used to manage the components' state and is used to perform injection on tests
@@ -43,15 +50,23 @@ class LogScreenTest {
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
-            ScreenApp(navController = navController, skipOnboarding = true)
+            ScreenApp(
+                navController = navController,
+                skipOnboarding = true,
+                onboardViewModel = onboardViewModel,
+                appViewModel = appViewModel,
+                calendarViewModel = calendarViewModel
+            )
         }
     }
 
     private fun navigateToLogScreen() {
         composeTestRule
-            .onNodeWithContentDescription(LocalDate.now().format(
-                DateTimeFormatter.ofPattern("yyyy-MM-dd")
-            ).toString()).performClick()
+            .onNodeWithContentDescription(
+                LocalDate.now().format(
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                ).toString()
+            ).performClick()
     }
 
     @Test
