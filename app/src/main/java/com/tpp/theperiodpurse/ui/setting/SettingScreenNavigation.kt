@@ -30,9 +30,9 @@ import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.Symptom
 
 enum class SettingScreenNavigation(@StringRes val title: Int) {
-    Start(title = R.string.settings_home),
-    Notification(title = R.string.customize_notifications),
-    BackUpAccount(title = R.string.back_up_account),
+    Start(title = R.string.settings_home), Notification(title = R.string.customize_notifications), BackUpAccount(
+        title = R.string.back_up_account
+    ),
     DeleteAccount(title = R.string.delete_account)
 }
 
@@ -46,21 +46,16 @@ fun SettingAppBar(
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    TopAppBar(
-        title = { Text(currentScreen)},
-        modifier = modifier.padding(0.dp),
-        navigationIcon = {
-            if (canNavigateBack) {
-                IconButton(onClick = navigateUp) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.back_button)
-                    )
-                }
+    TopAppBar(title = { Text(currentScreen) }, modifier = modifier.padding(0.dp), navigationIcon = {
+        if (canNavigateBack) {
+            IconButton(onClick = navigateUp) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = stringResource(R.string.back_button)
+                )
             }
-        },
-        backgroundColor = Color.Transparent,
-        elevation = 0.dp
+        }
+    }, backgroundColor = Color.Transparent, elevation = 0.dp
     )
 }
 
@@ -68,8 +63,8 @@ fun SettingAppBar(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SettingsScreen(
-    appViewModel: AppViewModel = viewModel(),
     modifier: Modifier = Modifier,
+    appViewModel: AppViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -91,17 +86,15 @@ fun SettingsScreen(
             contentScale = ContentScale.FillBounds
         )
 
-        val title = if(currentScreen.title == R.string.settings_home){
+        val title = if (currentScreen.title == R.string.settings_home) {
             " "
         } else {
             stringResource(id = R.string.customize_notifications)
         }
 
-        SettingAppBar(
-            currentScreen = title,
+        SettingAppBar(currentScreen = title,
             canNavigateBack = navController.previousBackStackEntry != null,
-            navigateUp = { navController.navigateUp() }
-        )
+            navigateUp = { navController.navigateUp() })
 
         NavHost(
             navController = navController,
@@ -122,7 +115,7 @@ fun SettingsScreen(
                 )
             }
             composable(route = SettingScreenNavigation.Notification.name) {
-                NotificationsLayout(context= LocalContext.current)
+                NotificationsLayout(context = LocalContext.current)
             }
             composable(route = SettingScreenNavigation.BackUpAccount.name) {
                 BackUpAccountScreen()
