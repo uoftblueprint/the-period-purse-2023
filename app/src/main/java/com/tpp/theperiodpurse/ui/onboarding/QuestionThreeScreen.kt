@@ -1,4 +1,4 @@
-package com.example.theperiodpurse.ui
+package com.tpp.theperiodpurse.ui.onboarding
 
 import android.graphics.Color.rgb
 import android.os.Build
@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.theperiodpurse.R
+import com.tpp.theperiodpurse.R
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -25,11 +25,9 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import com.example.theperiodpurse.ui.onboarding.backbutton
-
-import com.example.theperiodpurse.ui.onboarding.background_shape
+import com.tpp.theperiodpurse.ui.onboarding.backbutton
+import com.tpp.theperiodpurse.ui.onboarding.background_shape
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

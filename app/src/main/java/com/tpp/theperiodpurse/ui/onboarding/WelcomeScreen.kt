@@ -1,4 +1,4 @@
-package com.example.theperiodpurse.ui.onboarding
+package com.tpp.theperiodpurse.ui.onboarding
 
 
 import android.os.Build
@@ -25,8 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.theperiodpurse.MainActivity
-import com.example.theperiodpurse.R
+import com.tpp.theperiodpurse.R
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

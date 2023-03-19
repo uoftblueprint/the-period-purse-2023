@@ -1,4 +1,4 @@
-package com.example.theperiodpurse.ui.onboarding
+package com.tpp.theperiodpurse.ui.onboarding
 
 
 import android.os.Build
@@ -26,9 +26,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.theperiodpurse.R
-import com.example.theperiodpurse.data.OnboardUIState
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.data.OnboardUIState
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -41,7 +40,7 @@ fun QuestionOneScreen(
     onboardUiState: OnboardUIState
 ) {
     var periodCycle by remember { mutableStateOf("") }
-    if (onboardUiState.days != 0){
+    if (onboardUiState.days != 0) {
         periodCycle = onboardUiState.days.toString()
     }
     var entered by remember { mutableStateOf(false) }
@@ -140,7 +139,8 @@ fun QuestionOneScreen(
 
         }
         Row(
-            modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter).padding(bottom = (screenheight * (0.05)).dp),
+            modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter)
+                .padding(bottom = (screenheight * (0.05)).dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             TextButton(
@@ -173,10 +173,10 @@ fun QuestionOneScreen(
             }
 
 
-
+        }
     }
 }
-@RequiresApi(Build.VERSION_CODES.O)
+
 @Composable
 fun backbutton(navigateUp: () -> Unit, canNavigateBack: Boolean) {
 
@@ -196,8 +196,9 @@ fun backbutton(navigateUp: () -> Unit, canNavigateBack: Boolean) {
         elevation = 0.dp
 
     )
-
 }
+
+
 @Composable
 fun EditNumberField(
     @StringRes label: Int,

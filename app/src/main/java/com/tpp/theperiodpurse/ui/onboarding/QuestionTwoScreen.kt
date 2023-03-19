@@ -1,4 +1,4 @@
-package com.example.theperiodpurse.ui.onboarding
+package com.tpp.theperiodpurse.ui.onboarding
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
@@ -6,7 +6,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.theperiodpurse.R
 import android.app.DatePickerDialog
 import android.os.Build
 import android.widget.DatePicker
@@ -24,7 +23,8 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import com.example.theperiodpurse.data.OnboardUIState
+import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.data.OnboardUIState
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.function.Predicate.not

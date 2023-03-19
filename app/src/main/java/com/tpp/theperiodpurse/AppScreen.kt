@@ -1,4 +1,4 @@
-package com.example.theperiodpurse
+package com.tpp.theperiodpurse
 
 import android.content.Intent
 import android.os.Build
@@ -17,25 +17,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import androidx.navigation.compose.rememberNavController
-import com.tpp.theperiodpurse.ui.component.BottomNavigation
-import com.tpp.theperiodpurse.ui.component.FloatingActionButton
-import com.tpp.theperiodpurse.ui.onboarding.*
-import com.tpp.theperiodpurse.ui.symptomlog.LoggingOptionsPopup
-import com.tpp.theperiodpurse.ui.theme.ThePeriodPurseTheme
-import com.example.theperiodpurse.ui.component.BottomNavigation
-import com.example.theperiodpurse.ui.component.FloatingActionButton
-import com.example.theperiodpurse.ui.onboarding.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.example.theperiodpurse.ui.symptomlog.LoggingOptionsPopup
-import java.time.LocalDate
+import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
+import com.tpp.theperiodpurse.ui.component.BottomNavigation
+import com.tpp.theperiodpurse.ui.component.FloatingActionButton
+import com.tpp.theperiodpurse.ui.onboarding.*
+import com.tpp.theperiodpurse.ui.symptomlog.LoggingOptionsPopup
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -111,7 +106,7 @@ class MainActivity : ComponentActivity() {
                     // SignIn Successful
                     Toast.makeText(this, "SignIn Successful", Toast.LENGTH_SHORT).show()
                     setContent {
-                        Application { signIn() }
+                        Application(skipWelcome = true) { signIn() }
                     }
                 } else {
                     // SignIn Failed
@@ -119,11 +114,12 @@ class MainActivity : ComponentActivity() {
                 }
             }
     }
+}
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Application(skipOnboarding: Boolean = false, signIn: () -> Unit) {
-    ScreenApp(skipOnboarding = skipOnboarding, signIn = signIn)
+fun Application(skipOnboarding: Boolean = false, skipWelcome: Boolean = false, signIn: () -> Unit) {
+    ScreenApp(skipOnboarding = skipOnboarding, skipWelcome = skipWelcome, signIn = signIn)
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -134,7 +130,9 @@ fun ScreenApp(
     calendarViewModel: CalendarViewModel = viewModel(),
     skipOnboarding: Boolean = false,
     navController: NavHostController = rememberNavController(),
-    signIn: () -> Unit
+    skipWelcome: Boolean = false,
+    signIn: () -> Unit,
+
 ) {
     var loggingOptionsVisible by remember { mutableStateOf(false) }
     Scaffold(
@@ -161,7 +159,7 @@ fun ScreenApp(
         Box {
             NavigationGraph(
                 navController = navController,
-                startDestination = if (skipOnboarding) Screen.Calendar.name else OnboardingScreen.Welcome.name,
+                startDestination = if (skipOnboarding) Screen.Calendar.name else if (skipWelcome) OnboardingScreen.QuestionOne.name else OnboardingScreen.Welcome.name,
                 viewModel = viewModel,
                 calendarViewModel = calendarViewModel,
                 modifier = modifier.padding(innerPadding),
@@ -189,3 +187,4 @@ fun ScreenApp(
         }
     }
 }
+

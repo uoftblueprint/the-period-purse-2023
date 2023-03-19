@@ -1,5 +1,4 @@
-package com.example.theperiodpurse.ui
-
+package com.tpp.theperiodpurse.ui
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -19,9 +18,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.theperiodpurse.R
-import com.example.theperiodpurse.data.OnboardUIState
-import com.example.theperiodpurse.ui.onboarding.backbutton
+import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.ui.onboarding.backbutton
+import com.tpp.theperiodpurse.data.OnboardUIState
 
 /**
  * This composable expects [onboardUIState] that represents the onboarding state, [onCancelButtonClicked] lambda

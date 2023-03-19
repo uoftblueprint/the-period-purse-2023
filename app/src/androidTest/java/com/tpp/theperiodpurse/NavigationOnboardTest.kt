@@ -1,17 +1,19 @@
-package com.example.theperiodpurse
+package com.tpp.theperiodpurse
 
+import android.app.Application
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
-import com.example.theperiodpurse.ui.onboarding.OnboardViewModel
+import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import com.tpp.theperiodpurse.MainActivity
 import java.text.DateFormat
 import java.util.*
 import javax.inject.Inject
@@ -38,7 +40,7 @@ class NavigationOnboardTest {
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
-            ScreenApp(navController = navController, skipOnboarding = false, viewModel =
+            ScreenApp(navController = navController, skipOnboarding = false, skipWelcome = false, viewModel =
             onboardViewModel) { signIn() }
         }
     }
