@@ -88,7 +88,7 @@ fun NavigationGraph(
         // Education Screens
 
         composable(route = Screen.Learn.name) {
-            /* TODO Put Screen for Info page here */
+            EducationScreenLayout()
         }
 
 

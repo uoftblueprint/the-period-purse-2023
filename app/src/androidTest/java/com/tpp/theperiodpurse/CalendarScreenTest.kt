@@ -18,7 +18,6 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import javax.inject.Inject
-import kotlin.math.sign
 
 @HiltAndroidTest
 class CalendarScreenTest {

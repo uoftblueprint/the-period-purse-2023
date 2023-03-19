@@ -128,7 +128,10 @@ fun QuestionOneScreen(
                 ),
                 keyboardActions = KeyboardActions(
                     onDone = {
-                        focusManager.clearFocus(); onSelectionChanged(periodCycle); entered = true
+                        if (periodCycle != ""){
+                            onSelectionChanged(periodCycle); entered = true;
+                        }
+                        focusManager.clearFocus();
                     },
                 ),
                 entered = entered,
@@ -211,10 +214,8 @@ fun EditNumberField(
     TextField(
         value = value,
         onValueChange = onValueChange,
-
         label = { Text(stringResource(label)) },
         modifier = Modifier.fillMaxWidth(),
-
         singleLine = true,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions

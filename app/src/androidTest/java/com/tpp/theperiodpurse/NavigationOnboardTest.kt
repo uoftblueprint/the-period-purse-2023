@@ -1,6 +1,5 @@
 package com.tpp.theperiodpurse
 
-import android.app.Application
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.*
@@ -13,9 +12,6 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import com.tpp.theperiodpurse.MainActivity
-import java.text.DateFormat
-import java.util.*
 import javax.inject.Inject
 
 @HiltAndroidTest
@@ -150,6 +146,26 @@ class NavigationOnboardTest {
 
 
     }
+    @Test
+    fun appNavHost_blank_input_questionone() {
+        // check if no crash
+        navController.assertCurrentRouteName(OnboardingScreen.Welcome.name)
+
+        // next to quesiton one page
+        composeTestRule.onNodeWithContentDescription("Next").performClick()
+
+        composeTestRule.runOnIdle {
+            navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
+        }
+        composeTestRule.onNodeWithContentDescription("Pick Days")
+            .performImeAction()
+
+        composeTestRule.runOnIdle {
+            navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
+        }
+    }
+
+
 
 
     fun signIn(){
