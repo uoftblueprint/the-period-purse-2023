@@ -1,6 +1,7 @@
 package com.tpp.theperiodpurse
 
 import android.util.Log
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tpp.theperiodpurse.data.Date
@@ -82,6 +83,19 @@ class AppViewModel @Inject constructor (
             }
 
         }
+    }
+
+    fun getTrackedSymptoms() : List<Symptom> {
+        return uiState.value.trackedSymptoms
+    }
+
+    fun setTackedSymptoms(trackedSymptoms: List<Symptom>) {
+        _uiState.update { currentState ->
+            currentState.copy(trackedSymptoms = trackedSymptoms)
+        }
+        val sympCopy = trackedSymptoms.toMutableList()
+        sympCopy.remove(Symptom.FLOW)
+        userRepository.setSymptoms(sympCopy)
     }
 
     fun saveDate(date: Date) {

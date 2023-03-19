@@ -1,6 +1,7 @@
 package com.tpp.theperiodpurse.ui.setting
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -22,7 +23,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.data.Symptom
 
 enum class SettingScreenNavigation(@StringRes val title: Int) {
     Start(title = R.string.settings_home),
@@ -61,6 +64,7 @@ fun SettingAppBar(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SettingsScreen(
+    appViewModel: AppViewModel = viewModel(),
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
@@ -69,6 +73,8 @@ fun SettingsScreen(
         backStackEntry?.destination?.route ?: SettingScreenNavigation.Start.name
     )
 
+    // use appViewModel.getTrackedSymptoms to get a list of symptoms
+    // use appViewModel.setTrackedSymptoms to set the symptoms to a new list of symptoms
     Scaffold(
         topBar = {
             SettingAppBar(

@@ -8,6 +8,8 @@ interface UserDAO {
     suspend fun get(id: Int): User
     @Query("SELECT * FROM users")
     suspend fun getUsers(): List<User>
+    @Query("UPDATE users SET symptomsToTrack = :symptoms WHERE id = :id")
+    suspend fun updateSymptoms(id: Int, symptoms: List<Symptom>)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun save(user: User)
     @Update
