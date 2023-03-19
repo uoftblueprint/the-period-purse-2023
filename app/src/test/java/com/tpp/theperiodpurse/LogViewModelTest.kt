@@ -7,7 +7,12 @@ import org.junit.Test
 
 class LogViewModelTest {
     private val logSquarePrompts = listOf( // log prompts that use selectable squares
-        LogPrompt.Flow
+        LogPrompt.Flow,
+        LogPrompt.Mood,
+        LogPrompt.Cramps,
+        LogPrompt.Sleep,
+        LogPrompt.Exercise,
+        LogPrompt.Notes
     )
     private val viewModel = LogViewModel(logSquarePrompts)
 
@@ -27,11 +32,10 @@ class LogViewModelTest {
         viewModel.populateWithUIState(state)
         val selectSquares = viewModel.uiState.value.selectSquares
         val promptToText = viewModel.uiState.value.promptToText
-        // TODO fix logviewmodel tests
-//        assert(selectSquares["Flow"] == flow.displayName)
-//        assert(selectSquares["Cramps"] == cramp.displayName)
-//        assert(selectSquares["Exercise"] == exercise.displayName)
-//        assert(promptToText["Sleep"] == sleepString)
-//        assert(promptToText["Exercise"] == exerciseString)
+        assert(selectSquares[LogPrompt.Flow.title] == flow.displayName)
+        assert(selectSquares[LogPrompt.Cramps.title] == cramp.displayName)
+        assert(selectSquares[LogPrompt.Exercise.title] == exercise.displayName)
+        assert(promptToText[LogPrompt.Sleep.title] == sleepString)
+        assert(promptToText[LogPrompt.Exercise.title] == exerciseString)
     }
 }
