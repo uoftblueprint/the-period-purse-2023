@@ -123,10 +123,6 @@ fun SettingScreenLayout(
 
        Divider(modifier = Modifier.padding(start= 10.dp, end = 10.dp))
 
-//      NavigateButton(
-//          stringResource(id = R.string.customize_notifications),
-//          onClicked = onNotificationClicked,
-//      )
        Text(
            text = stringResource(R.string.account_settings_heading),
            modifier = Modifier.padding(start= 10.dp, top = 30.dp),
