@@ -34,8 +34,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.Screen
+import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.theme.HeaderColor1
 import com.tpp.theperiodpurse.ui.theme.SelectedColor1
 import com.tpp.theperiodpurse.data.Symptom

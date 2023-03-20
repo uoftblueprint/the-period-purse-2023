@@ -6,8 +6,6 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
-import com.tpp.theperiodpurse.data.DateRepository
-import com.tpp.theperiodpurse.data.UserRepository
 import com.tpp.theperiodpurse.ui.calendar.CalendarTabItem
 import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -39,10 +37,12 @@ class CalendarCycleTabTest {
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
-            ScreenApp(navController = navController, skipOnboarding = true, viewModel =
-            onboardViewModel)
+            ScreenApp(navController = navController, skipOnboarding = true, skipWelcome = false, viewModel =
+            onboardViewModel) { signIn() }
+
         }
     }
+
 
 
     private fun navigateToCycleScreen() {
@@ -130,6 +130,10 @@ class CalendarCycleTabTest {
         composeTestRule.onNodeWithText(CalendarTabItem.CalendarTab.title).performClick()
 
         composeTestRule.onNodeWithContentDescription("Calendar Page").assertIsDisplayed()
+    }
+
+    fun signIn(){
+
     }
 
 }
