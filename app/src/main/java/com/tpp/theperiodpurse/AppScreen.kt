@@ -38,6 +38,7 @@ import com.tpp.theperiodpurse.ui.component.BottomNavigation
 import com.tpp.theperiodpurse.ui.component.FloatingActionButton
 import com.tpp.theperiodpurse.ui.onboarding.*
 import com.tpp.theperiodpurse.ui.symptomlog.LoggingOptionsPopup
+import com.tpp.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
@@ -64,12 +65,6 @@ class MainActivity : ComponentActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         setContent {
-            if (mAuth.currentUser == null) {
-                Application { signIn() }
-            } else {
-//                val user: FirebaseUser = mAuth.currentUser!!
-                Application(true) { signIn() }
-            }
             ThePeriodPurseTheme {
                 val context = LocalContext.current
                 var hasNotificationPermission by remember {
@@ -98,7 +93,12 @@ class MainActivity : ComponentActivity() {
                         launcher.launch(POST_NOTIFICATIONS)
                     }
                 }
-                Application(applicationContext)
+                if (mAuth.currentUser == null) {
+                    Application(applicationContext) { signIn() }
+                } else {
+//                val user: FirebaseUser = mAuth.currentUser!!
+                    Application(applicationContext, true) { signIn() }
+                }
             }
         }
     }
@@ -108,7 +108,7 @@ class MainActivity : ComponentActivity() {
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -133,7 +133,7 @@ class MainActivity : ComponentActivity() {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresApi(Build.VERSION_CODES.S)
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         mAuth.signInWithCredential(credential)
@@ -142,7 +142,7 @@ class MainActivity : ComponentActivity() {
                     // SignIn Successful
                     Toast.makeText(this, "SignIn Successful", Toast.LENGTH_SHORT).show()
                     setContent {
-                        Application(skipWelcome = true) { signIn() }
+                        Application(context = applicationContext, skipWelcome = true) { signIn() }
                     }
                 } else {
                     // SignIn Failed
@@ -154,7 +154,7 @@ class MainActivity : ComponentActivity() {
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun Application(skipOnboarding: Boolean = false, skipWelcome: Boolean = false, signIn: () -> Unit， context: Context) {
+fun Application(context: Context, skipOnboarding: Boolean = false, skipWelcome: Boolean = false, signIn: () -> Unit) {
     ScreenApp(skipOnboarding = skipOnboarding, skipWelcome = skipWelcome, signIn = signIn)
     createNotificationChannel(context)
 }
@@ -172,6 +172,7 @@ fun createNotificationChannel(context: Context) {
             context.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
+}
 
 
 @RequiresApi(Build.VERSION_CODES.S)
