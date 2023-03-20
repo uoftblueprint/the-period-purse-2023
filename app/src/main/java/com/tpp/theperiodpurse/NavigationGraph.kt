@@ -40,7 +40,7 @@ enum class OnboardingScreen() {
     Summary,
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun NavigationGraph(
     navController: NavHostController,
@@ -96,7 +96,8 @@ fun NavigationGraph(
         // Welcome Screen
         composable(route = OnboardingScreen.Welcome.name) {
             WelcomeScreen(
-                onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionOne.name) },
+                onNextButtonClicked =
+                { navController.navigate(OnboardingScreen.QuestionOne.name) },
                 signIn = signIn
             )
         }

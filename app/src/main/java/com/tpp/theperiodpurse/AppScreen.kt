@@ -1,12 +1,19 @@
 package com.tpp.theperiodpurse
 
 import android.content.Intent
+import android.Manifest.permission.POST_NOTIFICATIONS
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -14,7 +21,9 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -29,6 +38,7 @@ import com.tpp.theperiodpurse.ui.component.BottomNavigation
 import com.tpp.theperiodpurse.ui.component.FloatingActionButton
 import com.tpp.theperiodpurse.ui.onboarding.*
 import com.tpp.theperiodpurse.ui.symptomlog.LoggingOptionsPopup
+import com.tpp.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
@@ -36,14 +46,13 @@ import java.time.LocalDate
 class MainActivity : ComponentActivity() {
 
     companion object {
-
         const val RC_SIGN_IN = 100
     }
 
     private lateinit var mAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
@@ -56,13 +65,40 @@ class MainActivity : ComponentActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         setContent {
-            if (mAuth.currentUser == null) {
-                Application { signIn() }
-            } else {
+            ThePeriodPurseTheme {
+                val context = LocalContext.current
+                var hasNotificationPermission by remember {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        mutableStateOf(
+                            ContextCompat.checkSelfPermission(
+                                context,
+                                POST_NOTIFICATIONS
+                            ) == PackageManager.PERMISSION_GRANTED
+                        )
+                    } else mutableStateOf(true)
+                }
+                val launcher = rememberLauncherForActivityResult(
+                    contract = ActivityResultContracts.RequestPermission(),
+                    onResult = { isGranted ->
+                        hasNotificationPermission = isGranted
+                        if (!isGranted) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                shouldShowRequestPermissionRationale(POST_NOTIFICATIONS)
+                            }
+                        }
+                    }
+                )
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    SideEffect {
+                        launcher.launch(POST_NOTIFICATIONS)
+                    }
+                }
+                if (mAuth.currentUser == null) {
+                    Application(applicationContext) { signIn() }
+                } else {
 //                val user: FirebaseUser = mAuth.currentUser!!
-                Application(true) { signIn() }
-
-
+                    Application(applicationContext, true) { signIn() }
+                }
             }
         }
     }
@@ -72,7 +108,7 @@ class MainActivity : ComponentActivity() {
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -97,7 +133,7 @@ class MainActivity : ComponentActivity() {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresApi(Build.VERSION_CODES.S)
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         mAuth.signInWithCredential(credential)
@@ -106,7 +142,7 @@ class MainActivity : ComponentActivity() {
                     // SignIn Successful
                     Toast.makeText(this, "SignIn Successful", Toast.LENGTH_SHORT).show()
                     setContent {
-                        Application(skipWelcome = true) { signIn() }
+                        Application(context = applicationContext, skipWelcome = true) { signIn() }
                     }
                 } else {
                     // SignIn Failed
@@ -116,13 +152,30 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun Application(skipOnboarding: Boolean = false, skipWelcome: Boolean = false, signIn: () -> Unit) {
+fun Application(context: Context, skipOnboarding: Boolean = false, skipWelcome: Boolean = false, signIn: () -> Unit) {
     ScreenApp(skipOnboarding = skipOnboarding, skipWelcome = skipWelcome, signIn = signIn)
+    createNotificationChannel(context)
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+fun createNotificationChannel(context: Context) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val channel = NotificationChannel(
+            "notification_channel",
+            "Notification",
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        channel.description = "Used for the reminder notifications"
+
+        val notificationManager =
+            context.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+}
+
+
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun ScreenApp(
     modifier: Modifier = Modifier,
@@ -187,4 +240,3 @@ fun ScreenApp(
         }
     }
 }
-
