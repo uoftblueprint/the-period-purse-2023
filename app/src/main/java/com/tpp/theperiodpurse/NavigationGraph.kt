@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -14,19 +13,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
+import com.tpp.theperiodpurse.MainActivity
 import com.tpp.theperiodpurse.data.*
-import com.tpp.theperiodpurse.ui.onboarding.QuestionThreeScreen
-import com.tpp.theperiodpurse.ui.onboarding.SummaryScreen
+import com.tpp.theperiodpurse.ui.SummaryScreen
 import com.tpp.theperiodpurse.ui.calendar.CalendarScreen
 import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
-import com.tpp.theperiodpurse.ui.symptomlog.LogScreen
 import com.tpp.theperiodpurse.ui.cycle.CycleScreenLayout
 import com.tpp.theperiodpurse.ui.education.*
-import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
-import com.tpp.theperiodpurse.ui.onboarding.QuestionOneScreen
-import com.tpp.theperiodpurse.ui.onboarding.QuestionTwoScreen
-import com.tpp.theperiodpurse.ui.onboarding.WelcomeScreen
+import com.tpp.theperiodpurse.ui.onboarding.*
 import com.tpp.theperiodpurse.ui.setting.SettingsScreen
+import com.tpp.theperiodpurse.ui.symptomlog.LogScreen
 import java.time.Duration
 
 enum class Screen() {
@@ -45,7 +41,7 @@ enum class OnboardingScreen() {
     Summary,
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun NavigationGraph(
     navController: NavHostController,
@@ -53,7 +49,9 @@ fun NavigationGraph(
     calendarViewModel: CalendarViewModel,
     onboardViewModel: OnboardViewModel,
     appViewModel: AppViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    mainActivity: MainActivity,
+    signIn: () -> Unit
 ) {
     val onboardUIState by onboardViewModel.uiState.collectAsState()
     NavHost(
@@ -102,36 +100,42 @@ fun NavigationGraph(
 
 
 
-        // Onboard Screens
-
+        // Welcome Screen
         composable(route = OnboardingScreen.Welcome.name) {
             WelcomeScreen(
-                onNextButtonClicked = {
-                    navController.navigate(OnboardingScreen.QuestionOne.name)
-                }
+                onNextButtonClicked =
+                { navController.navigate(OnboardingScreen.QuestionOne.name) },
+                signIn = signIn
             )
         }
+
+
+        // Onboard Screens
         composable(route = OnboardingScreen.QuestionOne.name) {
             QuestionOneScreen(
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionTwo.name) },
-                onSelectionChanged = { onboardViewModel.setQuantity(it.toInt()) }
+                onSelectionChanged = { onboardViewModel.setQuantity(it.toInt()) },
+                navigateUp = { navController.navigateUp() },
+                canNavigateBack = navController.previousBackStackEntry != null,
+                onboardUiState = onboardUIState,
             )
         }
         composable(route = OnboardingScreen.QuestionTwo.name) {
             QuestionTwoScreen(
                 onboardUiState = onboardUIState,
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionThree.name) },
-                options = onboardUIState.dateOptions,
-                onSelectionChanged = { onboardViewModel.setDate(it) }
+                onSelectionChanged = { onboardViewModel.setDate(it) },
+                navigateUp = { navController.navigateUp() },
+                canNavigateBack = navController.previousBackStackEntry != null
             )
         }
 
         composable(route = OnboardingScreen.QuestionThree.name) {
-            val context = LocalContext.current
             QuestionThreeScreen(
                 onNextButtonClicked = { navController.navigate(OnboardingScreen.Summary.name) },
                 onSelectionChanged = { onboardViewModel.setSymptoms(it) },
-                options = DataSource.symptoms.map { id -> context.resources.getString(id) },
+                navigateUp = { navController.navigateUp() },
+                canNavigateBack = navController.previousBackStackEntry != null
             )
         }
         composable(route = OnboardingScreen.Summary.name) {
@@ -157,9 +161,11 @@ fun NavigationGraph(
                     navController.navigate(Screen.Calendar.name)
                     appViewModel.loadData(calendarViewModel)
                 },
-                onCancelButtonClicked = {
-                    cancelOrderAndNavigateToStart(onboardViewModel, navController)
-                },
+                navigateUp = { navController.navigateUp() },
+                canNavigateBack = navController.previousBackStackEntry != null
+//                onCancelButtonClicked = {
+//                    cancelOrderAndNavigateToStart(onboardViewModel, navController)
+//                },
             )
         }
     }

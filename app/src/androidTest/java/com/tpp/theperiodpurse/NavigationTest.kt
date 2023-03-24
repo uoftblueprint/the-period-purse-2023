@@ -50,7 +50,7 @@ class NavigationTest {
                 onboardViewModel = onboardViewModel,
                 appViewModel = appViewModel,
                 calendarViewModel = calendarViewModel
-            )
+            ) { signIn() }
         }
     }
 
@@ -87,5 +87,10 @@ class NavigationTest {
         composeTestRule.onNodeWithContentDescription("Navigate to Calendar page").performClick()
         navController.assertCurrentRouteName(Screen.Calendar.name)
     }
+
+    fun signIn(){
+
+    }
+
 }
 

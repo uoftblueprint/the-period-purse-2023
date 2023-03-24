@@ -1,33 +1,41 @@
 {
   "project_info": {
-    "project_number": "670833659413",
-    "project_id": "the-period-purse-5ca7e",
-    "storage_bucket": "the-period-purse-5ca7e.appspot.com"
+    "project_number": "892650009855",
+    "project_id": "menstruation-nation",
+    "storage_bucket": "menstruation-nation.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:670833659413:android:22bf87498bdcbcc146481c",
+        "mobilesdk_app_id": "1:892650009855:android:d5f35df2ce8a6fdd3148ca",
         "android_client_info": {
           "package_name": "com.tpp.theperiodpurse"
         }
       },
       "oauth_client": [
         {
-          "client_id": "670833659413-6q9jgb44besuj2hdr8sa2uuv5fr6e19j.apps.googleusercontent.com",
+          "client_id": "892650009855-gfcn4nn3ci1u36dpafiuekb2nc0mtfuf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tpp.theperiodpurse",
+            "certificate_hash": "9530ca5d378bc848254e8ff14511ffe6f91b5bd3"
+          }
+        },
+        {
+          "client_id": "892650009855-pbtblmqsa2rppqtf1castutloo52lhfm.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDYvYRSQkEWUd-kxpXzfDUrmtRRFm2eR9k"
+          "current_key": "AIzaSyDDespiby1OeHyRHUm46Q1kHvviZ-VgCrI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "670833659413-6q9jgb44besuj2hdr8sa2uuv5fr6e19j.apps.googleusercontent.com",
+              "client_id": "892650009855-pbtblmqsa2rppqtf1castutloo52lhfm.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -102,7 +102,7 @@ class LogScreenTest {
                 onboardViewModel = onboardViewModel,
                 appViewModel = appViewModel,
                 calendarViewModel = calendarViewModel
-            )
+            ) { signIn() }
         }
     }
 
@@ -146,5 +146,8 @@ class LogScreenTest {
         navigateToLogScreen()
         composeTestRule.onNodeWithContentDescription("Log Close Button").performClick()
         navController.assertCurrentRouteName(Screen.Calendar.name)
+    }
+    fun signIn(){
+
     }
 }

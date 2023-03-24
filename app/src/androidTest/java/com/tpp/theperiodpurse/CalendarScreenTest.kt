@@ -98,9 +98,12 @@ class CalendarScreenTest {
                 ComposeNavigator()
             )
             ScreenApp(
-                navController = navController, skipOnboarding = true, onboardViewModel =
-                onboardViewModel, appViewModel = appViewModel, calendarViewModel = calendarViewModel
-            )
+                navController = navController,
+                skipOnboarding = true,
+                onboardViewModel = onboardViewModel,
+                appViewModel = appViewModel,
+                calendarViewModel = calendarViewModel
+            ) { signIn() }
         }
     }
 
@@ -164,5 +167,9 @@ class CalendarScreenTest {
             .config[SemanticsProperties.Text][0].text
         var today = LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL))
         assert(date == today)
+    }
+
+    fun signIn(){
+
     }
 }
