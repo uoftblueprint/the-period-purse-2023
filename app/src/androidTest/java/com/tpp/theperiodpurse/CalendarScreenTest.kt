@@ -7,14 +7,17 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
+import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.ui.calendar.CalendarTabItem
 import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.time.Duration
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -35,6 +38,50 @@ class CalendarScreenTest {
     @Inject
     lateinit var calendarViewModel: CalendarViewModel
 
+    @Inject
+    lateinit var userRepository: UserRepository
+
+    @Inject
+    lateinit var dateRepository: DateRepository
+
+    private val symptomList = arrayListOf(
+        Symptom.EXERCISE, Symptom.SLEEP, Symptom.MOOD,
+        Symptom.CRAMPS
+    );
+    private val currentDate = java.util.Date()
+    private val duration: Duration = Duration.ofHours(1)
+    private val dateList = arrayListOf(
+        Date(
+            date = currentDate,
+            flow = FlowSeverity.Heavy,
+            mood = Mood.ANGRY,
+            exerciseLength = duration,
+            exerciseType = Exercise.YOGA,
+            crampSeverity = CrampSeverity.Bad,
+            sleep = duration,
+            notes = ""
+        )
+    )
+
+    private fun insertDate() {
+        runBlocking {
+            dateRepository.addDate(dateList[0])
+        }
+    }
+
+    private fun insertUser() {
+        val user = User(
+            symptomsToTrack = symptomList,
+            periodHistory = dateList,
+            averagePeriodLength = 0,
+            averageCycleLength = 0,
+            daysSinceLastPeriod = 0
+        )
+        runBlocking {
+            userRepository.addUser(user)
+        }
+    }
+
     @get:Rule
     // Used to manage the components' state and is used to perform injection on tests
     var hiltRule = HiltAndroidRule(this)
@@ -42,6 +89,8 @@ class CalendarScreenTest {
     @Before
     fun setupNavHost() {
         hiltRule.inject()
+        insertDate()
+        insertUser()
         composeTestRule.setContent {
             navController =
                 TestNavHostController(LocalContext.current)
