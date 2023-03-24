@@ -122,7 +122,7 @@ class MainActivity : ComponentActivity() {
             val exception = task.exception
             if (task.isSuccessful) {
                 try {
-                    // Google SignIn was successful, authenticate with Firebase
+                    // Google SignIn was successful, authenticate with Firebase.
                     val account = task.getResult(ApiException::class.java)!!
                     firebaseAuthWithGoogle(account.idToken!!)
                 } catch (e: Exception) {
