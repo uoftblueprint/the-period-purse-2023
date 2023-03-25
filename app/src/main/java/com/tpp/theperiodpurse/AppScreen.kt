@@ -98,10 +98,10 @@ class MainActivity : ComponentActivity() {
                     }
                 }
                 if (mAuth.currentUser == null) {
-                    Application(applicationContext) { signIn() }
+                    Application(context = applicationContext, signIn = { signIn() } )
                 } else {
 //                val user: FirebaseUser = mAuth.currentUser!!
-                    Application(applicationContext) { signIn() }
+                    Application(context = applicationContext, signIn = { signIn() })
                 }
             }
         }
@@ -146,7 +146,7 @@ class MainActivity : ComponentActivity() {
                     // SignIn Successful
                     Toast.makeText(this, "SignIn Successful", Toast.LENGTH_SHORT).show()
                     setContent {
-                        Application(context = applicationContext) { signIn() }
+                        Application(context = applicationContext, skipDatabase = true, skipWelcome = true, signIn = { signIn() })
                     }
                 } else {
                     // SignIn Failed
@@ -158,8 +158,15 @@ class MainActivity : ComponentActivity() {
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun Application(context: Context, signIn: () -> Unit) {
-    ScreenApp(signIn = signIn)
+fun Application(context: Context,
+                signIn: () -> Unit,
+                skipWelcome: Boolean = false,
+                skipDatabase: Boolean = false,
+                skipOnboarding: Boolean = false) {
+    ScreenApp(signIn = signIn,
+        skipOnboarding = skipOnboarding,
+        skipWelcome = skipDatabase,
+        skipDatabase = skipWelcome)
     createNotificationChannel(context)
 }
 
@@ -186,21 +193,29 @@ fun ScreenApp(
     viewModel: OnboardViewModel = viewModel(),
     calendarViewModel: CalendarViewModel = viewModel(),
     navController: NavHostController = rememberNavController(),
-    skipWelcome: Boolean = false,
     signIn: () -> Unit,
+    skipWelcome: Boolean = false,
+    skipDatabase: Boolean = false,
+    skipOnboarding: Boolean = false,
 
-) {
+    ) {
     var loggingOptionsVisible by remember { mutableStateOf(false) }
+    var skipOnboarding = skipOnboarding
 
     val isOnboarded by viewModel.isOnboarded.observeAsState(initial = null)
 
-    LaunchedEffect(Unit) {
-        viewModel.checkOnboardedStatus()
+    if (!skipDatabase){
+        LaunchedEffect(Unit) {
+            viewModel.checkOnboardedStatus()
+        }
     }
 
-    if (isOnboarded == null){
+    if (isOnboarded == null && !skipDatabase){
         LoadingScreen()
     } else{
+        if (!skipDatabase){
+            skipOnboarding = (isOnboarded as Boolean)
+        }
         Scaffold(
             bottomBar = {
                 if (currentRoute(navController) in Screen.values().map { it.name }) {
@@ -225,7 +240,7 @@ fun ScreenApp(
             Box {
                 NavigationGraph(
                     navController = navController,
-                    startDestination = if (isOnboarded as Boolean) Screen.Calendar.name else if (skipWelcome) OnboardingScreen.QuestionOne.name else OnboardingScreen.Welcome.name,
+                    startDestination = if (skipOnboarding) Screen.Calendar.name else if (skipWelcome) OnboardingScreen.QuestionOne.name else OnboardingScreen.Welcome.name,
                     viewModel = viewModel,
                     calendarViewModel = calendarViewModel,
                     modifier = modifier.padding(innerPadding),

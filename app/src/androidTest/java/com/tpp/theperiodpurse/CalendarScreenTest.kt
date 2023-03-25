@@ -41,8 +41,8 @@ class CalendarScreenTest {
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
-            ScreenApp(navController = navController, skipOnboarding = true, viewModel =
-            onboardViewModel) { signIn() }
+            ScreenApp(navController = navController, skipDatabase = true, skipOnboarding = true, viewModel =
+            onboardViewModel, signIn = { signIn()  })
         }
     }
 
