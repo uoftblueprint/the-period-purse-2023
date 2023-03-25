@@ -18,8 +18,23 @@ class OnboardViewModel @Inject constructor (
     private val userRepository: UserRepository,
     private val dateRepository: DateRepository,
 ): ViewModel() {
+
     private val _uiState = MutableStateFlow(OnboardUIState(dateOptions = dateOptions()))
     val uiState: StateFlow<OnboardUIState> = _uiState.asStateFlow()
+
+    var isOnboarded: LiveData<Boolean?> = userRepository.isOnboarded
+
+    fun checkOnboardedStatus() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                async {
+                    userRepository.isOnboarded()
+                    isOnboarded = userRepository.isOnboarded
+                }
+
+            }
+        }
+    }
 
     /**
      * Set the quantity [averageDays] for average period length for this onboarding session
@@ -138,4 +153,6 @@ class OnboardViewModel @Inject constructor (
                    crampSeverity: CrampSeverity, sleep: java.util.Date) {
         saveDate(createDate(date, flow, mood, exerciseLength, exerciseType, crampSeverity, sleep))
     }
+
+
 }

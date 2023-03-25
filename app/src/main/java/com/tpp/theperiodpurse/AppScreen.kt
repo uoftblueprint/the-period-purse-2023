@@ -41,6 +41,9 @@ import com.tpp.theperiodpurse.ui.symptomlog.LoggingOptionsPopup
 import com.tpp.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -56,6 +59,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
+
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -97,7 +101,7 @@ class MainActivity : ComponentActivity() {
                     Application(applicationContext) { signIn() }
                 } else {
 //                val user: FirebaseUser = mAuth.currentUser!!
-                    Application(applicationContext, true) { signIn() }
+                    Application(applicationContext) { signIn() }
                 }
             }
         }
@@ -142,7 +146,7 @@ class MainActivity : ComponentActivity() {
                     // SignIn Successful
                     Toast.makeText(this, "SignIn Successful", Toast.LENGTH_SHORT).show()
                     setContent {
-                        Application(context = applicationContext, skipWelcome = true) { signIn() }
+                        Application(context = applicationContext) { signIn() }
                     }
                 } else {
                     // SignIn Failed
@@ -154,8 +158,8 @@ class MainActivity : ComponentActivity() {
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun Application(context: Context, skipOnboarding: Boolean = false, skipWelcome: Boolean = false, signIn: () -> Unit) {
-    ScreenApp(skipOnboarding = skipOnboarding, skipWelcome = skipWelcome, signIn = signIn)
+fun Application(context: Context, signIn: () -> Unit) {
+    ScreenApp(signIn = signIn)
     createNotificationChannel(context)
 }
 
@@ -181,62 +185,77 @@ fun ScreenApp(
     modifier: Modifier = Modifier,
     viewModel: OnboardViewModel = viewModel(),
     calendarViewModel: CalendarViewModel = viewModel(),
-    skipOnboarding: Boolean = false,
     navController: NavHostController = rememberNavController(),
     skipWelcome: Boolean = false,
     signIn: () -> Unit,
 
 ) {
     var loggingOptionsVisible by remember { mutableStateOf(false) }
-    Scaffold(
-        bottomBar = {
-            if (currentRoute(navController) in Screen.values().map { it.name }) {
-                BottomNavigation(navController = navController)
-            }
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                navController = navController,
-                onClickInCalendar = { loggingOptionsVisible = true }
-            )
-        },
-        floatingActionButtonPosition = FabPosition.Center,
-        isFloatingActionButtonDocked = true
-    ) { innerPadding ->
-        Image(
-            painter = painterResource(id = R.drawable.background),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.FillBounds
-        )
-        Box {
-            NavigationGraph(
-                navController = navController,
-                startDestination = if (skipOnboarding) Screen.Calendar.name else if (skipWelcome) OnboardingScreen.QuestionOne.name else OnboardingScreen.Welcome.name,
-                viewModel = viewModel,
-                calendarViewModel = calendarViewModel,
-                modifier = modifier.padding(innerPadding),
-                mainActivity = MainActivity(),
-                signIn = signIn
-            )
 
-            if (loggingOptionsVisible) {
-                LoggingOptionsPopup(
-                    onLogDailySymptomsClick = {
-                        navController.navigate(
-                            route = "%s/%s/%s"
-                                .format(
-                                    Screen.Calendar,
-                                    Screen.Log,
-                                    LocalDate.now().toString()
-                                )
-                        )
-                    },
-                    { /* TODO: Go to logging page for multiple dates */ },
-                    onExit = { loggingOptionsVisible = false },
-                    modifier = modifier.padding(innerPadding)
+    val isOnboarded by viewModel.isOnboarded.observeAsState(initial = null)
+
+    LaunchedEffect(Unit) {
+        viewModel.checkOnboardedStatus()
+    }
+
+    if (isOnboarded == null){
+        LoadingScreen()
+    } else{
+        Scaffold(
+            bottomBar = {
+                if (currentRoute(navController) in Screen.values().map { it.name }) {
+                    BottomNavigation(navController = navController)
+                }
+            },
+            floatingActionButton = {
+                FloatingActionButton(
+                    navController = navController,
+                    onClickInCalendar = { loggingOptionsVisible = true }
                 )
+            },
+            floatingActionButtonPosition = FabPosition.Center,
+            isFloatingActionButtonDocked = true
+        ) { innerPadding ->
+            Image(
+                painter = painterResource(id = R.drawable.background),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillBounds
+            )
+            Box {
+                NavigationGraph(
+                    navController = navController,
+                    startDestination = if (isOnboarded as Boolean) Screen.Calendar.name else if (skipWelcome) OnboardingScreen.QuestionOne.name else OnboardingScreen.Welcome.name,
+                    viewModel = viewModel,
+                    calendarViewModel = calendarViewModel,
+                    modifier = modifier.padding(innerPadding),
+                    mainActivity = MainActivity(),
+                    signIn = signIn
+                )
+
+                if (loggingOptionsVisible) {
+                    LoggingOptionsPopup(
+                        onLogDailySymptomsClick = {
+                            navController.navigate(
+                                route = "%s/%s/%s"
+                                    .format(
+                                        Screen.Calendar,
+                                        Screen.Log,
+                                        LocalDate.now().toString()
+                                    )
+                            )
+                        },
+                        { /* TODO: Go to logging page for multiple dates */ },
+                        onExit = { loggingOptionsVisible = false },
+                        modifier = modifier.padding(innerPadding)
+                    )
+                }
             }
         }
+
+
     }
+
+
+
 }

@@ -1,5 +1,6 @@
 package com.tpp.theperiodpurse.data
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
@@ -14,4 +15,5 @@ interface UserDAO {
     suspend fun update(user: User)
     @Delete
     suspend fun delete(user: User)
+
 }

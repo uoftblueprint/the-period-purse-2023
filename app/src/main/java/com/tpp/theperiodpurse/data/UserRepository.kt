@@ -1,12 +1,15 @@
 package com.tpp.theperiodpurse.data
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class UserRepository(private val userDAO: UserDAO) {
+    val isOnboarded: MutableLiveData<Boolean?> = MutableLiveData(null)
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
+
 
     fun addUser(user: User) {
         coroutineScope.launch (Dispatchers.IO) {
@@ -16,5 +19,9 @@ class UserRepository(private val userDAO: UserDAO) {
 
     suspend fun getUser(id: Int): User {
         return userDAO.get(id)
+    }
+
+    fun isOnboarded() {
+        isOnboarded.postValue(userDAO.getUsers().isNotEmpty())
     }
 }
