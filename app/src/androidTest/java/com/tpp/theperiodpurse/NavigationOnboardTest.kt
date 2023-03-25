@@ -87,7 +87,7 @@ class NavigationOnboardTest {
 //
 
 //        composeTestRule.onNodeWithContentDescription("Next").performClick()
-        composeTestRule.onNodeWithContentDescription("Skip").performClick()
+        composeTestRule.onNodeWithContentDescription("Next").performClick()
         navController.assertCurrentRouteName(OnboardingScreen.Summary.name)
         composeTestRule.onNodeWithText("5 days").assertExists()
         composeTestRule.onNodeWithContentDescription("Mood").assertExists()
@@ -164,6 +164,60 @@ class NavigationOnboardTest {
             navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
         }
     }
+
+    @Test
+    fun appNavHost_questionone_input_change() {
+        // welcome page
+        navController.assertCurrentRouteName(OnboardingScreen.Welcome.name)
+        // next to quesiton one page
+        composeTestRule.onNodeWithContentDescription("Next").performClick()
+            .performClick()
+        navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
+        val textFieldValue = "5"
+        composeTestRule.onNodeWithContentDescription("Pick Days")
+            .performTextInput(textFieldValue)
+        composeTestRule.onNodeWithContentDescription("Pick Days")
+            .performImeAction()
+
+        composeTestRule.onNodeWithContentDescription("Next").performClick()
+
+        composeTestRule.onNodeWithContentDescription("Skip").performClick()
+
+        composeTestRule.onNodeWithContentDescription("Skip").performClick()
+
+        navController.assertCurrentRouteName(OnboardingScreen.Summary.name)
+
+        composeTestRule.onNodeWithText("5 days").assertExists()
+
+        composeTestRule.onNodeWithContentDescription("Back").performClick()
+
+        composeTestRule.onNodeWithContentDescription("Back").performClick()
+
+        composeTestRule.onNodeWithContentDescription("Back").performClick()
+
+        // back to quesiton one page
+        navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
+
+
+        val newtextFieldValue = "6"
+        composeTestRule.onNodeWithContentDescription("Pick Days")
+            .performTextClearance()
+        composeTestRule.onNodeWithContentDescription("Pick Days")
+            .performTextInput(newtextFieldValue)
+        composeTestRule.onNodeWithContentDescription("Pick Days")
+            .performImeAction()
+
+        composeTestRule.onNodeWithContentDescription("Next").performClick()
+
+        composeTestRule.onNodeWithContentDescription("Skip").performClick()
+
+        composeTestRule.onNodeWithContentDescription("Skip").performClick()
+
+        navController.assertCurrentRouteName(OnboardingScreen.Summary.name)
+
+        composeTestRule.onNodeWithText("6 days").assertExists()
+    }
+
 
 
 
