@@ -99,6 +99,7 @@ fun NavigationGraph(
         }
 
 
+
         // Welcome Screen
         composable(route = OnboardingScreen.Welcome.name) {
             WelcomeScreen(
@@ -143,6 +144,7 @@ fun NavigationGraph(
                 onSendButtonClicked = {
                     navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
                     navController.navigate(Screen.Calendar.name)
+                    appViewModel.loadData(calendarViewModel)
                 },
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null
