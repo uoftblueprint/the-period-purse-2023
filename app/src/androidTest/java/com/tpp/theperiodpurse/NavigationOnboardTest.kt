@@ -87,7 +87,7 @@ class NavigationOnboardTest {
 //
 
 //        composeTestRule.onNodeWithContentDescription("Next").performClick()
-        composeTestRule.onNodeWithContentDescription("Skip").performClick()
+        composeTestRule.onNodeWithContentDescription("Next").performClick()
         navController.assertCurrentRouteName(OnboardingScreen.Summary.name)
         composeTestRule.onNodeWithText("5 days").assertExists()
         composeTestRule.onNodeWithContentDescription("Mood").assertExists()
