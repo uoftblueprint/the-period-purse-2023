@@ -23,32 +23,35 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation.NavHostController
+import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.OnboardUIState
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.function.Predicate.not
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun QuestionTwoScreen(
     onboardUiState: OnboardUIState,
-    onNextButtonClicked: () -> Unit,
     onSelectionChanged: (String) -> Unit = {},
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
-    canNavigateBack: Boolean
+    canNavigateBack: Boolean,
+    navController: NavHostController
 ) {
     val mYear: Int
     val mMonth: Int
     val mDay: Int
     val mContext = LocalContext.current
+    var entered by rememberSaveable { mutableStateOf(false) }
 
     val mDate = rememberSaveable { mutableStateOf("Choose date") }
 
-    if ((onboardUiState.date.equals("/"))){
-        mDate.value = onboardUiState.date
+    if (onboardUiState.date.contains("/")){
+        mDate.value = onboardUiState.date.split(" to ")[0]
+        entered = true
     }
 
     val mDateTo = remember { mutableStateOf("") }
@@ -58,7 +61,7 @@ fun QuestionTwoScreen(
     mMonth = mCalendar.get(Calendar.MONTH)
     mDay = mCalendar.get(Calendar.DAY_OF_MONTH)
 
-    var entered by remember { mutableStateOf(false) }
+
 
     val mDatePickerDialog = DatePickerDialog(
         mContext,
@@ -97,11 +100,9 @@ fun QuestionTwoScreen(
                 modifier = Modifier
                     .width(screenwidth.dp)
                     .height(height.dp)
-
             )
             {
                 background_shape()
-
                 Image(
                     painter = painterResource(R.drawable.flow_with_heart),
                     contentDescription = null,
@@ -110,7 +111,6 @@ fun QuestionTwoScreen(
                         .align(Alignment.Center),
                 )
                 val barheight1 = (screenheight * (0.09))
-
                 Image(
                     painter = painterResource(R.drawable.onboard_bar2),
                     contentDescription = null,
@@ -118,12 +118,10 @@ fun QuestionTwoScreen(
                         .size(barheight1.dp)
                         .align(Alignment.BottomCenter),
                 )
-
             }
-
             Text(
                 text = stringResource(R.string.question_two),
-                fontSize = 30.sp,
+                fontSize = (screenheight * (0.035)).sp,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .width(250.dp),
@@ -140,18 +138,17 @@ fun QuestionTwoScreen(
                 textAlign = TextAlign.Center
             )
             Spacer(Modifier.height((screenheight * (0.02)).dp))
-
-
-
             Button(
                 onClick = {
                     mDatePickerDialog.show()
                     entered = true
                 }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
                 modifier = modifier
-                    .width(175.dp).semantics { contentDescription = "datepick" },
+                    .width(175.dp)
+                    .semantics { contentDescription = "datepick" },
                 shape = RoundedCornerShape(20)
             ) {
+                if (mDate.value.contains("Choose date")){
                     Row(
                         modifier = Modifier
                             .padding(
@@ -163,59 +160,73 @@ fun QuestionTwoScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
+                        Text(text = mDate.value, color = Color.Gray, fontSize = 14.sp)
 
-                        Text(text = onboardUiState.date.split(" to ")[0], color = Color.Black, fontSize = 18.sp)
-
+                        Image(
+                            painter = painterResource(R.drawable.onboard_calendar),
+                            contentDescription = null,
+                            modifier = Modifier.padding(start = 10.dp, end=0.dp),
+                        )
+                    }
+                }
+                else {
+                    Row(
+                        modifier = Modifier
+                            .padding(
+                                start = 12.dp,
+                                end = 12.dp,
+                                top = 12.dp,
+                                bottom = 12.dp
+                            ),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(text = mDate.value, color = Color.Black, fontSize = 18.sp)
                     }
 
-
-
-
+                }
 
 
             }
-
             Spacer(Modifier.height((screenwidth * (0.02)).dp))
-
-
         }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .padding(bottom = (screenheight * (0.05)).dp),
+                .padding(bottom = (screenheight * (0.03)).dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             TextButton(
-                onClick = onNextButtonClicked,
+                onClick = {
+                    onboardUiState.date = "Choose date"
+                    navController.navigate(OnboardingScreen.QuestionThree.name)
+                          },
                 modifier = modifier
                     .padding(start = (screenwidth * (0.1)).dp)
-                    .weight(1f).semantics { contentDescription = "Skip" },
+                    .weight(1f)
+                    .semantics { contentDescription = "Skip" },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
 
             ) {
                 Text(stringResource(R.string.skip), color = Color(97, 153, 154), fontSize = 20.sp)
             }
             Button(
-                onClick = onNextButtonClicked,
+                onClick = {
+                    onSelectionChanged(mDate.value + "|" + mDateTo.value)
+                    navController.navigate(OnboardingScreen.QuestionThree.name)
+                          },
                 enabled = entered,
                 modifier = modifier
                     .padding(end = (screenwidth * (0.1)).dp)
-                    .weight(1f).semantics { contentDescription = "Next" },
+                    .weight(1f)
+                    .semantics { contentDescription = "Next" },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
             ) {
                 Text(stringResource(R.string.next), color = Color.White, fontSize = 20.sp)
-                onSelectionChanged(mDate.value + "|" + mDateTo.value)
-
             }
-
         }
     }
-
-
-
-
-
 }
 
 fun setDateTo(day: Int, month: Int, year: Int, range: Int): String {
