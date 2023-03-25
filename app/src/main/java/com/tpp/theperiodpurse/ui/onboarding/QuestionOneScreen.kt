@@ -54,7 +54,12 @@ fun QuestionOneScreen(
     if (periodCycle == ""){
         entered = false
     }
-    backbutton(navigateUp, canNavigateBack)
+    backbutton({
+        onboardUiState.days = 0
+        onboardUiState.symptomsOptions = listOf()
+        onboardUiState.date = ""
+        navController.navigateUp()
+               }, canNavigateBack)
 
     Box(modifier = Modifier
         .fillMaxHeight()
