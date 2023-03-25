@@ -13,7 +13,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
-import com.tpp.theperiodpurse.MainActivity
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.ui.SummaryScreen
 import com.tpp.theperiodpurse.ui.calendar.CalendarScreen
@@ -106,21 +105,17 @@ fun NavigationGraph(
         // Onboard Screens
         composable(route = OnboardingScreen.QuestionOne.name) {
             QuestionOneScreen(
-                onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionTwo.name) },
+                navController = navController,
                 onSelectionChanged = { viewModel.setQuantity(it.toInt()) },
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null,
                 onboardUiState = uiState,
-
-
-
-
             )
         }
         composable(route = OnboardingScreen.QuestionTwo.name) {
             QuestionTwoScreen(
+                navController = navController,
                 onboardUiState = uiState,
-                onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionThree.name) },
                 onSelectionChanged = { viewModel.setDate(it) },
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null
@@ -129,9 +124,9 @@ fun NavigationGraph(
 
         composable(route = OnboardingScreen.QuestionThree.name) {
             QuestionThreeScreen(
-                onNextButtonClicked = { navController.navigate(OnboardingScreen.Summary.name) },
+                navController = navController,
+                onboardUiState = uiState,
                 onSelectionChanged = { viewModel.setSymptoms(it) },
-                navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null
             )
         }

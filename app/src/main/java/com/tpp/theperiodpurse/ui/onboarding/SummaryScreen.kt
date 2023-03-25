@@ -62,7 +62,7 @@ fun SummaryScreen(
 
         ) {
 
-        Spacer(modifier = Modifier.height((screenheight * (0.15)).dp))
+        Spacer(modifier = Modifier.height((screenheight * (0.12)).dp))
 
 
         Image(
@@ -104,7 +104,7 @@ fun SummaryScreen(
             )
         }
 
-        if (!onboardUiState.date.contains("Choose date to")) {
+        if (!onboardUiState.date.contains("Choose date")) {
 
             Column(Modifier.padding(start = 25.dp)) {
                 Text(
