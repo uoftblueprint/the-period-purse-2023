@@ -143,7 +143,8 @@ fun NavigationGraph(
                     navController.navigate(Screen.Calendar.name)
                 },
                 navigateUp = { navController.navigateUp() },
-                canNavigateBack = navController.previousBackStackEntry != null
+                canNavigateBack = navController.previousBackStackEntry != null,
+                viewModel = viewModel
             )
         }
     }
