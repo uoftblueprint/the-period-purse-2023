@@ -146,9 +146,7 @@ fun NavigationGraph(
                 onSendButtonClicked = {
                     navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
                     navController.navigate(Screen.Calendar.name)
-                    if (appViewModel != null) {
-                        appViewModel.loadData(calendarViewModel)
-                    }
+                    appViewModel.loadData(calendarViewModel)
                 },
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null,
