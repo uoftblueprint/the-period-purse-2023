@@ -103,11 +103,11 @@ class AppViewModel @Inject constructor (
         val sympCopy = symptoms.toMutableList()
         if(symptoms.contains(symptom)){
             sympCopy.remove(symptom)
-            setTackedSymptoms(sympCopy)
+            setTackedSymptoms(sympCopy.toList())
             return false
         } else{
             sympCopy.add(symptom)
-            setTackedSymptoms(sympCopy)
+            setTackedSymptoms(sympCopy.toList())
             return true
         }
     }

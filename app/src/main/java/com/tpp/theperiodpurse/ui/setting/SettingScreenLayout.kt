@@ -209,7 +209,7 @@ fun TrackingPreferencesRow(symptoms: List<Symptom>, modifier: Modifier = Modifie
             icon = painterResource(id = R.drawable.nightlight_black_24dp),
             contentDescription = stringResource(R.string.sleep),
             ischecked = symptoms.contains(Symptom.SLEEP),
-            symptom = Symptom.MOOD,
+            symptom = Symptom.SLEEP,
             appViewModel = appViewModel
         )
     }

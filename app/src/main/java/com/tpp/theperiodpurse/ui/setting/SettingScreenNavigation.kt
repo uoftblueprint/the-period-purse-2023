@@ -115,18 +115,20 @@ fun SettingsScreen(
             modifier = modifier.padding(innerPadding)
         ) {
             composable(route = SettingScreenNavigation.Start.name) {
-                SettingScreenLayout(
-                    onNotificationClicked = {
-                        navController.navigate(SettingScreenNavigation.Notification.name)
-                    },
-                    onBackUpClicked = {
-                        navController.navigate(SettingScreenNavigation.BackUpAccount.name)
-                    },
-                    onDeleteClicked = {
-                        navController.navigate(SettingScreenNavigation.DeleteAccount.name)
-                    },
-                    appViewModel = appViewModel
-                )
+                if (appViewModel != null) {
+                    SettingScreenLayout(
+                        onNotificationClicked = {
+                            navController.navigate(SettingScreenNavigation.Notification.name)
+                        },
+                        onBackUpClicked = {
+                            navController.navigate(SettingScreenNavigation.BackUpAccount.name)
+                        },
+                        onDeleteClicked = {
+                            navController.navigate(SettingScreenNavigation.DeleteAccount.name)
+                        },
+                        appViewModel = appViewModel
+                    )
+                }
             }
             composable(route = SettingScreenNavigation.Notification.name) {
 //                TimeWheel(context= LocalContext.current)

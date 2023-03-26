@@ -6,7 +6,7 @@ import com.tpp.theperiodpurse.data.Symptom
 // data class
 data class AppUiState (
     // Preffered Symptoms to be tracked
-    val trackedSymptoms: List<Symptom> = listOf(),
+    var trackedSymptoms: List<Symptom> = listOf(),
     val allowReminders: Boolean = false,
-    val dates: List<Date> = emptyList(),
+    var dates: List<Date> = emptyList(),
 )
