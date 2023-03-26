@@ -39,7 +39,7 @@ enum class SettingScreenNavigation(@StringRes val title: Int) {
         title = R.string.back_up_account
     ),
     DeleteAccount(title = R.string.delete_account),
-    ResetDatabase(title = R.string.delete_account)
+    ResetDatabase(title = R.string.reset_database)
 }
 
 /**
@@ -149,7 +149,12 @@ fun SettingsScreen(
                 )
             }
             composable(route = SettingScreenNavigation.BackUpAccount.name) {
-                BackUpAccountScreen()
+                BackUpAccountScreen(appbar = SettingAppBar(
+                    currentScreen = currentScreen.name,
+                    canNavigateBack = navController.previousBackStackEntry != null,
+                    navigateUp = { navController.navigateUp() },
+                    color = Color.White),
+                    navController = navController)
             }
             composable(route = SettingScreenNavigation.DeleteAccount.name) {
                 val context = LocalContext.current

@@ -33,13 +33,9 @@ fun DeleteAccountScreen(
     navController: NavHostController = rememberNavController(),
 ) {
     val configuration = LocalConfiguration.current
-    val screenwidth = configuration.screenWidthDp;
     val screenheight = configuration.screenHeightDp
 
     var confirmDelete = remember { mutableStateOf(false)  }
-
-
-
 
     appBar
     Box(
