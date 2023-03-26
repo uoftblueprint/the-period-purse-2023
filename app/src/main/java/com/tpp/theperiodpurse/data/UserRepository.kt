@@ -14,7 +14,17 @@ class UserRepository(private val userDAO: UserDAO) {
         }
     }
 
+    fun setSymptoms(symptoms: List<Symptom>) {
+        coroutineScope.launch (Dispatchers.IO) {
+            userDAO.updateSymptoms(symptoms = symptoms, id = 1)
+        }
+    }
+
     suspend fun getUser(id: Int): User {
         return userDAO.get(id)
+    }
+
+    suspend fun isEmpty(): Boolean {
+        return userDAO.getUsers().isEmpty()
     }
 }

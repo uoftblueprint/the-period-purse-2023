@@ -2,6 +2,7 @@ package com.tpp.theperiodpurse
 
 import com.tpp.theperiodpurse.data.*
 import java.text.SimpleDateFormat
+import java.time.Duration
 
 val periodHistoryEmpty = arrayListOf<Date>()
 
@@ -10,37 +11,41 @@ val periodHistoryUnsorted = arrayListOf(
         date = SimpleDateFormat("dd/MM/yyyy").parse("03/01/2023")!!,
         flow = FlowSeverity.Light,
         mood = Mood.HAPPY,
-        exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("03/01/2023")!!,
+        exerciseLength = null,
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
-        sleep = SimpleDateFormat("dd/MM/YYYY").parse("03/01/2023")!!
+        sleep = null,
+		notes = "" 
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("01/01/2023")!!,
         flow = FlowSeverity.Light,
         mood = Mood.HAPPY,
-        exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("01/01/2023")!!,
+        exerciseLength = null,
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
-        sleep = SimpleDateFormat("dd/MM/YYYY").parse("01/01/2023")!!
+        sleep = null,
+		notes = "" 
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("04/01/2023")!!,
         flow = FlowSeverity.None,
         mood = Mood.HAPPY,
-        exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("04/01/2023")!!,
+        exerciseLength = null,
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
-        sleep = SimpleDateFormat("dd/MM/YYYY").parse("04/01/2023")!!
+        sleep = null,
+		notes = "" 
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("02/01/2023")!!,
         flow = FlowSeverity.Light,
         mood = Mood.HAPPY,
-        exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("02/01/2023")!!,
+        exerciseLength = null,
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
-        sleep = SimpleDateFormat("dd/MM/YYYY").parse("02/01/2023")!!
+        sleep = null,
+		notes = "" 
     ),
 )
 
@@ -49,28 +54,31 @@ val periodHistoryOneCycle = arrayListOf(
         date = SimpleDateFormat("dd/MM/yyyy").parse("01/01/2023")!!,
         flow = FlowSeverity.Light,
         mood = Mood.HAPPY,
-        exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("01/01/2023")!!,
+        exerciseLength = null,
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
-        sleep = SimpleDateFormat("dd/MM/YYYY").parse("01/01/2023")!!
+        sleep = null,
+		notes = "" 
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("02/01/2023")!!,
         flow = FlowSeverity.Light,
         mood = Mood.HAPPY,
-        exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("02/01/2023")!!,
+        exerciseLength = null,
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
-        sleep = SimpleDateFormat("dd/MM/YYYY").parse("02/01/2023")!!
+        sleep = null,
+		notes = "" 
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("03/01/2023")!!,
         flow = FlowSeverity.Light,
         mood = Mood.HAPPY,
-        exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("03/01/2023")!!,
+        exerciseLength = null,
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
-        sleep = SimpleDateFormat("dd/MM/YYYY").parse("03/01/2023")!!
+        sleep = null,
+		notes = "" 
     )
 )
 
@@ -79,28 +87,31 @@ val periodHistoryTwoCycles = arrayListOf(
         date = SimpleDateFormat("dd/MM/yyyy").parse("01/01/2023")!!,
         flow = FlowSeverity.Light,
         mood = Mood.HAPPY,
-        exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("01/01/2023")!!,
+        exerciseLength = null,
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
-        sleep = SimpleDateFormat("dd/MM/YYYY").parse("01/01/2023")!!
+        sleep = null,
+		notes = "" 
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("02/01/2023")!!,
         flow = FlowSeverity.Light,
         mood = Mood.HAPPY,
-        exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("02/01/2023")!!,
+        exerciseLength = null,
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
-        sleep = SimpleDateFormat("dd/MM/YYYY").parse("02/01/2023")!!
+        sleep = null,
+		notes = "" 
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("01/02/2023")!!,
         flow = FlowSeverity.Light,
         mood = Mood.HAPPY,
-        exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("01/02/2023")!!,
+        exerciseLength = null,
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
-        sleep = SimpleDateFormat("dd/MM/YYYY").parse("01/02/2023")!!
+        sleep = null,
+		notes = "" 
     ),
 )
 
@@ -110,55 +121,61 @@ val periodHistoryThreeCycles = arrayListOf(
         date = SimpleDateFormat("dd/MM/yyyy").parse("01/01/2023")!!,
         flow = FlowSeverity.Light,
         mood = Mood.HAPPY,
-        exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("01/01/2023")!!,
+        exerciseLength = null,
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
-        sleep = SimpleDateFormat("dd/MM/YYYY").parse("01/01/2023")!!
+        sleep = null,
+		notes = "" 
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("02/01/2023")!!,
         flow = FlowSeverity.Light,
         mood = Mood.HAPPY,
-        exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("02/01/2023")!!,
+        exerciseLength = null,
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
-        sleep = SimpleDateFormat("dd/MM/YYYY").parse("02/01/2023")!!
+        sleep = null,
+		notes = "" 
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("04/01/2023")!!,
         flow = FlowSeverity.Light,
         mood = Mood.HAPPY,
-        exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("04/01/2023")!!,
+        exerciseLength = null,
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
-        sleep = SimpleDateFormat("dd/MM/YYYY").parse("04/01/2023")!!
+        sleep = null,
+		notes = "" 
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("05/01/2023")!!,
         flow = FlowSeverity.Light,
         mood = Mood.HAPPY,
-        exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("05/01/2023")!!,
+        exerciseLength = null,
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
-        sleep = SimpleDateFormat("dd/MM/YYYY").parse("05/01/2023")!!
+        sleep = null,
+		notes = "" 
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("06/01/2023")!!,
         flow = FlowSeverity.Light,
         mood = Mood.HAPPY,
-        exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("06/01/2023")!!,
+        exerciseLength = null,
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
-        sleep = SimpleDateFormat("dd/MM/YYYY").parse("06/01/2023")!!
+        sleep = null,
+		notes = "" 
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("13/01/2023")!!,
         flow = FlowSeverity.Light,
         mood = Mood.HAPPY,
-        exerciseLength = SimpleDateFormat("dd/MM/YYYY").parse("13/01/2023")!!,
+        exerciseLength = null,
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
-        sleep = SimpleDateFormat("dd/MM/YYYY").parse("13/01/2023")!!
+        sleep = null,
+		notes = "" 
     )
 
 )

@@ -14,6 +14,7 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
         getText(logPrompts)
     ))
     val uiState: StateFlow<LogUiState> = _uiState.asStateFlow()
+    val logPrompts = logPrompts
 
     fun populateWithUIState(dayUIState: CalendarDayUIState) {
         _uiState.update { currentState ->
@@ -41,7 +42,7 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
     }
     fun setSquareSelected(logSquare: LogSquare) {
         _uiState.update { currentState ->
-            currentState.selectSquares[logSquare.promptTitle] = logSquare.description
+            currentState.selectSquares[logSquare.promptTitle] = logSquare.dataName
             currentState.copy(
                 selectSquares =
                     currentState.selectSquares
@@ -58,7 +59,7 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
     }
 
     fun getSelectedFlow(): FlowSeverity? {
-        var selectedFlow = uiState.value.selectSquares["Flow"]
+        var selectedFlow = uiState.value.selectSquares[LogPrompt.Flow.title]
         if (selectedFlow is String) {
             if (selectedFlow == "") selectedFlow = "None"
             return FlowSeverity.getSeverityByDisplayName(selectedFlow)
@@ -67,7 +68,7 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
     }
 
     fun getSelectedCrampSeverity(): CrampSeverity? {
-        var selectedCrampSeverity = uiState.value.selectSquares["Cramps"]
+        var selectedCrampSeverity = uiState.value.selectSquares[LogPrompt.Cramps.title]
         if (selectedCrampSeverity is String) {
             if (selectedCrampSeverity == "") selectedCrampSeverity = "None"
             return CrampSeverity.getSeverityByDisplayName(selectedCrampSeverity)
@@ -76,7 +77,7 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
     }
 
     fun getSelectedMood(): Mood? {
-        val selectedMood = uiState.value.selectSquares["Mood"]
+        val selectedMood = uiState.value.selectSquares[LogPrompt.Mood.title]
         if (selectedMood is String) {
             return Mood.getMoodByDisplayName(selectedMood)
         }
@@ -84,7 +85,7 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
     }
 
     fun getSelectedExercise(): Exercise? {
-        val selectedExercise = uiState.value.selectSquares["Exercise"]
+        val selectedExercise = uiState.value.selectSquares[LogPrompt.Exercise.title]
         if (selectedExercise is String) {
             return Exercise.getExerciseByDisplayName(selectedExercise)
         }
@@ -125,19 +126,28 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
         }
     }
 
-    private fun getSquares(logPrompts: List<LogPrompt>): LinkedHashMap<String, Any> {
-        var selectedSquares = LinkedHashMap<String, Any>()
+    private fun getSquares(logPrompts: List<LogPrompt>): LinkedHashMap<Int, Any> {
+        var selectedSquares = LinkedHashMap<Int, Any>()
         for (logPrompt in logPrompts) {
             selectedSquares[logPrompt.title] = false
         }
         return(selectedSquares)
     }
 
-    private fun getText(logPrompts: List<LogPrompt>): LinkedHashMap<String, String> {
-        var promptToText = LinkedHashMap<String, String>()
+    private fun getText(logPrompts: List<LogPrompt>): LinkedHashMap<Int, String> {
+        val promptToText = LinkedHashMap<Int, String>()
         for (logPrompt in logPrompts) {
             promptToText[logPrompt.title] = ""
         }
         return(promptToText)
+    }
+
+    fun isFilled(): Boolean {
+        logPrompts.forEach() { it ->
+            if (this.getSquareSelected(it) != null || this.getText(it) != "") {
+                return true
+            }
+        }
+        return false
     }
 }

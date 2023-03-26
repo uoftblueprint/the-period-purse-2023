@@ -23,7 +23,7 @@ import com.tpp.theperiodpurse.ui.onboarding.*
 import com.tpp.theperiodpurse.ui.setting.SettingsScreen
 import com.tpp.theperiodpurse.ui.symptomlog.LogScreen
 
-enum class Screen() {
+enum class Screen {
     Calendar,
     Log,
     Cycle,
@@ -31,7 +31,7 @@ enum class Screen() {
     Learn
 }
 
-enum class OnboardingScreen() {
+enum class OnboardingScreen {
     Welcome,
     QuestionOne,
     QuestionTwo,
@@ -44,20 +44,25 @@ enum class OnboardingScreen() {
 fun NavigationGraph(
     navController: NavHostController,
     startDestination: String,
-    viewModel: OnboardViewModel,
     calendarViewModel: CalendarViewModel,
+    onboardViewModel: OnboardViewModel,
+    appViewModel: AppViewModel,
     modifier: Modifier = Modifier,
     mainActivity: MainActivity,
     signIn: () -> Unit
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val onboardUIState by onboardViewModel.uiState.collectAsState()
     NavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier
     ) {
         composable(route = Screen.Calendar.name) {
-            CalendarScreen(navController = navController, calendarViewModel)
+            CalendarScreen(
+                navController = navController,
+                appViewModel = appViewModel,
+                calendarViewModel = calendarViewModel
+            )
         }
 
         composable(
@@ -71,13 +76,14 @@ fun NavigationGraph(
                 LogScreen(
                     date = date,
                     navController = navController,
+                    appViewModel = appViewModel,
                     calendarViewModel = calendarViewModel
                 )
             }
         }
 
         composable(route = Screen.Settings.name) {
-            SettingsScreen()
+            SettingsScreen(appViewModel = appViewModel)
         }
 
         composable(route = Screen.Cycle.name) {
@@ -89,7 +95,6 @@ fun NavigationGraph(
         composable(route = Screen.Learn.name) {
             EducationScreenLayout()
         }
-
 
 
         // Welcome Screen
@@ -106,17 +111,17 @@ fun NavigationGraph(
         composable(route = OnboardingScreen.QuestionOne.name) {
             QuestionOneScreen(
                 navController = navController,
-                onSelectionChanged = { viewModel.setQuantity(it.toInt()) },
+                onSelectionChanged = { onboardViewModel.setQuantity(it.toInt()) },
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null,
-                onboardUiState = uiState,
+                onboardUiState = onboardUIState,
             )
         }
         composable(route = OnboardingScreen.QuestionTwo.name) {
             QuestionTwoScreen(
                 navController = navController,
-                onboardUiState = uiState,
-                onSelectionChanged = { viewModel.setDate(it) },
+                onboardUiState = onboardUIState,
+                onSelectionChanged = { onboardViewModel.setDate(it) },
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null
             )
@@ -125,20 +130,24 @@ fun NavigationGraph(
         composable(route = OnboardingScreen.QuestionThree.name) {
             QuestionThreeScreen(
                 navController = navController,
-                onboardUiState = uiState,
-                onSelectionChanged = { viewModel.setSymptoms(it) },
+                onboardUiState = onboardUIState,
+                onSelectionChanged = { onboardViewModel.setSymptoms(it) },
                 canNavigateBack = navController.previousBackStackEntry != null
             )
         }
         composable(route = OnboardingScreen.Summary.name) {
             SummaryScreen(
-                onboardUiState = uiState,
+                onboardUiState = onboardUIState,
                 onSendButtonClicked = {
                     navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
                     navController.navigate(Screen.Calendar.name)
+                    appViewModel.loadData(calendarViewModel)
                 },
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null
+//                onCancelButtonClicked = {
+//                    cancelOrderAndNavigateToStart(onboardViewModel, navController)
+//                },
             )
         }
     }

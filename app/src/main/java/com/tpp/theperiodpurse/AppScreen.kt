@@ -19,7 +19,11 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -118,7 +122,7 @@ class MainActivity : ComponentActivity() {
             val exception = task.exception
             if (task.isSuccessful) {
                 try {
-                    // Google SignIn was successful, authenticate with Firebase
+                    // Google SignIn was successful, authenticate with Firebase.
                     val account = task.getResult(ApiException::class.java)!!
                     firebaseAuthWithGoogle(account.idToken!!)
                 } catch (e: Exception) {
@@ -179,7 +183,8 @@ fun createNotificationChannel(context: Context) {
 @Composable
 fun ScreenApp(
     modifier: Modifier = Modifier,
-    viewModel: OnboardViewModel = viewModel(),
+    appViewModel: AppViewModel = viewModel(),
+    onboardViewModel: OnboardViewModel = viewModel(),
     calendarViewModel: CalendarViewModel = viewModel(),
     skipOnboarding: Boolean = false,
     navController: NavHostController = rememberNavController(),
@@ -187,6 +192,7 @@ fun ScreenApp(
     signIn: () -> Unit,
 
 ) {
+    appViewModel.loadData(calendarViewModel)
     var loggingOptionsVisible by remember { mutableStateOf(false) }
     Scaffold(
         bottomBar = {
@@ -213,7 +219,8 @@ fun ScreenApp(
             NavigationGraph(
                 navController = navController,
                 startDestination = if (skipOnboarding) Screen.Calendar.name else if (skipWelcome) OnboardingScreen.QuestionOne.name else OnboardingScreen.Welcome.name,
-                viewModel = viewModel,
+                onboardViewModel = onboardViewModel,
+                appViewModel= appViewModel,
                 calendarViewModel = calendarViewModel,
                 modifier = modifier.padding(innerPadding),
                 mainActivity = MainActivity(),
