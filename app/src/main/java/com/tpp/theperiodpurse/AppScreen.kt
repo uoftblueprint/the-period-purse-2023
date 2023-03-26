@@ -19,7 +19,11 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -59,7 +63,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
-
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -122,7 +125,7 @@ class MainActivity : ComponentActivity() {
             val exception = task.exception
             if (task.isSuccessful) {
                 try {
-                    // Google SignIn was successful, authenticate with Firebase
+                    // Google SignIn was successful, authenticate with Firebase.
                     val account = task.getResult(ApiException::class.java)!!
                     firebaseAuthWithGoogle(account.idToken!!)
                 } catch (e: Exception) {
@@ -191,7 +194,8 @@ fun createNotificationChannel(context: Context) {
 @Composable
 fun ScreenApp(
     modifier: Modifier = Modifier,
-    viewModel: OnboardViewModel = viewModel(),
+    appViewModel: AppViewModel = viewModel(),
+    onboardViewModel: OnboardViewModel = viewModel(),
     calendarViewModel: CalendarViewModel = viewModel(),
     navController: NavHostController = rememberNavController(),
     signIn: () -> Unit,
@@ -200,14 +204,15 @@ fun ScreenApp(
     skipOnboarding: Boolean = false,
     context: Context,
 
-    ) {
+) {
+    appViewModel.loadData(calendarViewModel)
     var loggingOptionsVisible by remember { mutableStateOf(false) }
     var skipOnboarding = skipOnboarding
-    val isOnboarded by viewModel.isOnboarded.observeAsState(initial = null)
+    val isOnboarded by onboardViewModel.isOnboarded.observeAsState(initial = null)
 
     if (!skipDatabase){
         LaunchedEffect(Unit) {
-            viewModel.checkOnboardedStatus()
+            onboardViewModel.checkOnboardedStatus()
         }
     }
 
@@ -242,10 +247,12 @@ fun ScreenApp(
                 NavigationGraph(
                     navController = navController,
                     startDestination = if (skipOnboarding) Screen.Calendar.name else if (skipWelcome) OnboardingScreen.QuestionOne.name else OnboardingScreen.Welcome.name,
-                    viewModel = viewModel,
+                    onboardViewModel = onboardViewModel,
+                    appViewModel= appViewModel,
                     calendarViewModel = calendarViewModel,
                     modifier = modifier.padding(innerPadding),
                     signIn = signIn,
+                    mainActivity = MainActivity(),
                     context = context
                 )
 
@@ -268,10 +275,5 @@ fun ScreenApp(
                 }
             }
         }
-
-
     }
-
-
-
 }

@@ -7,6 +7,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import com.tpp.theperiodpurse.ui.calendar.CalendarTabItem
+import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -22,7 +23,13 @@ class CalendarCycleTabTest {
     private lateinit var navController: TestNavHostController
 
     @Inject
+    lateinit var appViewModel: AppViewModel
+
+    @Inject
     lateinit var onboardViewModel: OnboardViewModel
+
+    @Inject
+    lateinit var calendarViewModel: CalendarViewModel
 
     @get:Rule
     // Used to manage the components' state and is used to perform injection on tests
@@ -38,8 +45,7 @@ class CalendarCycleTabTest {
                 ComposeNavigator()
             )
             ScreenApp(
-                viewModel =
-                onboardViewModel,
+                viewModel = onboardViewModel,
                 navController = navController,
                 signIn = { signIn() },
                 skipDatabase = true,

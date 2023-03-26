@@ -1,9 +1,11 @@
 package com.tpp.theperiodpurse.data.module
 
+import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.data.DateDAO
 import com.tpp.theperiodpurse.data.DateRepository
 import com.tpp.theperiodpurse.data.UserDAO
 import com.tpp.theperiodpurse.data.UserRepository
+import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
 import dagger.Module
 import dagger.Provides
@@ -28,6 +30,22 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideAppViewModel(userRepository: UserRepository, dateRepository: DateRepository):
+            AppViewModel {
+        return AppViewModel(userRepository, dateRepository)
+    }
+
+    @Singleton
+    @Provides
     fun provideOnboardViewModel(userRepository: UserRepository, dateRepository: DateRepository):
-            OnboardViewModel { return OnboardViewModel(userRepository, dateRepository) }
+            OnboardViewModel {
+        return OnboardViewModel(userRepository, dateRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideCalendarViewModel():
+            CalendarViewModel {
+        return CalendarViewModel()
+    }
 }

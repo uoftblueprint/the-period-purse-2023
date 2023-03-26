@@ -13,10 +13,15 @@ class UserRepository(private val userDAO: UserDAO) {
     val isDeleted: MutableLiveData<Boolean?> = MutableLiveData(null)
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-
     fun addUser(user: User) {
         coroutineScope.launch (Dispatchers.IO) {
             userDAO.save(user)
+        }
+    }
+
+    fun setSymptoms(symptoms: List<Symptom>) {
+        coroutineScope.launch (Dispatchers.IO) {
+            userDAO.updateSymptoms(symptoms = symptoms, id = 1)
         }
     }
 

@@ -8,6 +8,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
+import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -23,7 +24,13 @@ class NavigationTest {
     private lateinit var navController: TestNavHostController
 
     @Inject
+    lateinit var appViewModel: AppViewModel
+
+    @Inject
     lateinit var onboardViewModel: OnboardViewModel
+
+    @Inject
+    lateinit var calendarViewModel: CalendarViewModel
 
     @get:Rule
     // Used to manage the components' state and is used to perform injection on tests
@@ -33,27 +40,26 @@ class NavigationTest {
     fun setupNavHost() {
         hiltRule.inject()
         composeTestRule.setContent {
-            navController =
-                TestNavHostController(LocalContext.current)
+            navController = TestNavHostController(LocalContext.current)
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
             ScreenApp(
-                viewModel =
-                onboardViewModel,
                 navController = navController,
-                signIn = { signIn() },
                 skipDatabase = true,
                 skipOnboarding = true,
-                context = LocalContext.current
+                context = LocalContext.current,
+                signIn = { signIn() },
+                onboardViewModel = onboardViewModel,
+                appViewModel = appViewModel,
+                calendarViewModel = calendarViewModel
             )
         }
     }
 
     @Test
     fun appNavHost_clickSettings_navigatesToSettingsScreen() {
-        composeTestRule.onNodeWithText(Screen.Settings.name)
-            .performClick()
+        composeTestRule.onNodeWithText(Screen.Settings.name).performClick()
         navController.assertCurrentRouteName(Screen.Settings.name)
     }
 
@@ -63,8 +69,7 @@ class NavigationTest {
 
     @Test
     fun appNavHost_clickSettings_navigatesToInfoScreen() {
-        composeTestRule.onNodeWithText(Screen.Learn.name)
-            .performClick()
+        composeTestRule.onNodeWithText(Screen.Learn.name).performClick()
         navController.assertCurrentRouteName(Screen.Learn.name)
     }
 
@@ -75,16 +80,14 @@ class NavigationTest {
     @Test
     fun appNavHost_clickCalendarFABOnSettingsScreen_navigatesToCalendarScreen() {
         navigateToSettingsScreen()
-        composeTestRule.onNodeWithContentDescription("Navigate to Calendar page")
-            .performClick()
+        composeTestRule.onNodeWithContentDescription("Navigate to Calendar page").performClick()
         navController.assertCurrentRouteName(Screen.Calendar.name)
     }
 
     @Test
     fun appNavHost_clickCalendarFABOnInfoScreen_navigatesToCalendarScreen() {
         navigateToInfoScreen()
-        composeTestRule.onNodeWithContentDescription("Navigate to Calendar page")
-            .performClick()
+        composeTestRule.onNodeWithContentDescription("Navigate to Calendar page").performClick()
         navController.assertCurrentRouteName(Screen.Calendar.name)
     }
 
