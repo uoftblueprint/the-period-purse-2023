@@ -22,7 +22,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -32,6 +31,7 @@ import com.tpp.theperiodpurse.AppUiState
 import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.OnboardUIState
+import com.tpp.theperiodpurse.ui.calendar.CalendarUIState
 import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
 
 enum class SettingScreenNavigation(@StringRes val title: Int) {
@@ -82,7 +82,8 @@ fun SettingsScreen(
     appViewModel: AppViewModel?,
     onboardUiState: OnboardUIState?,
     onboardViewModel: OnboardViewModel?,
-    appUiState: AppUiState?
+    appUiState: AppUiState?,
+    calUiState: CalendarUIState?
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = SettingScreenNavigation.valueOf(
@@ -162,9 +163,9 @@ fun SettingsScreen(
                 )
             }
             composable(route = SettingScreenNavigation.ResetDatabase.name) {
-                if (onboardViewModel != null && onboardUiState != null && appUiState != null) {
+                if (onboardViewModel != null && onboardUiState != null && appUiState != null && calUiState != null) {
                     ResetDatabase(context = context, viewModel = onboardViewModel, navController = navController, outController = outController, onboardUiState = onboardUiState,
-                    appUiState = appUiState)
+                    appUiState = appUiState, calUiState = calUiState)
                 }
             }
         }

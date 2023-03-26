@@ -39,12 +39,13 @@ class SettingsNavigationTest {
             )
             SettingsScreen(
                 outController = navController,
-                context = LocalContext.current,
-                onboardUiState = null,
                 navController = navController,
-                onboardViewModel = null,
+                context = LocalContext.current,
                 appViewModel = appViewModel,
-                appUiState = null
+                onboardUiState = null,
+                onboardViewModel = null,
+                appUiState = null,
+                calUiState = calUiState
             )
         }
     }
