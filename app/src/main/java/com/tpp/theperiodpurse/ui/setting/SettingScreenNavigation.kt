@@ -30,6 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.Symptom
+import dagger.hilt.android.internal.Contexts.getApplication
 
 enum class SettingScreenNavigation(@StringRes val title: Int) {
     Start(title = R.string.settings_home), Notification(title = R.string.customize_notifications), BackUpAccount(
@@ -77,7 +78,7 @@ fun SettingsScreen(
     // use appViewModel.getTrackedSymptoms to get a list of symptoms
     // use appViewModel.setTrackedSymptoms to set the symptoms to a new list of symptoms
     // remove this line below after using the appViewModel
-    Log.d("tracked symptoms", appViewModel.getTrackedSymptoms().toString())
+    // Log.d("tracked symptoms", appViewModel.getTrackedSymptoms().toString())
 
     Scaffold(
     ) { innerPadding ->
@@ -114,6 +115,7 @@ fun SettingsScreen(
                     onDeleteClicked = {
                         navController.navigate(SettingScreenNavigation.DeleteAccount.name)
                     },
+                    appViewModel = appViewModel
                 )
             }
             composable(route = SettingScreenNavigation.Notification.name) {

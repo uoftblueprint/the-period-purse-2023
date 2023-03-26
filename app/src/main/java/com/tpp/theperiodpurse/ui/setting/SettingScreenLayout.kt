@@ -38,6 +38,8 @@ import com.tpp.theperiodpurse.ui.education.SocialMedia
 import com.tpp.theperiodpurse.ui.education.TermsAndPrivacyFooter
 import com.tpp.theperiodpurse.ui.education.teal
 import androidx.core.content.ContextCompat
+import com.tpp.theperiodpurse.AppViewModel
+import com.tpp.theperiodpurse.data.DateRepository
 
 
 @Composable
@@ -46,10 +48,9 @@ fun SettingScreenLayout(
     onNotificationClicked: () -> Unit,
     onBackUpClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
-    settingsViewModel: SettingsViewModel = viewModel()
+    appViewModel: AppViewModel = viewModel()
 ){
-    val settingsUiState by settingsViewModel.uiState.collectAsState()
-    val symptoms = settingsUiState.symptomsOptions
+    val symptoms = appViewModel.getTrackedSymptoms()
    Column(modifier = modifier
        .fillMaxSize()
        .padding(10.dp)
@@ -61,7 +62,7 @@ fun SettingScreenLayout(
            fontWeight = FontWeight.Bold
        )
 
-       TrackingPreferencesRow(symptoms, settingsViewModel)
+       TrackingPreferencesRow(symptoms, appViewModel = appViewModel)
        Text(
            text = stringResource(R.string.notifications_heading),
            modifier = modifier.padding(top = 5.dp, start = 10.dp),
@@ -82,8 +83,8 @@ fun SettingScreenLayout(
                )
            }
            Switch(
-               checked = settingsUiState.allowReminders,
-               onCheckedChange = {settingsViewModel.toggleallowReminders()},
+               checked = appViewModel.getAllowReminders(),
+               onCheckedChange = {appViewModel.toggleAllowReminders()},
                modifier = modifier
                    .fillMaxWidth()
                    .wrapContentWidth(Alignment.End),
@@ -168,7 +169,7 @@ fun SettingScreenLayout(
 }
 
 @Composable
-fun TrackingPreferencesRow(symptoms: ArrayList<Symptom>, settingsViewModel: SettingsViewModel, modifier: Modifier = Modifier){
+fun TrackingPreferencesRow(symptoms: List<Symptom>, modifier: Modifier = Modifier, appViewModel: AppViewModel){
 
     Row(modifier = modifier
         .fillMaxWidth()
@@ -181,8 +182,8 @@ fun TrackingPreferencesRow(symptoms: ArrayList<Symptom>, settingsViewModel: Sett
             icon = painterResource(id = R.drawable.sentiment_neutral_black_24dp),
             contentDescription = stringResource(R.string.mood),
             ischecked = symptoms.contains(Symptom.MOOD),
-            settingsViewModel = settingsViewModel,
-            symptom = Symptom.MOOD
+            symptom = Symptom.MOOD,
+            appViewModel = appViewModel
         )
         TrackingOptionButton(
             modifier = modifier,
@@ -190,8 +191,8 @@ fun TrackingPreferencesRow(symptoms: ArrayList<Symptom>, settingsViewModel: Sett
             icon = painterResource(id = R.drawable.self_improvement_black_24dp),
             contentDescription = stringResource(R.string.exercise),
             ischecked = symptoms.contains(Symptom.EXERCISE),
-            settingsViewModel = settingsViewModel,
-            symptom = Symptom.EXERCISE
+            symptom = Symptom.EXERCISE,
+            appViewModel = appViewModel
         )
         TrackingOptionButton(
             modifier = modifier,
@@ -199,8 +200,8 @@ fun TrackingPreferencesRow(symptoms: ArrayList<Symptom>, settingsViewModel: Sett
             icon = painterResource(id = R.drawable.sick_black_24dp),
             contentDescription = stringResource(R.string.cramps),
             ischecked = symptoms.contains(Symptom.CRAMPS),
-            settingsViewModel = settingsViewModel,
-            symptom = Symptom.CRAMPS
+            symptom = Symptom.CRAMPS,
+            appViewModel = appViewModel
         )
         TrackingOptionButton(
             modifier = modifier,
@@ -208,17 +209,19 @@ fun TrackingPreferencesRow(symptoms: ArrayList<Symptom>, settingsViewModel: Sett
             icon = painterResource(id = R.drawable.nightlight_black_24dp),
             contentDescription = stringResource(R.string.sleep),
             ischecked = symptoms.contains(Symptom.SLEEP),
-            settingsViewModel = settingsViewModel,
-            symptom = Symptom.MOOD
+            symptom = Symptom.MOOD,
+            appViewModel = appViewModel
         )
     }
 }
 
 @Composable
-fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter, contentDescription: String, ischecked: Boolean, settingsViewModel: SettingsViewModel, symptom: Symptom) {
+fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter,
+                         contentDescription: String, ischecked: Boolean,
+                         symptom: Symptom, appViewModel: AppViewModel) {
 
-//    var checked by remember { mutableStateOf(false) }
-    val color = if (settingsViewModel.isSymptomChecked(symptom)) Color(teal) else Color.White
+//    println(appViewModel.isSymptomChecked(symptom))
+    val color = if (appViewModel.isSymptomChecked(symptom)) Color(teal) else Color.White
     Column(
         modifier = modifier
             .padding(10.dp),
@@ -226,7 +229,7 @@ fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter, conte
         horizontalAlignment = Alignment.CenterHorizontally,) {
         IconToggleButton(
             checked = ischecked,
-            onCheckedChange = {settingsViewModel.updateSymptoms(symptom)},
+            onCheckedChange = {appViewModel.updateSymptoms(symptom)},
             modifier = Modifier.clip(RoundedCornerShape(20.dp))
         ) {
             Icon(

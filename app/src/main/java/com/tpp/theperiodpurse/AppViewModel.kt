@@ -98,6 +98,34 @@ class AppViewModel @Inject constructor (
         userRepository.setSymptoms(sympCopy)
     }
 
+    fun updateSymptoms(symptom: Symptom): Boolean {
+        val symptoms = getTrackedSymptoms()
+        val sympCopy = symptoms.toMutableList()
+        if(symptoms.contains(symptom)){
+            sympCopy.remove(symptom)
+            setTackedSymptoms(sympCopy)
+            return false
+        } else{
+            sympCopy.add(symptom)
+            setTackedSymptoms(sympCopy)
+            return true
+        }
+    }
+
+    fun isSymptomChecked(symptom: Symptom): Boolean{
+        val symptoms = getTrackedSymptoms()
+        return symptoms.contains(symptom)
+    }
+
+    fun getAllowReminders(): Boolean{
+        return uiState.value.allowReminders
+    }
+
+    fun toggleAllowReminders(){
+        val currentReminderState = _uiState.value.allowReminders
+        _uiState.update { currentState -> currentState.copy(allowReminders = !currentReminderState)}
+    }
+
     fun saveDate(date: Date) {
         dateRepository.addDate(date)
     }

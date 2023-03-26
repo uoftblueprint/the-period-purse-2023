@@ -1,31 +1,36 @@
 package com.tpp.theperiodpurse.ui.setting
 
 import androidx.lifecycle.ViewModel
+import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.data.Symptom
 import com.tpp.theperiodpurse.data.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
+@HiltViewModel
 class SettingsViewModel @Inject constructor (
-    userRepository: UserRepository) : ViewModel()  {
+    appViewModel: AppViewModel) : ViewModel()  {
 
-    private val _uiState = MutableStateFlow(SettingsUIState(userRepository.getUser(1).symptomsToTrack))
+    val symptoms = appViewModel.getTrackedSymptoms()
+    private val _uiState = MutableStateFlow(SettingsUIState(symptoms))
     val uiState: StateFlow<SettingsUIState> = _uiState.asStateFlow()
-    val symptoms = _uiState.value.symptomsOptions
+
 
 
     fun updateSymptoms(symptom: Symptom): Boolean {
-        if(symptoms.contains(symptom)){
-            symptoms.remove(symptom)
-            _uiState.update { currentState -> currentState.copy(symptomsOptions = symptoms)}
-            return false
+        val sympCopy = symptoms.toMutableList()
+        return if(sympCopy.contains(symptom)){
+            sympCopy.remove(symptom)
+            _uiState.update { currentState -> currentState.copy(symptomsOptions = sympCopy)}
+            false
         } else{
-            symptoms.add(symptom)
-            _uiState.update { currentState -> currentState.copy(symptomsOptions = symptoms)}
-            return true
+            sympCopy.add(symptom)
+            _uiState.update { currentState -> currentState.copy(symptomsOptions = sympCopy)}
+            true
         }
 
     }
