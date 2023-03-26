@@ -49,8 +49,8 @@ fun NavigationGraph(
     onboardViewModel: OnboardViewModel,
     appViewModel: AppViewModel,
     modifier: Modifier = Modifier,
-    signIn: () -> Unit,
-    context: Context
+    context: Context,
+    signIn: () -> Unit
 ) {
     val onboardUIState by onboardViewModel.uiState.collectAsState()
     NavHost(
@@ -84,11 +84,11 @@ fun NavigationGraph(
         }
 
         composable(route = Screen.Settings.name) {
-            SettingsScreen(context = context,
-                appViewModel = appViewModel,
-                onboardViewModel = onboardViewModel,
+            SettingsScreen(appViewModel = appViewModel,
                 outController = navController,
-                onboardUiState = onboardUIState)
+                context = context,
+                onboardUiState = onboardUIState,
+                onboardViewModel = onboardViewModel)
         }
 
         composable(route = Screen.Cycle.name) {
@@ -151,10 +151,14 @@ fun NavigationGraph(
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null,
                 viewModel = onboardViewModel
+//                onCancelButtonClicked = {
+//                    cancelOrderAndNavigateToStart(onboardViewModel, navController)
+//                },
             )
         }
     }
 }
+
 @Composable
 fun currentRoute(navController: NavController): String? {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
