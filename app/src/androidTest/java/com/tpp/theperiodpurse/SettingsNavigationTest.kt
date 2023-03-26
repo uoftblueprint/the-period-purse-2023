@@ -43,7 +43,8 @@ class SettingsNavigationTest {
                 onboardUiState = null,
                 navController = navController,
                 onboardViewModel = null,
-                appViewModel = appViewModel
+                appViewModel = appViewModel,
+                appUiState = null
             )
         }
     }

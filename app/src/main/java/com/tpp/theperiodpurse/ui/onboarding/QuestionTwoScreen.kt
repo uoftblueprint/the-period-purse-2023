@@ -46,25 +46,17 @@ fun QuestionTwoScreen(
     val mDay: Int
     val mContext = LocalContext.current
     var entered by rememberSaveable { mutableStateOf(false) }
-
     val mDate = rememberSaveable { mutableStateOf("Choose date") }
-
+    val mDateTo = rememberSaveable { mutableStateOf("") }
     if (onboardUiState.date.contains("/")){
         mDate.value = onboardUiState.date.split(" to ")[0]
+        mDateTo.value = onboardUiState.date.split(" to ")[1]
         entered = true
     }
-
-
-
-    val mDateTo = remember { mutableStateOf("") }
     val mCalendar = Calendar.getInstance()
-
     mYear = mCalendar.get(Calendar.YEAR)
     mMonth = mCalendar.get(Calendar.MONTH)
     mDay = mCalendar.get(Calendar.DAY_OF_MONTH)
-
-
-
     val mDatePickerDialog = DatePickerDialog(
         mContext,
         { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
@@ -73,28 +65,18 @@ fun QuestionTwoScreen(
             onSelectionChanged(mDate.value + "|" + mDateTo.value)
         }, mYear, mMonth, mDay
     )
-
-
     val configuration = LocalConfiguration.current
-
     val screenwidth = configuration.screenWidthDp;
-
     val screenheight = configuration.screenHeightDp;
-
     mDatePickerDialog.getDatePicker().setMaxDate(Date().getTime())
-
     backbutton(navigateUp, canNavigateBack)
-
     Box(modifier = Modifier
         .fillMaxHeight()
         .fillMaxWidth()) {
-
-
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-
             val ratio = 0.5
             val ratioimage = 0.17
             val height = (screenheight * ratio)
@@ -131,7 +113,6 @@ fun QuestionTwoScreen(
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
-
             Text(
                 text = stringResource(R.string.description_two),
                 fontSize = 18.sp,
@@ -164,7 +145,6 @@ fun QuestionTwoScreen(
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(text = mDate.value, color = Color.Gray, fontSize = 14.sp)
-
                         Image(
                             painter = painterResource(R.drawable.onboard_calendar),
                             contentDescription = null,
@@ -186,10 +166,7 @@ fun QuestionTwoScreen(
                     ) {
                         Text(text = mDate.value, color = Color.Black, fontSize = 18.sp)
                     }
-
                 }
-
-
             }
             Spacer(Modifier.height((screenwidth * (0.02)).dp))
         }
@@ -231,14 +208,10 @@ fun QuestionTwoScreen(
         }
     }
 }
-
 fun setDateTo(day: Int, month: Int, year: Int, range: Int): String {
     val date = Calendar.getInstance()
     val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     date.set(year, month, day);
     date.add(Calendar.DATE, range)
     return formatter.format(date.time)
-
 }
-
-

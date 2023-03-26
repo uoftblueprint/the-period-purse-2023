@@ -53,6 +53,7 @@ fun NavigationGraph(
     signIn: () -> Unit
 ) {
     val onboardUIState by onboardViewModel.uiState.collectAsState()
+    val appUiState by appViewModel.uiState.collectAsState()
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -88,7 +89,8 @@ fun NavigationGraph(
                 outController = navController,
                 context = context,
                 onboardUiState = onboardUIState,
-                onboardViewModel = onboardViewModel)
+                onboardViewModel = onboardViewModel,
+                appUiState = appUiState)
         }
 
         composable(route = Screen.Cycle.name) {

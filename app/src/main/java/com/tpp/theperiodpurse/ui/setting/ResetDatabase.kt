@@ -9,6 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavHostController
+import com.tpp.theperiodpurse.AppUiState
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.data.OnboardUIState
 import com.tpp.theperiodpurse.ui.onboarding.LoadingScreen
@@ -23,7 +24,8 @@ fun ResetDatabase(
     viewModel: OnboardViewModel,
     outController: NavHostController,
     navController: NavHostController,
-    onboardUiState: OnboardUIState
+    onboardUiState: OnboardUIState,
+    appUiState: AppUiState
 ) {
 
     val isDeleted by viewModel.isOnboarded.observeAsState(initial = null)
@@ -37,6 +39,8 @@ fun ResetDatabase(
         LoadingScreen()
     }
     else {
+        appUiState.trackedSymptoms = listOf()
+        appUiState.dates = emptyList()
         onboardUiState.days = 0
         onboardUiState.symptomsOptions = listOf()
         onboardUiState.date = ""
