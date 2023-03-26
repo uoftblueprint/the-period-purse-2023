@@ -1,6 +1,7 @@
 package com.tpp.theperiodpurse.ui.setting
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -20,18 +21,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
 
 enum class SettingScreenNavigation(@StringRes val title: Int) {
     Start(title = R.string.settings_home),
     Notification(title = R.string.customize_notifications),
     BackUpAccount(title = R.string.back_up_account),
-    DeleteAccount(title = R.string.delete_account)
+    DeleteAccount(title = R.string.delete_account),
+    ResetDatabase(title = R.string.delete_account)
 }
 
 /**
@@ -42,7 +46,8 @@ fun SettingAppBar(
     currentScreen: String,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    color: Color,
 ) {
     TopAppBar(
         title = { Text(currentScreen)},
@@ -57,7 +62,7 @@ fun SettingAppBar(
                 }
             }
         },
-        backgroundColor = Color.Transparent,
+        backgroundColor = color,
         elevation = 0.dp
     )
 }
@@ -67,7 +72,10 @@ fun SettingAppBar(
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+    outController: NavHostController = rememberNavController(),
+    navController: NavHostController = rememberNavController(),
+    context: Context,
+    viewModel: OnboardViewModel?,
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = SettingScreenNavigation.valueOf(
@@ -83,17 +91,11 @@ fun SettingsScreen(
             contentScale = ContentScale.FillBounds
         )
 
-        val title = if(currentScreen.title == R.string.settings_home){
+        val title = if (currentScreen.title == R.string.settings_home) {
             " "
         } else {
             stringResource(id = R.string.customize_notifications)
         }
-
-        SettingAppBar(
-            currentScreen = title,
-            canNavigateBack = navController.previousBackStackEntry != null,
-            navigateUp = { navController.navigateUp() }
-        )
 
         NavHost(
             navController = navController,
@@ -126,14 +128,36 @@ fun SettingsScreen(
                         )
                     } else mutableStateOf(true)
                 }
-                NotificationsLayout(context= context, hasNotificationPermission)
+                NotificationsLayout(
+                    context = context,
+                    hasNotificationPermission,
+                    appBar = SettingAppBar(
+                        currentScreen = currentScreen.name,
+                        canNavigateBack = navController.previousBackStackEntry != null,
+                        navigateUp = { navController.navigateUp() },
+                        color = Color.Transparent)
+                )
             }
             composable(route = SettingScreenNavigation.BackUpAccount.name) {
                 BackUpAccountScreen()
             }
             composable(route = SettingScreenNavigation.DeleteAccount.name) {
-                DeleteAccountScreen()
+                val context = LocalContext.current
+                DeleteAccountScreen(
+                    appBar = SettingAppBar(
+                        currentScreen = currentScreen.name,
+                        canNavigateBack = navController.previousBackStackEntry != null,
+                        navigateUp = { navController.navigateUp() },
+                        color = Color.White),
+                    navController = navController
+                )
+            }
+            composable(route = SettingScreenNavigation.ResetDatabase.name) {
+                if (viewModel != null) {
+                    ResetDatabase(context = context, viewModel = viewModel, navController = navController, outController = outController)
+                }
             }
         }
     }
+
 }

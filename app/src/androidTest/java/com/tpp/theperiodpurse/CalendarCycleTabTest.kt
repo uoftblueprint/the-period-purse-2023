@@ -14,7 +14,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import javax.inject.Inject
-import kotlin.math.sign
 
 @HiltAndroidTest
 class CalendarCycleTabTest {
@@ -38,8 +37,15 @@ class CalendarCycleTabTest {
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
-            ScreenApp(navController = navController, skipDatabase = true, skipOnboarding = true, viewModel =
-            onboardViewModel, signIn = { signIn() })
+            ScreenApp(
+                viewModel =
+                onboardViewModel,
+                navController = navController,
+                signIn = { signIn() },
+                skipDatabase = true,
+                skipOnboarding = true,
+                context = LocalContext.current
+            )
 
         }
     }

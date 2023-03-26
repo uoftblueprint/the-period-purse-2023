@@ -36,8 +36,16 @@ class NavigationOnboardTest {
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
-            ScreenApp(navController = navController, skipDatabase = true, skipOnboarding = false, skipWelcome = false, viewModel =
-            onboardViewModel, signIn = { signIn() })
+            ScreenApp(
+                viewModel =
+                onboardViewModel,
+                navController = navController,
+                signIn = { signIn() },
+                skipWelcome = false,
+                skipDatabase = true,
+                skipOnboarding = false,
+                context = LocalContext.current
+            )
         }
     }
 

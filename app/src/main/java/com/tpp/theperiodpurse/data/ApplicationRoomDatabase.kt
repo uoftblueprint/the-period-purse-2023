@@ -27,5 +27,17 @@ abstract class ApplicationRoomDatabase: RoomDatabase() {
                 return instance
             }
         }
+        fun clearDatabase(context: Context): Boolean {
+            val instance = Room.databaseBuilder(
+                context.applicationContext,
+                ApplicationRoomDatabase::class.java,
+                "user_database"
+            )
+                .fallbackToDestructiveMigration()
+                .build()
+
+            instance.clearAllTables()
+            return true
+        }
     }
 }

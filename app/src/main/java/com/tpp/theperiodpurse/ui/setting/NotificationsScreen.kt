@@ -60,15 +60,20 @@ class NotificationsScreen : ComponentActivity() {
                 } else mutableStateOf(true)
             }
 
-            NotificationsLayout(LocalContext.current, hasNotificationPermission)
+            NotificationsLayout(
+                LocalContext.current, hasNotificationPermission, temp()
+            )
         }
     }
 }
 
+fun temp(){
+
+}
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean){
+fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, appBar: Unit){
     var pickedTime by remember { mutableStateOf(LocalTime.NOON) }
     val formattedTime by remember {
         derivedStateOf {
@@ -77,6 +82,7 @@ fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean){
                 .format(pickedTime)
         }
     }
+    appBar
 
     val timeDialogState = rememberMaterialDialogState()
 

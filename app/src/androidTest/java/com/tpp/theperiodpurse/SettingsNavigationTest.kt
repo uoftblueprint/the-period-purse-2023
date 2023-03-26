@@ -4,8 +4,14 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.performClick
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
+import com.tpp.theperiodpurse.data.DateDAO
+import com.tpp.theperiodpurse.data.DateRepository
+import com.tpp.theperiodpurse.data.OnboardUIState
+import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
 import com.tpp.theperiodpurse.ui.setting.SettingScreenNavigation
 import com.tpp.theperiodpurse.ui.setting.SettingsScreen
 import org.junit.Before
@@ -25,7 +31,7 @@ class SettingsNavigationTest {
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
-            SettingsScreen(navController = navController)
+            SettingsScreen(outController = navController, navController = navController, context = LocalContext.current, viewModel = null)
         }
     }
 

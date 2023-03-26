@@ -166,7 +166,8 @@ fun Application(context: Context,
     ScreenApp(signIn = signIn,
         skipOnboarding = skipOnboarding,
         skipWelcome = skipDatabase,
-        skipDatabase = skipWelcome)
+        skipDatabase = skipWelcome,
+        context = context)
     createNotificationChannel(context)
 }
 
@@ -197,11 +198,11 @@ fun ScreenApp(
     skipWelcome: Boolean = false,
     skipDatabase: Boolean = false,
     skipOnboarding: Boolean = false,
+    context: Context,
 
     ) {
     var loggingOptionsVisible by remember { mutableStateOf(false) }
     var skipOnboarding = skipOnboarding
-
     val isOnboarded by viewModel.isOnboarded.observeAsState(initial = null)
 
     if (!skipDatabase){
@@ -244,8 +245,8 @@ fun ScreenApp(
                     viewModel = viewModel,
                     calendarViewModel = calendarViewModel,
                     modifier = modifier.padding(innerPadding),
-                    mainActivity = MainActivity(),
-                    signIn = signIn
+                    signIn = signIn,
+                    context = context
                 )
 
                 if (loggingOptionsVisible) {

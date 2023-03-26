@@ -1,5 +1,6 @@
 package com.tpp.theperiodpurse
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
@@ -47,8 +48,8 @@ fun NavigationGraph(
     viewModel: OnboardViewModel,
     calendarViewModel: CalendarViewModel,
     modifier: Modifier = Modifier,
-    mainActivity: MainActivity,
-    signIn: () -> Unit
+    signIn: () -> Unit,
+    context: Context
 ) {
     val uiState by viewModel.uiState.collectAsState()
     NavHost(
@@ -77,7 +78,7 @@ fun NavigationGraph(
         }
 
         composable(route = Screen.Settings.name) {
-            SettingsScreen()
+            SettingsScreen(context = context, viewModel = viewModel, outController = navController)
         }
 
         composable(route = Screen.Cycle.name) {
@@ -144,18 +145,6 @@ fun NavigationGraph(
         }
     }
 }
-
-/**
- * Resets the [OnboardUIState] and pops up to [OnboardingScreen.Start]
- */
-private fun cancelOrderAndNavigateToStart(
-    viewModel: OnboardViewModel,
-    navController: NavHostController
-) {
-    viewModel.resetOrder()
-    navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = false)
-}
-
 @Composable
 fun currentRoute(navController: NavController): String? {
     val navBackStackEntry by navController.currentBackStackEntryAsState()

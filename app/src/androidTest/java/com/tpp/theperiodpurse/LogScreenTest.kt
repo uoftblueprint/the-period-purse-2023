@@ -19,7 +19,6 @@ import org.junit.Test
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
-import kotlin.math.sign
 
 @HiltAndroidTest
 class LogScreenTest {
@@ -43,8 +42,15 @@ class LogScreenTest {
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
-            ScreenApp(navController = navController, skipDatabase = true, skipOnboarding = true, viewModel =
-            onboardViewModel, signIn = { signIn() })
+            ScreenApp(
+                viewModel =
+                onboardViewModel,
+                navController = navController,
+                signIn = { signIn() },
+                skipDatabase = true,
+                skipOnboarding = true,
+                context = LocalContext.current
+            )
         }
     }
 
