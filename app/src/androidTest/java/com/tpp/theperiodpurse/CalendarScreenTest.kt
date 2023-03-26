@@ -98,12 +98,15 @@ class CalendarScreenTest {
                 ComposeNavigator()
             )
             ScreenApp(
-                navController = navController,
-                skipOnboarding = true,
                 onboardViewModel = onboardViewModel,
                 appViewModel = appViewModel,
-                calendarViewModel = calendarViewModel
-            ) { signIn() }
+                navController = navController,
+                calendarViewModel = calendarViewModel,
+                signIn = { signIn()  },
+                skipDatabase = true,
+                skipOnboarding = true,
+                context = LocalContext.current
+            )
         }
     }
 

@@ -19,8 +19,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.data.Date
 import com.tpp.theperiodpurse.ui.onboarding.backbutton
 import com.tpp.theperiodpurse.data.OnboardUIState
+import com.tpp.theperiodpurse.data.Symptom
+import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 /**
  * This composable expects [onboardUIState] that represents the onboarding state, [onCancelButtonClicked] lambda
@@ -32,7 +38,8 @@ fun SummaryScreen(
     onboardUiState: OnboardUIState,
     onSendButtonClicked: () -> Unit,
     navigateUp: () -> Unit,
-    canNavigateBack: Boolean
+    canNavigateBack: Boolean,
+    viewModel: OnboardViewModel,
 ) {
     val resources = LocalContext.current.resources
 
@@ -199,7 +206,17 @@ fun SummaryScreen(
             modifier = Modifier
                 .padding(horizontal = (screenheight * 0.02).dp)
                 .fillMaxWidth(),
-            onClick = { onSendButtonClicked() },
+            onClick = {
+
+                viewModel.addNewUser(
+                    getSymptomsToTrack(onboardUiState.symptomsOptions),
+                    arrayListOf<Date>(),
+                    onboardUiState.days,
+                    0,
+                    getDaysSince(onboardUiState.date)
+                )
+
+                onSendButtonClicked() },
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
 
         ) {
@@ -207,4 +224,37 @@ fun SummaryScreen(
         }
 
     }
+}
+
+fun getDaysSince(date: String): Int {
+
+    if (!date.contains("Choose date")){
+        val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        var date= date.split(" to ")[0]
+        val from = LocalDate.parse(date, dateFormatter)
+        val today = LocalDate.now()
+        return ChronoUnit.DAYS.between(today, from).toInt()
+    }
+    return 0
+
+
+}
+
+fun getSymptomsToTrack(strList: List<String>): ArrayList<Symptom> {
+
+    val list_so_far = arrayListOf<Symptom>()
+
+    strList.forEach {
+            symptom ->
+        when (symptom) {
+            "Mood" -> {list_so_far.add(Symptom.MOOD)}
+            "Exercise" -> {list_so_far.add(Symptom.EXERCISE)}
+            "Flow" -> {list_so_far.add(Symptom.FLOW)}
+            "Cramps" -> {list_so_far.add(Symptom.CRAMPS)}
+            "Sleep" -> {list_so_far.add(Symptom.SLEEP)}
+        }
+
+    }
+    return list_so_far
+
 }

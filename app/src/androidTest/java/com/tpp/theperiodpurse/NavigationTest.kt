@@ -46,11 +46,14 @@ class NavigationTest {
             )
             ScreenApp(
                 navController = navController,
+                skipDatabase = true,
                 skipOnboarding = true,
+                context = LocalContext.current,
+                signIn = { signIn() },
                 onboardViewModel = onboardViewModel,
                 appViewModel = appViewModel,
                 calendarViewModel = calendarViewModel
-            ) { signIn() }
+            )
         }
     }
 

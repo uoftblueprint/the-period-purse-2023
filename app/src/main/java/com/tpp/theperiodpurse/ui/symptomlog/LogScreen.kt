@@ -225,24 +225,24 @@ fun LogScreenTopBar(navController: NavController, date: LocalDate) {
                 if (date.minusDays(1) >=
                     YearMonth.now().minusMonths(12).atStartOfMonth())
                     IconButton(onClick = {
-                    navController.navigate(
-                        "%s/%s/%s".format(
-                            Screen.Calendar.name,
-                            Screen.Log.name,
-                            date.minusDays(1).toString()
-                        )
+                        navController.navigate(
+                            "%s/%s/%s".format(
+                                Screen.Calendar.name,
+                                Screen.Log.name,
+                                date.minusDays(1).toString()
+                            )
+                        ) {
+                            popUpTo(Screen.Calendar.name) {
+                                inclusive = false
+                            }
+                        } },
+                        modifier = Modifier
                     ) {
-                        popUpTo(Screen.Calendar.name) {
-                            inclusive = false
-                        }
-                    } },
-                    modifier = Modifier
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Log Back Arrow"
-                    )
-                }
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Log Back Arrow"
+                        )
+                    }
             }
 
             Column(
@@ -283,15 +283,15 @@ fun LogScreenTopBar(navController: NavController, date: LocalDate) {
                                 inclusive = false
                             }
                         }
-                },
-                modifier = Modifier
-                    .semantics { contentDescription = "ClickNextDay" }
+                    },
+                        modifier = Modifier
+                            .semantics { contentDescription = "ClickNextDay" }
                     ) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowForward,
-                        contentDescription = "Log Forward Arrow"
-                    )
-                }
+                        Icon(
+                            imageVector = Icons.Filled.ArrowForward,
+                            contentDescription = "Log Forward Arrow"
+                        )
+                    }
             }
 
         }
@@ -405,8 +405,8 @@ fun LogSelectableSquare(
 
     val squareColor = animateColorAsState(
         targetValue =
-            if (logSquare.description == selected) SelectedColor1
-            else HeaderColor1,
+        if (logSquare.description == selected) SelectedColor1
+        else HeaderColor1,
         animationSpec = tween(250, 0, LinearEasing)
     )
 
