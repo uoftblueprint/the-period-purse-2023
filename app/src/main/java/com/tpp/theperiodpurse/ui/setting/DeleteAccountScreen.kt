@@ -76,7 +76,7 @@ fun DeleteAccountScreen(
                                 Icon(
                                     Icons.Filled.Warning,
                                     contentDescription = "Warning Icon",
-                                    tint = Color.Red,
+                                    tint = Color(195, 50, 50),
                                     modifier = Modifier.size(24.dp)
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
@@ -109,7 +109,7 @@ fun DeleteAccountScreen(
                                 Text(
                                     text = "Delete",
                                     style = MaterialTheme.typography.button,
-                                    color = Color.Red
+                                    color = Color(195, 50, 50)
                                 )
                             }
                         },

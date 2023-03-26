@@ -11,6 +11,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -21,7 +22,8 @@ import com.tpp.theperiodpurse.R
 @Composable
 fun LoadingScreen() {
     val configuration = LocalConfiguration.current
-    val screenheight = configuration.screenHeightDp;
+    val redLoading = Color(195, 50, 50)
+
     Image(
         painter = painterResource(id = R.drawable.background),
         contentDescription = null,
@@ -32,12 +34,7 @@ fun LoadingScreen() {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Image(
-            painter = painterResource(R.drawable.app_logo),
-            contentDescription = null,
-            modifier = Modifier.size((screenheight*0.40).dp)
-        )
-        CircularProgressIndicator()
+        CircularProgressIndicator(color = redLoading)
     }
 
 }
