@@ -28,8 +28,11 @@ class UserRepository(private val userDAO: UserDAO) {
     suspend fun getUser(id: Int): User {
         return userDAO.get(id)
     }
+    suspend fun isEmpty(): Boolean {
+        return userDAO.getUsers().isEmpty()
+    }
 
-    fun isOnboarded() {
+    suspend fun isOnboarded() {
         isOnboarded.postValue(userDAO.getUsers().isNotEmpty())
     }
     fun isDeleted(context: Context) {

@@ -22,7 +22,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -33,7 +32,6 @@ import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.OnboardUIState
 import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
-import com.tpp.theperiodpurse.data.Symptom
 
 enum class SettingScreenNavigation(@StringRes val title: Int) {
     Start(title = R.string.settings_home), Notification(title = R.string.customize_notifications), BackUpAccount(
@@ -80,10 +78,9 @@ fun SettingsScreen(
     outController: NavHostController = rememberNavController(),
     navController: NavHostController = rememberNavController(),
     context: Context,
-    appViewModel: AppViewModel = viewModel(),
-    viewModel: OnboardViewModel?,
-    onboardUiState: OnboardUIState?
-    navController: NavHostController = rememberNavController()
+    appViewModel: AppViewModel?,
+    onboardUiState: OnboardUIState?,
+    onboardViewModel: OnboardViewModel?
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = SettingScreenNavigation.valueOf(
@@ -93,7 +90,9 @@ fun SettingsScreen(
     // use appViewModel.getTrackedSymptoms to get a list of symptoms
     // use appViewModel.setTrackedSymptoms to set the symptoms to a new list of symptoms
     // remove this line below after using the appViewModel
-    Log.d("tracked symptoms", appViewModel.getTrackedSymptoms().toString())
+    if (appViewModel != null) {
+        Log.d("tracked symptoms", appViewModel.getTrackedSymptoms().toString())
+    }
 
     Scaffold(
     ) { innerPadding ->
@@ -104,11 +103,6 @@ fun SettingsScreen(
             contentScale = ContentScale.FillBounds
         )
 
-        val title = if (currentScreen.title == R.string.settings_home) {
-            " "
-        } else {
-            stringResource(id = R.string.customize_notifications)
-        }
 
         NavHost(
             navController = navController,
@@ -166,8 +160,8 @@ fun SettingsScreen(
                 )
             }
             composable(route = SettingScreenNavigation.ResetDatabase.name) {
-                if (viewModel != null && onboardUiState != null) {
-                    ResetDatabase(context = context, viewModel = viewModel, navController = navController, outController = outController, onboardUiState = onboardUiState)
+                if (onboardViewModel != null && onboardUiState != null) {
+                    ResetDatabase(context = context, viewModel = onboardViewModel, navController = navController, outController = outController, onboardUiState = onboardUiState)
                 }
             }
         }

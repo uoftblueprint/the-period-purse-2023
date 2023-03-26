@@ -170,7 +170,8 @@ fun Application(context: Context,
         skipOnboarding = skipOnboarding,
         skipWelcome = skipDatabase,
         skipDatabase = skipWelcome,
-        context = context)
+        context = context,
+        appViewModel = viewModel())
     createNotificationChannel(context)
 }
 
@@ -205,7 +206,9 @@ fun ScreenApp(
     context: Context,
 
 ) {
-    appViewModel.loadData(calendarViewModel)
+    if (appViewModel != null) {
+        appViewModel.loadData(calendarViewModel)
+    }
     var loggingOptionsVisible by remember { mutableStateOf(false) }
     var skipOnboarding = skipOnboarding
     val isOnboarded by onboardViewModel.isOnboarded.observeAsState(initial = null)
@@ -244,6 +247,7 @@ fun ScreenApp(
                 contentScale = ContentScale.FillBounds
             )
             Box {
+
                 NavigationGraph(
                     navController = navController,
                     startDestination = if (skipOnboarding) Screen.Calendar.name else if (skipWelcome) OnboardingScreen.QuestionOne.name else OnboardingScreen.Welcome.name,
@@ -252,9 +256,9 @@ fun ScreenApp(
                     calendarViewModel = calendarViewModel,
                     modifier = modifier.padding(innerPadding),
                     signIn = signIn,
-                    mainActivity = MainActivity(),
                     context = context
                 )
+
 
                 if (loggingOptionsVisible) {
                     LoggingOptionsPopup(

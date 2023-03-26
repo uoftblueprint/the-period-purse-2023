@@ -104,7 +104,6 @@ class LogScreenTest {
                 context = LocalContext.current,
                 onboardViewModel = onboardViewModel,
                 appViewModel = appViewModel,
-                calendarViewModel = calendarViewModel
             )
         }
     }

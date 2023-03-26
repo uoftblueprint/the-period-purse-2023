@@ -45,12 +45,13 @@ class CalendarCycleTabTest {
                 ComposeNavigator()
             )
             ScreenApp(
-                viewModel = onboardViewModel,
+                onboardViewModel = onboardViewModel,
                 navController = navController,
                 signIn = { signIn() },
                 skipDatabase = true,
                 skipOnboarding = true,
-                context = LocalContext.current
+                context = LocalContext.current,
+                appViewModel = appViewModel
             )
 
         }

@@ -88,7 +88,7 @@ fun NavigationGraph(
                 appViewModel = appViewModel,
                 onboardViewModel = onboardViewModel,
                 outController = navController,
-                onboardUiState = uiState)
+                onboardUiState = onboardUIState)
         }
 
         composable(route = Screen.Cycle.name) {
@@ -146,7 +146,9 @@ fun NavigationGraph(
                 onSendButtonClicked = {
                     navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
                     navController.navigate(Screen.Calendar.name)
-                    appViewModel.loadData(calendarViewModel)
+                    if (appViewModel != null) {
+                        appViewModel.loadData(calendarViewModel)
+                    }
                 },
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null,
