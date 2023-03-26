@@ -26,7 +26,7 @@ class SettingsNavigationTest {
 
 
     @get:Rule
-    // Used to manage the components' state and is used to perform injection on tests
+    // Used to manage the  components' state and is used to perform injection on tests
     var hiltRule = HiltAndroidRule(this)
 
     @Before
