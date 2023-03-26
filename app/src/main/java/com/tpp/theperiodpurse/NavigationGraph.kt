@@ -13,7 +13,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
-import com.tpp.theperiodpurse.MainActivity
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.ui.SummaryScreen
 import com.tpp.theperiodpurse.ui.calendar.CalendarScreen
@@ -23,9 +22,8 @@ import com.tpp.theperiodpurse.ui.education.*
 import com.tpp.theperiodpurse.ui.onboarding.*
 import com.tpp.theperiodpurse.ui.setting.SettingsScreen
 import com.tpp.theperiodpurse.ui.symptomlog.LogScreen
-import java.time.Duration
 
-enum class Screen() {
+enum class Screen {
     Calendar,
     Log,
     Cycle,
@@ -33,7 +31,7 @@ enum class Screen() {
     Learn
 }
 
-enum class OnboardingScreen() {
+enum class OnboardingScreen {
     Welcome,
     QuestionOne,
     QuestionTwo,
@@ -99,7 +97,6 @@ fun NavigationGraph(
         }
 
 
-
         // Welcome Screen
         composable(route = OnboardingScreen.Welcome.name) {
             WelcomeScreen(
@@ -113,7 +110,7 @@ fun NavigationGraph(
         // Onboard Screens
         composable(route = OnboardingScreen.QuestionOne.name) {
             QuestionOneScreen(
-                onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionTwo.name) },
+                navController = navController,
                 onSelectionChanged = { onboardViewModel.setQuantity(it.toInt()) },
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null,
@@ -122,8 +119,8 @@ fun NavigationGraph(
         }
         composable(route = OnboardingScreen.QuestionTwo.name) {
             QuestionTwoScreen(
+                navController = navController,
                 onboardUiState = onboardUIState,
-                onNextButtonClicked = { navController.navigate(OnboardingScreen.QuestionThree.name) },
                 onSelectionChanged = { onboardViewModel.setDate(it) },
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null
@@ -132,9 +129,9 @@ fun NavigationGraph(
 
         composable(route = OnboardingScreen.QuestionThree.name) {
             QuestionThreeScreen(
-                onNextButtonClicked = { navController.navigate(OnboardingScreen.Summary.name) },
+                navController = navController,
+                onboardUiState = onboardUIState,
                 onSelectionChanged = { onboardViewModel.setSymptoms(it) },
-                navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null
             )
         }

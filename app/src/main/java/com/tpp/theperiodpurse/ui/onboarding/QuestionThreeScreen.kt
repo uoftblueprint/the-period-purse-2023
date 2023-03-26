@@ -26,18 +26,31 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import com.tpp.theperiodpurse.ui.onboarding.backbutton
-import com.tpp.theperiodpurse.ui.onboarding.background_shape
+import androidx.navigation.NavHostController
+import com.tpp.theperiodpurse.OnboardingScreen
+import com.tpp.theperiodpurse.data.OnboardUIState
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun QuestionThreeScreen(
     onSelectionChanged: (String) -> Unit = {},
-    onNextButtonClicked: () -> Unit = {},
-    navigateUp: () -> Unit,
-    canNavigateBack: Boolean
+    canNavigateBack: Boolean,
+    navController: NavHostController,
+    onboardUiState: OnboardUIState
 ) {
     var selectedValue by rememberSaveable { mutableStateOf("") }
+    var updateList by rememberSaveable { mutableStateOf(false) }
+
+    if (!updateList && onboardUiState.symptomsOptions.isNotEmpty()){
+        onboardUiState.symptomsOptions.forEach { option ->
+            if (option != "" && !selectedValue.contains(option)) {
+                selectedValue = "$selectedValue$option|"
+            }
+        }
+        updateList = true
+
+    }
+
 
     val configuration = LocalConfiguration.current
 
@@ -45,7 +58,10 @@ fun QuestionThreeScreen(
 
     val screenheight = configuration.screenHeightDp;
 
-    Box(Modifier.fillMaxHeight().fillMaxWidth()) {
+    Box(
+        Modifier
+            .fillMaxHeight()
+            .fillMaxWidth()) {
 
 
         Column(
@@ -86,7 +102,7 @@ fun QuestionThreeScreen(
             }
             Text(
                 text = stringResource(R.string.question_three),
-                fontSize = 28.sp,
+                fontSize = (screenheight * (0.035)).sp,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .width(300.dp),
@@ -181,10 +197,10 @@ fun QuestionThreeScreen(
                                     selectedValue = selectedValue + "|" + item
 
                                 }
-                                onSelectionChanged(selectedValue)
                             }
                         )
-                        .padding(horizontal = (screenheight * 0.02).dp).semantics { contentDescription = "Mood" },
+                        .padding(horizontal = (screenheight * 0.02).dp)
+                        .semantics { contentDescription = "Mood" },
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
@@ -234,9 +250,9 @@ fun QuestionThreeScreen(
                                     selectedValue = selectedValue + "|" + item
 
                                 }
-                                onSelectionChanged(selectedValue)
                             })
-                        .padding(horizontal = 13.dp).semantics { contentDescription = "fitness" },
+                        .padding(horizontal = 13.dp)
+                        .semantics { contentDescription = "fitness" },
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -288,9 +304,10 @@ fun QuestionThreeScreen(
                                     selectedValue = selectedValue + "|" + item
 
                                 }
-                                onSelectionChanged(selectedValue)
+
                             })
-                        .padding(horizontal = 13.dp).semantics { contentDescription = "Cramps" },
+                        .padding(horizontal = 13.dp)
+                        .semantics { contentDescription = "Cramps" },
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -317,8 +334,6 @@ fun QuestionThreeScreen(
                             )
 
                     }
-
-
                     Text(
                         text = stringResource(R.string.cramps),
                         fontSize = 15.sp,
@@ -345,9 +360,10 @@ fun QuestionThreeScreen(
                                     selectedValue = selectedValue + "|" + item
 
                                 }
-                                onSelectionChanged(selectedValue)
+
                             })
-                        .padding(horizontal = 13.dp).semantics { contentDescription = "Exercise" },
+                        .padding(horizontal = 13.dp)
+                        .semantics { contentDescription = "Exercise" },
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -356,7 +372,8 @@ fun QuestionThreeScreen(
                         modifier = Modifier
                             .height(50.dp)
                             .width(50.dp)
-                            .clip(RoundedCornerShape(30)).semantics { contentDescription = "Sleep" }
+                            .clip(RoundedCornerShape(30))
+                            .semantics { contentDescription = "Sleep" }
                             .then(
                                 if (!selectedValue.contains("Sleep")) Modifier.background(Color.White) else Modifier.background(
                                     Color(rgb(142, 212, 193))
@@ -374,30 +391,31 @@ fun QuestionThreeScreen(
                             )
 
                     }
-
-
                     Text(
                         text = stringResource(R.string.sleep),
                         fontSize = 15.sp,
 
                         )
-
                 }
-
-
             }
-
-
         }
         Row(
-            modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter).padding(bottom = (screenheight * (0.03)).dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .padding(bottom = (screenheight * (0.01)).dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             TextButton(
                 modifier = Modifier
                     .padding(start = (screenwidth * (0.1)).dp)
-                    .weight(1f).semantics { contentDescription = "Skip" },
-                onClick = onNextButtonClicked,
+                    .weight(1f)
+                    .semantics { contentDescription = "Skip" },
+                onClick = {
+                    onSelectionChanged("")
+                    navController.navigate(OnboardingScreen.Summary.name)
+
+                },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
             ) {
                 Text(
@@ -409,10 +427,14 @@ fun QuestionThreeScreen(
             Button(
                 modifier = Modifier
                     .padding(end = (screenwidth * (0.1)).dp)
-                    .weight(1f).semantics { contentDescription = "Next" },
+                    .weight(1f)
+                    .semantics { contentDescription = "Next" },
                 // the button is enabled when the user makes a selection
-                enabled = selectedValue.isNotEmpty(),
-                onClick = onNextButtonClicked,
+                enabled = selectedValue.replace("|","").isNotEmpty(),
+                onClick = {
+                    onSelectionChanged(selectedValue)
+                    navController.navigate(OnboardingScreen.Summary.name)
+                },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
             ) {
                 Text(stringResource(R.string.next), color = Color.White, fontSize = 20.sp)
@@ -421,7 +443,10 @@ fun QuestionThreeScreen(
 
     }
 
-    backbutton(navigateUp, canNavigateBack)
+    backbutton({
+        navController.navigateUp()
+        onSelectionChanged(selectedValue)
+               }, canNavigateBack)
 }
 
 
