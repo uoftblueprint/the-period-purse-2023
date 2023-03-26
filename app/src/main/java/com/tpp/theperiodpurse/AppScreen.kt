@@ -45,6 +45,9 @@ import com.tpp.theperiodpurse.ui.symptomlog.LoggingOptionsPopup
 import com.tpp.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -98,10 +101,10 @@ class MainActivity : ComponentActivity() {
                     }
                 }
                 if (mAuth.currentUser == null) {
-                    Application(applicationContext) { signIn() }
+                    Application(context = applicationContext, signIn = { signIn() } )
                 } else {
 //                val user: FirebaseUser = mAuth.currentUser!!
-                    Application(applicationContext, true) { signIn() }
+                    Application(context = applicationContext, signIn = { signIn() })
                 }
             }
         }
@@ -146,7 +149,7 @@ class MainActivity : ComponentActivity() {
                     // SignIn Successful
                     Toast.makeText(this, "SignIn Successful", Toast.LENGTH_SHORT).show()
                     setContent {
-                        Application(context = applicationContext, skipWelcome = true) { signIn() }
+                        Application(context = applicationContext, skipDatabase = true, skipWelcome = true, signIn = { signIn() })
                     }
                 } else {
                     // SignIn Failed
@@ -158,8 +161,16 @@ class MainActivity : ComponentActivity() {
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun Application(context: Context, skipOnboarding: Boolean = false, skipWelcome: Boolean = false, signIn: () -> Unit) {
-    ScreenApp(skipOnboarding = skipOnboarding, skipWelcome = skipWelcome, signIn = signIn)
+fun Application(context: Context,
+                signIn: () -> Unit,
+                skipWelcome: Boolean = false,
+                skipDatabase: Boolean = false,
+                skipOnboarding: Boolean = false) {
+    ScreenApp(signIn = signIn,
+        skipOnboarding = skipOnboarding,
+        skipWelcome = skipDatabase,
+        skipDatabase = skipWelcome,
+        context = context)
     createNotificationChannel(context)
 }
 
@@ -186,48 +197,65 @@ fun ScreenApp(
     appViewModel: AppViewModel = viewModel(),
     onboardViewModel: OnboardViewModel = viewModel(),
     calendarViewModel: CalendarViewModel = viewModel(),
-    skipOnboarding: Boolean = false,
     navController: NavHostController = rememberNavController(),
-    skipWelcome: Boolean = false,
     signIn: () -> Unit,
+    skipWelcome: Boolean = false,
+    skipDatabase: Boolean = false,
+    skipOnboarding: Boolean = false,
+    context: Context,
 
 ) {
     appViewModel.loadData(calendarViewModel)
     var loggingOptionsVisible by remember { mutableStateOf(false) }
-    Scaffold(
-        bottomBar = {
-            if (currentRoute(navController) in screensWithNavigationBar) {
-                BottomNavigation(navController = navController)
-            }
-        },
-        floatingActionButton = {
-            if (currentRoute(navController) in screensWithNavigationBar) {
-                FloatingActionButton(
-                    navController = navController,
-                    onClickInCalendar = { loggingOptionsVisible = true }
-                )
-            }
-        },
-        floatingActionButtonPosition = FabPosition.Center,
-        isFloatingActionButtonDocked = true
-    ) { innerPadding ->
-        Image(
-            painter = painterResource(id = R.drawable.background),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.FillBounds
-        )
-        Box {
-            NavigationGraph(
-                navController = navController,
-                startDestination = if (skipOnboarding) Screen.Calendar.name else if (skipWelcome) OnboardingScreen.QuestionOne.name else OnboardingScreen.Welcome.name,
-                onboardViewModel = onboardViewModel,
-                appViewModel= appViewModel,
-                calendarViewModel = calendarViewModel,
-                modifier = modifier.padding(innerPadding),
-                mainActivity = MainActivity(),
-                signIn = signIn
+    var skipOnboarding = skipOnboarding
+    val isOnboarded by onboardViewModel.isOnboarded.observeAsState(initial = null)
+
+    if (!skipDatabase){
+        LaunchedEffect(Unit) {
+            onboardViewModel.checkOnboardedStatus()
+        }
+    }
+
+    if (isOnboarded == null && !skipDatabase){
+        LoadingScreen()
+    } else{
+        if (!skipDatabase){
+            skipOnboarding = (isOnboarded as Boolean)
+        }
+        Scaffold(
+            bottomBar = {
+                if (currentRoute(navController) in screensWithNavigationBar) {
+                    BottomNavigation(navController = navController)
+                }
+            },
+            floatingActionButton = {
+                if (currentRoute(navController) in screensWithNavigationBar) {
+                    FloatingActionButton(
+                        navController = navController,
+                        onClickInCalendar = { loggingOptionsVisible = true }
+                    )
+                }
+            },
+            floatingActionButtonPosition = FabPosition.Center,
+            isFloatingActionButtonDocked = true
+        ) { innerPadding ->
+            Image(
+                painter = painterResource(id = R.drawable.background),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillBounds
             )
+            Box {
+                NavigationGraph(
+                    navController = navController,
+                    startDestination = if (skipOnboarding) Screen.Calendar.name else if (skipWelcome) OnboardingScreen.QuestionOne.name else OnboardingScreen.Welcome.name,
+                    onboardViewModel = onboardViewModel,
+                    appViewModel= appViewModel,
+                    calendarViewModel = calendarViewModel,
+                    modifier = modifier.padding(innerPadding),
+                    signIn = signIn,
+                    context = context
+                )
 
             if (loggingOptionsVisible) {
                 LoggingOptionsPopup(

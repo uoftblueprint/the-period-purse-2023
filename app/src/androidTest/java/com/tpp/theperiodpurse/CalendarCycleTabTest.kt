@@ -15,6 +15,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import javax.inject.Inject
+import kotlin.math.sign
 
 @HiltAndroidTest
 class CalendarCycleTabTest {
@@ -50,8 +51,11 @@ class CalendarCycleTabTest {
                 onboardViewModel = onboardViewModel,
                 appViewModel = appViewModel,
                 calendarViewModel = calendarViewModel,
-                skipWelcome = false
-            ) { signIn() }
+                skipWelcome = false,
+                skipDatabase = true,
+                signIn = { signIn() },
+                context = LocalContext.current
+            )
         }
     }
 
@@ -102,6 +106,7 @@ class CalendarCycleTabTest {
     @Test
     fun appTabs_swipeCalendarPage_SelectsCycle() {
         composeTestRule.onRoot().performTouchInput {
+            swipeLeft()
             swipeLeft()
         }
 
