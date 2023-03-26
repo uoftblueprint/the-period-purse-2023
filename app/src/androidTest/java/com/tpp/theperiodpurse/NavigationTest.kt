@@ -92,7 +92,6 @@ class NavigationTest {
         navController.assertCurrentRouteName(Screen.Calendar.name)
     }
 
-<<<<<<< HEAD
     @Test
     fun appNavHost_clickCalendarFABOnCalendarScreen_navigatesLoggingPage() {
         composeTestRule.onNodeWithContentDescription("Open logging options").performClick()
