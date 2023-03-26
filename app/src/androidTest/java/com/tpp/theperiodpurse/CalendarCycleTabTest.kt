@@ -6,9 +6,8 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
-import com.tpp.theperiodpurse.data.DateRepository
-import com.tpp.theperiodpurse.data.UserRepository
 import com.tpp.theperiodpurse.ui.calendar.CalendarTabItem
+import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -24,7 +23,13 @@ class CalendarCycleTabTest {
     private lateinit var navController: TestNavHostController
 
     @Inject
+    lateinit var appViewModel: AppViewModel
+
+    @Inject
     lateinit var onboardViewModel: OnboardViewModel
+
+    @Inject
+    lateinit var calendarViewModel: CalendarViewModel
 
     @get:Rule
     // Used to manage the components' state and is used to perform injection on tests
@@ -39,10 +44,17 @@ class CalendarCycleTabTest {
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
-            ScreenApp(navController = navController, skipOnboarding = true, viewModel =
-            onboardViewModel)
+            ScreenApp(
+                navController = navController,
+                skipOnboarding = true,
+                onboardViewModel = onboardViewModel,
+                appViewModel = appViewModel,
+                calendarViewModel = calendarViewModel,
+                skipWelcome = false
+            ) { signIn() }
         }
     }
+
 
 
     private fun navigateToCycleScreen() {
@@ -130,6 +142,10 @@ class CalendarCycleTabTest {
         composeTestRule.onNodeWithText(CalendarTabItem.CalendarTab.title).performClick()
 
         composeTestRule.onNodeWithContentDescription("Calendar Page").assertIsDisplayed()
+    }
+
+    fun signIn(){
+
     }
 
 }

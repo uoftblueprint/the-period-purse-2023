@@ -4,9 +4,8 @@ enum class Mood(val displayName: String) {
     HAPPY("Happy"),
     NEUTRAL("Meh"),
     SAD("Sad"),
-//    LOL("lol"), // Not implemented
-//    IDK("idk"), // Not implemented
-//    GREAT, // Not implemented
+    LOL("lol"), // Not implemented
+    IDK("idk"), // Not implemented
     SILLY("Silly/Goofy"), // Different from iOS
     SICK("Sick"),
     ANGRY("Angry"),

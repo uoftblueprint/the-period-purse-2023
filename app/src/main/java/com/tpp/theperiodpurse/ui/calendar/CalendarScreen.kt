@@ -31,6 +31,7 @@ import com.google.accompanist.pager.*
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.*
+import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.Symptom
 import com.tpp.theperiodpurse.navigateToLogScreenWithDate
@@ -50,7 +51,6 @@ import java.util.*
 val tabModifier = Modifier
     .background(Color.White)
     .fillMaxWidth()
-
 
 inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier = composed {
     clickable(indication = null,
@@ -118,10 +118,15 @@ fun TabsContent(
     tabs: List<CalendarTabItem>,
     pagerState: PagerState,
     calendarViewModel: CalendarViewModel,
-    navController: NavController
+    navController: NavController,
+    appViewModel: AppViewModel
 ) {
     HorizontalPager(state = pagerState, count = tabs.size) { page ->
-        tabs[page].screen(calendarViewModel, navController)
+        tabs[page].screen(
+            navController = navController,
+            calendarViewModel = calendarViewModel,
+            appViewModel = appViewModel
+        )
     }
 }
 
@@ -130,7 +135,8 @@ fun TabsContent(
 @Composable
 fun CalendarScreen(
     navController: NavController,
-    calendarViewModel: CalendarViewModel
+    calendarViewModel: CalendarViewModel,
+    appViewModel: AppViewModel
 ) {
     // Main calendar screen which allows navigation to cycle page and calendar
     // By default, opens on to the Calendar
@@ -151,7 +157,8 @@ fun CalendarScreen(
                     tabs = tabs,
                     pagerState = pagerState,
                     calendarViewModel = calendarViewModel,
-                    navController = navController
+                    navController = navController,
+                    appViewModel = appViewModel
                 )
             }
         }
@@ -162,11 +169,16 @@ val previewTrackedSymptoms = Symptom.values().asList()
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarScreenLayout(calendarViewModel: CalendarViewModel, navController: NavController) {
+fun CalendarScreenLayout(
+    calendarViewModel: CalendarViewModel,
+    navController: NavController,
+    appViewModel: AppViewModel
+) {
         val calendarUIState by calendarViewModel.uiState.collectAsState()
     // Contains the swappable content
     ThePeriodPurseTheme {
         val bg = painterResource(R.drawable.colourwatercolour)
+        val appUiState by appViewModel.uiState.collectAsState()
 
         val selectedSymptom = calendarUIState.selectedSymptom
         val currentMonth = remember { YearMonth.now() }
@@ -192,9 +204,9 @@ fun CalendarScreenLayout(calendarViewModel: CalendarViewModel, navController: Na
             )
             Column {
                 SymptomTab(
-                    trackedSymptoms = previewTrackedSymptoms,
                     selectedSymptom = selectedSymptom,
-                    onSymptomClick = { calendarViewModel.setSelectedSymptom(it) }
+                    onSymptomClick = { calendarViewModel.setSelectedSymptom(it) },
+                    trackedSymptoms = appUiState.trackedSymptoms
 //                trackedSymptoms = userDAO.get().symptomsToTrack
                 )
                 VerticalCalendar(
@@ -293,7 +305,7 @@ fun Month.displayText(short: Boolean = true): String {
 @Composable
 fun CalendarScreenPreview() {
     ThePeriodPurseTheme {
-        CalendarScreen(rememberNavController(), viewModel())
+        CalendarScreen(rememberNavController(), viewModel(), viewModel())
     }
 }
 
