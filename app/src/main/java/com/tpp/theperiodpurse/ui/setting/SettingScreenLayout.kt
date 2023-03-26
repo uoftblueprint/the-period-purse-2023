@@ -1,6 +1,12 @@
 package com.tpp.theperiodpurse.ui.setting
 
 
+import android.Manifest
+import android.Manifest.permission.SCHEDULE_EXACT_ALARM
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -16,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,6 +37,7 @@ import com.tpp.theperiodpurse.data.Symptom
 import com.tpp.theperiodpurse.ui.education.SocialMedia
 import com.tpp.theperiodpurse.ui.education.TermsAndPrivacyFooter
 import com.tpp.theperiodpurse.ui.education.teal
+import androidx.core.content.ContextCompat
 
 
 @Composable
@@ -83,6 +91,34 @@ fun SettingScreenLayout(
                    uncheckedThumbColor = Color.DarkGray
                )
            )
+           val context = LocalContext.current
+           var hasAlarmPermission by remember {
+               if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                   mutableStateOf(
+                       ContextCompat.checkSelfPermission(
+                           context,
+                           Manifest.permission.POST_NOTIFICATIONS
+                       ) == PackageManager.PERMISSION_GRANTED
+                   )
+               } else mutableStateOf(true)
+           }
+           val launcher = rememberLauncherForActivityResult(
+               contract = ActivityResultContracts.RequestPermission(),
+               onResult = { isGranted ->
+                   hasAlarmPermission = isGranted
+//                   if (!isGranted) {
+//                       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+////                           shouldShowRequestPermissionRationale(SCHEDULE_EXACT_ALARM)
+//                       }
+//                   }
+               }
+           )
+           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+               SideEffect {
+                   launcher.launch(SCHEDULE_EXACT_ALARM)
+               }
+           }
+
        }
        Divider(modifier = Modifier.padding(start= 10.dp, end = 10.dp))
 
@@ -223,7 +259,7 @@ fun NavigateButton(text: String, onClicked: () -> Unit ){
             contentDescription = "arrow",
             modifier = Modifier.wrapContentWidth(Alignment.End)
         )
-        
+
     }
 }
 

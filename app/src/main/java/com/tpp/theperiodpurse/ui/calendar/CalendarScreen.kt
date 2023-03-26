@@ -14,7 +14,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,7 +26,9 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -34,8 +40,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.Screen
+import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.theme.HeaderColor1
 import com.tpp.theperiodpurse.ui.theme.SelectedColor1
 import com.tpp.theperiodpurse.data.Symptom
@@ -46,6 +52,7 @@ import com.google.accompanist.pager.*
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.*
+import com.tpp.theperiodpurse.AppViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.Month
@@ -57,7 +64,6 @@ import java.util.*
 val tabModifier = Modifier
     .background(Color.White)
     .fillMaxWidth()
-
 
 inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier = composed {
     clickable(indication = null,
@@ -125,10 +131,15 @@ fun TabsContent(
     tabs: List<CalendarTabItem>,
     pagerState: PagerState,
     calendarViewModel: CalendarViewModel,
-    navController: NavController
+    navController: NavController,
+    appViewModel: AppViewModel
 ) {
     HorizontalPager(state = pagerState, count = tabs.size) { page ->
-        tabs[page].screen(calendarViewModel, navController)
+        tabs[page].screen(
+            navController = navController,
+            calendarViewModel = calendarViewModel,
+            appViewModel = appViewModel
+        )
     }
 }
 
@@ -137,7 +148,8 @@ fun TabsContent(
 @Composable
 fun CalendarScreen(
     navController: NavController,
-    calendarViewModel: CalendarViewModel
+    calendarViewModel: CalendarViewModel,
+    appViewModel: AppViewModel
 ) {
     // Main calendar screen which allows navigation to cycle page and calendar
     // By default, opens on to the Calendar
@@ -158,7 +170,8 @@ fun CalendarScreen(
                     tabs = tabs,
                     pagerState = pagerState,
                     calendarViewModel = calendarViewModel,
-                    navController = navController
+                    navController = navController,
+                    appViewModel = appViewModel
                 )
             }
         }
@@ -169,11 +182,17 @@ val previewTrackedSymptoms = Symptom.values().asList()
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarScreenLayout(calendarViewModel: CalendarViewModel, navController: NavController) {
+fun CalendarScreenLayout(
+    calendarViewModel: CalendarViewModel,
+    navController: NavController,
+    appViewModel: AppViewModel
+) {
         val calendarUIState by calendarViewModel.uiState.collectAsState()
     // Contains the swappable content
     ThePeriodPurseTheme {
         val bg = painterResource(R.drawable.colourwatercolour)
+        val appUiState by appViewModel.uiState.collectAsState()
+        var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
 
         var selectedSymptom = calendarUIState.selectedSymptom
         val currentMonth = remember { YearMonth.now() }
@@ -199,9 +218,9 @@ fun CalendarScreenLayout(calendarViewModel: CalendarViewModel, navController: Na
             )
             Column {
                 SymptomTab(
-                    trackedSymptoms = previewTrackedSymptoms,
                     selectedSymptom = selectedSymptom,
-                    onSymptomClick = { calendarViewModel.setSelectedSymptom(it) }
+                    onSymptomClick = { calendarViewModel.setSelectedSymptom(it) },
+                    trackedSymptoms = appUiState.trackedSymptoms
 //                trackedSymptoms = userDAO.get().symptomsToTrack
                 )
                 VerticalCalendar(
@@ -284,7 +303,8 @@ fun Day(
                     }
                 )
 
-                Box(modifier = Modifier.padding(12.dp)
+                Box(modifier = Modifier
+                    .padding(12.dp)
                     .align(Alignment.Center)) {
                     if (calendarDayUIState != null) {
                         Image(
@@ -360,7 +380,7 @@ fun Month.displayText(short: Boolean = true): String {
 @Composable
 fun CalendarScreenPreview() {
     ThePeriodPurseTheme {
-        CalendarScreen(rememberNavController(), viewModel())
+        CalendarScreen(rememberNavController(), viewModel(), viewModel())
     }
 }
 
