@@ -70,6 +70,7 @@ fun QuestionTwoScreen(
         { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
             mDate.value = setDateTo(mDayOfMonth, mMonth, mYear, 0)
             mDateTo.value = setDateTo(mDayOfMonth, mMonth, mYear, onboardUiState.days)
+            onSelectionChanged(mDate.value + "|" + mDateTo.value)
         }, mYear, mMonth, mDay
     )
 
