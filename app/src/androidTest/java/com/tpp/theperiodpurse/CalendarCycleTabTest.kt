@@ -7,6 +7,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import com.tpp.theperiodpurse.ui.calendar.CalendarTabItem
+import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -14,6 +15,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import javax.inject.Inject
+import kotlin.math.sign
 
 @HiltAndroidTest
 class CalendarCycleTabTest {
@@ -22,10 +24,13 @@ class CalendarCycleTabTest {
     private lateinit var navController: TestNavHostController
 
     @Inject
+    lateinit var appViewModel: AppViewModel
+
+    @Inject
     lateinit var onboardViewModel: OnboardViewModel
 
     @Inject
-    lateinit var appViewModel: AppViewModel
+    lateinit var calendarViewModel: CalendarViewModel
 
     @get:Rule
     // Used to manage the components' state and is used to perform injection on tests
@@ -40,11 +45,17 @@ class CalendarCycleTabTest {
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
-            ScreenApp(navController = navController, skipOnboarding = true, skipWelcome = false,
+            ScreenApp(
+                navController = navController,
+                skipOnboarding = true,
+                onboardViewModel = onboardViewModel,
                 appViewModel = appViewModel,
-                onboardViewModel = onboardViewModel, signIn = {signIn()},
-            context = LocalContext.current)
-
+                calendarViewModel = calendarViewModel,
+                skipWelcome = false,
+                skipDatabase = true,
+                signIn = { signIn() },
+                context = LocalContext.current
+            )
         }
     }
 
@@ -95,6 +106,7 @@ class CalendarCycleTabTest {
     @Test
     fun appTabs_swipeCalendarPage_SelectsCycle() {
         composeTestRule.onRoot().performTouchInput {
+            swipeLeft()
             swipeLeft()
         }
 

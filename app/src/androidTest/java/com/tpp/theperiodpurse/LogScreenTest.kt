@@ -99,6 +99,7 @@ class LogScreenTest {
             ScreenApp(
                 navController = navController,
                 skipOnboarding = true,
+                skipDatabase = true,
                 signIn = { signIn() },
                 calendarViewModel = calendarViewModel,
                 context = LocalContext.current,
