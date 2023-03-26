@@ -66,7 +66,7 @@ class AppViewModel @Inject constructor (
                                 ).toString()
                             }
 
-                            calendarViewModel.saveDayInfo(
+                            calendarViewModel.setDayInfo(
                                 date.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
                                 CalendarDayUIState(
                                     flow = date.flow,
@@ -89,7 +89,7 @@ class AppViewModel @Inject constructor (
         return uiState.value.trackedSymptoms
     }
 
-    fun setTackedSymptoms(trackedSymptoms: List<Symptom>) {
+    fun setTrackedSymptoms(trackedSymptoms: List<Symptom>) {
         _uiState.update { currentState ->
             currentState.copy(trackedSymptoms = trackedSymptoms)
         }
