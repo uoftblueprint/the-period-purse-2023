@@ -35,6 +35,8 @@ import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
+import com.tpp.theperiodpurse.data.Symptom
+import com.tpp.theperiodpurse.ui.calendar.components.getDayColorAndIcon
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -64,6 +66,8 @@ fun LogMultipleDatesScreen(
             firstDayOfWeek = firstDayOfWeek
         )
 
+        val calendarDayUIStates = calendarViewModel.uiState.collectAsState().value.days
+
         val selectedDates = mutableSetOf<LocalDate>()
 
         Box {
@@ -79,9 +83,10 @@ fun LogMultipleDatesScreen(
                 dayContent = { day ->
                     var selected by remember { mutableStateOf(false) }
                     if (day.position == DayPosition.MonthDate) {
+                        val (dayColor, _) = getDayColorAndIcon(Symptom.FLOW, calendarDayUIStates[day.date])
                         Day(
-                            date = day.date,
-                            color = if (selected) Red else Color.White,
+                            day.date,
+                            color = if (selected) Red else dayColor,
                             iconId = null,
                             onClick = {
                                 selected = !selected
@@ -100,7 +105,9 @@ fun LogMultipleDatesScreen(
                 }
                 onClose()},
                 backgroundColor = SelectedColor1,
-                modifier = Modifier.padding(end = 16.dp, bottom = 16.dp).align(Alignment.BottomEnd)
+                modifier = Modifier
+                    .padding(end = 16.dp, bottom = 16.dp)
+                    .align(Alignment.BottomEnd)
             ) {
                 Icon(
                     Icons.Rounded.Check,
