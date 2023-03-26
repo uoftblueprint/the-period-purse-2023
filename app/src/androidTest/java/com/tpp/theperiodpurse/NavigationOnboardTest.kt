@@ -81,7 +81,6 @@ class NavigationOnboardTest {
     // Used to manage the components' state and is used to perform injection on tests
     var hiltRule = HiltAndroidRule(this)
 
-
     @Before
     fun setupNavHost() {
         hiltRule.inject()
@@ -98,8 +97,11 @@ class NavigationOnboardTest {
                 skipWelcome = false,
                 onboardViewModel = onboardViewModel,
                 appViewModel = appViewModel,
+                signIn = { signIn() },
+                skipDatabase = true,
+                context = LocalContext.current,
                 calendarViewModel = calendarViewModel
-            ) { signIn() }
+            )
         }
     }
 

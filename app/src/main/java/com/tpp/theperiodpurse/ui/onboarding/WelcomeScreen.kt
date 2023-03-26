@@ -29,7 +29,8 @@ import com.tpp.theperiodpurse.R
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun WelcomeScreen(signIn: () -> Unit, onNextButtonClicked: () -> Unit) {
+fun WelcomeScreen(signIn: () -> Unit,
+                  onNextButtonClicked: () -> Unit) {
 
     val configuration = LocalConfiguration.current
 

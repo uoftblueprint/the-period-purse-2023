@@ -1,4 +1,6 @@
 package com.tpp.theperiodpurse.ui.onboarding
+import android.content.Context
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.*
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.data.Date
@@ -19,8 +21,40 @@ class OnboardViewModel @Inject constructor (
     private val userRepository: UserRepository,
     private val dateRepository: DateRepository,
 ): ViewModel() {
+
     private val _uiState = MutableStateFlow(OnboardUIState(dateOptions = dateOptions()))
     val uiState: StateFlow<OnboardUIState> = _uiState.asStateFlow()
+
+    var isOnboarded: LiveData<Boolean?> = userRepository.isOnboarded
+    var isDeleted: LiveData<Boolean?> = userRepository.isDeleted
+
+
+    fun checkOnboardedStatus() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                async {
+                    userRepository.isOnboarded()
+                    isOnboarded = userRepository.isOnboarded
+                }
+
+            }
+        }
+    }
+    fun checkDeletedStatus(context: Context) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                async {
+                    userRepository.isDeleted(context = context)
+                    isDeleted = userRepository.isDeleted
+                }
+
+            }
+        }
+    }
+
+
+
+
 
     /**
      * Set the quantity [averageDays] for average period length for this onboarding session
@@ -140,4 +174,6 @@ class OnboardViewModel @Inject constructor (
                    crampSeverity: CrampSeverity, sleep: Duration?) {
         saveDate(createDate(date, flow, mood, exerciseLength, exerciseType, crampSeverity, sleep))
     }
+
+
 }

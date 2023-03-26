@@ -1,5 +1,6 @@
 package com.tpp.theperiodpurse
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
@@ -48,10 +49,11 @@ fun NavigationGraph(
     onboardViewModel: OnboardViewModel,
     appViewModel: AppViewModel,
     modifier: Modifier = Modifier,
-    mainActivity: MainActivity,
+    context: Context,
     signIn: () -> Unit
 ) {
     val onboardUIState by onboardViewModel.uiState.collectAsState()
+    val appUiState by appViewModel.uiState.collectAsState()
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -83,7 +85,12 @@ fun NavigationGraph(
         }
 
         composable(route = Screen.Settings.name) {
-            SettingsScreen(appViewModel = appViewModel)
+            SettingsScreen(appViewModel = appViewModel,
+                outController = navController,
+                context = context,
+                onboardUiState = onboardUIState,
+                onboardViewModel = onboardViewModel,
+                appUiState = appUiState)
         }
 
         composable(route = Screen.Cycle.name) {
@@ -144,24 +151,14 @@ fun NavigationGraph(
                     appViewModel.loadData(calendarViewModel)
                 },
                 navigateUp = { navController.navigateUp() },
-                canNavigateBack = navController.previousBackStackEntry != null
+                canNavigateBack = navController.previousBackStackEntry != null,
+                viewModel = onboardViewModel
 //                onCancelButtonClicked = {
 //                    cancelOrderAndNavigateToStart(onboardViewModel, navController)
 //                },
             )
         }
     }
-}
-
-/**
- * Resets the [OnboardUIState] and pops up to [OnboardingScreen.Start]
- */
-private fun cancelOrderAndNavigateToStart(
-    viewModel: OnboardViewModel,
-    navController: NavHostController
-) {
-    viewModel.resetOrder()
-    navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = false)
 }
 
 @Composable
