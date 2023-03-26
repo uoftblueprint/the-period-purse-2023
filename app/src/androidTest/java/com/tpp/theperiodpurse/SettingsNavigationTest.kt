@@ -31,7 +31,7 @@ class SettingsNavigationTest {
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
-            SettingsScreen(outController = navController, navController = navController, context = LocalContext.current, viewModel = null)
+            SettingsScreen(outController = navController, navController = navController, context = LocalContext.current, viewModel = null, onboardUiState = null)
         }
     }
 

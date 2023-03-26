@@ -228,14 +228,15 @@ fun SummaryScreen(
 
 fun getDaysSince(date: String): Int {
 
-    val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("dd/MM/yyyy")
-    var date= date.split(" to ")[0]
+    if (!date.contains("Choose date")){
+        val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        var date= date.split(" to ")[0]
+        val from = LocalDate.parse(date, dateFormatter)
+        val today = LocalDate.now()
+        return ChronoUnit.DAYS.between(today, from).toInt()
+    }
+    return 0
 
-    val from = LocalDate.parse(date, dateFormatter)
-
-    val today = LocalDate.now()
-
-    return ChronoUnit.DAYS.between(today, from).toInt()
 
 }
 

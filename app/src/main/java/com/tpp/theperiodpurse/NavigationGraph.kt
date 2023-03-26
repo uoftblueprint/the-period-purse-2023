@@ -78,7 +78,10 @@ fun NavigationGraph(
         }
 
         composable(route = Screen.Settings.name) {
-            SettingsScreen(context = context, viewModel = viewModel, outController = navController)
+            SettingsScreen(context = context,
+                viewModel = viewModel,
+                outController = navController,
+                onboardUiState = uiState)
         }
 
         composable(route = Screen.Cycle.name) {

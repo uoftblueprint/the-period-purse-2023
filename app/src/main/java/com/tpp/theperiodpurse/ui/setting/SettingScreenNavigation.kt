@@ -28,6 +28,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.data.OnboardUIState
 import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
 
 enum class SettingScreenNavigation(@StringRes val title: Int) {
@@ -76,6 +77,7 @@ fun SettingsScreen(
     navController: NavHostController = rememberNavController(),
     context: Context,
     viewModel: OnboardViewModel?,
+    onboardUiState: OnboardUIState?
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = SettingScreenNavigation.valueOf(
@@ -153,8 +155,8 @@ fun SettingsScreen(
                 )
             }
             composable(route = SettingScreenNavigation.ResetDatabase.name) {
-                if (viewModel != null) {
-                    ResetDatabase(context = context, viewModel = viewModel, navController = navController, outController = outController)
+                if (viewModel != null && onboardUiState != null) {
+                    ResetDatabase(context = context, viewModel = viewModel, navController = navController, outController = outController, onboardUiState = onboardUiState)
                 }
             }
         }
