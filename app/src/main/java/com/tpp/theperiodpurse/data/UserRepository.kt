@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,7 +22,10 @@ class UserRepository(private val userDAO: UserDAO) {
 
     fun setSymptoms(symptoms: List<Symptom>) {
         coroutineScope.launch (Dispatchers.IO) {
-            userDAO.updateSymptoms(symptoms = symptoms, id = 1)
+            val jsonSymptoms = Gson().toJson(symptoms);
+            if (jsonSymptoms != null) {
+                userDAO.updateSymptoms(symptoms = jsonSymptoms, id = 1)
+            }
         }
     }
 

@@ -1,6 +1,5 @@
 package com.tpp.theperiodpurse.data
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
@@ -10,7 +9,7 @@ interface UserDAO {
     @Query("SELECT * FROM users")
     suspend fun getUsers(): List<User>
     @Query("UPDATE users SET symptomsToTrack = :symptoms WHERE id = :id")
-    suspend fun updateSymptoms(id: Int, symptoms: List<Symptom>)
+    suspend fun updateSymptoms(id: Int, symptoms: String)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun save(user: User)
     @Update
