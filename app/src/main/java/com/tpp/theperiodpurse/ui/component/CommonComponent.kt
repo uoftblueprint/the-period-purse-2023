@@ -17,8 +17,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.Screen
-import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.currentRoute
+import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.theme.Red
 import com.tpp.theperiodpurse.ui.theme.Teal
 

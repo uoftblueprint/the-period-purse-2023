@@ -1,6 +1,7 @@
 package com.tpp.theperiodpurse.ui.symptomlog
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
@@ -25,6 +26,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -35,48 +37,50 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.Screen
-import com.tpp.theperiodpurse.data.LogPrompt
-import com.tpp.theperiodpurse.data.LogSquare
 import com.tpp.theperiodpurse.ui.theme.HeaderColor1
 import com.tpp.theperiodpurse.ui.theme.SecondaryFontColor
 import com.tpp.theperiodpurse.ui.theme.SelectedColor1
 import com.kizitonwose.calendar.core.atStartOfMonth
+import com.tpp.theperiodpurse.AppViewModel
+import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.data.*
+import java.sql.Time
+import java.time.*
 import com.tpp.theperiodpurse.ui.calendar.CalendarDayUIState
 import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.Date as Date1
 
 
 @Composable
 fun LogScreen(
-    date: String="0001-01-01",
-    calendarViewModel: CalendarViewModel,
-    navController: NavController
+    date: String = "0001-01-01",
+    navController: NavController,
+    appViewModel: AppViewModel,
+    calendarViewModel: CalendarViewModel
 ) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val day = LocalDate.parse(date)
+        val appUiState by appViewModel.uiState.collectAsState()
 
-        val logPrompts = listOf(
-            LogPrompt.Flow,
-            LogPrompt.Mood,
-            LogPrompt.Sleep,
-            LogPrompt.Cramps,
-            LogPrompt.Exercise,
-            LogPrompt.Notes
-        )
+        val logPrompts: MutableList<LogPrompt> = mutableListOf()
 
-        val logSquarePrompts = listOf( // log prompts that use selectable squares
-            LogPrompt.Flow
-        )
+        for (symptom in appUiState.trackedSymptoms) {
+            (LogPrompt from symptom.nameId)?.let { logPrompts.add(it) }
+        }
 
-        val logViewModel = LogViewModel(logSquarePrompts)
+        (LogPrompt from R.string.notes)?.let { logPrompts.add(it) }
+
+        val logViewModel = LogViewModel(logPrompts)
         val calendarState by calendarViewModel.uiState.collectAsState()
         val dayUIState = calendarState.days[day]
         if (dayUIState != null) {
             logViewModel.populateWithUIState(dayUIState)
         }
+
 
         LogScreenLayout(
             day, navController, logPrompts, logViewModel,
@@ -93,9 +97,53 @@ fun LogScreen(
                     )
                 )
                 navController.navigateUp()
+                if (logViewModel.isFilled()) {
+                    var exercisedDuration: Duration? = null
+                    val excTxt = logViewModel.getText(LogPrompt.Exercise)
+                    if (excTxt != "") {
+                        exercisedDuration = Duration.ofHours(
+                            Time.valueOf(excTxt).hours.toLong()
+                        ).plusMinutes(
+                            Time.valueOf(excTxt).minutes.toLong()
+                        )
+                    }
+                    var sleepDuration: Duration? = null
+                    val sleepTxt = logViewModel.getText(LogPrompt.Sleep)
+                    if (sleepTxt != "") {
+                        sleepDuration = Duration.ofHours(
+                            Time.valueOf(sleepTxt).hours.toLong()
+                        ).plusMinutes(
+                            Time.valueOf(sleepTxt).minutes.toLong()
+                        )
+                    }
+                    Log.d("MOOD CHECK",logViewModel.getSquareSelected(LogPrompt.Mood).toString())
+                    logViewModel.getSelectedMood()?.let { Log.d("MOOD CHECKS", it.displayName) }
+                    appViewModel.saveDate(
+                        Date(
+                            date = Date1.from(
+                                LocalDateTime.of(
+                                    day, LocalDateTime.MIN.toLocalTime()
+                                ).atZone(ZoneId.systemDefault()).toInstant()
+                            ),
+                            flow = logViewModel.getSquareSelected(LogPrompt.Flow)
+                                ?.let { FlowSeverity.getSeverityByDisplayName(it) },
+                            mood = logViewModel.getSelectedMood(),
+                            exerciseLength = exercisedDuration,
+                            exerciseType = logViewModel.getSquareSelected(LogPrompt.Exercise)
+                                ?.let { Exercise.getExerciseByDisplayName(it) },
+                            crampSeverity = logViewModel.getSquareSelected(LogPrompt.Cramps)
+                                ?.let { CrampSeverity.getSeverityByDisplayName(it) },
+                            sleep = sleepDuration,
+                            notes = logViewModel.getText(LogPrompt.Notes)
+                        )
+                    )
+                }
             })
+
     }
 }
+
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -177,24 +225,24 @@ fun LogScreenTopBar(navController: NavController, date: LocalDate) {
                 if (date.minusDays(1) >=
                     YearMonth.now().minusMonths(12).atStartOfMonth())
                     IconButton(onClick = {
-                    navController.navigate(
-                        "%s/%s/%s".format(
-                            Screen.Calendar.name,
-                            Screen.Log.name,
-                            date.minusDays(1).toString()
-                        )
+                        navController.navigate(
+                            "%s/%s/%s".format(
+                                Screen.Calendar.name,
+                                Screen.Log.name,
+                                date.minusDays(1).toString()
+                            )
+                        ) {
+                            popUpTo(Screen.Calendar.name) {
+                                inclusive = false
+                            }
+                        } },
+                        modifier = Modifier
                     ) {
-                        popUpTo(Screen.Calendar.name) {
-                            inclusive = false
-                        }
-                    } },
-                    modifier = Modifier
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Log Back Arrow"
-                    )
-                }
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Log Back Arrow"
+                        )
+                    }
             }
 
             Column(
@@ -235,15 +283,15 @@ fun LogScreenTopBar(navController: NavController, date: LocalDate) {
                                 inclusive = false
                             }
                         }
-                },
-                modifier = Modifier
-                    .semantics { contentDescription = "ClickNextDay" }
+                    },
+                        modifier = Modifier
+                            .semantics { contentDescription = "ClickNextDay" }
                     ) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowForward,
-                        contentDescription = "Log Forward Arrow"
-                    )
-                }
+                        Icon(
+                            imageVector = Icons.Filled.ArrowForward,
+                            contentDescription = "Log Forward Arrow"
+                        )
+                    }
             }
 
         }
@@ -307,7 +355,7 @@ fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
                 logPrompt.icon(tabColor.value)
                 Spacer(Modifier.size(10.dp))
                 Text(
-                    text = logPrompt.title,
+                    text = stringResource(logPrompt.title),
                     fontWeight = FontWeight.Bold,
                     color = tabColor.value,
                     fontSize = 16.sp
@@ -357,8 +405,8 @@ fun LogSelectableSquare(
 
     val squareColor = animateColorAsState(
         targetValue =
-            if (logSquare.description == selected) SelectedColor1
-            else HeaderColor1,
+        if (logSquare.description == selected) SelectedColor1
+        else HeaderColor1,
         animationSpec = tween(250, 0, LinearEasing)
     )
 
@@ -500,5 +548,5 @@ fun LogSelectableSquarePreview() {
 @Preview
 @Composable
 fun SaveButtonPreview() {
-    SaveButton {}
+    SaveButton() {}
 }

@@ -25,7 +25,8 @@ fun sortPeriodHistory(periodHistory: ArrayList<Date>) {
 
     // Sorts dates in ascending order.
     periodHistory.sortWith {
-            date1, date2 -> date1.date.compareTo(date2.date)
+            date1, date2 ->
+        date1.date?.compareTo(date2.date) ?: 0
     }
 }
 
@@ -54,7 +55,7 @@ fun calculateAveragePeriodLength(periodHistory: ArrayList<Date>): Float {
     var consecutiveDays = 1
 
     for (i in 1 until periodHistory.size) {
-        val currDatePlusOne = addOneDay(currDate)
+        val currDatePlusOne = currDate?.let { addOneDay(it) }
 
         if (currDatePlusOne == periodHistory[i].date) {
             consecutiveDays += 1
@@ -93,18 +94,24 @@ fun calculateAverageCycleLength(periodHistory: ArrayList<Date>): Float {
     sortPeriodHistory(periodHistory)
 
     var currDate = periodHistory[0].date
-    var currDatePlusOne = addOneDay(currDate)
+    var currDatePlusOne = currDate?.let { addOneDay(it) }
 
     for (i in 1 until periodHistory.size) {
         if (currDatePlusOne == periodHistory[i].date) {
-            currDatePlusOne = addOneDay(currDatePlusOne)
+            currDatePlusOne = currDatePlusOne?.let { addOneDay(it) }
         } else {
             // Takes the time and subtracts it, then divides to convert from milliseconds to days.
-            val time = (periodHistory[i].date.time - currDate.time) / 86400000
-            cycleLengths.add(time.toInt())
 
-            currDate = periodHistory[i].date
-            currDatePlusOne = addOneDay(currDate)
+            if (periodHistory[i].date != null) {
+
+                val time = ((periodHistory[i].date?.time ?: 0) - (currDate?.time ?: 0)) / 86400000
+                cycleLengths.add(time.toInt())
+
+                currDate = periodHistory[i].date
+                if (currDate != null) {
+                    currDatePlusOne = addOneDay(currDate)
+                }
+            }
         }
     }
     return if (cycleLengths.size == 0) {

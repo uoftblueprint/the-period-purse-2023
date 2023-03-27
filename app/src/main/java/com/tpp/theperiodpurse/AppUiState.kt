@@ -1,10 +1,11 @@
 package com.tpp.theperiodpurse
 
-import android.os.Bundle
-import androidx.activity.compose.setContent
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-// data class
-class AppUiState {
+import com.tpp.theperiodpurse.data.Date
+import com.tpp.theperiodpurse.data.Symptom
 
-}
+// data class
+data class AppUiState (
+    // Preffered Symptoms to be tracked
+    var trackedSymptoms: List<Symptom> = listOf(),
+    var dates: List<Date> = emptyList(),
+)

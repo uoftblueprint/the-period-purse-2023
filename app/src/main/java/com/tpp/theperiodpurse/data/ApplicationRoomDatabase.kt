@@ -6,8 +6,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-@Database(entities=[User::class, Date::class], version = 3, exportSchema = false)
-@TypeConverters(SymptomConverter::class, DateConverter::class, DaysConverter::class)
+@Database(entities=[User::class, Date::class], version = 4, exportSchema = false)
+@TypeConverters(
+    SymptomConverter::class,
+    DateConverter::class,
+    DaysConverter::class,
+    DurationConverter::class
+)
 abstract class ApplicationRoomDatabase: RoomDatabase() {
     abstract fun userDAO(): UserDAO
     abstract fun dateDAO(): DateDAO
@@ -26,6 +31,18 @@ abstract class ApplicationRoomDatabase: RoomDatabase() {
                 INSTANCE = instance
                 return instance
             }
+        }
+        fun clearDatabase(context: Context): Boolean {
+            val instance = Room.databaseBuilder(
+                context.applicationContext,
+                ApplicationRoomDatabase::class.java,
+                "user_database"
+            )
+                .fallbackToDestructiveMigration()
+                .build()
+
+            instance.clearAllTables()
+            return true
         }
     }
 }

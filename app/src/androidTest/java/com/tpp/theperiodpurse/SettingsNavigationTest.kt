@@ -8,48 +8,65 @@ import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import com.tpp.theperiodpurse.ui.setting.SettingScreenNavigation
 import com.tpp.theperiodpurse.ui.setting.SettingsScreen
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import javax.inject.Inject
 
+@HiltAndroidTest
 class SettingsNavigationTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
     private lateinit var navController: TestNavHostController
 
+    @Inject
+    lateinit var appViewModel: AppViewModel
+
+
+    @get:Rule
+    // Used to manage the components' state and is used to perform injection on tests
+    var hiltRule = HiltAndroidRule(this)
+
     @Before
     fun setupNavHost() {
+        hiltRule.inject()
         composeTestRule.setContent {
-            navController =
-                TestNavHostController(LocalContext.current)
+            navController = TestNavHostController(LocalContext.current)
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
-            SettingsScreen(navController = navController)
+            SettingsScreen(
+                outController = navController,
+                context = LocalContext.current,
+                onboardUiState = null,
+                navController = navController,
+                onboardViewModel = null,
+                appViewModel = appViewModel,
+                appUiState = null
+            )
         }
     }
 
     @Test
     fun appNavhost_clickNotifications_navigatesToNotificationsScreen() {
         navController.assertCurrentRouteName(SettingScreenNavigation.Start.name)
-        composeTestRule.onNodeWithStringId(R.string.customize_notifications)
-            .performClick()
+        composeTestRule.onNodeWithStringId(R.string.customize_notifications).performClick()
         navController.assertCurrentRouteName(SettingScreenNavigation.Notification.name)
     }
 
     @Test
     fun appNavhost_clickBackUp_navigatesToBackUpScreen() {
         navController.assertCurrentRouteName(SettingScreenNavigation.Start.name)
-        composeTestRule.onNodeWithStringId(R.string.back_up_account)
-            .performClick()
+        composeTestRule.onNodeWithStringId(R.string.back_up_account).performClick()
         navController.assertCurrentRouteName(SettingScreenNavigation.BackUpAccount.name)
     }
 
     @Test
     fun appNavhost_clickDelete_navigatesToDeleteScreen() {
         navController.assertCurrentRouteName(SettingScreenNavigation.Start.name)
-        composeTestRule.onNodeWithStringId(R.string.delete_account)
-            .performClick()
+        composeTestRule.onNodeWithStringId(R.string.delete_account).performClick()
         navController.assertCurrentRouteName(SettingScreenNavigation.DeleteAccount.name)
     }
 }

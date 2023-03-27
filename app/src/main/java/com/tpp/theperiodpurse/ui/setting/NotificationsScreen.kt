@@ -1,10 +1,14 @@
 package com.tpp.theperiodpurse.ui.setting
 
 
+import android.Manifest
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -26,7 +30,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.data.Alarm
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.MaterialDialogState
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
@@ -37,20 +43,37 @@ import java.util.*
 
 
 
-
 class NotificationsScreen : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            NotificationsLayout(LocalContext.current)
+            val context = LocalContext.current
+            val hasNotificationPermission by remember {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    mutableStateOf(
+                        ContextCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.POST_NOTIFICATIONS
+                        ) == PackageManager.PERMISSION_GRANTED
+                    )
+                } else mutableStateOf(true)
+            }
+
+            NotificationsLayout(
+                LocalContext.current, hasNotificationPermission, temp()
+            )
         }
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+fun temp(){
+
+}
+
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun NotificationsLayout(context: Context){
+fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, appBar: Unit){
     var pickedTime by remember { mutableStateOf(LocalTime.NOON) }
     val formattedTime by remember {
         derivedStateOf {
@@ -59,6 +82,7 @@ fun NotificationsLayout(context: Context){
                 .format(pickedTime)
         }
     }
+    appBar
 
     val timeDialogState = rememberMaterialDialogState()
 
@@ -86,11 +110,9 @@ fun NotificationsLayout(context: Context){
         dialogState = timeDialogState,
         buttons = {
             positiveButton(text = "Ok") {
-                Toast.makeText(
-                    context,
-                    "Clicked ok",
-                    Toast.LENGTH_LONG
-                ).show()
+                if(hasNotificationsPermission){
+                    setAlarm(context, pickedTime)
+                }
             }
             negativeButton(text = "Cancel")
         }
@@ -104,6 +126,28 @@ fun NotificationsLayout(context: Context){
     }
 
 }
+
+@RequiresApi(Build.VERSION_CODES.S)
+fun setAlarm(context: Context, pickedTime: LocalTime){
+    val calendar=Calendar.getInstance().apply {
+        timeInMillis = System.currentTimeMillis()
+    }
+    calendar.apply {
+        set(Calendar.HOUR_OF_DAY,pickedTime.hour)
+        set(Calendar.MINUTE,pickedTime.minute)
+        set(Calendar.SECOND, pickedTime.second)
+    }
+
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val intent = Intent(context, Alarm::class.java)
+    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+    val hasAlarmPermission: Boolean = alarmManager.canScheduleExactAlarms()
+
+    if(hasAlarmPermission){
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+    }
+}
+
 
 @Composable
 private fun TimePicker(
