@@ -176,11 +176,3 @@ fun CycleScreenLayout(
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun CycleScreenPreview() {
-//    ThePeriodPurseTheme {
-//        CycleScreenLayout()
-//    }
-//}
