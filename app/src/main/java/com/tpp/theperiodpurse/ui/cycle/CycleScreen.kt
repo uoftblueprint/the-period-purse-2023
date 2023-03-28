@@ -14,15 +14,23 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.data.calculateAverageCycleLength
+import com.tpp.theperiodpurse.data.calculateAveragePeriodLength
+import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import com.tpp.theperiodpurse.ui.theme.ThePeriodPurseTheme
+
+private var periodLength = (-1).toFloat()
+private var cycleLength = (-1).toFloat()
+
 
 @Composable
 fun CurrentCycleBox(modifier: Modifier = Modifier) {
@@ -47,6 +55,7 @@ fun AverageLengthBox(
     modifier: Modifier = Modifier,
     title: String,
     image: String = "Change this into Image later",
+    length: Float,
     color: Color
 ) {
     Card(
@@ -65,8 +74,16 @@ fun AverageLengthBox(
             Spacer(modifier.height(20.dp))
             Row {
                 Text(
-                    text = stringResource(R.string.log_to_learn),
-                    fontSize = 10.sp,
+                    text = when (length) {
+                        (-1).toFloat() -> stringResource(R.string.log_to_learn)
+                        (-2).toFloat() -> stringResource(R.string.log_to_learn)
+                        else -> "$length Days"
+                    },
+                    fontSize = when (length) {
+                        (-1).toFloat() -> 10.sp
+                        (-2).toFloat() -> 10.sp
+                        else -> 20.sp
+                    },
                     fontWeight = FontWeight(500),
                     modifier = modifier.width(55.dp)
                 )
@@ -100,14 +117,25 @@ fun CycleHistoryBox(modifier: Modifier = Modifier) {
                     .padding(vertical = 15.dp)
                     .fillMaxWidth()
             )
-            Text(text = stringResource(R.string.log_to_learn))
+            Text(text = "TODO")
         }
     }
 }
 
 @Composable
-fun CycleScreenLayout(modifier: Modifier = Modifier) {
+fun CycleScreenLayout(
+    appViewModel: AppViewModel,
+    calendarViewModel: CalendarViewModel,
+    modifier: Modifier = Modifier
+) {
+    val dates = ArrayList(appViewModel.getDates())
+
+    periodLength = calculateAveragePeriodLength(dates)
+    cycleLength = calculateAverageCycleLength(dates)
+
     ThePeriodPurseTheme {
+        appViewModel.loadData(calendarViewModel)
+
         val bg = painterResource(R.drawable.colourwatercolour)
         Box {
             Image(
@@ -121,6 +149,7 @@ fun CycleScreenLayout(modifier: Modifier = Modifier) {
             Column(
                 modifier
                     .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
                     .fillMaxHeight()
                     .padding(
                         horizontal = 20.dp, vertical = 25.dp
@@ -130,11 +159,15 @@ fun CycleScreenLayout(modifier: Modifier = Modifier) {
                 Spacer(modifier.height(30.dp))
                 Row {
                     AverageLengthBox(
-                        title = stringResource(R.string.avg_period_len), color = Color(0xFFFEDBDB)
+                        title = stringResource(R.string.avg_period_len),
+                        color = Color(0xFFFEDBDB),
+                        length = periodLength
                     )
                     Spacer(modifier.width(16.dp))
                     AverageLengthBox(
-                        title = stringResource(R.string.avg_cycle_len), color = Color(0xFFBAE0D8)
+                        title = stringResource(R.string.avg_cycle_len),
+                        color = Color(0xFFBAE0D8),
+                        length = cycleLength
                     )
                 }
                 Spacer(modifier.height(30.dp))
@@ -144,10 +177,10 @@ fun CycleScreenLayout(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun CycleScreenPreview() {
-    ThePeriodPurseTheme {
-        CycleScreenLayout()
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun CycleScreenPreview() {
+//    ThePeriodPurseTheme {
+//        CycleScreenLayout()
+//    }
+//}
