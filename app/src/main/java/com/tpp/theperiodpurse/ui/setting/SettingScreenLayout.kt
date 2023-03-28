@@ -39,7 +39,6 @@ import com.tpp.theperiodpurse.ui.education.TermsAndPrivacyFooter
 import com.tpp.theperiodpurse.ui.education.teal
 import androidx.core.content.ContextCompat
 import com.tpp.theperiodpurse.AppViewModel
-import com.tpp.theperiodpurse.data.DateRepository
 
 
 @Composable
@@ -51,6 +50,35 @@ fun SettingScreenLayout(
     appViewModel: AppViewModel = viewModel()
 ){
     val symptoms = appViewModel.getTrackedSymptoms()
+    val context = LocalContext.current
+    var hasAlarmPermission by remember {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            mutableStateOf(
+                ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+            )
+        } else mutableStateOf(true)
+    }
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            hasAlarmPermission = isGranted
+//                   if (!isGranted) {
+//                       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+////                           shouldShowRequestPermissionRationale(SCHEDULE_EXACT_ALARM)
+//                       }
+//                   }
+        }
+    )
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        SideEffect {
+            launcher.launch(SCHEDULE_EXACT_ALARM)
+        }
+    }
+
    Column(modifier = modifier
        .fillMaxSize()
        .padding(10.dp)
@@ -70,7 +98,6 @@ fun SettingScreenLayout(
            fontWeight = FontWeight.Bold
        )
        Row(modifier = modifier.padding(20.dp)) {
-           var checked by remember { mutableStateOf(false) }
            Column (modifier = Modifier) {
                Text(text = stringResource(
                    R.string.remind_me_to_log_symptoms),
@@ -92,34 +119,6 @@ fun SettingScreenLayout(
                    uncheckedThumbColor = Color.DarkGray
                )
            )
-           val context = LocalContext.current
-           var hasAlarmPermission by remember {
-               if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                   mutableStateOf(
-                       ContextCompat.checkSelfPermission(
-                           context,
-                           Manifest.permission.POST_NOTIFICATIONS
-                       ) == PackageManager.PERMISSION_GRANTED
-                   )
-               } else mutableStateOf(true)
-           }
-           val launcher = rememberLauncherForActivityResult(
-               contract = ActivityResultContracts.RequestPermission(),
-               onResult = { isGranted ->
-                   hasAlarmPermission = isGranted
-//                   if (!isGranted) {
-//                       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-////                           shouldShowRequestPermissionRationale(SCHEDULE_EXACT_ALARM)
-//                       }
-//                   }
-               }
-           )
-           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-               SideEffect {
-                   launcher.launch(SCHEDULE_EXACT_ALARM)
-               }
-           }
-
        }
        Divider(modifier = Modifier.padding(start= 10.dp, end = 10.dp))
 
@@ -220,7 +219,6 @@ fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter,
                          contentDescription: String, ischecked: Boolean,
                          symptom: Symptom, appViewModel: AppViewModel) {
 
-//    println(appViewModel.isSymptomChecked(symptom))
     val color = if (appViewModel.isSymptomChecked(symptom)) Color(teal) else Color.White
     Column(
         modifier = modifier
@@ -265,6 +263,7 @@ fun NavigateButton(text: String, onClicked: () -> Unit ){
 
     }
 }
+
 
 /**
  * Preview for Settings Home Page

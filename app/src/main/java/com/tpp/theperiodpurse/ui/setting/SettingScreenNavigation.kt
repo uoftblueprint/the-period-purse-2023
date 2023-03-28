@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -22,7 +21,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -33,8 +31,6 @@ import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.OnboardUIState
 import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
-import com.tpp.theperiodpurse.data.Symptom
-import dagger.hilt.android.internal.Contexts.getApplication
 
 enum class SettingScreenNavigation(@StringRes val title: Int) {
     Start(title = R.string.settings_home), Notification(title = R.string.customize_notifications), BackUpAccount(
@@ -91,14 +87,6 @@ fun SettingsScreen(
         backStackEntry?.destination?.route ?: SettingScreenNavigation.Start.name
     )
 
-    // use appViewModel.getTrackedSymptoms to get a list of symptoms
-    // use appViewModel.setTrackedSymptoms to set the symptoms to a new list of symptoms
-    // remove this line below after using the appViewModel
-    if (appViewModel != null) {
-        Log.d("tracked symptoms", appViewModel.getTrackedSymptoms().toString())
-    }
-    // Log.d("tracked symptoms", appViewModel.getTrackedSymptoms().toString())
-
     Scaffold(
     ) { innerPadding ->
         Image(
@@ -143,6 +131,7 @@ fun SettingsScreen(
                         )
                     } else mutableStateOf(true)
                 }
+
                 NotificationsLayout(
                     context = context,
                     hasNotificationPermission,

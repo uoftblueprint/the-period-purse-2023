@@ -1,8 +1,6 @@
 package com.tpp.theperiodpurse.data
 
 import android.content.Context
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
@@ -26,6 +24,12 @@ class UserRepository(private val userDAO: UserDAO) {
             if (jsonSymptoms != null) {
                 userDAO.updateSymptoms(symptoms = jsonSymptoms, id = 1)
             }
+        }
+    }
+
+    fun setReminders(allowReminders: Boolean) {
+        coroutineScope.launch (Dispatchers.IO) {
+            userDAO.updateReminders(id = 1, allowReminders)
         }
     }
 

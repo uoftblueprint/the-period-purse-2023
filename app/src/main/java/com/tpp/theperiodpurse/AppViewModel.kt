@@ -1,7 +1,6 @@
 package com.tpp.theperiodpurse
 
 import android.util.Log
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tpp.theperiodpurse.data.Date
@@ -29,6 +28,7 @@ class AppViewModel @Inject constructor (
 ): ViewModel() {
     private val _uiState = MutableStateFlow(AppUiState())
     val uiState: StateFlow<AppUiState> = _uiState.asStateFlow()
+
 
     fun loadData(calendarViewModel: CalendarViewModel) {
         val trackedSymptoms: MutableList<Symptom> = mutableListOf()
@@ -124,6 +124,7 @@ class AppViewModel @Inject constructor (
     fun toggleAllowReminders(){
         val currentReminderState = _uiState.value.allowReminders
         _uiState.update { currentState -> currentState.copy(allowReminders = !currentReminderState)}
+        userRepository.setReminders(!currentReminderState)
     }
 
     fun saveDate(date: Date) {

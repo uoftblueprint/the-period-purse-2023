@@ -10,6 +10,8 @@ interface UserDAO {
     suspend fun getUsers(): List<User>
     @Query("UPDATE users SET symptomsToTrack = :symptoms WHERE id = :id")
     suspend fun updateSymptoms(id: Int, symptoms: String)
+    @Query("UPDATE users SET allowReminders = :allowReminder WHERE id = :id")
+    suspend fun updateReminders(id: Int, allowReminder: Boolean)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun save(user: User)
     @Update
