@@ -227,7 +227,7 @@ fun CalendarScreenLayout(
                     modifier = Modifier
                         .padding(horizontal = 12.dp)
                         .semantics { contentDescription = "Calendar" },
-                    contentPadding = PaddingValues(bottom = 66.dp),
+                    contentPadding = PaddingValues(bottom = 120.dp),
                     state = state,
                     monthHeader = { month ->
                         MonthHeader(month)
