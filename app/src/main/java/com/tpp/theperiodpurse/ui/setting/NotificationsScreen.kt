@@ -31,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.Alarm
 import com.vanpra.composematerialdialogs.MaterialDialog
@@ -43,7 +44,7 @@ import java.util.*
 
 
 
-class NotificationsScreen : ComponentActivity() {
+class NotificationsScreen(private val appViewModel: AppViewModel) : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
