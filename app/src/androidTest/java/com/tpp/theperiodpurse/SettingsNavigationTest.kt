@@ -26,7 +26,7 @@ class SettingsNavigationTest {
 
 
     @get:Rule
-    // Used to manage the components' state and is used to perform injection on tests
+    // Used to manage the  components' state and is used to perform injection on tests
     var hiltRule = HiltAndroidRule(this)
 
     @Before
@@ -39,12 +39,13 @@ class SettingsNavigationTest {
             )
             SettingsScreen(
                 outController = navController,
-                context = LocalContext.current,
-                onboardUiState = null,
                 navController = navController,
-                onboardViewModel = null,
+                context = LocalContext.current,
                 appViewModel = appViewModel,
-                appUiState = null
+                onboardUiState = null,
+                onboardViewModel = null,
+                appUiState = null,
+                calUiState = null
             )
         }
     }

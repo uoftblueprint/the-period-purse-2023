@@ -46,6 +46,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.dp
 
 
 @AndroidEntryPoint
@@ -287,8 +289,16 @@ fun ScreenApp(
                         },
                         { /* TODO: Go to logging page for multiple dates */ },
                         onExit = { loggingOptionsVisible = false },
-                        modifier = modifier.padding(innerPadding)
+                        modifier = modifier.padding(bottom = 64.dp)
                     )
+                }
+            }
+            Box(
+                contentAlignment = Alignment.BottomCenter,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                if (currentRoute(navController) in Screen.values().map { it.name }) {
+                    BottomNavigation(navController = navController)
                 }
             }
         }
