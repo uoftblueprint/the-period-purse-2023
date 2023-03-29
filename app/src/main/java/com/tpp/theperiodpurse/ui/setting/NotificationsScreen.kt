@@ -62,7 +62,7 @@ class NotificationsScreen(private val appViewModel: AppViewModel) : ComponentAct
             }
 
             NotificationsLayout(
-                LocalContext.current, hasNotificationPermission, temp(), true
+                LocalContext.current, hasNotificationPermission, temp(), appViewModel
             )
         }
     }
@@ -74,7 +74,7 @@ fun temp(){
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, appBar: Unit, allowNotifications: Boolean = true){
+fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, appBar: Unit, appViewModel: AppViewModel){
     var pickedTime by remember { mutableStateOf(LocalTime.NOON) }
     val formattedTime by remember {
         derivedStateOf {
@@ -111,9 +111,13 @@ fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, a
         dialogState = timeDialogState,
         buttons = {
             positiveButton(text = "Ok") {
-                if(hasNotificationsPermission && allowNotifications){
-                    setAlarm(context, pickedTime)
-                    println("alarm set")
+                if(hasNotificationsPermission){
+                    if(appViewModel.getAllowReminders()){
+                        setAlarm(context, pickedTime)
+                        println("alarm set")
+                    } else {
+                        println("didn't work")
+                    }
                 }
                 else {println("alarm not set")}
             }

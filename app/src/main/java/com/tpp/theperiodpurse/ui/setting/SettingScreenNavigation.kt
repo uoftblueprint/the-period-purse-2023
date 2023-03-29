@@ -131,20 +131,22 @@ fun SettingsScreen(
                         )
                     } else mutableStateOf(true)
                 }
-                var allowReminders = false
-                if (appViewModel != null){
-                    allowReminders = appViewModel.getAllowReminders()
+//                var allowReminders = false
+//                if (appViewModel != null){
+//                    allowReminders = appViewModel.getAllowReminders()
+//                }
+                if (appViewModel != null) {
+                    NotificationsLayout(
+                        context = context,
+                        hasNotificationPermission,
+                        appBar = SettingAppBar(
+                            currentScreen = currentScreen.name,
+                            canNavigateBack = navController.previousBackStackEntry != null,
+                            navigateUp = { navController.navigateUp() },
+                            color = Color.Transparent),
+                        appViewModel
+                    )
                 }
-                NotificationsLayout(
-                    context = context,
-                    hasNotificationPermission,
-                    appBar = SettingAppBar(
-                        currentScreen = currentScreen.name,
-                        canNavigateBack = navController.previousBackStackEntry != null,
-                        navigateUp = { navController.navigateUp() },
-                        color = Color.Transparent),
-                    allowNotifications = allowReminders
-                )
             }
             composable(route = SettingScreenNavigation.BackUpAccount.name) {
                 BackUpAccountScreen()
