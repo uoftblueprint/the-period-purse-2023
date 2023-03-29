@@ -47,6 +47,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 
 
 @AndroidEntryPoint
@@ -223,11 +224,6 @@ fun ScreenApp(
             skipOnboarding = (isOnboarded as Boolean)
         }
         Scaffold(
-            bottomBar = {
-                if (currentRoute(navController) in Screen.values().map { it.name }) {
-                    BottomNavigation(navController = navController)
-                }
-            },
             floatingActionButton = {
                 FloatingActionButton(
                     navController = navController,
@@ -271,6 +267,14 @@ fun ScreenApp(
                         onExit = { loggingOptionsVisible = false },
                         modifier = modifier.padding(innerPadding)
                     )
+                }
+            }
+            Box(
+                contentAlignment = Alignment.BottomCenter,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                if (currentRoute(navController) in Screen.values().map { it.name }) {
+                    BottomNavigation(navController = navController)
                 }
             }
         }
