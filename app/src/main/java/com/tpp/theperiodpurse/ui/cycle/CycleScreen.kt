@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -128,14 +129,16 @@ fun CycleScreenLayout(
     calendarViewModel: CalendarViewModel,
     modifier: Modifier = Modifier
 ) {
-    val dates = ArrayList(appViewModel.getDates())
 
-    periodLength = calculateAveragePeriodLength(dates)
-    cycleLength = calculateAverageCycleLength(dates)
+    LaunchedEffect(Unit) {
+        appViewModel.loadData(calendarViewModel)
+        val dates = ArrayList(appViewModel.getDates())
+
+        periodLength = calculateAveragePeriodLength(dates)
+        cycleLength = calculateAverageCycleLength(dates)
+    }
 
     ThePeriodPurseTheme {
-        appViewModel.loadData(calendarViewModel)
-
         val bg = painterResource(R.drawable.colourwatercolour)
         Box {
             Image(
