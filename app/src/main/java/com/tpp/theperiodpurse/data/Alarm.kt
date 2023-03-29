@@ -37,7 +37,6 @@ class Alarm: BroadcastReceiver() {
             .setContentText(description)
             .setSmallIcon(R.drawable.app_logo)
         notificationManager.notify(1, builder.build())
-        println("yay")
     }
 
 }

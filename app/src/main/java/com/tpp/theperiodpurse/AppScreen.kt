@@ -203,6 +203,7 @@ fun ScreenApp(
     skipDatabase: Boolean = false,
     skipOnboarding: Boolean = false,
     context: Context,
+    hasNotificationsPermissions: Boolean = false,
 
 ) {
     appViewModel.loadData(calendarViewModel)

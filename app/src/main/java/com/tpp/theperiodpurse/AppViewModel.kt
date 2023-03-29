@@ -127,6 +127,11 @@ class AppViewModel @Inject constructor (
         userRepository.setReminders(!currentReminderState)
     }
 
+    fun setAllowReminders(){
+        _uiState.update { currentState -> currentState.copy(allowReminders = true)}
+        userRepository.setReminders(true)
+    }
+
     fun saveDate(date: Date) {
         dateRepository.addDate(date)
     }

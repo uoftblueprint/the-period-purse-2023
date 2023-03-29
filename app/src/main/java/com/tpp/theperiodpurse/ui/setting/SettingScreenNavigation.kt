@@ -131,7 +131,10 @@ fun SettingsScreen(
                         )
                     } else mutableStateOf(true)
                 }
-
+                var allowReminders = false
+                if (appViewModel != null){
+                    allowReminders = appViewModel.getAllowReminders()
+                }
                 NotificationsLayout(
                     context = context,
                     hasNotificationPermission,
@@ -139,7 +142,8 @@ fun SettingsScreen(
                         currentScreen = currentScreen.name,
                         canNavigateBack = navController.previousBackStackEntry != null,
                         navigateUp = { navController.navigateUp() },
-                        color = Color.Transparent)
+                        color = Color.Transparent),
+                    allowNotifications = allowReminders
                 )
             }
             composable(route = SettingScreenNavigation.BackUpAccount.name) {
