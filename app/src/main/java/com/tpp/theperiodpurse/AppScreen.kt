@@ -105,7 +105,6 @@ class MainActivity : ComponentActivity() {
                 if (mAuth.currentUser == null) {
                     Application(context = applicationContext, signIn = { signIn() } )
                 } else {
-//                val user: FirebaseUser = mAuth.currentUser!!
                     Application(context = applicationContext, signIn = { signIn() })
                 }
             }
