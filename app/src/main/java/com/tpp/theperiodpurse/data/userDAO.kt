@@ -12,6 +12,10 @@ interface UserDAO {
     suspend fun updateSymptoms(id: Int, symptoms: String)
     @Query("UPDATE users SET allowReminders = :allowReminder WHERE id = :id")
     suspend fun updateReminders(id: Int, allowReminder: Boolean)
+    @Query("UPDATE users SET reminderTime = :time WHERE id = :id")
+    suspend fun updateReminderTime(id: Int, time: String)
+    @Query("UPDATE users SET reminderFreq = :freq WHERE id = :id")
+    suspend fun updateReminderFreq(id: Int, freq: String)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun save(user: User)
     @Update

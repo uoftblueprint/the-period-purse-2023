@@ -33,6 +33,18 @@ class UserRepository(private val userDAO: UserDAO) {
         }
     }
 
+    fun setReminderTime(time: String) {
+        coroutineScope.launch (Dispatchers.IO) {
+            userDAO.updateReminderTime(id = 1, time)
+        }
+    }
+
+    fun setReminderFreq(freq: String) {
+        coroutineScope.launch (Dispatchers.IO) {
+            userDAO.updateReminderFreq(id = 1, freq)
+        }
+    }
+
     suspend fun getUser(id: Int): User {
         return userDAO.get(id)
     }
