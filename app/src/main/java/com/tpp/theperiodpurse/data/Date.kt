@@ -7,8 +7,7 @@ import java.util.Date
 
 @Entity(tableName = "dates")
 data class Date (
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    @PrimaryKey
     @TypeConverters(DaysConverter::class)
     val date: Date?,
     val flow: FlowSeverity?,
