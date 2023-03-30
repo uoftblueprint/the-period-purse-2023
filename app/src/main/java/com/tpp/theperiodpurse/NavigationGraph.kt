@@ -96,7 +96,6 @@ fun NavigationGraph(
         composable(route = Screen.Cycle.name) {
             CycleScreenLayout(
                 appViewModel = appViewModel,
-                calendarViewModel = calendarViewModel
             )
         }
 

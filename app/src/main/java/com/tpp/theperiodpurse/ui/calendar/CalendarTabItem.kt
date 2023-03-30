@@ -16,6 +16,6 @@ open class CalendarTabItem(var title: String, var screen: ComposableNavFun) {
         "Calendar",
         {calendarViewModel, navController, appViewModel -> CalendarScreenLayout(
             calendarViewModel = calendarViewModel, navController, appViewModel = appViewModel) })
-    object CycleTab : CalendarTabItem("Cycle", { calendarViewModel, _, appViewModel ->
-        CycleScreenLayout(appViewModel = appViewModel, calendarViewModel = calendarViewModel) })
+    object CycleTab : CalendarTabItem("Cycle", { _, _, appViewModel ->
+        CycleScreenLayout(appViewModel = appViewModel) })
 }

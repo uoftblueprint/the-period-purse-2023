@@ -16,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -26,7 +25,6 @@ import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.calculateAverageCycleLength
 import com.tpp.theperiodpurse.data.calculateAveragePeriodLength
-import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import com.tpp.theperiodpurse.ui.theme.ThePeriodPurseTheme
 
 private var periodLength = (-1).toFloat()
@@ -126,17 +124,12 @@ fun CycleHistoryBox(modifier: Modifier = Modifier) {
 @Composable
 fun CycleScreenLayout(
     appViewModel: AppViewModel,
-    calendarViewModel: CalendarViewModel,
     modifier: Modifier = Modifier
 ) {
+    val dates = ArrayList(appViewModel.getDates())
 
-    LaunchedEffect(Unit) {
-        appViewModel.loadData(calendarViewModel)
-        val dates = ArrayList(appViewModel.getDates())
-
-        periodLength = calculateAveragePeriodLength(dates)
-        cycleLength = calculateAverageCycleLength(dates)
-    }
+    periodLength = calculateAveragePeriodLength(dates)
+    cycleLength = calculateAverageCycleLength(dates)
 
     ThePeriodPurseTheme {
         val bg = painterResource(R.drawable.colourwatercolour)
