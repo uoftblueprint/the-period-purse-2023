@@ -242,11 +242,6 @@ fun ScreenApp(
             skipOnboarding = (isOnboarded as Boolean)
         }
         Scaffold(
-            bottomBar = {
-                if (currentRoute(navController) in Screen.values().map { it.name }) {
-                    BottomNavigation(navController = navController)
-                }
-            },
             floatingActionButton = {
                 FloatingActionButton(
                     navController = navController,
