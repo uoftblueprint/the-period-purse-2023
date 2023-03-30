@@ -1,6 +1,7 @@
 
 package com.tpp.theperiodpurse.ui.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
@@ -53,42 +54,48 @@ private fun BottomNavigation(
     modifier: Modifier = Modifier,
     navItemModifier: Modifier = Modifier
 ) {
-    Box {
-        BottomNavigation(
-            backgroundColor = Color.White,
-            modifier = modifier.align(Alignment.BottomCenter)
-        ) {
+    Column() {
+        Box {
+            BottomNavigation(
+                backgroundColor = Color.White,
+                modifier = modifier.align(Alignment.BottomCenter)
+            ) {
 
-            BottomNavigationItem(
-                icon = {
-                    Icon(
-                        painterResource(R.drawable.info_black_24dp),
-                        contentDescription = null
-                    )
-                },
-                label = { Text(Screen.Learn.name) },
-                selected = false,
-                onClick = onInfoNavigationClicked,
-                modifier = navItemModifier
-            )
+                BottomNavigationItem(
+                    icon = {
+                        Icon(
+                            painterResource(R.drawable.info_black_24dp),
+                            contentDescription = null
+                        )
+                    },
+                    label = { Text(Screen.Learn.name) },
+                    selected = false,
+                    onClick = onInfoNavigationClicked,
+                    modifier = navItemModifier
+                )
 
-            Spacer(modifier = modifier.width(58.dp))
+                Spacer(modifier = modifier.width(58.dp))
 
-            BottomNavigationItem(
-                icon = {
-                    Icon(
-                        painterResource(R.drawable.settings_black_24dp),
-                        contentDescription = null
-                    )
-                },
-                label = { Text(Screen.Settings.name) },
-                selected = false,
-                onClick = onSettingsNavigationClicked,
-                modifier = navItemModifier
-            )
+                BottomNavigationItem(
+                    icon = {
+                        Icon(
+                            painterResource(R.drawable.settings_black_24dp),
+                            contentDescription = null
+                        )
+                    },
+                    label = { Text(Screen.Settings.name) },
+                    selected = false,
+                    onClick = onSettingsNavigationClicked,
+                    modifier = navItemModifier
+                )
+            }
         }
-
-
+        Box (
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .height(6.dp)
+        ) {}
     }
 }
 @Composable
