@@ -96,7 +96,9 @@ fun NavigationGraph(
         }
 
         composable(route = Screen.Cycle.name) {
-            CycleScreenLayout()
+            CycleScreenLayout(
+                appViewModel = appViewModel,
+            )
         }
 
         // Education Screens
