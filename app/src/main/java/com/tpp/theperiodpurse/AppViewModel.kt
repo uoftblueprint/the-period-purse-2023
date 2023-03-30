@@ -132,6 +132,24 @@ class AppViewModel @Inject constructor (
         userRepository.setReminders(true)
     }
 
+    fun getReminderTime(): String{
+        return uiState.value.reminderTime
+    }
+
+    fun setReminderTime(time: String){
+        _uiState.update { currentState -> currentState.copy(reminderTime = time) }
+        userRepository.setReminderTime(time)
+    }
+
+    fun setReminderFreq(freq: String){
+        _uiState.update { currentState -> currentState.copy(reminderFrequency = freq) }
+        userRepository.setReminderFreq(freq)
+    }
+
+    fun getReminderFreq(): String{
+        return uiState.value.reminderFrequency
+    }
+
     fun saveDate(date: Date) {
         dateRepository.addDate(date)
     }

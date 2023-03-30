@@ -8,7 +8,7 @@ data class AppUiState (
     // Preffered Symptoms to be tracked
     var trackedSymptoms: List<Symptom> = listOf(),
     val allowReminders: Boolean = false,
-    val reminderFrequency: String = "",
-    val reminderTime: String = "",
+    val reminderFrequency: String = "Every day",
+    val reminderTime: String = "12:00 PM",
     var dates: List<Date> = emptyList(),
 )

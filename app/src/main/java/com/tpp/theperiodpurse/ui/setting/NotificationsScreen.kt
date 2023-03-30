@@ -75,14 +75,11 @@ fun temp(){
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, appBar: Unit, appViewModel: AppViewModel){
-    var pickedTime by remember { mutableStateOf(LocalTime.NOON) }
-    val formattedTime by remember {
-        derivedStateOf {
-            DateTimeFormatter
-                .ofPattern("hh:mm")
-                .format(pickedTime)
-        }
-    }
+
+    val formatter = DateTimeFormatter.ofPattern("h:mm a") // define the format of the input string
+    var formattedTime = appViewModel.getReminderTime()
+    var pickedTime = LocalTime.parse(formattedTime, formatter)
+
     appBar
 
     val timeDialogState = rememberMaterialDialogState()
@@ -97,11 +94,11 @@ fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, a
         Text(text = stringResource(id = R.string.remind_me_to_log_symptoms),
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(15.dp, top = 60.dp))
-        Text(text = "We'll remind you to log your symptoms.",
+        Text(text = stringResource(id = R.string.reminder_description),
             modifier = Modifier.padding(start = 15.dp),
             fontWeight = FontWeight.Light)
         Divider(color = Color.Gray, thickness = 0.7.dp)
-        Expandable()
+        Expandable(appViewModel)
         Divider(color = Color.Gray, thickness = 0.7.dp)
         TimePicker(timeDialogState, formattedTime)
         Divider(color = Color.Gray, thickness = 0.7.dp)
@@ -111,6 +108,8 @@ fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, a
         dialogState = timeDialogState,
         buttons = {
             positiveButton(text = "Ok") {
+                formattedTime = pickedTime.format(DateTimeFormatter.ofPattern("h:mm a"))
+                appViewModel.setReminderTime(formattedTime)
                 if(hasNotificationsPermission){
                     if(appViewModel.getAllowReminders()){
                         setAlarm(context, pickedTime)
@@ -125,7 +124,7 @@ fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, a
         }
     ) {
         timepicker(
-            initialTime = LocalTime.NOON,
+            initialTime = pickedTime,
             title = "Pick a time",
         ) {
             pickedTime = it
@@ -181,7 +180,7 @@ private fun TimePicker(
                     .padding(bottom = extraPadding.coerceAtLeast(0.dp))
                     .align(Alignment.CenterVertically)
             ) {
-                Text(text = "Reminder Time", modifier = Modifier.padding(start = 5.dp))
+                Text(text = stringResource(id = R.string.reminder_time), modifier = Modifier.padding(start = 5.dp))
                 Button(colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
                     elevation = null,
                     modifier = Modifier
@@ -204,7 +203,7 @@ private fun TimePicker(
 
 
 @Composable
-fun Expandable(){
+fun Expandable(appViewModel: AppViewModel){
     var repeatExpanded by remember {
         mutableStateOf(false)
     }
@@ -220,17 +219,17 @@ fun Expandable(){
                 .background(Color.White)
                 .fillMaxWidth()
         ) {
-            val radioOptions = listOf("Every Day", "Every Week", "Every month")
-            val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[2]) }
+            val radioOptions = listOf("Every day", "Every week", "Every month")
+            val selectedOption = appViewModel.getReminderFreq()
             Column(
                 modifier = Modifier
                     .weight(1f)
                     .padding(bottom = extraPadding.coerceAtLeast(0.dp))
                     .align(Alignment.CenterVertically)
             ) {
-                Text(text = "Repeat", modifier = Modifier.padding(start = 5.dp))
+                Text(text = stringResource(id = R.string.repeat), modifier = Modifier.padding(start = 5.dp))
                 if (repeatExpanded) {
-                    RadioButtons(radioOptions, selectedOption, onOptionSelected)
+                    RadioButtons(radioOptions, selectedOption, appViewModel)
                 }
 
             }
@@ -252,7 +251,7 @@ fun Expandable(){
 }
 
 @Composable
-fun RadioButtons(radioOptions: List<String>, selectedOption: String, onOptionSelected: (String) -> Unit) {
+fun RadioButtons(radioOptions: List<String>, selectedOption: String, appViewModel: AppViewModel) {
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -265,14 +264,17 @@ fun RadioButtons(radioOptions: List<String>, selectedOption: String, onOptionSel
                         .fillMaxWidth()
                         .selectable(
                             selected = (text == selectedOption),
-                            onClick = { onOptionSelected(text) }
+                            onClick = {
+                                //onOptionSelected(text)
+                                appViewModel.setReminderFreq(text)
+                            }
                         )
                         .padding(horizontal = 15.dp)
                 ) {
                     RadioButton(
                         selected = (text == selectedOption), modifier = Modifier.padding(all = Dp(value = 8F)),
                         onClick = {
-                            onOptionSelected(text)
+                            appViewModel.setReminderFreq(text)
                         }
                     )
                     Text(

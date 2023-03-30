@@ -79,6 +79,8 @@ fun SettingScreenLayout(
         }
     }
 
+    val time = appViewModel.getReminderFreq() + " at " + appViewModel.getReminderTime()
+
    Column(modifier = modifier
        .fillMaxSize()
        .padding(10.dp)
@@ -103,7 +105,7 @@ fun SettingScreenLayout(
                    R.string.remind_me_to_log_symptoms),
                    fontWeight = FontWeight.Bold)
                Spacer(modifier = modifier.padding(3.dp))
-               Text(text = stringResource(R.string.sample_notification),
+               Text(text = time,
                    modifier = Modifier.padding(start = 5.dp),
                    color = Color.Gray,
                    fontSize = 15.sp,
