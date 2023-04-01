@@ -89,7 +89,11 @@ class AppViewModel @Inject constructor (
         return uiState.value.trackedSymptoms
     }
 
-    fun setTackedSymptoms(trackedSymptoms: ArrayList<Symptom>) {
+    fun getDates() : List<Date> {
+        return uiState.value.dates
+    }
+
+    fun setTrackedSymptoms(trackedSymptoms: ArrayList<Symptom>) {
         _uiState.update { currentState ->
             currentState.copy(trackedSymptoms = trackedSymptoms)
         }
@@ -103,11 +107,11 @@ class AppViewModel @Inject constructor (
         val sympCopy = symptoms.toMutableList()
         if(symptoms.contains(symptom)){
             sympCopy.remove(symptom)
-            setTackedSymptoms(sympCopy as ArrayList<Symptom>)
+            setTrackedSymptoms(sympCopy as ArrayList<Symptom>)
             return false
         } else {
             sympCopy.add(symptom)
-            setTackedSymptoms(sympCopy as ArrayList<Symptom>)
+            setTrackedSymptoms(sympCopy as ArrayList<Symptom>)
             return true
         }
     }
