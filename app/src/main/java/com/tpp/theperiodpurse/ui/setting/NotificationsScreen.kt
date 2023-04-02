@@ -34,6 +34,8 @@ import androidx.core.content.ContextCompat
 import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.Alarm
+import com.tpp.theperiodpurse.data.MonthlyAlarm
+import com.tpp.theperiodpurse.data.WeeklyAlarm
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.MaterialDialogState
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
@@ -112,7 +114,7 @@ fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, a
                 appViewModel.setReminderTime(formattedTime)
                 if(hasNotificationsPermission){
                     if(appViewModel.getAllowReminders()){
-                        setAlarm(context, pickedTime)
+                        setAlarm(context, pickedTime, appViewModel)
                         println("alarm set")
                     } else {
                         println("didn't work")
@@ -134,7 +136,9 @@ fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, a
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
-fun setAlarm(context: Context, pickedTime: LocalTime){
+fun setAlarm(context: Context, pickedTime: LocalTime, appViewModel: AppViewModel){
+//    Alarm(appViewModel)
+
     val calendar=Calendar.getInstance().apply {
         timeInMillis = System.currentTimeMillis()
     }
@@ -145,13 +149,24 @@ fun setAlarm(context: Context, pickedTime: LocalTime){
     }
 
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    val intent = Intent(context, Alarm::class.java)
+//    val intent = Intent(context, Alarm::class.java)
+
+    val freq = appViewModel.getReminderFreq()
+    lateinit var intent: Intent
+    if (freq == "Every day"){
+        intent = Intent(context, Alarm::class.java)
+    } else if(freq == "Every week"){
+        intent = Intent(context, WeeklyAlarm::class.java)
+    } else if (freq == "Every month"){
+        intent = Intent(context, MonthlyAlarm::class.java)
+    }
     val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
     val hasAlarmPermission: Boolean = alarmManager.canScheduleExactAlarms()
 
     if(hasAlarmPermission){
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
     }
+
 }
 
 
