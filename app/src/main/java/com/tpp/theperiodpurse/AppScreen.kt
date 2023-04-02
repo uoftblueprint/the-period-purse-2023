@@ -271,7 +271,7 @@ fun ScreenApp(
                 contentAlignment = Alignment.BottomCenter,
                 modifier = Modifier.fillMaxSize()
             ) {
-                if (currentRoute(navController) in Screen.values().map { it.name }) {
+                if (currentRoute(navController) in screensWithNavigationBar) {
                     BottomNavigation(navController = navController)
                 }
             }
