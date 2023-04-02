@@ -47,6 +47,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.dp
 
 
 @AndroidEntryPoint
@@ -103,7 +105,6 @@ class MainActivity : ComponentActivity() {
                 if (mAuth.currentUser == null) {
                     Application(context = applicationContext, signIn = { signIn() } )
                 } else {
-//                val user: FirebaseUser = mAuth.currentUser!!
                     Application(context = applicationContext, signIn = { signIn() })
                 }
             }
@@ -223,11 +224,6 @@ fun ScreenApp(
             skipOnboarding = (isOnboarded as Boolean)
         }
         Scaffold(
-            bottomBar = {
-                if (currentRoute(navController) in screensWithNavigationBar) {
-                    BottomNavigation(navController = navController)
-                }
-            },
             floatingActionButton = {
                 if (currentRoute(navController) in screensWithNavigationBar) {
                     FloatingActionButton(
@@ -267,8 +263,17 @@ fun ScreenApp(
                     },
                     onLogMultiplePeriodDates = { navController.navigate(Screen.LogMultipleDates.name) },
                     onExit = { loggingOptionsVisible = false },
-                    modifier = modifier.padding(innerPadding)
-                )
+                    modifier = modifier.padding(bottom = 64.dp)
+                    )
+                }
+            }
+            Box(
+                contentAlignment = Alignment.BottomCenter,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                if (currentRoute(navController) in Screen.values().map { it.name }) {
+                    BottomNavigation(navController = navController)
+                }
             }
         }
     }

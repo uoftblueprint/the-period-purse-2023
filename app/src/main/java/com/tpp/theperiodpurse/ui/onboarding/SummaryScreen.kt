@@ -216,6 +216,7 @@ fun SummaryScreen(
                     getDaysSince(onboardUiState.date)
                 )
 
+
                 onSendButtonClicked() },
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
 

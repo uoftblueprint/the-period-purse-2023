@@ -123,7 +123,7 @@ fun LogScreen(
                         Date(
                             date = Date1.from(
                                 LocalDateTime.of(
-                                    day, LocalDateTime.now().toLocalTime()
+                                    day, LocalDateTime.MIN.toLocalTime()
                                 ).atZone(ZoneId.systemDefault()).toInstant()
                             ),
                             flow = logViewModel.getSquareSelected(LogPrompt.Flow)

@@ -62,6 +62,7 @@ fun NavigationGraph(
 ) {
     val onboardUIState by onboardViewModel.uiState.collectAsState()
     val appUiState by appViewModel.uiState.collectAsState()
+    val calUiState by calendarViewModel.uiState.collectAsState()
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -105,11 +106,14 @@ fun NavigationGraph(
                 context = context,
                 onboardUiState = onboardUIState,
                 onboardViewModel = onboardViewModel,
-                appUiState = appUiState)
+                appUiState = appUiState,
+                calUiState = calUiState)
         }
 
         composable(route = Screen.Cycle.name) {
-            CycleScreenLayout()
+            CycleScreenLayout(
+                appViewModel = appViewModel,
+            )
         }
 
         // Education Screens
