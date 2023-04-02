@@ -33,6 +33,7 @@ import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.OnboardUIState
 import com.tpp.theperiodpurse.ui.calendar.CalendarUIState
 import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
+import kotlin.math.sign
 
 enum class SettingScreenNavigation(@StringRes val title: Int) {
     Start(title = R.string.settings_home), Notification(title = R.string.customize_notifications), BackUpAccount(
@@ -83,7 +84,8 @@ fun SettingsScreen(
     onboardUiState: OnboardUIState?,
     onboardViewModel: OnboardViewModel?,
     appUiState: AppUiState?,
-    calUiState: CalendarUIState?
+    calUiState: CalendarUIState?,
+    signIn: () -> Unit
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = SettingScreenNavigation.valueOf(
@@ -154,7 +156,9 @@ fun SettingsScreen(
                     canNavigateBack = navController.previousBackStackEntry != null,
                     navigateUp = { navController.navigateUp() },
                     color = Color.White),
-                    navController = navController)
+                    navController = navController,
+                    signIn = signIn
+                )
             }
             composable(route = SettingScreenNavigation.DeleteAccount.name) {
                 val context = LocalContext.current

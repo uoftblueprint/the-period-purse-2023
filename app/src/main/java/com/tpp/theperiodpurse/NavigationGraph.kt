@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -14,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
+import com.google.api.services.drive.Drive
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.ui.SummaryScreen
 import com.tpp.theperiodpurse.ui.calendar.CalendarScreen
@@ -38,6 +40,7 @@ enum class OnboardingScreen {
     QuestionTwo,
     QuestionThree,
     Summary,
+    LoadGoogleDrive
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -50,7 +53,8 @@ fun NavigationGraph(
     appViewModel: AppViewModel,
     modifier: Modifier = Modifier,
     context: Context,
-    signIn: () -> Unit
+    signIn: () -> Unit,
+    googleDrive: Drive? = null
 ) {
     val onboardUIState by onboardViewModel.uiState.collectAsState()
     val appUiState by appViewModel.uiState.collectAsState()
@@ -92,7 +96,8 @@ fun NavigationGraph(
                 onboardUiState = onboardUIState,
                 onboardViewModel = onboardViewModel,
                 appUiState = appUiState,
-                calUiState = calUiState)
+                calUiState = calUiState,
+                signIn = signIn)
         }
 
         composable(route = Screen.Cycle.name) {
@@ -161,6 +166,20 @@ fun NavigationGraph(
 //                    cancelOrderAndNavigateToStart(onboardViewModel, navController)
 //                },
             )
+        }
+        composable(route = OnboardingScreen.LoadGoogleDrive.name) {
+            if (googleDrive != null) {
+                LoadGoogleDrive(googleDrive = googleDrive,
+                    viewModel = onboardViewModel,
+                    navHostController = navController)
+            }
+            else {
+                WelcomeScreen(
+                    onNextButtonClicked =
+                    { navController.navigate(OnboardingScreen.QuestionOne.name) },
+                    signIn = signIn
+                )
+            }
         }
     }
 }

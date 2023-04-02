@@ -2,6 +2,8 @@ package com.tpp.theperiodpurse.ui.onboarding
 import android.content.Context
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.*
+import com.google.api.services.drive.Drive
+import com.google.api.services.drive.model.FileList
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.data.Date
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +29,8 @@ class OnboardViewModel @Inject constructor (
 
     var isOnboarded: LiveData<Boolean?> = userRepository.isOnboarded
     var isDeleted: LiveData<Boolean?> = userRepository.isDeleted
+    var isDrive: MutableLiveData<FileList?> = MutableLiveData(null)
+
 
 
     fun checkOnboardedStatus() {
@@ -46,6 +50,19 @@ class OnboardViewModel @Inject constructor (
                 async {
                     userRepository.isDeleted(context = context)
                     isDeleted = userRepository.isDeleted
+                }
+
+            }
+        }
+    }
+
+    fun checkGoogleDrive(drive: Drive) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                async {
+                    val query = "mimeType='application/x-sqlite3' and trashed=false and 'root' in parents and name='my_database.db'"
+                    isDrive.postValue(drive.files().list().setQ(query).execute())
+
                 }
 
             }

@@ -1,6 +1,7 @@
 package com.tpp.theperiodpurse
 
 import android.Manifest.permission.POST_NOTIFICATIONS
+import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -35,6 +36,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.api.client.extensions.android.http.AndroidHttp
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
+import com.google.api.client.json.gson.GsonFactory
+import com.google.api.client.json.jackson2.JacksonFactory
+import com.google.api.services.drive.Drive
+import com.google.api.services.drive.DriveScopes
+import com.google.common.reflect.TypeToken
+import com.google.gson.Gson
 import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import com.tpp.theperiodpurse.ui.component.BottomNavigation
 import com.tpp.theperiodpurse.ui.component.FloatingActionButton
@@ -42,6 +52,7 @@ import com.tpp.theperiodpurse.ui.onboarding.*
 import com.tpp.theperiodpurse.ui.symptomlog.LoggingOptionsPopup
 import com.tpp.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.ByteArrayOutputStream
 import java.time.LocalDate
 
 
@@ -109,11 +120,12 @@ class MainActivity : ComponentActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode === RC_SIGN_IN) {
+        if (requestCode === RC_SIGN_IN && resultCode == Activity.RESULT_OK) {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             val task: Task<GoogleSignInAccount> =
                 GoogleSignIn.getSignedInAccountFromIntent(data)
+
             handleSignInResult(task)
         }
 
@@ -121,14 +133,33 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.S)
     fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
-            val account = completedTask.getResult(ApiException::class.java)!!.account
+            if (completedTask.isSuccessful){
+                val account = completedTask.getResult(ApiException::class.java)!!.account
+                Toast.makeText(this, "SignIn Successful", Toast.LENGTH_SHORT).show()
+                val credential = GoogleAccountCredential.usingOAuth2(
+                    this, listOf(DriveScopes.DRIVE_FILE, DriveScopes.DRIVE, DriveScopes.DRIVE_READONLY)
+                )
+                credential.selectedAccount = account
+                val drive = Drive
+                    .Builder(
+                        AndroidHttp.newCompatibleTransport(),
+                        JacksonFactory.getDefaultInstance(),
+                        credential
+                    )
+                    .setApplicationName(getString(R.string.app_name))
+                    .build()
 
-
-            // Signed in successfully, show authenticated UI.
-            Toast.makeText(this, "SignIn Successful", Toast.LENGTH_SHORT).show()
-            setContent {
-                Application(context = applicationContext, skipDatabase = true, skipWelcome = true, signIn = { signIn() })
+                setContent {
+                    Application(context = applicationContext, skipDatabase = true, skipWelcome = true, signIn = { signIn() }, googleDrive = drive)
+                }
             }
+            else {
+                Toast.makeText(this, "SignIn Failed", Toast.LENGTH_SHORT).show()
+                setContent {
+                    Application(context = applicationContext, skipDatabase = false, skipWelcome = false, signIn = { signIn() })
+                }
+            }
+
         } catch (e: ApiException) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -147,12 +178,14 @@ fun Application(context: Context,
                 signIn: () -> Unit,
                 skipWelcome: Boolean = false,
                 skipDatabase: Boolean = false,
-                skipOnboarding: Boolean = false) {
+                skipOnboarding: Boolean = false,
+                googleDrive: Drive? = null) {
     ScreenApp(signIn = signIn,
         skipOnboarding = skipOnboarding,
         skipWelcome = skipDatabase,
         skipDatabase = skipWelcome,
-        context = context)
+        context = context,
+        googleDrive = googleDrive)
     createNotificationChannel(context)
 }
 
@@ -185,7 +218,7 @@ fun ScreenApp(
     skipDatabase: Boolean = false,
     skipOnboarding: Boolean = false,
     context: Context,
-
+    googleDrive: Drive? = null
 ) {
     appViewModel.loadData(calendarViewModel)
     var loggingOptionsVisible by remember { mutableStateOf(false) }
@@ -223,13 +256,17 @@ fun ScreenApp(
             Box {
                 NavigationGraph(
                     navController = navController,
-                    startDestination = if (skipOnboarding) Screen.Calendar.name else if (skipWelcome) OnboardingScreen.QuestionOne.name else OnboardingScreen.Welcome.name,
+                    startDestination = if (googleDrive != null) OnboardingScreen.LoadGoogleDrive.name
+                    else if (skipOnboarding) Screen.Calendar.name
+                    else if (skipWelcome) OnboardingScreen.QuestionOne.name
+                    else OnboardingScreen.Welcome.name,
                     onboardViewModel = onboardViewModel,
                     appViewModel= appViewModel,
                     calendarViewModel = calendarViewModel,
                     modifier = modifier.padding(innerPadding),
                     signIn = signIn,
-                    context = context
+                    context = context,
+                    googleDrive = googleDrive
                 )
 
                 if (loggingOptionsVisible) {
