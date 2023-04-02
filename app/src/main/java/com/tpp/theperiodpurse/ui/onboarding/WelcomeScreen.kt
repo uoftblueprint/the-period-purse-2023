@@ -75,9 +75,9 @@ fun WelcomeScreen(signIn: () -> Unit,
 
         // Sign in with Google Button
         GoogleSignInButton {
-
             signIn()
         }
+
         Spacer(modifier = Modifier.height((screenheight*0.006).dp))
 
         val annotatedLinkString = buildAnnotatedString {

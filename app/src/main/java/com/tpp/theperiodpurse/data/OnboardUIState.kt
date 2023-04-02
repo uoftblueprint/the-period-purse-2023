@@ -8,5 +8,5 @@ data class OnboardUIState(/** Selected days quantity  */
                           var symptomsOptions: List<String> = listOf(),
                           /** Available dates for the track*/
                           val dateOptions: List<String> = listOf(),
-                          val user: User? = null,
+                          val user: User? = null
 )

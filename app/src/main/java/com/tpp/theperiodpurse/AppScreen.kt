@@ -26,6 +26,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -109,7 +110,7 @@ class MainActivity : ComponentActivity() {
                         launcher.launch(POST_NOTIFICATIONS)
                     }
                 }
-                Application(context = applicationContext, signIn = { signIn() } )
+                Application(context = applicationContext, signIn = { signIn() }, signout = { signOut() } )
 
             }
         }
@@ -119,7 +120,13 @@ class MainActivity : ComponentActivity() {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
-
+    private fun signOut() {
+        googleSignInClient.revokeAccess().addOnCompleteListener {
+            googleSignInClient.signOut().addOnCompleteListener {
+                Toast.makeText(this, "SignOut Successful", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -153,8 +160,9 @@ class MainActivity : ComponentActivity() {
                     .setApplicationName(getString(R.string.app_name))
                     .build()
 
+
                 setContent {
-                    Application(context = applicationContext, skipDatabase = true, skipWelcome = true, signIn = { signIn() }, googleDrive = drive)
+                    Application(context = applicationContext, signIn = { signIn() }, signout = { signOut() }, googleDrive = drive)
                 }
             }
             else {
@@ -183,13 +191,15 @@ fun Application(context: Context,
                 skipWelcome: Boolean = false,
                 skipDatabase: Boolean = false,
                 skipOnboarding: Boolean = false,
-                googleDrive: Drive? = null) {
+                googleDrive: Drive? = null,
+                signout: () -> Unit = {}) {
     ScreenApp(signIn = signIn,
         skipOnboarding = skipOnboarding,
         skipWelcome = skipDatabase,
         skipDatabase = skipWelcome,
         context = context,
-        googleDrive = googleDrive)
+        googleDrive = googleDrive,
+        signout = signout)
     createNotificationChannel(context)
 }
 
@@ -222,7 +232,8 @@ fun ScreenApp(
     skipDatabase: Boolean = false,
     skipOnboarding: Boolean = false,
     context: Context,
-    googleDrive: Drive? = null
+    googleDrive: Drive? = null,
+    signout: () -> Unit = {}
 ) {
     appViewModel.loadData(calendarViewModel)
     var loggingOptionsVisible by remember { mutableStateOf(false) }
@@ -270,7 +281,8 @@ fun ScreenApp(
                     modifier = modifier.padding(innerPadding),
                     signIn = signIn,
                     context = context,
-                    googleDrive = googleDrive
+                    googleDrive = googleDrive,
+                    signout = signout
                 )
 
                 if (loggingOptionsVisible) {

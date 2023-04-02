@@ -52,7 +52,7 @@ fun SettingAppBar(
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
-    color: Color,
+    color: Color
 ) {
     TopAppBar(
         title = { Text(currentScreen)},
@@ -85,7 +85,8 @@ fun SettingsScreen(
     onboardViewModel: OnboardViewModel?,
     appUiState: AppUiState?,
     calUiState: CalendarUIState?,
-    signIn: () -> Unit
+    signIn: () -> Unit,
+    signout: () -> Unit = {}
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = SettingScreenNavigation.valueOf(
@@ -174,7 +175,7 @@ fun SettingsScreen(
             composable(route = SettingScreenNavigation.ResetDatabase.name) {
                 if (onboardViewModel != null && onboardUiState != null && appUiState != null && calUiState != null) {
                     ResetDatabase(context = context, viewModel = onboardViewModel, navController = navController, outController = outController, onboardUiState = onboardUiState,
-                    appUiState = appUiState, calUiState = calUiState)
+                    appUiState = appUiState, calUiState = calUiState, signout = signout)
                 }
             }
         }

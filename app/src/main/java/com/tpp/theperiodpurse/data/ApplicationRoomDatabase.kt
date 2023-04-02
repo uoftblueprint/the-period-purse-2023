@@ -5,6 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 
 @Database(entities=[User::class, Date::class], version = 4, exportSchema = false)
 @TypeConverters(
@@ -43,6 +46,31 @@ abstract class ApplicationRoomDatabase: RoomDatabase() {
 
             instance.clearAllTables()
             return true
+        }
+
+        fun DatabaseToFile(context: Context): File {
+            val exportDir = context.externalCacheDir ?: context.cacheDir
+            val file = File(exportDir, "user_database.db")
+            val path = context.getDatabasePath("user_database").absolutePath
+
+            val instance = Room.databaseBuilder(
+                context.applicationContext,
+                ApplicationRoomDatabase::class.java,
+                "user_database"
+            )
+                .fallbackToDestructiveMigration()
+                .build()
+
+            FileInputStream(File(path)).channel.use { input ->
+                FileOutputStream(file).channel.use { output ->
+                    output.transferFrom(input, 0, input.size())
+                }
+            }
+
+            return file
+
+
+
         }
     }
 }

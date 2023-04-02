@@ -2,6 +2,7 @@ package com.tpp.theperiodpurse.ui.onboarding
 import android.content.Context
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.*
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.model.FileList
 import com.tpp.theperiodpurse.data.*
@@ -31,7 +32,10 @@ class OnboardViewModel @Inject constructor (
     var isDeleted: LiveData<Boolean?> = userRepository.isDeleted
     var isDrive: MutableLiveData<FileList?> = MutableLiveData(null)
 
-
+    fun checkGoogleLogin(context: Context): Boolean{
+        val account = GoogleSignIn.getLastSignedInAccount(context)
+        return (account!=null)
+    }
 
     fun checkOnboardedStatus() {
         viewModelScope.launch {
@@ -60,7 +64,7 @@ class OnboardViewModel @Inject constructor (
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 async {
-                    val query = "mimeType='application/x-sqlite3' and trashed=false and 'root' in parents and name='my_database.db'"
+                    val query = "mimeType='application/x-sqlite3' and trashed=false and 'root' in parents and name='user_database.db'"
                     isDrive.postValue(drive.files().list().setQ(query).execute())
 
                 }

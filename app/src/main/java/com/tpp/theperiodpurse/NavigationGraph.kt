@@ -54,7 +54,8 @@ fun NavigationGraph(
     modifier: Modifier = Modifier,
     context: Context,
     signIn: () -> Unit,
-    googleDrive: Drive? = null
+    googleDrive: Drive? = null,
+    signout: () -> Unit = {}
 ) {
     val onboardUIState by onboardViewModel.uiState.collectAsState()
     val appUiState by appViewModel.uiState.collectAsState()
@@ -97,7 +98,8 @@ fun NavigationGraph(
                 onboardViewModel = onboardViewModel,
                 appUiState = appUiState,
                 calUiState = calUiState,
-                signIn = signIn)
+                signIn = signIn,
+                signout = signout)
         }
 
         composable(route = Screen.Cycle.name) {
