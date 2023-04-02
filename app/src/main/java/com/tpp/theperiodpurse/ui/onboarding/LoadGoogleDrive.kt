@@ -30,10 +30,16 @@ fun LoadGoogleDrive(googleDrive: Drive, viewModel: OnboardViewModel, navHostCont
     }
     else {
         if (isDrive!!.files.isNotEmpty()){
-            navHostController.navigate(Screen.Calendar.name)
+            LaunchedEffect(Unit) {
+                navHostController.popBackStack()
+                navHostController.navigate(Screen.Calendar.name)
+            }
         }
         else {
-            navHostController.navigate(OnboardingScreen.QuestionOne.name)
+            LaunchedEffect(Unit) {
+                navHostController.popBackStack()
+                navHostController.navigate(OnboardingScreen.QuestionOne.name)
+            }
         }
 
 

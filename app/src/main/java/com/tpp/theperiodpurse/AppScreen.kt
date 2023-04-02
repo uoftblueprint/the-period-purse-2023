@@ -35,6 +35,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Task
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
@@ -71,6 +72,9 @@ class MainActivity : ComponentActivity() {
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
+            .requestScopes(Scope(DriveScopes.DRIVE_FILE),
+                Scope(DriveScopes.DRIVE),
+                Scope(DriveScopes.DRIVE_READONLY))
             .requestIdToken(getString(R.string.default_web_client_id))
             .build()
 
