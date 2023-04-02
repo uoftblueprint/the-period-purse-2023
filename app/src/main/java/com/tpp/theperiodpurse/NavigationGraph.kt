@@ -20,6 +20,8 @@ import com.tpp.theperiodpurse.ui.calendar.CalendarScreen
 import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import com.tpp.theperiodpurse.ui.cycle.CycleScreenLayout
 import com.tpp.theperiodpurse.ui.education.*
+import com.tpp.theperiodpurse.ui.legal.PrivacyScreen
+import com.tpp.theperiodpurse.ui.legal.TermsScreen
 import com.tpp.theperiodpurse.ui.onboarding.*
 import com.tpp.theperiodpurse.ui.setting.SettingsScreen
 import com.tpp.theperiodpurse.ui.symptomlog.LogScreen
@@ -29,7 +31,9 @@ enum class Screen {
     Log,
     Cycle,
     Settings,
-    Learn
+    Learn,
+    Terms,
+    Privacy
 }
 
 enum class OnboardingScreen {
@@ -97,10 +101,16 @@ fun NavigationGraph(
             CycleScreenLayout()
         }
 
-        // Education Screens
-
         composable(route = Screen.Learn.name) {
-            EducationScreenLayout()
+            EducationScreen(outController = navController)
+        }
+
+        composable(Screen.Terms.name) {
+            TermsScreen(navController)
+        }
+
+        composable(Screen.Privacy.name) {
+            PrivacyScreen(navController)
         }
 
 

@@ -37,7 +37,7 @@ fun EducationDYKScreen(navController: NavHostController) {
             modifier = Modifier
                 .clickable(interactionSource = interactionSource,
                     indication = null)
-                { navController.navigate(Destination.Home.route) }
+                { navController.navigate(EducationNavigation.Learn.name) }
                 .size(20.dp)
                 .align(Alignment.Start),
             painter = painterResource(R.drawable.arrow),

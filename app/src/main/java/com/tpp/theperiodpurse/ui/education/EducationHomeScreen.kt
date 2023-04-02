@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.Screen
 import com.tpp.theperiodpurse.data.Product
 import com.tpp.theperiodpurse.data.ProductsList
 
@@ -37,11 +38,14 @@ const val pink = 0xFFFFA3A4
  * Education Home Screen for the Learn/Info Tab on the App.
  */
 @Composable
-fun EducationScreen(
+fun EducationScreenLayout(
+    outController: NavHostController = rememberNavController(),
     navController: NavHostController,
 ) {
-    EducationBackground()
     val uriHandler = LocalUriHandler.current
+
+    EducationBackground()
+
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -104,11 +108,10 @@ fun EducationScreen(
                     Terms & Conditions, and Privacy Policy
                      */
                     Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                        TermsAndPrivacyFooter(navController)
+                        TermsAndPrivacyFooter(outController)
                     }
 
                     Spacer(modifier = Modifier.size(64.dp))
-
                 }
             }
         }
@@ -126,7 +129,7 @@ fun DYKCard(navController: NavHostController) {
         shape = RoundedCornerShape(12.dp),
         elevation = 10.dp,
         backgroundColor = Color(teal),
-        onClick = { navController.navigate(Destination.DYK.route) },
+        onClick = { navController.navigate(EducationNavigation.DYK.name) },
     ) {
         Row {
             Column(
@@ -172,7 +175,12 @@ fun PeriodProducts (navController: NavHostController, it: Product) {
             .aspectRatio(1f),
         shape = RoundedCornerShape(12.dp), elevation = 10.dp,
         backgroundColor = Color(pink),
-        onClick = { navController.navigate(Destination.Info.createRoute(it.ProductName)) },
+        onClick = {
+            navController.currentBackStackEntry?.savedStateHandle?.set(
+                key = "elementId",
+                value = it.ProductName
+            )
+            navController.navigate(EducationNavigation.ProductInfo.name) },
     ) {
         Column(
             modifier = Modifier
@@ -281,8 +289,12 @@ fun SocialMedia(uriHandler: UriHandler) {
 
         Icon(
             modifier = Modifier
-                .clickable { uriHandler.openUri("https://www.youtube.com/channel/" +
-                        "UC2YgDU_9XxbjJsGGvXwxwyA") }
+                .clickable {
+                    uriHandler.openUri(
+                        "https://www.youtube.com/channel/" +
+                                "UC2YgDU_9XxbjJsGGvXwxwyA"
+                    )
+                }
                 .padding(horizontal = 8.dp)
                 .size(24.dp),
             painter = painterResource(R.drawable.youtube),
@@ -323,7 +335,7 @@ fun TermsAndPrivacyFooter(navController: NavHostController) {
         verticalAlignment = Alignment.CenterVertically
     ) {
             ClickableText(
-                onClick = { navController.navigate(Destination.Terms.route) },
+                onClick = { navController.navigate(Screen.Terms.name) },
                 style = TextStyle(
                     textDecoration = TextDecoration.Underline,
                     color = Color(teal),
@@ -340,7 +352,7 @@ fun TermsAndPrivacyFooter(navController: NavHostController) {
             )
 
             ClickableText(
-                onClick = { navController.navigate(Destination.Privacy.route) },
+                onClick = { navController.navigate(Screen.Privacy.name) },
                 style = TextStyle(
                     textDecoration = TextDecoration.Underline,
                     color = Color(teal),
@@ -360,5 +372,5 @@ fun TermsAndPrivacyFooter(navController: NavHostController) {
 @Preview
 @Composable
 fun EducationScreenPreview() {
-    EducationScreen(rememberNavController())
+    EducationScreenLayout(rememberNavController(), rememberNavController())
 }
