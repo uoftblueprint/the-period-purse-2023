@@ -102,7 +102,7 @@ fun LoadGoogleDrive(googleDrive: Drive, viewModel: OnboardViewModel, navHostCont
                         Text(
                             text = "No",
                             style = MaterialTheme.typography.button,
-                            color = Color.Blue
+                            color = Color(195, 50, 50),
                         )
                     }
                 }

@@ -47,8 +47,11 @@ fun ResetDatabase(
         onboardUiState.days = 0
         onboardUiState.symptomsOptions = listOf()
         onboardUiState.date = ""
-        navController.popBackStack()
-        outController.navigate(OnboardingScreen.Welcome.name)
+        LaunchedEffect(Unit) {
+            navController.popBackStack()
+            outController.navigate(OnboardingScreen.Welcome.name)
+        }
+
     }
 
 }
