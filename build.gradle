@@ -6,10 +6,11 @@ buildscript {
         room_version = "2.5.0"
     }
     repositories {
+        google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.google.gms:google-services:4.3.14'
+        classpath 'com.google.gms:google-services:4.3.15'
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
