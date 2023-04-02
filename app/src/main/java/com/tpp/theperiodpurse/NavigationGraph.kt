@@ -21,6 +21,7 @@ import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import com.tpp.theperiodpurse.ui.cycle.CycleScreenLayout
 import com.tpp.theperiodpurse.ui.education.*
 import com.tpp.theperiodpurse.ui.onboarding.*
+import com.tpp.theperiodpurse.ui.setting.LoadDatabase
 import com.tpp.theperiodpurse.ui.setting.SettingsScreen
 import com.tpp.theperiodpurse.ui.symptomlog.LogScreen
 
@@ -38,6 +39,7 @@ enum class OnboardingScreen {
     QuestionTwo,
     QuestionThree,
     Summary,
+    LoadDatabase,
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -150,9 +152,8 @@ fun NavigationGraph(
             SummaryScreen(
                 onboardUiState = onboardUIState,
                 onSendButtonClicked = {
-                    navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
-                    navController.navigate(Screen.Calendar.name)
-                    appViewModel.loadData(calendarViewModel)
+                    navController.navigate(OnboardingScreen.LoadDatabase.name)
+
                 },
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null,
@@ -160,6 +161,13 @@ fun NavigationGraph(
 //                onCancelButtonClicked = {
 //                    cancelOrderAndNavigateToStart(onboardViewModel, navController)
 //                },
+            )
+        }
+        composable(route = OnboardingScreen.LoadDatabase.name) {
+            LoadDatabase(
+                appViewModel = appViewModel,
+                calViewModel = calendarViewModel,
+                navController = navController
             )
         }
     }

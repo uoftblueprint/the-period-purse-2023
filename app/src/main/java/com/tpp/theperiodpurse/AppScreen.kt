@@ -206,7 +206,6 @@ fun ScreenApp(
     context: Context,
 
 ) {
-    appViewModel.loadData(calendarViewModel)
     var loggingOptionsVisible by remember { mutableStateOf(false) }
     var skipOnboarding = skipOnboarding
     val isOnboarded by onboardViewModel.isOnboarded.observeAsState(initial = null)
@@ -242,7 +241,7 @@ fun ScreenApp(
             Box {
                 NavigationGraph(
                     navController = navController,
-                    startDestination = if (skipOnboarding) Screen.Calendar.name else if (skipWelcome) OnboardingScreen.QuestionOne.name else OnboardingScreen.Welcome.name,
+                    startDestination = if (skipOnboarding) OnboardingScreen.LoadDatabase.name else if (skipWelcome) OnboardingScreen.QuestionOne.name else OnboardingScreen.Welcome.name,
                     onboardViewModel = onboardViewModel,
                     appViewModel= appViewModel,
                     calendarViewModel = calendarViewModel,
