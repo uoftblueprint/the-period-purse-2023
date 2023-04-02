@@ -1,6 +1,8 @@
 package com.tpp.theperiodpurse
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tpp.theperiodpurse.data.Date
@@ -28,6 +30,7 @@ class AppViewModel @Inject constructor (
 ): ViewModel() {
     private val _uiState = MutableStateFlow(AppUiState())
     val uiState: StateFlow<AppUiState> = _uiState.asStateFlow()
+    var isLoaded: MutableLiveData<Boolean?> = MutableLiveData(null)
 
     fun loadData(calendarViewModel: CalendarViewModel) {
         val trackedSymptoms: MutableList<Symptom> = mutableListOf()
@@ -80,8 +83,8 @@ class AppViewModel @Inject constructor (
                     }
                 }
             }
-
         }
+        isLoaded.postValue(true)
     }
 
     fun getTrackedSymptoms() : List<Symptom> {
