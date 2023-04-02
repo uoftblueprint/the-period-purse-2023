@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
+import com.tpp.theperiodpurse.ui.symptomlog.LogMultipleDatesScreen
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.ui.SummaryScreen
 import com.tpp.theperiodpurse.ui.calendar.CalendarScreen
@@ -24,14 +25,21 @@ import com.tpp.theperiodpurse.ui.onboarding.*
 import com.tpp.theperiodpurse.ui.setting.LoadDatabase
 import com.tpp.theperiodpurse.ui.setting.SettingsScreen
 import com.tpp.theperiodpurse.ui.symptomlog.LogScreen
+import java.time.LocalDate
 
 enum class Screen {
     Calendar,
     Log,
     Cycle,
     Settings,
-    Learn
+    Learn,
+    LogMultipleDates
 }
+
+val screensWithNavigationBar = arrayOf(
+    Screen.Calendar.name, Screen.Log.name, Screen.Cycle.name,
+    Screen.Settings.name, Screen.Learn.name
+)
 
 enum class OnboardingScreen {
     Welcome,
@@ -85,6 +93,13 @@ fun NavigationGraph(
                     calendarViewModel = calendarViewModel
                 )
             }
+        }
+
+        composable(route = Screen.LogMultipleDates.name) {
+            LogMultipleDatesScreen(
+                onClose = { navController.navigateUp() },
+                calendarViewModel
+            )
         }
 
         composable(route = Screen.Settings.name) {
@@ -171,6 +186,22 @@ fun NavigationGraph(
             )
         }
     }
+}
+
+/**
+ * Resets the [OnboardUIState] and pops up to [OnboardingScreen.Start]
+ */
+private fun cancelOrderAndNavigateToStart(
+    viewModel: OnboardViewModel,
+    navController: NavHostController
+) {
+    viewModel.resetOrder()
+    navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = false)
+}
+
+fun navigateToLogScreenWithDate(date: LocalDate, navController: NavController) {
+    navController.navigate(route = "%s/%s/%s"
+        .format(Screen.Calendar, Screen.Log, date.toString()))
 }
 
 @Composable

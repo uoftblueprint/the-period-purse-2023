@@ -224,10 +224,12 @@ fun ScreenApp(
         }
         Scaffold(
             floatingActionButton = {
-                FloatingActionButton(
-                    navController = navController,
-                    onClickInCalendar = { loggingOptionsVisible = true }
-                )
+                if (currentRoute(navController) in screensWithNavigationBar) {
+                    FloatingActionButton(
+                        navController = navController,
+                        onClickInCalendar = { loggingOptionsVisible = true }
+                    )
+                }
             },
             floatingActionButtonPosition = FabPosition.Center,
             isFloatingActionButtonDocked = true
@@ -250,21 +252,17 @@ fun ScreenApp(
                     context = context
                 )
 
-                if (loggingOptionsVisible) {
-                    LoggingOptionsPopup(
-                        onLogDailySymptomsClick = {
-                            navController.navigate(
-                                route = "%s/%s/%s"
-                                    .format(
-                                        Screen.Calendar,
-                                        Screen.Log,
-                                        LocalDate.now().toString()
-                                    )
-                            )
-                        },
-                        { /* TODO: Go to logging page for multiple dates */ },
-                        onExit = { loggingOptionsVisible = false },
-                        modifier = modifier.padding(bottom = 64.dp)
+            if (loggingOptionsVisible) {
+                LoggingOptionsPopup(
+                    onLogDailySymptomsClick = {
+                        navigateToLogScreenWithDate(
+                            LocalDate.now(),
+                            navController
+                        )
+                    },
+                    onLogMultiplePeriodDates = { navController.navigate(Screen.LogMultipleDates.name) },
+                    onExit = { loggingOptionsVisible = false },
+                    modifier = modifier.padding(bottom = 64.dp)
                     )
                 }
             }
@@ -272,7 +270,7 @@ fun ScreenApp(
                 contentAlignment = Alignment.BottomCenter,
                 modifier = Modifier.fillMaxSize()
             ) {
-                if (currentRoute(navController) in Screen.values().map { it.name }) {
+                if (currentRoute(navController) in screensWithNavigationBar) {
                     BottomNavigation(navController = navController)
                 }
             }

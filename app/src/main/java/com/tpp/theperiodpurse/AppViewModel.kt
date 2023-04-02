@@ -68,7 +68,7 @@ class AppViewModel @Inject constructor (
                                 ).toString()
                             }
 
-                            calendarViewModel.saveDayInfo(
+                            calendarViewModel.setDayInfo(
                                 date.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
                                 CalendarDayUIState(
                                     flow = date.flow,
