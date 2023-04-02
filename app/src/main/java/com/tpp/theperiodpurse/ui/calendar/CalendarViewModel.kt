@@ -42,6 +42,23 @@ class CalendarViewModel: ViewModel() {
         _uiState.update { state -> state }
     }
 
+    fun clearFlow(day: LocalDate) {
+        val original = _uiState.value.days[day]
+        if (original != null) {
+            val newState = CalendarDayUIState(
+                flow = null,
+                mood = original.mood,
+                exerciseLengthString = original.exerciseLengthString,
+                exerciseType = original.exerciseType,
+                crampSeverity = original.crampSeverity,
+                sleepString = original.sleepString,
+            )
+            _uiState.value.days[day] = newState
+        }
+
+        _uiState.update { state -> state }
+    }
+
     fun setSelectedSymptom(symptom: Symptom) {
         _uiState.update { state -> CalendarUIState(state.days, symptom) }
     }
