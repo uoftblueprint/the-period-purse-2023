@@ -69,6 +69,7 @@ fun LogMultipleDatesScreen(
         val calendarDayUIStates = calendarViewModel.uiState.collectAsState().value.days
 
         val selectedDates = mutableSetOf<LocalDate>()
+        val unselectedDates = mutableSetOf<LocalDate>()
 
         Box {
             VerticalCalendar(
@@ -81,19 +82,24 @@ fun LogMultipleDatesScreen(
                     MonthHeader(month)
                 },
                 dayContent = { day ->
-                    var selected by remember { mutableStateOf(false) }
                     if (day.position == DayPosition.MonthDate) {
-                        val (dayColor, _) = getDayColorAndIcon(Symptom.FLOW, calendarDayUIStates[day.date])
+                        val initSelected = calendarDayUIStates[day.date]?.flow != null
+                        var selected by remember { mutableStateOf(initSelected) }
+//                        val (dayColor, _) = getDayColorAndIcon(Symptom.FLOW, calendarDayUIStates[day.date])
                         Day(
                             day.date,
-                            color = if (selected) Red else dayColor,
+                            color = if (selected) Red else Color.White,
                             iconId = null,
                             onClick = {
                                 selected = !selected
-                                if (selected)
+                                if (selected) {
                                     selectedDates.add(day.date)
-                                else
+                                    unselectedDates.remove(day.date)
+                                }
+                                else {
                                     selectedDates.remove(day.date)
+                                    unselectedDates.add(day.date)
+                                }
                             }
                         )
                     }
@@ -101,7 +107,10 @@ fun LogMultipleDatesScreen(
 
             FloatingActionButton(onClick = {
                 selectedDates.forEach {
-                    calendarViewModel.updateDayInfo(it, CalendarDayUIState(FlowSeverity.Medium))
+                    calendarViewModel.updateDayInfo(it, CalendarDayUIState(flow = FlowSeverity.Medium))
+                }
+                unselectedDates.forEach {
+                    calendarViewModel.clearFlow(it)
                 }
                 onClose()},
                 backgroundColor = SelectedColor1,
