@@ -31,7 +31,7 @@ enum class Screen {
     Log,
     Cycle,
     Settings,
-    Learn
+    Learn,
 }
 
 enum class OnboardingScreen {
