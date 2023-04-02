@@ -23,6 +23,7 @@
     <string name="cramps">Cramps</string>
     <string name="sleep">Sleep</string>
     <string name="flow">Flow</string>
+    <string name="notes">Notes</string>
     <string name="order_details">Average period length: %1$s \n Last period: %2$s \nSymptoms to log: %3$s</string>
     <string name="average_period_length">Average period length</string>
     <string name="last_period">Last period</string>
@@ -53,6 +54,7 @@
     <string name="customize_notifications">Customise Notifications</string>
     <string name="back_up_account">Back Up Account</string>
     <string name="delete_account">Delete Account</string>
+    <string name="reset_database">Delete Account</string>
     <string name="settings_home">Settings</string>
     <string name="sample_notification">Every day at 10:00 AM</string>
     <string name="copyright">© 2023 The Period Purse. All rights reserved.</string>
