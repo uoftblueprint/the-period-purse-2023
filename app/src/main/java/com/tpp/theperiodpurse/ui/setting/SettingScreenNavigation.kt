@@ -160,7 +160,8 @@ fun SettingsScreen(
                     navController = navController,
                     signIn = signIn,
                     outController = outController,
-                    onboardUIState = onboardUiState
+                    onboardUIState = onboardUiState,
+                    context = context
                 )
             }
             composable(route = SettingScreenNavigation.DeleteAccount.name) {
