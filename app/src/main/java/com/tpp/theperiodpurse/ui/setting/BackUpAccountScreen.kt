@@ -61,12 +61,9 @@ fun BackUpAccountScreen(appbar: Unit,
                 fontSize = 18.sp)
 
             Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))
-
             Text(text= "Backing up to Google Drive will upload your data to Google Drive and ensure you can access it on other devices.",
                 fontSize = 13.sp)
-
             Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))
-
             Button(modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp),
                 onClick = {
@@ -75,18 +72,12 @@ fun BackUpAccountScreen(appbar: Unit,
                 colors =  ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))) {
                 Text(text = "Back Up Account", color = Color.White)
             }
-
             Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))
             Text(text= "Last backup: Not available",
                 color = Color.Gray,
                 fontSize = 13.sp)
-
-
             }
-
         }
-
-
     }
     else {
 

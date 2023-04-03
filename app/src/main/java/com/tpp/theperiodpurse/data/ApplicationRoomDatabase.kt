@@ -53,14 +53,6 @@ abstract class ApplicationRoomDatabase: RoomDatabase() {
             val file = File(exportDir, "user_database.db")
             val path = context.getDatabasePath("user_database").absolutePath
 
-            val instance = Room.databaseBuilder(
-                context.applicationContext,
-                ApplicationRoomDatabase::class.java,
-                "user_database"
-            )
-                .fallbackToDestructiveMigration()
-                .build()
-
             FileInputStream(File(path)).channel.use { input ->
                 FileOutputStream(file).channel.use { output ->
                     output.transferFrom(input, 0, input.size())

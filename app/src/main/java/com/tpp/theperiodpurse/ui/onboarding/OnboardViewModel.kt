@@ -1,11 +1,8 @@
 package com.tpp.theperiodpurse.ui.onboarding
 import android.accounts.Account
 import android.content.Context
-import android.provider.Settings.Global.getString
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.json.jackson2.JacksonFactory
@@ -18,10 +15,7 @@ import com.tpp.theperiodpurse.data.Date
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.util.*
@@ -39,6 +33,8 @@ class OnboardViewModel @Inject constructor (
     var isOnboarded: LiveData<Boolean?> = userRepository.isOnboarded
     var isDeleted: LiveData<Boolean?> = userRepository.isDeleted
     var isDrive: MutableLiveData<FileList?> = MutableLiveData(null)
+    var isDownloaded: MutableLiveData<Boolean?> = MutableLiveData(null)
+
 
     fun checkGoogleLogin(context: Context): Boolean{
         val account = GoogleSignIn.getLastSignedInAccount(context)
@@ -68,6 +64,7 @@ class OnboardViewModel @Inject constructor (
         }
     }
 
+
     fun checkGoogleDrive(account: Account, context: Context, ) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -90,6 +87,55 @@ class OnboardViewModel @Inject constructor (
 
                 }
 
+            }
+        }
+    }
+
+    fun downloadBackup(account: Account, context: Context){
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                        var instance = ApplicationRoomDatabase.getDatabase(context)
+                        instance.close()
+                        val credential = GoogleAccountCredential.usingOAuth2(
+                            context,
+                            listOf(
+                                DriveScopes.DRIVE_FILE,
+                                DriveScopes.DRIVE,
+                                DriveScopes.DRIVE_READONLY
+                            )
+                        )
+                        credential.selectedAccount = account
+                        val drive = Drive
+                            .Builder(
+                                AndroidHttp.newCompatibleTransport(),
+                                JacksonFactory.getDefaultInstance(),
+                                credential
+                            )
+                            .setApplicationName(context.getString(R.string.app_name))
+                            .build()
+
+                        val query =
+                            "mimeType='application/x-sqlite3' and trashed=false and 'root' in parents and name='user_database.db'"
+                        val fileList = drive.files().list().setQ(query).execute()
+
+                        val fileId = fileList.files[0].id
+                        val outputStream =
+                            FileOutputStream(context.getDatabasePath("user_database.db"))
+                        drive.files().get(fileId).executeMediaAndDownloadTo(outputStream)
+                        ApplicationRoomDatabase.getDatabase(context)
+                        isDownloaded.postValue(true)
+                }
+            }
+    }
+
+    fun backupDatabase(account: Account, context: Context, ) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                async {
+                    val credential = GoogleAccountCredential.usingOAuth2(
+                        context, listOf(DriveScopes.DRIVE_FILE, DriveScopes.DRIVE, DriveScopes.DRIVE_READONLY)
+                    )
+                }
             }
         }
     }
