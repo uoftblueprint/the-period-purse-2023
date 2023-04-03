@@ -29,8 +29,10 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -73,9 +75,7 @@ class MainActivity : ComponentActivity() {
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
-            .requestScopes(Scope(DriveScopes.DRIVE_FILE),
-                Scope(DriveScopes.DRIVE),
-                Scope(DriveScopes.DRIVE_READONLY))
+            .requestScopes(Scope(DriveScopes.DRIVE_FILE), Scope(DriveScopes.DRIVE), Scope(DriveScopes.DRIVE_READONLY))
             .requestIdToken(getString(R.string.default_web_client_id))
             .build()
 
@@ -110,7 +110,7 @@ class MainActivity : ComponentActivity() {
                         launcher.launch(POST_NOTIFICATIONS)
                     }
                 }
-                Application(context = applicationContext, signIn = { signIn() }, signout = { signOut() } )
+                Application(context = applicationContext, signIn = { signIn() }, signout = { signOut() }, googleSignInClient = googleSignInClient )
 
             }
         }
@@ -136,7 +136,6 @@ class MainActivity : ComponentActivity() {
             // a listener.
             val task: Task<GoogleSignInAccount> =
                 GoogleSignIn.getSignedInAccountFromIntent(data)
-
             handleSignInResult(task)
         }
 
@@ -147,38 +146,17 @@ class MainActivity : ComponentActivity() {
             if (completedTask.isSuccessful){
                 val account = completedTask.getResult(ApiException::class.java)!!.account
                 Toast.makeText(this, "SignIn Successful", Toast.LENGTH_SHORT).show()
-                val credential = GoogleAccountCredential.usingOAuth2(
-                    this, listOf(DriveScopes.DRIVE_FILE, DriveScopes.DRIVE, DriveScopes.DRIVE_READONLY)
-                )
-                credential.selectedAccount = account
-                val drive = Drive
-                    .Builder(
-                        AndroidHttp.newCompatibleTransport(),
-                        JacksonFactory.getDefaultInstance(),
-                        credential
-                    )
-                    .setApplicationName(getString(R.string.app_name))
-                    .build()
 
-
-                setContent {
-                    Application(context = applicationContext, signIn = { signIn() }, signout = { signOut() }, googleDrive = drive)
-                }
             }
             else {
                 Toast.makeText(this, "SignIn Failed", Toast.LENGTH_SHORT).show()
-                setContent {
-                    Application(context = applicationContext, skipDatabase = false, skipWelcome = false, signIn = { signIn() })
-                }
             }
 
         } catch (e: ApiException) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Toast.makeText(this, "SignIn Failed", Toast.LENGTH_SHORT).show()
-            setContent {
-                Application(context = applicationContext, skipDatabase = false, skipWelcome = false, signIn = { signIn() })
-            }
+
         }
 
     }
@@ -192,14 +170,16 @@ fun Application(context: Context,
                 skipDatabase: Boolean = false,
                 skipOnboarding: Boolean = false,
                 googleDrive: Drive? = null,
-                signout: () -> Unit = {}) {
+                signout: () -> Unit = {},
+                googleSignInClient: GoogleSignInClient) {
     ScreenApp(signIn = signIn,
         skipOnboarding = skipOnboarding,
         skipWelcome = skipDatabase,
         skipDatabase = skipWelcome,
         context = context,
         googleDrive = googleDrive,
-        signout = signout)
+        signout = signout,
+        googleSignInClient = googleSignInClient)
     createNotificationChannel(context)
 }
 
@@ -233,9 +213,9 @@ fun ScreenApp(
     skipOnboarding: Boolean = false,
     context: Context,
     googleDrive: Drive? = null,
-    signout: () -> Unit = {}
+    signout: () -> Unit = {},
+    googleSignInClient: GoogleSignInClient
 ) {
-    appViewModel.loadData(calendarViewModel)
     var loggingOptionsVisible by remember { mutableStateOf(false) }
     var skipOnboarding = skipOnboarding
     val isOnboarded by onboardViewModel.isOnboarded.observeAsState(initial = null)
@@ -245,12 +225,25 @@ fun ScreenApp(
             onboardViewModel.checkOnboardedStatus()
         }
     }
+    val startdestination : String
 
     if (isOnboarded == null && !skipDatabase){
         LoadingScreen()
     } else{
         if (!skipDatabase){
             skipOnboarding = (isOnboarded as Boolean)
+        }
+        if (googleDrive != null) {
+            startdestination = OnboardingScreen.LoadGoogleDrive.name
+        }
+        else if (skipOnboarding) {
+            startdestination = Screen.Calendar.name
+        }
+        else if (skipWelcome) {
+            startdestination = OnboardingScreen.QuestionOne.name
+        }
+        else {
+            startdestination = OnboardingScreen.Welcome.name
         }
         Scaffold(
             floatingActionButton = {
@@ -271,10 +264,7 @@ fun ScreenApp(
             Box {
                 NavigationGraph(
                     navController = navController,
-                    startDestination = if (googleDrive != null) OnboardingScreen.LoadGoogleDrive.name
-                    else if (skipOnboarding) Screen.Calendar.name
-                    else if (skipWelcome) OnboardingScreen.QuestionOne.name
-                    else OnboardingScreen.Welcome.name,
+                    startDestination = startdestination,
                     onboardViewModel = onboardViewModel,
                     appViewModel= appViewModel,
                     calendarViewModel = calendarViewModel,
@@ -282,7 +272,8 @@ fun ScreenApp(
                     signIn = signIn,
                     context = context,
                     googleDrive = googleDrive,
-                    signout = signout
+                    signout = signout,
+                    googleSignInClient = googleSignInClient
                 )
 
                 if (loggingOptionsVisible) {

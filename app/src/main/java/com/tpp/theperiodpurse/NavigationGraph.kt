@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -15,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.api.services.drive.Drive
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.ui.SummaryScreen
@@ -40,7 +40,8 @@ enum class OnboardingScreen {
     QuestionTwo,
     QuestionThree,
     Summary,
-    LoadGoogleDrive
+    LoadGoogleDrive,
+    GoogleSignIn
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -55,7 +56,8 @@ fun NavigationGraph(
     context: Context,
     signIn: () -> Unit,
     googleDrive: Drive? = null,
-    signout: () -> Unit = {}
+    signout: () -> Unit = {},
+    googleSignInClient: GoogleSignInClient
 ) {
     val onboardUIState by onboardViewModel.uiState.collectAsState()
     val appUiState by appViewModel.uiState.collectAsState()
@@ -120,7 +122,10 @@ fun NavigationGraph(
             WelcomeScreen(
                 onNextButtonClicked =
                 { navController.navigate(OnboardingScreen.QuestionOne.name) },
-                signIn = signIn
+                signIn = signIn,
+                navController = navController,
+                context = context,
+                onboardUIState = onboardUIState
             )
         }
 
@@ -170,19 +175,13 @@ fun NavigationGraph(
             )
         }
         composable(route = OnboardingScreen.LoadGoogleDrive.name) {
-            if (googleDrive != null) {
-                LoadGoogleDrive(googleDrive = googleDrive,
+                LoadGoogleDrive(
                     viewModel = onboardViewModel,
-                    navHostController = navController)
-            }
-            else {
-                WelcomeScreen(
-                    onNextButtonClicked =
-                    { navController.navigate(OnboardingScreen.QuestionOne.name) },
-                    signIn = signIn
-                )
-            }
+                    navHostController = navController,
+                    context = context,
+                    googleAccount = onboardUIState.googleAccount)
         }
+
     }
 }
 

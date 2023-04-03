@@ -49,6 +49,8 @@ fun ResetDatabase(
         onboardUiState.days = 0
         onboardUiState.symptomsOptions = listOf()
         onboardUiState.date = ""
+        onboardUiState.googleAccount = null
+
         if (viewModel.checkGoogleLogin(context)){
             signout()
         }

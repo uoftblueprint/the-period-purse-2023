@@ -158,7 +158,9 @@ fun SettingsScreen(
                     navigateUp = { navController.navigateUp() },
                     color = Color.White),
                     navController = navController,
-                    signIn = signIn
+                    signIn = signIn,
+                    outController = outController,
+                    onboardUIState = onboardUiState
                 )
             }
             composable(route = SettingScreenNavigation.DeleteAccount.name) {

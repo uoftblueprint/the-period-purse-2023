@@ -9,7 +9,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 
-@Database(entities=[User::class, Date::class], version = 4, exportSchema = false)
+@Database(entities=[User::class, Date::class], version = 5, exportSchema = false)
 @TypeConverters(
     SymptomConverter::class,
     DateConverter::class,
@@ -66,11 +66,7 @@ abstract class ApplicationRoomDatabase: RoomDatabase() {
                     output.transferFrom(input, 0, input.size())
                 }
             }
-
             return file
-
-
-
         }
     }
 }

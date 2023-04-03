@@ -1,10 +1,18 @@
 package com.tpp.theperiodpurse.ui.onboarding
+import android.accounts.Account
 import android.content.Context
+import android.provider.Settings.Global.getString
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.api.client.extensions.android.http.AndroidHttp
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.drive.Drive
+import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.FileList
+import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.data.Date
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -60,10 +68,23 @@ class OnboardViewModel @Inject constructor (
         }
     }
 
-    fun checkGoogleDrive(drive: Drive) {
+    fun checkGoogleDrive(account: Account, context: Context, ) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 async {
+                    val credential = GoogleAccountCredential.usingOAuth2(
+                        context, listOf(DriveScopes.DRIVE_FILE, DriveScopes.DRIVE, DriveScopes.DRIVE_READONLY)
+                    )
+                    credential.selectedAccount = account
+                    val drive = Drive
+                        .Builder(
+                            AndroidHttp.newCompatibleTransport(),
+                            JacksonFactory.getDefaultInstance(),
+                            credential
+                        )
+                        .setApplicationName(context.getString(R.string.app_name))
+                        .build()
+
                     val query = "mimeType='application/x-sqlite3' and trashed=false and 'root' in parents and name='user_database.db'"
                     isDrive.postValue(drive.files().list().setQ(query).execute())
 
