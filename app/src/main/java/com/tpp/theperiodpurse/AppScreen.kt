@@ -30,7 +30,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -103,9 +102,9 @@ class MainActivity : ComponentActivity() {
                     }
                 }
                 if (mAuth.currentUser == null) {
-                    Application(context = applicationContext, signIn = { signIn() } )
+                    Application(context = applicationContext, signIn = { signIn() }, hasNotificationsPermission = hasNotificationPermission )
                 } else {
-                    Application(context = applicationContext, signIn = { signIn() })
+                    Application(context = applicationContext, signIn = { signIn() }, hasNotificationsPermission = hasNotificationPermission)
                 }
             }
         }
@@ -150,7 +149,19 @@ class MainActivity : ComponentActivity() {
                     // SignIn Successful
                     Toast.makeText(this, "SignIn Successful", Toast.LENGTH_SHORT).show()
                     setContent {
-                        Application(context = applicationContext, skipDatabase = true, skipWelcome = true, signIn = { signIn() })
+
+                        val hasNotificationPermission by remember {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                mutableStateOf(
+                                    ContextCompat.checkSelfPermission(
+                                        applicationContext,
+                                        POST_NOTIFICATIONS
+                                    ) == PackageManager.PERMISSION_GRANTED
+                                )
+                            } else mutableStateOf(true)
+                        }
+
+                        Application(context = applicationContext, skipDatabase = true, skipWelcome = true, signIn = { signIn() }, hasNotificationsPermission = hasNotificationPermission)
                     }
                 } else {
                     // SignIn Failed
@@ -166,12 +177,14 @@ fun Application(context: Context,
                 signIn: () -> Unit,
                 skipWelcome: Boolean = false,
                 skipDatabase: Boolean = false,
-                skipOnboarding: Boolean = false) {
+                skipOnboarding: Boolean = false,
+                hasNotificationsPermission: Boolean = false) {
     ScreenApp(signIn = signIn,
         skipOnboarding = skipOnboarding,
         skipWelcome = skipDatabase,
         skipDatabase = skipWelcome,
-        context = context)
+        context = context,
+    hasNotificationsPermissions = hasNotificationsPermission)
     createNotificationChannel(context)
 }
 
@@ -204,6 +217,7 @@ fun ScreenApp(
     skipDatabase: Boolean = false,
     skipOnboarding: Boolean = false,
     context: Context,
+    hasNotificationsPermissions: Boolean = false,
 
 ) {
     var loggingOptionsVisible by remember { mutableStateOf(false) }
