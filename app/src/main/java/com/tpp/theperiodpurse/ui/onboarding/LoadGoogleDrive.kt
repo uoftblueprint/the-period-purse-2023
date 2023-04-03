@@ -110,7 +110,7 @@ fun LoadGoogleDrive(googleAccount: Account?, viewModel: OnboardViewModel, navHos
         if (isDrive!!.files.isNotEmpty() && confirmLoad.value && decision.value){
             LaunchedEffect(Unit) {
                 navHostController.popBackStack()
-                navHostController.navigate(Screen.Calendar.name)
+                navHostController.navigate(OnboardingScreen.DownloadBackup.name)
             }
         }
         else if (confirmLoad.value) {

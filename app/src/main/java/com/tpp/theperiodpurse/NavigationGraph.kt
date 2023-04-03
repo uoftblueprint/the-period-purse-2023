@@ -50,8 +50,8 @@ enum class OnboardingScreen {
     QuestionThree,
     Summary,
     LoadGoogleDrive,
-    GoogleSignIn
     LoadDatabase,
+    DownloadBackup
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -205,6 +205,13 @@ fun NavigationGraph(
                     googleAccount = onboardUIState.googleAccount)
         }
 
+        composable(route = OnboardingScreen.DownloadBackup.name) {
+            DownloadBackup(googleAccount = onboardUIState.googleAccount,
+                viewModel = onboardViewModel,
+                navHostController = navController,
+                context = context)
+        }
+
     }
 }
 
@@ -212,4 +219,9 @@ fun NavigationGraph(
 fun currentRoute(navController: NavController): String? {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     return navBackStackEntry?.destination?.route
+}
+
+fun navigateToLogScreenWithDate(date: LocalDate, navController: NavController) {
+    navController.navigate(route = "%s/%s/%s"
+        .format(Screen.Calendar, Screen.Log, date.toString()))
 }

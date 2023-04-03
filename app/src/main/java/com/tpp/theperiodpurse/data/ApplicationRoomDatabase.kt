@@ -9,7 +9,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 
-@Database(entities=[User::class, Date::class], version = 5, exportSchema = false)
+@Database(entities=[User::class, Date::class], version = 6, exportSchema = false)
 @TypeConverters(
     SymptomConverter::class,
     DateConverter::class,

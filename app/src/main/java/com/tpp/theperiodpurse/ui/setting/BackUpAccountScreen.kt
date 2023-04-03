@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -41,6 +39,18 @@ fun BackUpAccountScreen(appbar: Unit,
     val screenheight = configuration.screenHeightDp
 
     var confirmBackUp = remember { mutableStateOf(false)  }
+
+    var firstCheck = remember {
+        mutableStateOf(true)
+    }
+
+    if (firstCheck.value){
+        val account = GoogleSignIn.getLastSignedInAccount(context)
+        if (account != null && onboardUIState?.googleAccount !=null){
+            onboardUIState.googleAccount= account.account
+        }
+        firstCheck.value = true
+    }
 
     appbar
 
@@ -123,16 +133,11 @@ fun BackUpAccountScreen(appbar: Unit,
                             signInResult.value = GoogleSignInResult(GoogleSignInAccount.createDefault(), Status.RESULT_CANCELED)
                         }
                     }
-
-
                 }
             }
-
         }
 
     }
-
-
 
     if (confirmBackUp.value) {
 
@@ -181,7 +186,5 @@ fun BackUpAccountScreen(appbar: Unit,
         )
 
     }
-
-
 
 }

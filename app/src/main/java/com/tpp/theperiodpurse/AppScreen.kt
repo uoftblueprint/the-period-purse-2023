@@ -168,10 +168,9 @@ fun Application(context: Context,
                 signIn: () -> Unit,
                 skipWelcome: Boolean = false,
                 skipDatabase: Boolean = false,
-                skipOnboarding: Boolean = false,
                 googleDrive: Drive? = null,
                 signout: () -> Unit = {},
-                googleSignInClient: GoogleSignInClient) {
+                googleSignInClient: GoogleSignInClient,
                 skipOnboarding: Boolean = false,
                 hasNotificationsPermission: Boolean = false) {
     ScreenApp(signIn = signIn,
@@ -181,8 +180,7 @@ fun Application(context: Context,
         context = context,
         googleDrive = googleDrive,
         signout = signout,
-        googleSignInClient = googleSignInClient)
-        context = context,
+        googleSignInClient = googleSignInClient,
     hasNotificationsPermissions = hasNotificationsPermission)
     createNotificationChannel(context)
 }
@@ -218,7 +216,7 @@ fun ScreenApp(
     context: Context,
     googleDrive: Drive? = null,
     signout: () -> Unit = {},
-    googleSignInClient: GoogleSignInClient
+    googleSignInClient: GoogleSignInClient,
     hasNotificationsPermissions: Boolean = false,
 
 ) {
@@ -309,3 +307,4 @@ fun ScreenApp(
         }
     }
 }
+
