@@ -1,21 +1,24 @@
 package com.tpp.theperiodpurse.ui.cycle
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -45,7 +48,68 @@ fun CurrentCycleBox(modifier: Modifier = Modifier) {
             color = Color(0xFFB12126),
             modifier = modifier.padding(start = 20.dp, top = 20.dp)
         )
+        Spacer(modifier = Modifier.height(16.dp))
+        Box(
+            modifier = Modifier
+                .padding(20.dp)
+                .fillMaxWidth()
+        ) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(200.dp)
+            ) {
+                Canvas(modifier = Modifier.matchParentSize()) {
+                    val strokeWidth = 25.dp.toPx()
+                    val ringColor = Color(0xFFB12126)
+                    val radius = (size.minDimension - strokeWidth) / 2
 
+                    drawArc(
+                        color = ringColor.copy(alpha = 0.2f),
+                        startAngle = 0f,
+                        sweepAngle = 360f,
+                        useCenter = false,
+                        topLeft = center - Offset(radius, radius),
+                        size = Size(radius * 2, radius * 2),
+                        style = Stroke(width = strokeWidth)
+                    )
+
+                    // Draw the progress ring
+                    drawArc(
+                        color = ringColor,
+                        startAngle = -90f,
+                        sweepAngle = 360f * 0.75f,
+                        useCenter = false,
+                        topLeft = center - Offset(radius, radius),
+                        size = Size(radius * 2, radius * 2),
+                        style = Stroke(width = strokeWidth, cap = StrokeCap.Round)
+                    )
+                }
+                Column(
+                    modifier = modifier.align(Alignment.Center),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        text = "1",
+                        fontSize = 50.sp,
+                        fontWeight = FontWeight(900),
+                        color = Color(0xFFB12126),
+                    )
+                    Text(
+                        text = "Days since",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight(500),
+                        color = Color(0xFF868083),
+                    )
+                    Text(
+                        text = "last period",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight(500),
+                        color = Color(0xFF868083),
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -53,7 +117,7 @@ fun CurrentCycleBox(modifier: Modifier = Modifier) {
 fun AverageLengthBox(
     modifier: Modifier = Modifier,
     title: String,
-    image: String = "Change this into Image later",
+    image: Painter,
     length: Float,
     color: Color
 ) {
@@ -91,8 +155,19 @@ fun AverageLengthBox(
                     modifier
                         .size(50.dp)
                         .clip(RoundedCornerShape(50))
-                        .background(Color.Red)
-                ) {}
+                        .background(Color.White)
+                ) {
+                    Image(
+                        painter = image,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .matchParentSize()
+                            .aspectRatio(1f) // Maintain a 1:1 aspect ratio
+                            .padding(8.dp), // Add padding to shrink the image inside the box
+                        contentScale = ContentScale.Fit,
+                        alignment = Alignment.Center
+                    )
+                }
             }
         }
     }
@@ -157,13 +232,15 @@ fun CycleScreenLayout(
                     AverageLengthBox(
                         title = stringResource(R.string.avg_period_len),
                         color = Color(0xFFFEDBDB),
-                        length = periodLength
+                        length = periodLength,
+                        image = painterResource(R.drawable.flow_with_heart)
                     )
                     Spacer(modifier.width(16.dp))
                     AverageLengthBox(
                         title = stringResource(R.string.avg_cycle_len),
                         color = Color(0xFFBAE0D8),
-                        length = cycleLength
+                        length = cycleLength,
+                        image = painterResource(R.drawable.menstruation_calendar__1_)
                     )
                 }
                 Spacer(modifier.height(30.dp))
