@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-@Database(entities=[User::class, Date::class], version = 7, exportSchema = false)
+@Database(entities=[User::class, Date::class], version = 5, exportSchema = false)
 @TypeConverters(
     SymptomConverter::class,
     DateConverter::class,
