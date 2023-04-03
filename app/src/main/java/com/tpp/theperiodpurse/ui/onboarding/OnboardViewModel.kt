@@ -34,7 +34,7 @@ class OnboardViewModel @Inject constructor (
     var isDeleted: LiveData<Boolean?> = userRepository.isDeleted
     var isDrive: MutableLiveData<FileList?> = MutableLiveData(null)
     var isDownloaded: MutableLiveData<Boolean?> = MutableLiveData(null)
-
+    var isBackedUp: MutableLiveData<Boolean?> = MutableLiveData(null)
 
     fun checkGoogleLogin(context: Context): Boolean{
         val account = GoogleSignIn.getLastSignedInAccount(context)
@@ -70,7 +70,8 @@ class OnboardViewModel @Inject constructor (
             withContext(Dispatchers.IO) {
                 async {
                     val credential = GoogleAccountCredential.usingOAuth2(
-                        context, listOf(DriveScopes.DRIVE_FILE, DriveScopes.DRIVE, DriveScopes.DRIVE_READONLY)
+                        context, listOf(DriveScopes.DRIVE_FILE,
+                            DriveScopes.DRIVE_APPDATA)
                     )
                     credential.selectedAccount = account
                     val drive = Drive
@@ -82,7 +83,7 @@ class OnboardViewModel @Inject constructor (
                         .setApplicationName(context.getString(R.string.app_name))
                         .build()
 
-                    val query = "mimeType='application/x-sqlite3' and trashed=false and 'root' in parents and name='user_database.db'"
+                    val query = "mimeType='application/x-sqlite3' and trashed=false and 'appDataFolder' in parents and name='user_database.db'"
                     isDrive.postValue(drive.files().list().setQ(query).execute())
 
                 }
@@ -99,9 +100,8 @@ class OnboardViewModel @Inject constructor (
                         val credential = GoogleAccountCredential.usingOAuth2(
                             context,
                             listOf(
-                                DriveScopes.DRIVE_FILE,
-                                DriveScopes.DRIVE,
-                                DriveScopes.DRIVE_READONLY
+                                DriveScopes.DRIVE_READONLY,
+                                DriveScopes.DRIVE_APPDATA
                             )
                         )
                         credential.selectedAccount = account
@@ -115,7 +115,7 @@ class OnboardViewModel @Inject constructor (
                             .build()
 
                         val query =
-                            "mimeType='application/x-sqlite3' and trashed=false and 'root' in parents and name='user_database.db'"
+                            "mimeType='application/x-sqlite3' and trashed=false and 'appDataFolder' in parents and name='user_database.db'"
                         val fileList = drive.files().list().setQ(query).execute()
 
                         val fileId = fileList.files[0].id
@@ -133,8 +133,20 @@ class OnboardViewModel @Inject constructor (
             withContext(Dispatchers.IO) {
                 async {
                     val credential = GoogleAccountCredential.usingOAuth2(
-                        context, listOf(DriveScopes.DRIVE_FILE, DriveScopes.DRIVE, DriveScopes.DRIVE_READONLY)
+                        context, listOf(DriveScopes.DRIVE_READONLY,
+                            DriveScopes.DRIVE_APPDATA)
                     )
+                    credential.selectedAccount = account
+                    val drive = Drive.Builder(
+                        AndroidHttp.newCompatibleTransport(),
+                        JacksonFactory.getDefaultInstance(),
+                        credential
+                    )
+                        .setApplicationName(context.getString(R.string.app_name))
+                        .build()
+
+
+
                 }
             }
         }
