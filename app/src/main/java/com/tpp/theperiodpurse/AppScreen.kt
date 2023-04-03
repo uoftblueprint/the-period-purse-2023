@@ -30,7 +30,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -103,9 +102,9 @@ class MainActivity : ComponentActivity() {
                     }
                 }
                 if (mAuth.currentUser == null) {
-                    Application(context = applicationContext, signIn = { signIn() } )
+                    Application(context = applicationContext, signIn = { signIn() }, hasNotificationsPermission = hasNotificationPermission )
                 } else {
-                    Application(context = applicationContext, signIn = { signIn() })
+                    Application(context = applicationContext, signIn = { signIn() }, hasNotificationsPermission = hasNotificationPermission)
                 }
             }
         }
@@ -150,7 +149,19 @@ class MainActivity : ComponentActivity() {
                     // SignIn Successful
                     Toast.makeText(this, "SignIn Successful", Toast.LENGTH_SHORT).show()
                     setContent {
-                        Application(context = applicationContext, skipDatabase = true, skipWelcome = true, signIn = { signIn() })
+
+                        val hasNotificationPermission by remember {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                mutableStateOf(
+                                    ContextCompat.checkSelfPermission(
+                                        applicationContext,
+                                        POST_NOTIFICATIONS
+                                    ) == PackageManager.PERMISSION_GRANTED
+                                )
+                            } else mutableStateOf(true)
+                        }
+
+                        Application(context = applicationContext, skipDatabase = true, skipWelcome = true, signIn = { signIn() }, hasNotificationsPermission = hasNotificationPermission)
                     }
                 } else {
                     // SignIn Failed
@@ -166,12 +177,14 @@ fun Application(context: Context,
                 signIn: () -> Unit,
                 skipWelcome: Boolean = false,
                 skipDatabase: Boolean = false,
-                skipOnboarding: Boolean = false) {
+                skipOnboarding: Boolean = false,
+                hasNotificationsPermission: Boolean = false) {
     ScreenApp(signIn = signIn,
         skipOnboarding = skipOnboarding,
         skipWelcome = skipDatabase,
         skipDatabase = skipWelcome,
-        context = context)
+        context = context,
+    hasNotificationsPermissions = hasNotificationsPermission)
     createNotificationChannel(context)
 }
 
@@ -204,9 +217,9 @@ fun ScreenApp(
     skipDatabase: Boolean = false,
     skipOnboarding: Boolean = false,
     context: Context,
+    hasNotificationsPermissions: Boolean = false,
 
 ) {
-    appViewModel.loadData(calendarViewModel)
     var loggingOptionsVisible by remember { mutableStateOf(false) }
     var skipOnboarding = skipOnboarding
     val isOnboarded by onboardViewModel.isOnboarded.observeAsState(initial = null)
@@ -225,10 +238,12 @@ fun ScreenApp(
         }
         Scaffold(
             floatingActionButton = {
-                FloatingActionButton(
-                    navController = navController,
-                    onClickInCalendar = { loggingOptionsVisible = true }
-                )
+                if (currentRoute(navController) in screensWithNavigationBar) {
+                    FloatingActionButton(
+                        navController = navController,
+                        onClickInCalendar = { loggingOptionsVisible = true }
+                    )
+                }
             },
             floatingActionButtonPosition = FabPosition.Center,
             isFloatingActionButtonDocked = true
@@ -242,7 +257,7 @@ fun ScreenApp(
             Box {
                 NavigationGraph(
                     navController = navController,
-                    startDestination = if (skipOnboarding) Screen.Calendar.name else if (skipWelcome) OnboardingScreen.QuestionOne.name else OnboardingScreen.Welcome.name,
+                    startDestination = if (skipOnboarding) OnboardingScreen.LoadDatabase.name else if (skipWelcome) OnboardingScreen.QuestionOne.name else OnboardingScreen.Welcome.name,
                     onboardViewModel = onboardViewModel,
                     appViewModel= appViewModel,
                     calendarViewModel = calendarViewModel,
@@ -251,21 +266,17 @@ fun ScreenApp(
                     context = context
                 )
 
-                if (loggingOptionsVisible) {
-                    LoggingOptionsPopup(
-                        onLogDailySymptomsClick = {
-                            navController.navigate(
-                                route = "%s/%s/%s"
-                                    .format(
-                                        Screen.Calendar,
-                                        Screen.Log,
-                                        LocalDate.now().toString()
-                                    )
-                            )
-                        },
-                        { /* TODO: Go to logging page for multiple dates */ },
-                        onExit = { loggingOptionsVisible = false },
-                        modifier = modifier.padding(bottom = 64.dp)
+            if (loggingOptionsVisible) {
+                LoggingOptionsPopup(
+                    onLogDailySymptomsClick = {
+                        navigateToLogScreenWithDate(
+                            LocalDate.now(),
+                            navController
+                        )
+                    },
+                    onLogMultiplePeriodDates = { navController.navigate(Screen.LogMultipleDates.name) },
+                    onExit = { loggingOptionsVisible = false },
+                    modifier = modifier.padding(bottom = 64.dp)
                     )
                 }
             }
@@ -273,7 +284,7 @@ fun ScreenApp(
                 contentAlignment = Alignment.BottomCenter,
                 modifier = Modifier.fillMaxSize()
             ) {
-                if (currentRoute(navController) in Screen.values().map { it.name }) {
+                if (currentRoute(navController) in screensWithNavigationBar) {
                     BottomNavigation(navController = navController)
                 }
             }

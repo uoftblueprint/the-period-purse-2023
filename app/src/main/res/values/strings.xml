@@ -41,6 +41,8 @@
     <string name="avg_period_len">Average period length</string>
     <string name="avg_cycle_len">Average cycle length</string>
     <string name="fab_to_calender">Average cycle length</string>
+    <string name="log_multiple_dates_header_title">Tap date to log period</string>
+    <string name="log_multiple_dates_header_body">Selected dates with have their Flow level set to Medium</string>
 
     <string name="period_flow">Period Flow</string>
     <string name="expand_button_symptoms_content_description">Expand to switch symptoms</string>
@@ -52,10 +54,12 @@
     <string name="account_settings_heading">Account settings</string>
     <string name="remind_me_to_log_symptoms">Remind me to log symptoms</string>
     <string name="customize_notifications">Customise Notifications</string>
+    <string name="reminder_time">Reminder Time</string>
+    <string name="repeat">Repeat</string>
     <string name="back_up_account">Back Up Account</string>
     <string name="delete_account">Delete Account</string>
     <string name="reset_database">Delete Account</string>
     <string name="settings_home">Settings</string>
-    <string name="sample_notification">Every day at 10:00 AM</string>
+    <string name="reminder_description">We\'ll remind you to log your symptoms.</string>
     <string name="copyright">© 2023 The Period Purse. All rights reserved.</string>
 </resources>

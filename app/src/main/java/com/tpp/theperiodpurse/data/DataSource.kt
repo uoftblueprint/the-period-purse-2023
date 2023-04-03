@@ -8,8 +8,5 @@ object DataSource {
         R.string.exercise,
         R.string.cramps,
         R.string.sleep,
-
     )
-
-
 }

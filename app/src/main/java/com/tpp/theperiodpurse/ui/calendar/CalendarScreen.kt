@@ -4,57 +4,44 @@ package com.tpp.theperiodpurse.ui.calendar
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.RippleAlpha
 import androidx.compose.material.ripple.RippleTheme
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.tpp.theperiodpurse.Screen
-import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.ui.theme.HeaderColor1
-import com.tpp.theperiodpurse.ui.theme.SelectedColor1
-import com.tpp.theperiodpurse.data.Symptom
-import com.tpp.theperiodpurse.ui.calendar.components.SymptomTab
-import com.tpp.theperiodpurse.ui.calendar.components.getDayColorAndIcon
-import com.tpp.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import com.google.accompanist.pager.*
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.*
 import com.tpp.theperiodpurse.AppViewModel
+import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.data.Symptom
+import com.tpp.theperiodpurse.navigateToLogScreenWithDate
+import com.tpp.theperiodpurse.ui.calendar.components.Day
+import com.tpp.theperiodpurse.ui.calendar.components.SymptomTab
+import com.tpp.theperiodpurse.ui.calendar.components.getDayColorAndIcon
+import com.tpp.theperiodpurse.ui.theme.HeaderColor1
+import com.tpp.theperiodpurse.ui.theme.SelectedColor1
+import com.tpp.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import java.time.Month
 import java.time.YearMonth
 import java.time.format.TextStyle
@@ -192,9 +179,8 @@ fun CalendarScreenLayout(
     ThePeriodPurseTheme {
         val bg = painterResource(R.drawable.colourwatercolour)
         val appUiState by appViewModel.uiState.collectAsState()
-        var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
 
-        var selectedSymptom = calendarUIState.selectedSymptom
+        val selectedSymptom = calendarUIState.selectedSymptom
         val currentMonth = remember { YearMonth.now() }
         val startMonth = remember { currentMonth.minusMonths(12) } // Previous months
         val endMonth = remember { currentMonth.plusMonths(0) } // Next months
@@ -233,18 +219,12 @@ fun CalendarScreenLayout(
                         MonthHeader(month)
                     },
                     dayContent = { day ->
-                        Day(
-                            day = day,
-                            calendarDayUIState = calendarUIState.days[day.date],
-                            activeSymptom = selectedSymptom
-                        ) {
-                            navController.navigate(
-                                route = "%s/%s/%s"
-                                    .format(
-                                        Screen.Calendar,
-                                        Screen.Log,
-                                        day.date.toString()
-                                    )
+                        if (day.position == DayPosition.MonthDate) {
+                            CalendarDay(
+                                day = day,
+                                calendarDayUIState = calendarUIState.days[day.date],
+                                activeSymptom = selectedSymptom,
+                                onClick = { navigateToLogScreenWithDate(day.date, navController) }
                             )
                         }
                     }
@@ -257,69 +237,15 @@ fun CalendarScreenLayout(
 // Creates the days
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Day(
+fun CalendarDay(
     day: CalendarDay,
     calendarDayUIState: CalendarDayUIState?,
     activeSymptom: Symptom,
-    onClick: (CalendarDay) -> Unit,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    val (dayColor, iconId) = getDayColorAndIcon(day, activeSymptom, calendarDayUIState)
-    Box(
-        modifier = Modifier
-            .padding(1.dp)
-            .aspectRatio(1f)
-    )
-    {
-        if (day.position == DayPosition.MonthDate) {
-            Box(
-                modifier = Modifier
-                    .size(64.dp)
-                    .clip(shape = RoundedCornerShape(8.dp))
-                    .fillMaxSize()
-                    .background(dayColor)
-                    .semantics { contentDescription = day.date.toString() }
-                    .border(
-                        color = Color(200, 205, 205),
-                        width = 1.dp,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .clickable(
-                        enabled = !day.date.isAfter(LocalDate.now()),
-                        onClick = {
-                            if (!day.date.isAfter(LocalDate.now()))
-                                onClick(day)
-                        }
-                    ),
-            ) {
-                Text(
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold,
-                    text = day.date.dayOfMonth.toString(),
-                    color = if (day.date.isAfter(LocalDate.now())) {
-                        Color(190, 190, 190)
-                    } else {
-                        Color.Black
-                    }
-                )
-
-                Box(modifier = Modifier
-                    .padding(12.dp)
-                    .align(Alignment.Center)) {
-                    if (calendarDayUIState != null) {
-                        Image(
-                            painterResource(id = iconId),
-                            modifier = Modifier
-                                .size(20.dp)
-                                .offset(y = 2.dp),
-                            contentDescription = "DateFlowIcon"
-                        )
-
-                    }
-                }
-            }
-        }
-    }
+    val (dayColor, iconId) = getDayColorAndIcon(activeSymptom, calendarDayUIState)
+    Day(day.date, dayColor, iconId, onClick, modifier)
 }
 
 
@@ -375,7 +301,6 @@ fun Month.displayText(short: Boolean = true): String {
 }
 
 
-//@OptIn(ExperimentalPagerApi::class)
 @Preview
 @Composable
 fun CalendarScreenPreview() {

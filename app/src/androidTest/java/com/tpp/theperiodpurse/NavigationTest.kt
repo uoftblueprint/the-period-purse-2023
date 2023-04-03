@@ -2,6 +2,7 @@ package com.tpp.theperiodpurse
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -15,6 +16,9 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import javax.inject.Inject
 
 @HiltAndroidTest
@@ -91,8 +95,22 @@ class NavigationTest {
         navController.assertCurrentRouteName(Screen.Calendar.name)
     }
 
+    @Test
+    fun appNavHost_clickCalendarFABOnCalendarScreen_navigatesLoggingPage() {
+        composeTestRule.onNodeWithContentDescription("Open logging options").performClick()
+        composeTestRule.onNodeWithContentDescription("Log daily symptoms")
+            .performClick()
+        composeTestRule.onNodeWithText(LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)))
+            .assertIsDisplayed()
+    }
+    @Test
+    fun appNavHost_clickCalendarFABOnCalendarScreen_navigatesLogMultipleDatesPage() {
+        composeTestRule.onNodeWithContentDescription("Open logging options").performClick()
+        composeTestRule.onNodeWithContentDescription("Log multiple period dates")
+            .performClick()
+        navController.assertCurrentRouteName(Screen.LogMultipleDates.name)
+    }
     fun signIn(){
-
     }
 
 }
