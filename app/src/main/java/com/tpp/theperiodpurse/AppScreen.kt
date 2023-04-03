@@ -231,10 +231,6 @@ fun ScreenApp(
         }
     }
 
-    if(hasNotificationsPermissions){
-        appViewModel.setAllowReminders()
-    }
-
     if (isOnboarded == null && !skipDatabase){
         LoadingScreen()
     } else{

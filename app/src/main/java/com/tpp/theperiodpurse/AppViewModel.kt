@@ -42,7 +42,10 @@ class AppViewModel @Inject constructor (
                 trackedSymptoms.add(Symptom.FLOW)
                 trackedSymptoms.addAll(user.symptomsToTrack)
                 _uiState.update { currentState ->
-                    currentState.copy(trackedSymptoms = trackedSymptoms)
+                    currentState.copy(trackedSymptoms = trackedSymptoms,
+                    allowReminders = user.allowReminders,
+                    reminderFrequency = user.reminderFreq,
+                    reminderTime = user.reminderTime,)
                 }
             }
             withContext(Dispatchers.IO) {
@@ -129,11 +132,6 @@ class AppViewModel @Inject constructor (
         val currentReminderState = _uiState.value.allowReminders
         _uiState.update { currentState -> currentState.copy(allowReminders = !currentReminderState)}
         userRepository.setReminders(!currentReminderState)
-    }
-
-    fun setAllowReminders(){
-        _uiState.update { currentState -> currentState.copy(allowReminders = true)}
-        userRepository.setReminders(true)
     }
 
     fun getReminderTime(): String{
