@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -93,13 +92,6 @@ fun SettingsScreen(
         backStackEntry?.destination?.route ?: SettingScreenNavigation.Start.name
     )
 
-    // use appViewModel.getTrackedSymptoms to get a list of symptoms
-    // use appViewModel.setTrackedSymptoms to set the symptoms to a new list of symptoms
-    // remove this line below after using the appViewModel
-    if (appViewModel != null) {
-        Log.d("tracked symptoms", appViewModel.getTrackedSymptoms().toString())
-    }
-
     Scaffold(
     ) { innerPadding ->
         Image(
@@ -116,17 +108,20 @@ fun SettingsScreen(
             modifier = modifier.padding(innerPadding)
         ) {
             composable(route = SettingScreenNavigation.Start.name) {
-                SettingScreenLayout(
-                    onNotificationClicked = {
-                        navController.navigate(SettingScreenNavigation.Notification.name)
-                    },
-                    onBackUpClicked = {
-                        navController.navigate(SettingScreenNavigation.BackUpAccount.name)
-                    },
-                    onDeleteClicked = {
-                        navController.navigate(SettingScreenNavigation.DeleteAccount.name)
-                    },
-                )
+                if (appViewModel != null) {
+                    SettingScreenLayout(
+                        onNotificationClicked = {
+                            navController.navigate(SettingScreenNavigation.Notification.name)
+                        },
+                        onBackUpClicked = {
+                            navController.navigate(SettingScreenNavigation.BackUpAccount.name)
+                        },
+                        onDeleteClicked = {
+                            navController.navigate(SettingScreenNavigation.DeleteAccount.name)
+                        },
+                        appViewModel = appViewModel
+                    )
+                }
             }
             composable(route = SettingScreenNavigation.Notification.name) {
 //                TimeWheel(context= LocalContext.current)
@@ -141,15 +136,22 @@ fun SettingsScreen(
                         )
                     } else mutableStateOf(true)
                 }
-                NotificationsLayout(
-                    context = context,
-                    hasNotificationPermission,
-                    appBar = SettingAppBar(
-                        currentScreen = currentScreen.name,
-                        canNavigateBack = navController.previousBackStackEntry != null,
-                        navigateUp = { navController.navigateUp() },
-                        color = Color.Transparent)
-                )
+//                var allowReminders = false
+//                if (appViewModel != null){
+//                    allowReminders = appViewModel.getAllowReminders()
+//                }
+                if (appViewModel != null) {
+                    NotificationsLayout(
+                        context = context,
+                        hasNotificationPermission,
+                        appBar = SettingAppBar(
+                            currentScreen = currentScreen.name,
+                            canNavigateBack = navController.previousBackStackEntry != null,
+                            navigateUp = { navController.navigateUp() },
+                            color = Color.Transparent),
+                        appViewModel
+                    )
+                }
             }
             composable(route = SettingScreenNavigation.BackUpAccount.name) {
                 BackUpAccountScreen(appbar = SettingAppBar(

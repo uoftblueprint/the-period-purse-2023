@@ -172,6 +172,8 @@ fun Application(context: Context,
                 googleDrive: Drive? = null,
                 signout: () -> Unit = {},
                 googleSignInClient: GoogleSignInClient) {
+                skipOnboarding: Boolean = false,
+                hasNotificationsPermission: Boolean = false) {
     ScreenApp(signIn = signIn,
         skipOnboarding = skipOnboarding,
         skipWelcome = skipDatabase,
@@ -180,6 +182,8 @@ fun Application(context: Context,
         googleDrive = googleDrive,
         signout = signout,
         googleSignInClient = googleSignInClient)
+        context = context,
+    hasNotificationsPermissions = hasNotificationsPermission)
     createNotificationChannel(context)
 }
 
@@ -215,6 +219,8 @@ fun ScreenApp(
     googleDrive: Drive? = null,
     signout: () -> Unit = {},
     googleSignInClient: GoogleSignInClient
+    hasNotificationsPermissions: Boolean = false,
+
 ) {
     var loggingOptionsVisible by remember { mutableStateOf(false) }
     var skipOnboarding = skipOnboarding
@@ -247,10 +253,12 @@ fun ScreenApp(
         }
         Scaffold(
             floatingActionButton = {
-                FloatingActionButton(
-                    navController = navController,
-                    onClickInCalendar = { loggingOptionsVisible = true }
-                )
+                if (currentRoute(navController) in screensWithNavigationBar) {
+                    FloatingActionButton(
+                        navController = navController,
+                        onClickInCalendar = { loggingOptionsVisible = true }
+                    )
+                }
             },
             floatingActionButtonPosition = FabPosition.Center,
             isFloatingActionButtonDocked = true
@@ -276,21 +284,17 @@ fun ScreenApp(
                     googleSignInClient = googleSignInClient
                 )
 
-                if (loggingOptionsVisible) {
-                    LoggingOptionsPopup(
-                        onLogDailySymptomsClick = {
-                            navController.navigate(
-                                route = "%s/%s/%s"
-                                    .format(
-                                        Screen.Calendar,
-                                        Screen.Log,
-                                        LocalDate.now().toString()
-                                    )
-                            )
-                        },
-                        { /* TODO: Go to logging page for multiple dates */ },
-                        onExit = { loggingOptionsVisible = false },
-                        modifier = modifier.padding(bottom = 64.dp)
+            if (loggingOptionsVisible) {
+                LoggingOptionsPopup(
+                    onLogDailySymptomsClick = {
+                        navigateToLogScreenWithDate(
+                            LocalDate.now(),
+                            navController
+                        )
+                    },
+                    onLogMultiplePeriodDates = { navController.navigate(Screen.LogMultipleDates.name) },
+                    onExit = { loggingOptionsVisible = false },
+                    modifier = modifier.padding(bottom = 64.dp)
                     )
                 }
             }
@@ -298,7 +302,7 @@ fun ScreenApp(
                 contentAlignment = Alignment.BottomCenter,
                 modifier = Modifier.fillMaxSize()
             ) {
-                if (currentRoute(navController) in Screen.values().map { it.name }) {
+                if (currentRoute(navController) in screensWithNavigationBar) {
                     BottomNavigation(navController = navController)
                 }
             }

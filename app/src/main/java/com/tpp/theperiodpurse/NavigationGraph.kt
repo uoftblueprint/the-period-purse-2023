@@ -16,6 +16,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.api.services.drive.Drive
+import com.tpp.theperiodpurse.ui.symptomlog.LogMultipleDatesScreen
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.ui.SummaryScreen
 import com.tpp.theperiodpurse.ui.calendar.CalendarScreen
@@ -23,8 +24,10 @@ import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import com.tpp.theperiodpurse.ui.cycle.CycleScreenLayout
 import com.tpp.theperiodpurse.ui.education.*
 import com.tpp.theperiodpurse.ui.onboarding.*
+import com.tpp.theperiodpurse.ui.setting.LoadDatabase
 import com.tpp.theperiodpurse.ui.setting.SettingsScreen
 import com.tpp.theperiodpurse.ui.symptomlog.LogScreen
+import java.time.LocalDate
 
 enum class Screen {
     Calendar,
@@ -32,7 +35,13 @@ enum class Screen {
     Cycle,
     Settings,
     Learn,
+    LogMultipleDates,
 }
+
+val screensWithNavigationBar = arrayOf(
+    Screen.Calendar.name, Screen.Log.name, Screen.Cycle.name,
+    Screen.Settings.name, Screen.Learn.name
+)
 
 enum class OnboardingScreen {
     Welcome,
@@ -42,6 +51,7 @@ enum class OnboardingScreen {
     Summary,
     LoadGoogleDrive,
     GoogleSignIn
+    LoadDatabase,
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -90,6 +100,13 @@ fun NavigationGraph(
                     calendarViewModel = calendarViewModel
                 )
             }
+        }
+
+        composable(route = Screen.LogMultipleDates.name) {
+            LogMultipleDatesScreen(
+                onClose = { navController.navigateUp() },
+                calendarViewModel
+            )
         }
 
         composable(route = Screen.Settings.name) {
@@ -162,9 +179,8 @@ fun NavigationGraph(
             SummaryScreen(
                 onboardUiState = onboardUIState,
                 onSendButtonClicked = {
-                    navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
-                    navController.navigate(Screen.Calendar.name)
-                    appViewModel.loadData(calendarViewModel)
+                    navController.navigate(OnboardingScreen.LoadDatabase.name)
+
                 },
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null,
@@ -172,6 +188,13 @@ fun NavigationGraph(
 //                onCancelButtonClicked = {
 //                    cancelOrderAndNavigateToStart(onboardViewModel, navController)
 //                },
+            )
+        }
+        composable(route = OnboardingScreen.LoadDatabase.name) {
+            LoadDatabase(
+                appViewModel = appViewModel,
+                calViewModel = calendarViewModel,
+                navController = navController
             )
         }
         composable(route = OnboardingScreen.LoadGoogleDrive.name) {

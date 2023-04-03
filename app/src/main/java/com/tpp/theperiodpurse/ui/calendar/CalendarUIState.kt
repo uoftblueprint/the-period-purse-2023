@@ -12,10 +12,10 @@ data class CalendarUIState(
 
 data class CalendarDayUIState(
     val flow: FlowSeverity?,
-    val mood: Mood?,
+    val mood: Mood? = null,
     val exerciseLengthString: String = "",
-    val exerciseType: Exercise?,
-    val crampSeverity: CrampSeverity?,
+    val exerciseType: Exercise? = null,
+    val crampSeverity: CrampSeverity? = null,
     val sleepString: String = ""
 ) {
     private val exerciseLength =
