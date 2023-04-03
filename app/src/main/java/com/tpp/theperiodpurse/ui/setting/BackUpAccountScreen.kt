@@ -96,7 +96,6 @@ fun BackUpAccountScreen(appbar: Unit,
             if (onboardUIState != null) {
                 onboardUIState.googleAccount = account.account
             }
-            confirmBackUp.value = true
         }
         else {
             val signInResult = remember { mutableStateOf(GoogleSignInResult(GoogleSignInAccount.createDefault(), Status.RESULT_CANCELED)) }
