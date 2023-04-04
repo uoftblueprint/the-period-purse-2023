@@ -86,18 +86,27 @@ fun LogScreen(
         LogScreenLayout(
             day, navController, logPrompts, logViewModel,
             onSave = {
+                navController.navigateUp()
+                // If None is selected, it should not count is a square is filled
+                var flow = logViewModel.getSelectedFlow()
+                if (flow != null && flow.name == "None") {
+                    flow = null
+                }
+                var cramps = logViewModel.getSelectedCrampSeverity()
+                if (cramps != null && cramps.name == "None") {
+                    cramps = null
+                }
                 calendarViewModel.setDayInfo(
                     day,
                     CalendarDayUIState(
-                        flow = logViewModel.getSelectedFlow(),
+                        flow = flow,
                         mood = logViewModel.getSelectedMood(),
                         exerciseLengthString = logViewModel.getText(LogPrompt.Exercise),
                         exerciseType = logViewModel.getSelectedExercise(),
-                        crampSeverity = logViewModel.getSelectedCrampSeverity(),
+                        crampSeverity = cramps,
                         sleepString = logViewModel.getText(LogPrompt.Sleep)
                     )
                 )
-                navController.navigateUp()
                 if (logViewModel.isFilled()) {
                     var exercisedDuration: Duration? = null
                     val excTxt = logViewModel.getText(LogPrompt.Exercise)
@@ -138,6 +147,18 @@ fun LogScreen(
                             notes = logViewModel.getText(LogPrompt.Notes)
                         )
                     )
+                } else {
+                    // chcek  if given date is in the db, if it is, delete the entry
+                    val dates = appViewModel.getDates()
+                    for (d in dates) {
+                        val thisDate = d.date?.toInstant()?.atZone(ZoneId.systemDefault())
+                            ?.toLocalDate()
+                        if (thisDate != null) {
+                            if (thisDate == day) {
+                                appViewModel.deleteDate(d)
+                            }
+                        }
+                    }
                 }
             })
 
