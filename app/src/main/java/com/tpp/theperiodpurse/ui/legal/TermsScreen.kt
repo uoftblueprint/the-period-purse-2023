@@ -1,4 +1,4 @@
-package com.tpp.theperiodpurse.ui.education
+package com.tpp.theperiodpurse.ui.legal
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
@@ -20,10 +20,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.ui.education.EducationBackground
+import com.tpp.theperiodpurse.ui.education.teal
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun EducationTermsScreen(navController: NavHostController) {
+fun TermsScreen(navController: NavHostController) {
     val interactionSource = remember { MutableInteractionSource() }
     val scaffoldState = rememberScaffoldState()
 
@@ -46,7 +48,7 @@ fun EducationTermsScreen(navController: NavHostController) {
                         modifier = Modifier
                             .clickable(interactionSource = interactionSource,
                                 indication = null)
-                            { navController.navigate(Destination.Home.route) }
+                            { navController.popBackStack() }
                             .size(20.dp),
                         painter = painterResource(R.drawable.arrow),
                         contentDescription = "Back Button",
@@ -196,5 +198,5 @@ fun EducationTermsScreen(navController: NavHostController) {
 @Preview
 @Composable
 fun PreviewTermsConditionsScreen() {
-    EducationTermsScreen(rememberNavController())
+    TermsScreen(rememberNavController())
 }

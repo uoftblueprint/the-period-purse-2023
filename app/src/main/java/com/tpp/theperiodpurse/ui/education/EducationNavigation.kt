@@ -1,8 +1,8 @@
 package com.tpp.theperiodpurse.ui.education
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -11,45 +11,43 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.tpp.theperiodpurse.R
 
-sealed class Destination(val route: String) {
-    object Home: Destination("home")
-    object DYK: Destination("dyk")
-    object Privacy: Destination("privacy")
-    object Terms: Destination("terms")
-    object Info: Destination("info/{elementId}") {
-        fun createRoute(elementId: String) = "info/$elementId"
-    }
+enum class EducationNavigation {
+    Learn,
+    DYK,
+    ProductInfo
 }
 
 @Composable
-fun EducationScreenLayout() {
-    Surface(
-    modifier = Modifier.fillMaxSize()
+fun EducationScreen(
+    outController: NavHostController = rememberNavController(),
+    navController: NavHostController = rememberNavController()
+) {
+    NavHost(
+        navController = navController,
+        startDestination = EducationNavigation.Learn.name
     ) {
-        val navController = rememberNavController()
-        NavigationAppHost(navController = navController)
-    }
-}
-
-@Composable
-fun NavigationAppHost(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = "home") {
-
-        composable(Destination.Home.route) { EducationScreen(navController) }
-        composable(Destination.DYK.route) { EducationDYKScreen(navController) }
-        composable(Destination.Terms.route) { EducationTermsScreen(navController) }
-        composable(Destination.Privacy.route) { EducationPrivacyScreen(navController) }
-        composable(Destination.Info.route) { navBackStackEntry ->
-            val elementId = navBackStackEntry.arguments?.getString("elementId")
-            if (elementId == null) {
-                println("ERROR")
-            } else {
-                EducationInfoScreen(navController, elementId)
-            }
+        composable(route = EducationNavigation.Learn.name) {
+            EducationScreenLayout(outController, navController)
         }
 
+        composable(EducationNavigation.DYK.name) {
+            EducationDYKScreen(navController)
+        }
+
+        composable(
+            route = EducationNavigation.ProductInfo.name,
+            arguments = listOf(navArgument("elementId") { nullable = true })
+            ) {
+                val elementId =
+                    navController.previousBackStackEntry?.savedStateHandle?.get<String>("elementId")
+
+                if (elementId != null) {
+                    EducationInfoScreen(navController, elementId)
+                }
+            }
     }
 }
 
