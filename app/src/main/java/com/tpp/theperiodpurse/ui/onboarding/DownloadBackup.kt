@@ -34,7 +34,10 @@ fun DownloadBackup(googleAccount: Account?, viewModel: OnboardViewModel, navHost
         LoadingScreen()
     }
     else {
-        navHostController.navigate(OnboardingScreen.LoadDatabase.name)
+        LaunchedEffect(Unit){
+            navHostController.navigate(OnboardingScreen.LoadDatabase.name)
+        }
+
     }
 
 

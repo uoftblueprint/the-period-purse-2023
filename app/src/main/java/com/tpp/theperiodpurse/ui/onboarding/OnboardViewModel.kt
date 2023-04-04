@@ -90,8 +90,10 @@ class OnboardViewModel @Inject constructor (
                         .setApplicationName(context.getString(R.string.app_name))
                         .build()
 
-                    val query = "mimeType='application/x-sqlite3' and trashed=false and 'appDataFolder' in parents and name='user_database.db'"
-                    isDrive.postValue(drive.files().list().setQ(query).execute())
+
+                    isDrive.postValue(drive.files().list()
+                        .setQ("name = 'user_database.db' and trashed = false")
+                        .setSpaces("appDataFolder").execute())
 
                 }
 
@@ -121,9 +123,9 @@ class OnboardViewModel @Inject constructor (
                             .setApplicationName(context.getString(R.string.app_name))
                             .build()
 
-                        val query =
-                            "mimeType='application/x-sqlite3' and trashed=false and 'appDataFolder' in parents and name='user_database.db'"
-                        val fileList = drive.files().list().setQ(query).execute()
+                        val fileList = drive.files().list()
+                            .setQ("name = 'user_database.db' and trashed = false")
+                            .setSpaces("appDataFolder").execute()
 
                         val fileId = fileList.files[0].id
                         val outputStream =
@@ -153,9 +155,9 @@ class OnboardViewModel @Inject constructor (
                     credential
                 ).setApplicationName(context.getString(R.string.app_name)).build()
 
-                val query =
-                    "mimeType='application/x-sqlite3' and trashed=false and 'appDataFolder' in parents and name='user_database.db'"
-                val fileList = drive.files().list().setQ(query).execute()
+               val fileList = drive.files().list()
+                   .setQ("name = 'user_database.db' and trashed = false")
+                   .setSpaces("appDataFolder").execute()
                 val fileId = if (fileList.files.isNotEmpty()) {
                     fileList.files[0].id
                 } else {
