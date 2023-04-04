@@ -22,6 +22,8 @@ import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import com.tpp.theperiodpurse.ui.cycle.CycleScreenLayout
 import com.tpp.theperiodpurse.ui.cycle.PeriodHistoryLayout
 import com.tpp.theperiodpurse.ui.education.*
+import com.tpp.theperiodpurse.ui.legal.PrivacyScreen
+import com.tpp.theperiodpurse.ui.legal.TermsScreen
 import com.tpp.theperiodpurse.ui.onboarding.*
 import com.tpp.theperiodpurse.ui.setting.LoadDatabase
 import com.tpp.theperiodpurse.ui.setting.SettingsScreen
@@ -36,6 +38,11 @@ enum class Screen {
     Learn,
     LogMultipleDates,
     CycleFullHisotry
+}
+
+enum class LegalScreen {
+    Terms,
+    Privacy
 }
 
 val screensWithNavigationBar = arrayOf(
@@ -130,13 +137,22 @@ fun NavigationGraph(
 
         // Education Screens
         composable(route = Screen.Learn.name) {
-            EducationScreenLayout()
+            EducationScreen(outController = navController)
+        }
+
+        composable(LegalScreen.Terms.name) {
+            TermsScreen(navController)
+        }
+
+        composable(LegalScreen.Privacy.name) {
+            PrivacyScreen(navController)
         }
 
 
         // Welcome Screen
         composable(route = OnboardingScreen.Welcome.name) {
             WelcomeScreen(
+                navController = navController,
                 onNextButtonClicked =
                 { navController.navigate(OnboardingScreen.QuestionOne.name) },
                 signIn = signIn

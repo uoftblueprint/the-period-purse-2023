@@ -107,6 +107,7 @@ fun SettingsScreen(
             composable(route = SettingScreenNavigation.Start.name) {
                 if (appViewModel != null) {
                     SettingScreenLayout(
+                        outController = outController,
                         onNotificationClicked = {
                             navController.navigate(SettingScreenNavigation.Notification.name)
                         },
