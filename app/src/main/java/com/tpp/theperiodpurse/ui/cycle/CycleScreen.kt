@@ -3,6 +3,7 @@ package com.tpp.theperiodpurse.ui.cycle
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
@@ -21,13 +22,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.*
-import com.tpp.theperiodpurse.ui.theme.ThePeriodPurseTheme
+import com.tpp.theperiodpurse.data.Date
+import com.tpp.theperiodpurse.ui.education.teal
+import java.lang.Integer.min
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 private var periodLength = (-1).toFloat()
 private var cycleLength = (-1).toFloat()
@@ -139,7 +148,7 @@ fun AverageLengthBox(
                     text = when (length) {
                         (-1).toFloat() -> stringResource(R.string.log_to_learn)
                         (-2).toFloat() -> stringResource(R.string.log_to_learn)
-                        else -> "$length Days"
+                        else -> "%.2f Days".format(length)
                     },
                     fontSize = when (length) {
                         (-1).toFloat() -> 10.sp
@@ -173,24 +182,77 @@ fun AverageLengthBox(
 }
 
 @Composable
-fun CycleHistoryBox(modifier: Modifier = Modifier) {
+fun CycleHistoryBox(modifier: Modifier = Modifier, dates: ArrayList<Date>?) {
     Card(
         modifier.fillMaxWidth(), elevation = 2.dp, shape = RoundedCornerShape(10)
     ) {
-        Column(modifier.padding(horizontal = 30.dp, vertical = 25.dp)) {
-            Text(
-                text = stringResource(R.string.cycle_history),
-                fontSize = 20.sp,
-                fontWeight = FontWeight(700),
-                color = Color(0xFF868083),
-            )
+        Column(modifier.padding(horizontal = 15.dp, vertical = 15.dp)) {
+            Row (modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ){
+                Text(
+                    text = stringResource(R.string.period_history),
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight(700),
+                    color = Color(0xFF868083),
+                )
+                ClickableText(
+                    onClick = { /* Go to show more */ },
+                    style = TextStyle(
+                        color = Color(teal),
+                        fontWeight = FontWeight(700),
+                        fontSize = 15.sp
+                    ),
+                    text = AnnotatedString(stringResource(id = R.string.show_more))
+                )
+            }
             Divider(
                 color = Color(0xFF868083),
                 modifier = modifier
-                    .padding(vertical = 15.dp)
+                    .padding(top = 5.dp, bottom = 10.dp)
                     .fillMaxWidth()
             )
-            Text(text = "TODO")
+            // show last three most recent periods
+            if (dates != null) {
+                if (dates.size == 0) {
+                    Text(text = stringResource(R.string.please_start_logging_to_learn_more))
+                } else {
+                    val periods = parseDatesIntoPeriods(dates)
+                    val length = min(periods.size, 3)
+                    Column {
+                        val formatter = SimpleDateFormat("MMM d", Locale.getDefault())
+                        // check if it's within a day, if so display current period...
+                        periods[length - 1][0].date?.let {
+                            val date = formatter.format(it)
+                            Text(text = "Most Recent Period: Started $date")
+                        }
+                        if (length >= 2) {
+                            val period = periods[1]
+                            val startDate = period[0].date
+                            val endDate = period[period.size - 1].date?.let { addOneDay(it) }
+                            if (startDate != null && endDate != null) {
+                                val startString = formatter.format(startDate)
+                                val endString = formatter.format(endDate)
+                                val periodLength = (endDate.time - startDate.time) / 86400000
+                                Text(text = "$startString - $endString")
+                                Text(text = "$periodLength-day period")
+                            }
+                        }
+                        if (length == 3) {
+                            val period = periods[0]
+                            val startDate = period[0].date
+                            val endDate = period[period.size - 1].date?.let { addOneDay(it) }
+                            if (startDate != null && endDate != null) {
+                                val startString = formatter.format(startDate)
+                                val endString = formatter.format(endDate)
+                                val periodLength = (endDate.time - startDate.time) / 86400000
+                                Text(text = "$startString - $endString")
+                                Text(text = "$periodLength-day period")
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -205,46 +267,51 @@ fun CycleScreenLayout(
     periodLength = calculateAveragePeriodLength(dates)
     cycleLength = calculateAverageCycleLength(dates)
 
-    ThePeriodPurseTheme {
-        val bg = painterResource(R.drawable.colourwatercolour)
-        Box {
-            Image(
-                painter = bg,
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .semantics { contentDescription = "Cycle Page" },
-                contentScale = ContentScale.FillBounds,
-            )
-            Column(
-                modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
-                    .fillMaxHeight()
-                    .padding(
-                        horizontal = 20.dp, vertical = 25.dp
-                    )
-            ) {
-                CurrentCycleBox(dates = dates)
-                Spacer(modifier.height(30.dp))
-                Row {
-                    AverageLengthBox(
-                        title = stringResource(R.string.avg_period_len),
-                        color = Color(0xFFFEDBDB),
-                        length = periodLength,
-                        image = painterResource(R.drawable.flow_with_heart)
-                    )
-                    Spacer(modifier.width(16.dp))
-                    AverageLengthBox(
-                        title = stringResource(R.string.avg_cycle_len),
-                        color = Color(0xFFBAE0D8),
-                        length = cycleLength,
-                        image = painterResource(R.drawable.menstruation_calendar__1_)
-                    )
-                }
-                Spacer(modifier.height(30.dp))
-                CycleHistoryBox()
+    val bg = painterResource(R.drawable.colourwatercolour)
+    Box {
+        Image(
+            painter = bg,
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxSize()
+                .semantics { contentDescription = "Cycle Page" },
+            contentScale = ContentScale.FillBounds,
+        )
+        Column(
+            modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .fillMaxHeight()
+                .padding(
+                    horizontal = 20.dp, vertical = 25.dp
+                )
+        ) {
+            CurrentCycleBox(dates = dates)
+            Spacer(modifier.height(30.dp))
+            Row {
+                AverageLengthBox(
+                    title = stringResource(R.string.avg_period_len),
+                    color = Color(0xFFFEDBDB),
+                    length = periodLength,
+                    image = painterResource(R.drawable.flow_with_heart)
+                )
+                Spacer(modifier.width(16.dp))
+                AverageLengthBox(
+                    title = stringResource(R.string.avg_cycle_len),
+                    color = Color(0xFFBAE0D8),
+                    length = cycleLength,
+                    image = painterResource(R.drawable.menstruation_calendar__1_)
+                )
             }
+            Spacer(modifier.height(30.dp))
+            CycleHistoryBox(dates = dates)
+            Spacer(modifier.height(80.dp))
         }
     }
+}
+
+@Preview
+@Composable
+fun DisplayPeriodHistory() {
+    CycleHistoryBox(dates = null)
 }

@@ -19,6 +19,36 @@ fun addOneDay(date: java.util.Date): java.util.Date {
     return c.time
 }
 
+/**
+ * Given a list of Dates, sort the Dates into lists of periods
+ * Return a list containing sublists where each sublist is a period
+ */
+fun parseDatesIntoPeriods(periodHistory: ArrayList<Date>): ArrayList<ArrayList<Date>> {
+    sortPeriodHistory(periodHistory)
+    val periods = ArrayList<ArrayList<Date>>()
+    var currPeriod = ArrayList<Date>()
+    for (i in 0 until periodHistory.size) {
+        // check if next element in the array is within one day
+        if (i == 0) {
+            currPeriod.add(periodHistory[i])
+        } else {
+            val date1 = periodHistory[i].date
+            val date2 = periodHistory[i - 1].date
+            if (date1 != null && date2 != null ) {
+                val diff = date1.time - date2.time
+                if ( diff <= 86400000) {
+                    currPeriod.add(periodHistory[i])
+                } else {
+                    periods.add(currPeriod)
+                    currPeriod = ArrayList()
+                    currPeriod.add(periodHistory[i])
+                }
+            }
+        }
+    }
+    periods.add(currPeriod)
+    return periods
+}
 
 /**
  * Sorts an array list of Dates that removes the dates with no flow (i.e., filtering by dates
