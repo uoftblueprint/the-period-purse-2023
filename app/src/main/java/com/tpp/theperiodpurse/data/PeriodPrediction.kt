@@ -6,6 +6,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashSet
 import java.util.Date as Date1
 
 val c: Calendar = Calendar.getInstance()
@@ -183,4 +184,20 @@ fun calculateDaysSinceLastPeriod(periodHistory: ArrayList<Date>): Long {
  */
 fun calculateArcAngle(periodHistory: ArrayList<Date>):Float {
     return 360f * min(1f, calculateDaysSinceLastPeriod(periodHistory) / 31f)
+}
+
+/**
+ * Given an arraylist containing sublists of periods, find and return all years in a HashSet
+ */
+fun findYears(periods: ArrayList<ArrayList<Date>>): HashSet<Int> {
+    val years = HashSet<Int>()
+    for (sublist in periods) {
+        for (date in sublist) {
+            val year = date.date?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()?.year
+            if (year != null) {
+                years.add(year)
+            }
+        }
+    }
+    return years
 }

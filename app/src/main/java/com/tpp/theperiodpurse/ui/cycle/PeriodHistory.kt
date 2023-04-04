@@ -23,6 +23,7 @@ import androidx.navigation.NavController
 import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.addOneDay
+import com.tpp.theperiodpurse.data.findYears
 import com.tpp.theperiodpurse.data.parseDatesIntoPeriods
 import java.text.SimpleDateFormat
 
@@ -36,6 +37,9 @@ fun PeriodHistoryLayout(
 ) {
     val dates = ArrayList(appViewModel.getDates())
     val bg = painterResource(R.drawable.colourwatercolour)
+    val periods = parseDatesIntoPeriods(dates)
+    val years = findYears(periods)
+    // iterateing over years and create horizontally scrollable buttons
     Scaffold(
         topBar = {
             TopAppBar (
