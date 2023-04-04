@@ -6,7 +6,6 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashSet
 import java.util.Date as Date1
 
 val c: Calendar = Calendar.getInstance()
@@ -187,15 +186,19 @@ fun calculateArcAngle(periodHistory: ArrayList<Date>):Float {
 }
 
 /**
- * Given an arraylist containing sublists of periods, find and return all years in a HashSet
+ * Given an arraylist containing sublists of periods, find and return a HashTable
+ * where the keys are years, and the values are corresponding periods
  */
-fun findYears(periods: ArrayList<ArrayList<Date>>): HashSet<Int> {
-    val years = HashSet<Int>()
-    for (sublist in periods) {
-        for (date in sublist) {
-            val year = date.date?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()?.year
+fun findYears(periods: ArrayList<ArrayList<Date>>): MutableMap<Int, ArrayList<ArrayList<Date>>> {
+    val years = mutableMapOf<Int, ArrayList<ArrayList<Date>>>()
+    for (period in periods) {
+        val year = period[0].date?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()?.year
+        if (years.containsKey(year)) {
+            years[year]?.add(period)
+        } else {
             if (year != null) {
-                years.add(year)
+                years[year] = ArrayList()
+                years[year]?.add(period)
             }
         }
     }

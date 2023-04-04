@@ -217,7 +217,8 @@ fun CycleHistoryBox(modifier: Modifier = Modifier, dates: ArrayList<Date>?, onCl
             )
             // show last three most recent periods
             if (dates != null) {
-                PeriodEntries(dates)
+                val periods = parseDatesIntoPeriods(dates)
+                PeriodEntries(periods, 3)
             }
         }
     }
