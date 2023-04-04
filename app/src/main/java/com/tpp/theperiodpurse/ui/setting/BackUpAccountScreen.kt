@@ -48,7 +48,7 @@ fun BackUpAccountScreen(appbar: Unit,
         if (account != null && onboardUIState?.googleAccount !=null){
             onboardUIState.googleAccount= account.account
         }
-        firstCheck.value = true
+        firstCheck.value = false
     }
 
     appbar
@@ -95,6 +95,7 @@ fun BackUpAccountScreen(appbar: Unit,
         if (account != null){
             if (onboardUIState != null) {
                 onboardUIState.googleAccount = account.account
+                confirmBackUp.value = true
             }
         }
         else {
@@ -126,7 +127,7 @@ fun BackUpAccountScreen(appbar: Unit,
                     }
                     LaunchedEffect(signInResult.value) {
                         if (signInResult.value.isSuccess) {
-                            navController.navigate(OnboardingScreen.QuestionTwo.name)
+                            navController.navigate(SettingScreenNavigation.BackUpAccount.name)
                         }
                         else {
                             signInResult.value = GoogleSignInResult(GoogleSignInAccount.createDefault(), Status.RESULT_CANCELED)
