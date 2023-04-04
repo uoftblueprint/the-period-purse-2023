@@ -241,7 +241,7 @@ fun ScreenApp(
             startdestination = OnboardingScreen.LoadGoogleDrive.name
         }
         else if (skipOnboarding) {
-            startdestination = Screen.Calendar.name
+            startdestination = OnboardingScreen.LoadDatabase.name
         }
         else if (skipWelcome) {
             startdestination = OnboardingScreen.QuestionOne.name

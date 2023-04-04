@@ -152,14 +152,6 @@ class OnboardViewModel @Inject constructor (
                     JacksonFactory.getDefaultInstance(),
                     credential
                 ).setApplicationName(context.getString(R.string.app_name)).build()
-//                val metadata = File()
-//                    .setParents(listOf("appDataFolder"))
-//                    .setMimeType("text/plain")
-//                    .setName("example.txt")
-//                val emptyContent = ByteArrayContent("text/plain", byteArrayOf())
-//                drive.files().create(metadata, emptyContent)
-//                    .setFields("id")
-//                    .execute()
 
                 val query =
                     "mimeType='application/x-sqlite3' and trashed=false and 'appDataFolder' in parents and name='user_database.db'"
