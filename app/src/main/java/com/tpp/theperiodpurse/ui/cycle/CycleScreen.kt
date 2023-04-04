@@ -226,8 +226,8 @@ fun CycleHistoryBox(modifier: Modifier = Modifier, dates: ArrayList<Date>?) {
                             val date = formatter.format(it)
                             Text(text = "Most Recent Period: Started $date")
                         }
-                        if (length >= 2) {
-                            val period = periods[1]
+                        for (i in 1 until length) {
+                            val period = periods[length - i - 1]
                             val startDate = period[0].date
                             val endDate = period[period.size - 1].date?.let { addOneDay(it) }
                             if (startDate != null && endDate != null) {
@@ -235,19 +235,8 @@ fun CycleHistoryBox(modifier: Modifier = Modifier, dates: ArrayList<Date>?) {
                                 val endString = formatter.format(endDate)
                                 val periodLength = (endDate.time - startDate.time) / 86400000
                                 Text(text = "$startString - $endString")
-                                Text(text = "$periodLength-day period")
-                            }
-                        }
-                        if (length == 3) {
-                            val period = periods[0]
-                            val startDate = period[0].date
-                            val endDate = period[period.size - 1].date?.let { addOneDay(it) }
-                            if (startDate != null && endDate != null) {
-                                val startString = formatter.format(startDate)
-                                val endString = formatter.format(endDate)
-                                val periodLength = (endDate.time - startDate.time) / 86400000
-                                Text(text = "$startString - $endString")
-                                Text(text = "$periodLength-day period")
+                                Text(text = "$periodLength-day period",
+                                    fontSize = 13.sp)
                             }
                         }
                     }
