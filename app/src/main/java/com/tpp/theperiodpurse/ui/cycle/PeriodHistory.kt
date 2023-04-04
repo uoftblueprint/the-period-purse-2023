@@ -30,6 +30,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 
 import java.util.*
+import kotlin.collections.ArrayList
 
 @Composable
 fun PeriodHistoryLayout(
@@ -40,7 +41,11 @@ fun PeriodHistoryLayout(
     val dates = ArrayList(appViewModel.getDates())
     val bg = painterResource(R.drawable.colourwatercolour)
     val periods = parseDatesIntoPeriods(dates)
-    val years = findYears(periods)
+    var years = findYears(periods)
+    if (years == null) {
+        years = mutableMapOf()
+        years[LocalDate.now().year] = ArrayList()
+    }
     var yearSelected by remember { mutableStateOf(years.keys.last()) }
     // iterateing over years and create horizontally scrollable buttons
     Scaffold(
@@ -131,7 +136,7 @@ fun PeriodHistoryLayout(
 
 @Composable
 fun PeriodEntries(periods: ArrayList<ArrayList<com.tpp.theperiodpurse.data.Date>>, upperbound: Int?) {
-    if (periods.size == 0) {
+    if (periods.size == 0 || periods[0].size == 0) {
         Text(text = stringResource(R.string.please_start_logging_to_learn_more))
     } else {
         val length = if (upperbound != null) kotlin.math.min(periods.size, upperbound) else periods.size

@@ -189,8 +189,11 @@ fun calculateArcAngle(periodHistory: ArrayList<Date>):Float {
  * Given an arraylist containing sublists of periods, find and return a HashTable
  * where the keys are years, and the values are corresponding periods
  */
-fun findYears(periods: ArrayList<ArrayList<Date>>): MutableMap<Int, ArrayList<ArrayList<Date>>> {
+fun findYears(periods: ArrayList<ArrayList<Date>>): MutableMap<Int, ArrayList<ArrayList<Date>>>? {
     val years = mutableMapOf<Int, ArrayList<ArrayList<Date>>>()
+    if (periods.size == 0 || periods[0].size == 0) {
+        return null
+    }
     for (period in periods) {
         val year = period[0].date?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()?.year
         if (years.containsKey(year)) {
