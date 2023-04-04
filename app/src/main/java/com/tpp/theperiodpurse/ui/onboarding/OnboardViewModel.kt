@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Context
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.lifecycle.*
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
@@ -104,35 +106,47 @@ class OnboardViewModel @Inject constructor (
     fun downloadBackup(account: Account, context: Context){
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
-                        var instance = ApplicationRoomDatabase.getDatabase(context)
-                        instance.close()
-                        val credential = GoogleAccountCredential.usingOAuth2(
-                            context,
-                            listOf(
-                                DriveScopes.DRIVE_FILE,
-                                DriveScopes.DRIVE_APPDATA
-                            )
+                    var instance = ApplicationRoomDatabase.getDatabase(context)
+                    instance.close()
+
+                    val credential = GoogleAccountCredential.usingOAuth2(
+                        context,
+                        listOf(
+                            DriveScopes.DRIVE_FILE,
+                            DriveScopes.DRIVE_APPDATA
                         )
-                        credential.selectedAccount = account
-                        val drive = Drive
-                            .Builder(
-                                AndroidHttp.newCompatibleTransport(),
-                                JacksonFactory.getDefaultInstance(),
-                                credential
-                            )
-                            .setApplicationName(context.getString(R.string.app_name))
-                            .build()
+                    )
+                    credential.selectedAccount = account
 
-                        val fileList = drive.files().list()
-                            .setQ("name = 'user_database.db' and trashed = false")
-                            .setSpaces("appDataFolder").execute()
+                    val drive = Drive
+                        .Builder(
+                            AndroidHttp.newCompatibleTransport(),
+                            JacksonFactory.getDefaultInstance(),
+                            credential
+                        )
+                        .setApplicationName(context.getString(R.string.app_name))
+                        .build()
 
-                        val fileId = fileList.files[0].id
-                        val outputStream =
-                            FileOutputStream(context.getDatabasePath("user_database.db"))
-                        drive.files().get(fileId).executeMediaAndDownloadTo(outputStream)
-                        ApplicationRoomDatabase.getDatabase(context)
-                        isDownloaded.postValue(true)
+
+                    val fileList = drive.files().list()
+                        .setQ("name = 'user_database.db' and trashed = false")
+                        .setSpaces("appDataFolder").execute()
+
+                    val fileId = fileList.files[0].id
+                    val outputStream = FileOutputStream(context.getDatabasePath("user_database.db"))
+
+                    drive.files().get(fileId).executeMediaAndDownloadTo(outputStream)
+
+                    context.deleteDatabase("user_database")
+
+                    Room.databaseBuilder(context.applicationContext, ApplicationRoomDatabase::class.java, "user_database")
+                        .createFromAsset("user_database.db")
+                        .fallbackToDestructiveMigration()
+                        .build()
+
+
+
+                    isDownloaded.postValue(true)
                 }
             }
     }
@@ -140,9 +154,6 @@ class OnboardViewModel @Inject constructor (
     fun backupDatabase(account: Account, context: Context) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-
-
-
                 val credential = GoogleAccountCredential.usingOAuth2(
                     context,
                     listOf(DriveScopes.DRIVE_APPDATA,
