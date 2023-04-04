@@ -17,4 +17,10 @@ class DateRepository(private val dateDAO: DateDAO) {
     fun getAllDates(): Flow<List<Date>> {
         return dateDAO.getDates()
     }
+
+    fun deletDate(date: Date) {
+        coroutineScope.launch (Dispatchers.IO) {
+            dateDAO.delete(date)
+        }
+    }
 }
