@@ -28,14 +28,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.Screen
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.data.Date
 import com.tpp.theperiodpurse.ui.education.teal
-import java.lang.Integer.min
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 private var periodLength = (-1).toFloat()
@@ -182,9 +181,13 @@ fun AverageLengthBox(
 }
 
 @Composable
-fun CycleHistoryBox(modifier: Modifier = Modifier, dates: ArrayList<Date>?) {
+fun CycleHistoryBox(modifier: Modifier = Modifier, dates: ArrayList<Date>?, onClickShowFull: (Int) -> Unit) {
     Card(
-        modifier.fillMaxWidth(), elevation = 2.dp, shape = RoundedCornerShape(10)
+        modifier.fillMaxWidth()
+            .padding(bottom = 20.dp),
+        elevation = 2.dp,
+        shape = RoundedCornerShape(10)
+
     ) {
         Column(modifier.padding(horizontal = 15.dp, vertical = 15.dp)) {
             Row (modifier = Modifier.fillMaxWidth(),
@@ -197,7 +200,7 @@ fun CycleHistoryBox(modifier: Modifier = Modifier, dates: ArrayList<Date>?) {
                     color = Color(0xFF868083),
                 )
                 ClickableText(
-                    onClick = { /* Go to show more */ },
+                    onClick = onClickShowFull,
                     style = TextStyle(
                         color = Color(teal),
                         fontWeight = FontWeight(700),
@@ -214,33 +217,7 @@ fun CycleHistoryBox(modifier: Modifier = Modifier, dates: ArrayList<Date>?) {
             )
             // show last three most recent periods
             if (dates != null) {
-                if (dates.size == 0) {
-                    Text(text = stringResource(R.string.please_start_logging_to_learn_more))
-                } else {
-                    val periods = parseDatesIntoPeriods(dates)
-                    val length = min(periods.size, 3)
-                    Column {
-                        val formatter = SimpleDateFormat("MMM d", Locale.getDefault())
-                        // check if it's within a day, if so display current period...
-                        periods[length - 1][0].date?.let {
-                            val date = formatter.format(it)
-                            Text(text = "Most Recent Period: Started $date")
-                        }
-                        for (i in 1 until length) {
-                            val period = periods[length - i - 1]
-                            val startDate = period[0].date
-                            val endDate = period[period.size - 1].date?.let { addOneDay(it) }
-                            if (startDate != null && endDate != null) {
-                                val startString = formatter.format(startDate)
-                                val endString = formatter.format(endDate)
-                                val periodLength = (endDate.time - startDate.time) / 86400000
-                                Text(text = "$startString - $endString")
-                                Text(text = "$periodLength-day period",
-                                    fontSize = 13.sp)
-                            }
-                        }
-                    }
-                }
+                PeriodEntries(dates)
             }
         }
     }
@@ -249,7 +226,8 @@ fun CycleHistoryBox(modifier: Modifier = Modifier, dates: ArrayList<Date>?) {
 @Composable
 fun CycleScreenLayout(
     appViewModel: AppViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     val dates = ArrayList(appViewModel.getDates())
 
@@ -293,7 +271,12 @@ fun CycleScreenLayout(
                 )
             }
             Spacer(modifier.height(30.dp))
-            CycleHistoryBox(dates = dates)
+            CycleHistoryBox(
+                dates = dates,
+                onClickShowFull = {
+                    navController.navigate(Screen.CycleFullHisotry.name)
+                }
+            )
             Spacer(modifier.height(80.dp))
         }
     }
@@ -302,5 +285,5 @@ fun CycleScreenLayout(
 @Preview
 @Composable
 fun DisplayPeriodHistory() {
-    CycleHistoryBox(dates = null)
+    CycleHistoryBox(dates = null, onClickShowFull = {})
 }
