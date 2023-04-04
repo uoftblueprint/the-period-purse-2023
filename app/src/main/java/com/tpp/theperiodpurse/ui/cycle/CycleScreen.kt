@@ -26,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.data.Date
+import com.tpp.theperiodpurse.data.calculateArcAngle
 import com.tpp.theperiodpurse.data.calculateAverageCycleLength
 import com.tpp.theperiodpurse.data.calculateAveragePeriodLength
 import com.tpp.theperiodpurse.ui.theme.ThePeriodPurseTheme
@@ -35,7 +37,7 @@ private var cycleLength = (-1).toFloat()
 
 
 @Composable
-fun CurrentCycleBox(modifier: Modifier = Modifier) {
+fun CurrentCycleBox(modifier: Modifier = Modifier, dates: ArrayList<Date>) {
     Card(
         modifier
             .fillMaxWidth()
@@ -78,7 +80,7 @@ fun CurrentCycleBox(modifier: Modifier = Modifier) {
                     drawArc(
                         color = ringColor,
                         startAngle = -90f,
-                        sweepAngle = 360f * 0.75f,
+                        sweepAngle = calculateArcAngle(dates),
                         useCenter = false,
                         topLeft = center - Offset(radius, radius),
                         size = Size(radius * 2, radius * 2),
@@ -226,7 +228,7 @@ fun CycleScreenLayout(
                         horizontal = 20.dp, vertical = 25.dp
                     )
             ) {
-                CurrentCycleBox()
+                CurrentCycleBox(dates = dates)
                 Spacer(modifier.height(30.dp))
                 Row {
                     AverageLengthBox(

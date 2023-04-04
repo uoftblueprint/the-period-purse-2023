@@ -1,7 +1,12 @@
 package com.tpp.theperiodpurse.data
 
+import java.lang.Float.min
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 import kotlin.collections.ArrayList
+import java.util.Date as Date1
 
 val c: Calendar = Calendar.getInstance()
 
@@ -119,4 +124,27 @@ fun calculateAverageCycleLength(periodHistory: ArrayList<Date>): Float {
     } else {
         (cycleLengths.sum().toFloat() / cycleLengths.size)
     }
+}
+
+/**
+ * Calculate the the sweeping angle for the progress circle
+ * assume one month contains 31 days, use the equation:
+ * (number of days since last cycle / 31) * 360f
+ */
+fun calculateArcAngle(periodHistory: ArrayList<Date>):Float {
+    if (periodHistory.isEmpty()) {
+        return 0f
+    }
+    sortPeriodHistory(periodHistory)
+    val lastPeriodDate = periodHistory[periodHistory.size - 1].date?.time
+    val currDate = Date1.from(
+        LocalDateTime.of(
+            LocalDate.now(), LocalDateTime.MIN.toLocalTime()
+        ).atZone(ZoneId.systemDefault()).toInstant()
+    ).time
+    if (lastPeriodDate != null) {
+        val dayRatio = (currDate - lastPeriodDate)/86400000/31f
+        return 360f * min(1f, dayRatio)
+    }
+    return 360f
 }
