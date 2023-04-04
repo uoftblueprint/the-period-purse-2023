@@ -30,13 +30,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.data.Symptom
 import com.tpp.theperiodpurse.ui.education.SocialMedia
 import com.tpp.theperiodpurse.ui.education.teal
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
+import com.tpp.theperiodpurse.AppViewModel
 
 
 @Composable
@@ -46,7 +49,40 @@ fun SettingScreenLayout(
     onNotificationClicked: () -> Unit,
     onBackUpClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
+    appViewModel: AppViewModel = viewModel()
 ){
+    val symptoms = appViewModel.getTrackedSymptoms()
+    val context = LocalContext.current
+    var hasAlarmPermission by remember {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            mutableStateOf(
+                ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+            )
+        } else mutableStateOf(true)
+    }
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            hasAlarmPermission = isGranted
+//                   if (!isGranted) {
+//                       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+////                           shouldShowRequestPermissionRationale(SCHEDULE_EXACT_ALARM)
+//                       }
+//                   }
+        }
+    )
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        SideEffect {
+            launcher.launch(SCHEDULE_EXACT_ALARM)
+        }
+    }
+
+    val time = appViewModel.getReminderFreq() + " at " + appViewModel.getReminderTime()
+
    Column(modifier = modifier
        .fillMaxSize()
        .padding(10.dp)
@@ -58,7 +94,7 @@ fun SettingScreenLayout(
            fontWeight = FontWeight.Bold
        )
 
-       TrackingPreferencesRow()
+       TrackingPreferencesRow(symptoms, appViewModel = appViewModel)
        Text(
            text = stringResource(R.string.notifications_heading),
            modifier = modifier.padding(top = 5.dp, start = 10.dp),
@@ -66,21 +102,20 @@ fun SettingScreenLayout(
            fontWeight = FontWeight.Bold
        )
        Row(modifier = modifier.padding(20.dp)) {
-           var checked by remember { mutableStateOf(false) }
            Column (modifier = Modifier) {
                Text(text = stringResource(
                    R.string.remind_me_to_log_symptoms),
                    fontWeight = FontWeight.Bold)
                Spacer(modifier = modifier.padding(3.dp))
-               Text(text = stringResource(R.string.sample_notification),
+               Text(text = time,
                    modifier = Modifier.padding(start = 5.dp),
                    color = Color.Gray,
                    fontSize = 15.sp,
                )
            }
            Switch(
-               checked = checked,
-               onCheckedChange = { checked = !checked},
+               checked = appViewModel.getAllowReminders(),
+               onCheckedChange = {appViewModel.toggleAllowReminders()},
                modifier = modifier
                    .fillMaxWidth()
                    .wrapContentWidth(Alignment.End),
@@ -88,34 +123,6 @@ fun SettingScreenLayout(
                    uncheckedThumbColor = Color.DarkGray
                )
            )
-           val context = LocalContext.current
-           var hasAlarmPermission by remember {
-               if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                   mutableStateOf(
-                       ContextCompat.checkSelfPermission(
-                           context,
-                           Manifest.permission.POST_NOTIFICATIONS
-                       ) == PackageManager.PERMISSION_GRANTED
-                   )
-               } else mutableStateOf(true)
-           }
-           val launcher = rememberLauncherForActivityResult(
-               contract = ActivityResultContracts.RequestPermission(),
-               onResult = { isGranted ->
-                   hasAlarmPermission = isGranted
-//                   if (!isGranted) {
-//                       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-////                           shouldShowRequestPermissionRationale(SCHEDULE_EXACT_ALARM)
-//                       }
-//                   }
-               }
-           )
-           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-               SideEffect {
-                   launcher.launch(SCHEDULE_EXACT_ALARM)
-               }
-           }
-
        }
        Divider(modifier = Modifier.padding(start= 10.dp, end = 10.dp))
 
@@ -164,7 +171,8 @@ fun SettingScreenLayout(
 }
 
 @Composable
-fun TrackingPreferencesRow(modifier: Modifier = Modifier){
+fun TrackingPreferencesRow(symptoms: List<Symptom>, modifier: Modifier = Modifier, appViewModel: AppViewModel){
+
     Row(modifier = modifier
         .fillMaxWidth()
         .padding(10.dp),
@@ -175,40 +183,54 @@ fun TrackingPreferencesRow(modifier: Modifier = Modifier){
             label = stringResource(R.string.mood),
             icon = painterResource(id = R.drawable.sentiment_neutral_black_24dp),
             contentDescription = stringResource(R.string.mood),
+            ischecked = symptoms.contains(Symptom.MOOD),
+            symptom = Symptom.MOOD,
+            appViewModel = appViewModel
         )
         TrackingOptionButton(
             modifier = modifier,
             label = stringResource(R.string.exercise),
             icon = painterResource(id = R.drawable.self_improvement_black_24dp),
-            contentDescription = stringResource(R.string.exercise)
+            contentDescription = stringResource(R.string.exercise),
+            ischecked = symptoms.contains(Symptom.EXERCISE),
+            symptom = Symptom.EXERCISE,
+            appViewModel = appViewModel
         )
         TrackingOptionButton(
             modifier = modifier,
             label = stringResource(R.string.cramps),
             icon = painterResource(id = R.drawable.sick_black_24dp),
             contentDescription = stringResource(R.string.cramps),
+            ischecked = symptoms.contains(Symptom.CRAMPS),
+            symptom = Symptom.CRAMPS,
+            appViewModel = appViewModel
         )
         TrackingOptionButton(
             modifier = modifier,
             label = stringResource(R.string.sleep),
             icon = painterResource(id = R.drawable.nightlight_black_24dp),
-            contentDescription = stringResource(R.string.sleep)
+            contentDescription = stringResource(R.string.sleep),
+            ischecked = symptoms.contains(Symptom.SLEEP),
+            symptom = Symptom.SLEEP,
+            appViewModel = appViewModel
         )
     }
 }
 
 @Composable
-fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter, contentDescription: String) {
-    var checked by remember { mutableStateOf(false) }
-    val color = if (checked) Color(teal) else Color.White
+fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter,
+                         contentDescription: String, ischecked: Boolean,
+                         symptom: Symptom, appViewModel: AppViewModel) {
+
+    val color = if (appViewModel.isSymptomChecked(symptom)) Color(teal) else Color.White
     Column(
         modifier = modifier
             .padding(10.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,) {
         IconToggleButton(
-            checked = checked,
-            onCheckedChange = { checked = !checked},
+            checked = ischecked,
+            onCheckedChange = {appViewModel.updateSymptoms(symptom)},
             modifier = Modifier.clip(RoundedCornerShape(20.dp))
         ) {
             Icon(

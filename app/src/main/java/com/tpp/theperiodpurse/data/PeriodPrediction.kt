@@ -44,12 +44,12 @@ fun sortPeriodHistory(periodHistory: ArrayList<Date>) {
 *     - Logs on Jan. 1 and Jan. 5 ==> 1 day period, 1 day period
 */
 fun calculateAveragePeriodLength(periodHistory: ArrayList<Date>): Float {
-    if (periodHistory.size == 0) {
+    sortPeriodHistory(periodHistory)
+
+    if (periodHistory.isEmpty()) {
         return (-1).toFloat()
     }
     val periodLengths = ArrayList<Int>()
-
-    sortPeriodHistory(periodHistory)
 
     var currDate = periodHistory[0].date
     var consecutiveDays = 1
@@ -81,17 +81,17 @@ fun calculateAveragePeriodLength(periodHistory: ArrayList<Date>): Float {
 *
 * Examples:
 *      - Period 1: Started Jan 1, Period 2: Started Feb 1 ==> 31 day cycle.
-*      - Period 1: Started Jan 1, Period 2: Started Jan 4, Period 3: Started Jan 3
+*      - Period 1: Started Jan 1, Period 2: Started Jan 4, Period 3: Started Jan 13
 *                  ==> Cycles of 3 and 9 days; average cycle length is 6 days.
 */
 fun calculateAverageCycleLength(periodHistory: ArrayList<Date>): Float {
+    sortPeriodHistory(periodHistory)
+
     if (periodHistory.size == 0) {
         return (-1).toFloat()
     }
 
     val cycleLengths = ArrayList<Int>()
-
-    sortPeriodHistory(periodHistory)
 
     var currDate = periodHistory[0].date
     var currDatePlusOne = currDate?.let { addOneDay(it) }
@@ -108,9 +108,9 @@ fun calculateAverageCycleLength(periodHistory: ArrayList<Date>): Float {
                 cycleLengths.add(time.toInt())
 
                 currDate = periodHistory[i].date
-                if (currDate != null) {
-                    currDatePlusOne = addOneDay(currDate)
-                }
+
+                currDatePlusOne = currDate?.let { addOneDay(it) }
+
             }
         }
     }

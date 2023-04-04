@@ -16,12 +16,12 @@ import com.tpp.theperiodpurse.R
 import java.time.LocalTime
 import java.util.*
 
-class Alarm: BroadcastReceiver() {
+class MonthlyAlarm: BroadcastReceiver() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onReceive(context: Context, intent: Intent?) {
         try {
             println("reached Alarm Class")
-            showNotification(context, "Daily Reminder to Log Symptoms!", "This is your daily reminder to log your symptoms")
+            showNotification(context, "Monthly Reminder to Log Symptoms!", "This is your monthly reminder to log your symptoms")
             setAlarm(context)
 
         }catch (e: Exception){
@@ -39,10 +39,8 @@ class Alarm: BroadcastReceiver() {
         val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         val hasAlarmPermission: Boolean = alarmManager.canScheduleExactAlarms()
 
-
         val calendar= Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis() + 120000
-//            timeInMillis = System.currentTimeMillis() + AlarmManager.INTERVAL_DAY
+            timeInMillis = System.currentTimeMillis() + 2628000000 // 1 month in milliseconds
         }
         if(hasAlarmPermission){
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)

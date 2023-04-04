@@ -21,7 +21,6 @@ import com.tpp.theperiodpurse.R
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LoadingScreen() {
-    val configuration = LocalConfiguration.current
     val redLoading = Color(195, 50, 50)
 
     Image(

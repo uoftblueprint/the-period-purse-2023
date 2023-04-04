@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
+import com.tpp.theperiodpurse.ui.symptomlog.LogMultipleDatesScreen
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.ui.SummaryScreen
 import com.tpp.theperiodpurse.ui.calendar.CalendarScreen
@@ -23,8 +24,10 @@ import com.tpp.theperiodpurse.ui.education.*
 import com.tpp.theperiodpurse.ui.legal.PrivacyScreen
 import com.tpp.theperiodpurse.ui.legal.TermsScreen
 import com.tpp.theperiodpurse.ui.onboarding.*
+import com.tpp.theperiodpurse.ui.setting.LoadDatabase
 import com.tpp.theperiodpurse.ui.setting.SettingsScreen
 import com.tpp.theperiodpurse.ui.symptomlog.LogScreen
+import java.time.LocalDate
 
 enum class Screen {
     Calendar,
@@ -32,6 +35,7 @@ enum class Screen {
     Cycle,
     Settings,
     Learn,
+    LogMultipleDates
 }
 
 enum class LegalScreen {
@@ -39,12 +43,18 @@ enum class LegalScreen {
     Privacy
 }
 
+val screensWithNavigationBar = arrayOf(
+    Screen.Calendar.name, Screen.Log.name, Screen.Cycle.name,
+    Screen.Settings.name, Screen.Learn.name
+)
+
 enum class OnboardingScreen {
     Welcome,
     QuestionOne,
     QuestionTwo,
     QuestionThree,
     Summary,
+    LoadDatabase,
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -61,6 +71,7 @@ fun NavigationGraph(
 ) {
     val onboardUIState by onboardViewModel.uiState.collectAsState()
     val appUiState by appViewModel.uiState.collectAsState()
+    val calUiState by calendarViewModel.uiState.collectAsState()
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -91,17 +102,27 @@ fun NavigationGraph(
             }
         }
 
+        composable(route = Screen.LogMultipleDates.name) {
+            LogMultipleDatesScreen(
+                onClose = { navController.navigateUp() },
+                calendarViewModel
+            )
+        }
+
         composable(route = Screen.Settings.name) {
             SettingsScreen(appViewModel = appViewModel,
                 outController = navController,
                 context = context,
                 onboardUiState = onboardUIState,
                 onboardViewModel = onboardViewModel,
-                appUiState = appUiState)
+                appUiState = appUiState,
+                calUiState = calUiState)
         }
 
         composable(route = Screen.Cycle.name) {
-            CycleScreenLayout()
+            CycleScreenLayout(
+                appViewModel = appViewModel,
+            )
         }
 
         composable(route = Screen.Learn.name) {
@@ -160,9 +181,8 @@ fun NavigationGraph(
             SummaryScreen(
                 onboardUiState = onboardUIState,
                 onSendButtonClicked = {
-                    navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
-                    navController.navigate(Screen.Calendar.name)
-                    appViewModel.loadData(calendarViewModel)
+                    navController.navigate(OnboardingScreen.LoadDatabase.name)
+
                 },
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null,
@@ -172,7 +192,30 @@ fun NavigationGraph(
 //                },
             )
         }
+        composable(route = OnboardingScreen.LoadDatabase.name) {
+            LoadDatabase(
+                appViewModel = appViewModel,
+                calViewModel = calendarViewModel,
+                navController = navController
+            )
+        }
     }
+}
+
+/**
+ * Resets the [OnboardUIState] and pops up to [OnboardingScreen.Start]
+ */
+private fun cancelOrderAndNavigateToStart(
+    viewModel: OnboardViewModel,
+    navController: NavHostController
+) {
+    viewModel.resetOrder()
+    navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = false)
+}
+
+fun navigateToLogScreenWithDate(date: LocalDate, navController: NavController) {
+    navController.navigate(route = "%s/%s/%s"
+        .format(Screen.Calendar, Screen.Log, date.toString()))
 }
 
 @Composable

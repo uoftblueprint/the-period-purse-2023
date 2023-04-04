@@ -10,9 +10,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.AppUiState
+import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.OnboardingScreen
+import com.tpp.theperiodpurse.Screen
 import com.tpp.theperiodpurse.data.OnboardUIState
 import com.tpp.theperiodpurse.ui.calendar.CalendarUIState
+import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import com.tpp.theperiodpurse.ui.onboarding.LoadingScreen
 import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
 import kotlinx.coroutines.Dispatchers
@@ -20,35 +23,25 @@ import kotlinx.coroutines.withContext
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ResetDatabase(
-    context: Context,
-    viewModel: OnboardViewModel,
-    outController: NavHostController,
+fun LoadDatabase(
     navController: NavHostController,
-    onboardUiState: OnboardUIState,
-    appUiState: AppUiState,
-    calUiState: CalendarUIState
+    appViewModel: AppViewModel,
+    calViewModel: CalendarViewModel,
 ) {
+    val isLoaded by appViewModel.isLoaded.observeAsState(initial = null)
 
-    val isDeleted by viewModel.isOnboarded.observeAsState(initial = null)
 
-    LaunchedEffect(Unit) {
-        withContext(Dispatchers.IO) {
-            viewModel.checkDeletedStatus(context)
-        }
-    }
-    if (isDeleted == null){
+    appViewModel.loadData(calViewModel)
+
+    if (isLoaded == null){
         LoadingScreen()
     }
     else {
-        calUiState.days = LinkedHashMap()
-        appUiState.trackedSymptoms = listOf()
-        appUiState.dates = emptyList()
-        onboardUiState.days = 0
-        onboardUiState.symptomsOptions = listOf()
-        onboardUiState.date = ""
-        navController.popBackStack()
-        outController.navigate(OnboardingScreen.Welcome.name)
+        LaunchedEffect(Unit) {
+            navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
+            navController.navigate(Screen.Calendar.name)
+        }
+
     }
 
 }

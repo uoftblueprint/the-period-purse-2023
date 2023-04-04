@@ -14,5 +14,8 @@ data class User(
     val periodHistory: ArrayList<Date> = ArrayList(),
     val averagePeriodLength: Int = 0,
     val averageCycleLength: Int = 0,
-    val daysSinceLastPeriod: Int = 0
+    val daysSinceLastPeriod: Int = 0,
+    val allowReminders: Boolean = false,
+    val reminderTime: String = "12:00 PM",
+    val reminderFreq: String = "Every day",
     )

@@ -8,13 +8,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
+class LogViewModel(val logPrompts: List<LogPrompt>) : ViewModel() {
     private val _uiState = MutableStateFlow(LogUiState(
         getSquares(logPrompts),
         getText(logPrompts)
     ))
     val uiState: StateFlow<LogUiState> = _uiState.asStateFlow()
-    val logPrompts = logPrompts
 
     fun populateWithUIState(dayUIState: CalendarDayUIState) {
         _uiState.update { currentState ->
@@ -127,7 +126,7 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
     }
 
     private fun getSquares(logPrompts: List<LogPrompt>): LinkedHashMap<Int, Any> {
-        var selectedSquares = LinkedHashMap<Int, Any>()
+        val selectedSquares = LinkedHashMap<Int, Any>()
         for (logPrompt in logPrompts) {
             selectedSquares[logPrompt.title] = false
         }
@@ -143,8 +142,21 @@ class LogViewModel(logPrompts: List<LogPrompt>) : ViewModel() {
     }
 
     fun isFilled(): Boolean {
-        logPrompts.forEach() { it ->
-            if (this.getSquareSelected(it) != null || this.getText(it) != "") {
+        logPrompts.forEach() {it ->
+            // For Flow, Cramps, check not null and not None to return true
+            // For Sleep, Excercise, Mood, check not null to return true
+            // For Notes, check not empty to return true
+            if (it == LogPrompt.Flow || it == LogPrompt.Cramps) {
+                if (this.getSquareSelected(it) != null && this.getSquareSelected(it) != "None") {
+                    return true
+                }
+            }
+            if (it == LogPrompt.Sleep || it == LogPrompt.Mood || it == LogPrompt.Exercise) {
+                if (this.getSquareSelected(it) != null) {
+                    return true
+                }
+            }
+            if (it == LogPrompt.Notes && this.getText(it) != "") {
                 return true
             }
         }

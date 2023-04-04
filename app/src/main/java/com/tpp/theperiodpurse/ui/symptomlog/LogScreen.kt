@@ -48,6 +48,7 @@ import java.sql.Time
 import java.time.*
 import com.tpp.theperiodpurse.ui.calendar.CalendarDayUIState
 import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
+import com.tpp.theperiodpurse.ui.component.PopupTopBar
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -85,18 +86,27 @@ fun LogScreen(
         LogScreenLayout(
             day, navController, logPrompts, logViewModel,
             onSave = {
-                calendarViewModel.saveDayInfo(
+                navController.navigateUp()
+                // If None is selected, it should not count is a square is filled
+                var flow = logViewModel.getSelectedFlow()
+                if (flow != null && flow.name == "None") {
+                    flow = null
+                }
+                var cramps = logViewModel.getSelectedCrampSeverity()
+                if (cramps != null && cramps.name == "None") {
+                    cramps = null
+                }
+                calendarViewModel.setDayInfo(
                     day,
                     CalendarDayUIState(
-                        flow = logViewModel.getSelectedFlow(),
+                        flow = flow,
                         mood = logViewModel.getSelectedMood(),
                         exerciseLengthString = logViewModel.getText(LogPrompt.Exercise),
                         exerciseType = logViewModel.getSelectedExercise(),
-                        crampSeverity = logViewModel.getSelectedCrampSeverity(),
+                        crampSeverity = cramps,
                         sleepString = logViewModel.getText(LogPrompt.Sleep)
                     )
                 )
-                navController.navigateUp()
                 if (logViewModel.isFilled()) {
                     var exercisedDuration: Duration? = null
                     val excTxt = logViewModel.getText(LogPrompt.Exercise)
@@ -137,6 +147,18 @@ fun LogScreen(
                             notes = logViewModel.getText(LogPrompt.Notes)
                         )
                     )
+                } else {
+                    // chcek  if given date is in the db, if it is, delete the entry
+                    val dates = appViewModel.getDates()
+                    for (d in dates) {
+                        val thisDate = d.date?.toInstant()?.atZone(ZoneId.systemDefault())
+                            ?.toLocalDate()
+                        if (thisDate != null) {
+                            if (thisDate == day) {
+                                appViewModel.deleteDate(d)
+                            }
+                        }
+                    }
                 }
             })
 
@@ -183,48 +205,33 @@ fun LogScreenLayout(
         }
 
     }
-
-
 }
-
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LogScreenTopBar(navController: NavController, date: LocalDate) {
-    Column(
+    PopupTopBar( onClose = { navController.navigateUp() }) {
+        LogScreenTopBarContent(navController = navController, date = date)
+    }
+}
+
+@Composable
+private fun LogScreenTopBarContent(navController: NavController, date: LocalDate) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = HeaderColor1)
+            .padding(top = 0.dp, bottom = 0.dp, start = 35.dp, end = 35.dp)
     ) {
-        Row (modifier = Modifier
-            .padding(start = 10.dp, top = 10.dp, end = 0.dp)
-        ) {
-            IconButton(
-                onClick = { navController.navigateUp() },
-                modifier = Modifier
-                    .then(Modifier.size(24.dp))
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Close,
-                    contentDescription = "Log Close Button"
-                )
-            }
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.Center,
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 0.dp, bottom = 0.dp, start = 35.dp, end = 35.dp)
-                .height(65.dp)
+                .weight(.1f),
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .weight(.1f),
-            ) {
-                if (date.minusDays(1) >=
-                    YearMonth.now().minusMonths(12).atStartOfMonth())
-                    IconButton(onClick = {
+            if (date.minusDays(1) >=
+                YearMonth.now().minusMonths(12).atStartOfMonth()
+            )
+                IconButton(
+                    onClick = {
                         navController.navigate(
                             "%s/%s/%s".format(
                                 Screen.Calendar.name,
@@ -235,65 +242,65 @@ fun LogScreenTopBar(navController: NavController, date: LocalDate) {
                             popUpTo(Screen.Calendar.name) {
                                 inclusive = false
                             }
-                        } },
-                        modifier = Modifier
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Log Back Arrow"
-                        )
-                    }
-            }
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .weight(.8f)
-            ) {
-                Text(
-                    text = "Log your symptoms for:",
-                    color = Color(50,50,50),
-                    fontSize = 12.sp
-                )
-                Text(
-                    text = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)),
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
+                        }
+                    },
                     modifier = Modifier
-                        .testTag("DateLabel")
-                        .semantics { contentDescription = "DateLabel" }
-                )
-            }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Log Back Arrow"
+                    )
+                }
+        }
 
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .weight(.8f)
+        ) {
+            Text(
+                text = "Log your symptoms for:",
+                color = Color(50, 50, 50),
+                fontSize = 12.sp
+            )
+            Text(
+                text = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)),
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .weight(.1f)
-            ) {
-                if (date.plusDays(1)<=LocalDate.now())
-                    IconButton(onClick = {
-                        navController.navigate("%s/%s/%s"
+                    .testTag("DateLabel")
+                    .semantics { contentDescription = "DateLabel" }
+            )
+        }
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .weight(.1f)
+        ) {
+            if (date.plusDays(1) <= LocalDate.now())
+                IconButton(onClick = {
+                    navController.navigate(
+                        "%s/%s/%s"
                             .format(
                                 Screen.Calendar.name,
                                 Screen.Log.name,
                                 date.plusDays(1)
                             )
-                        ) {
-                            popUpTo(Screen.Calendar.name) {
-                                inclusive = false
-                            }
-                        }
-                    },
-                        modifier = Modifier
-                            .semantics { contentDescription = "ClickNextDay" }
                     ) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowForward,
-                            contentDescription = "Log Forward Arrow"
-                        )
+                        popUpTo(Screen.Calendar.name) {
+                            inclusive = false
+                        }
                     }
-            }
-
+                },
+                    modifier = Modifier
+                        .semantics { contentDescription = "ClickNextDay" }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowForward,
+                        contentDescription = "Log Forward Arrow"
+                    )
+                }
         }
     }
 }

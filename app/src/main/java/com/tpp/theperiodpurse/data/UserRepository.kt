@@ -1,9 +1,8 @@
 package com.tpp.theperiodpurse.data
 
 import android.content.Context
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,7 +20,28 @@ class UserRepository(private val userDAO: UserDAO) {
 
     fun setSymptoms(symptoms: List<Symptom>) {
         coroutineScope.launch (Dispatchers.IO) {
-            userDAO.updateSymptoms(symptoms = symptoms, id = 1)
+            val jsonSymptoms = Gson().toJson(symptoms);
+            if (jsonSymptoms != null) {
+                userDAO.updateSymptoms(symptoms = jsonSymptoms, id = 1)
+            }
+        }
+    }
+
+    fun setReminders(allowReminders: Boolean) {
+        coroutineScope.launch (Dispatchers.IO) {
+            userDAO.updateReminders(id = 1, allowReminders)
+        }
+    }
+
+    fun setReminderTime(time: String) {
+        coroutineScope.launch (Dispatchers.IO) {
+            userDAO.updateReminderTime(id = 1, time)
+        }
+    }
+
+    fun setReminderFreq(freq: String) {
+        coroutineScope.launch (Dispatchers.IO) {
+            userDAO.updateReminderFreq(id = 1, freq)
         }
     }
 
@@ -36,7 +56,7 @@ class UserRepository(private val userDAO: UserDAO) {
         isOnboarded.postValue(userDAO.getUsers().isNotEmpty())
     }
     fun isDeleted(context: Context) {
-        isOnboarded.postValue(ApplicationRoomDatabase.clearDatabase(context))
+        isDeleted.postValue(ApplicationRoomDatabase.clearDatabase(context))
     }
 
 }

@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -31,6 +30,7 @@ import com.tpp.theperiodpurse.AppUiState
 import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.OnboardUIState
+import com.tpp.theperiodpurse.ui.calendar.CalendarUIState
 import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
 
 enum class SettingScreenNavigation(@StringRes val title: Int) {
@@ -38,7 +38,7 @@ enum class SettingScreenNavigation(@StringRes val title: Int) {
         title = R.string.back_up_account
     ),
     DeleteAccount(title = R.string.delete_account),
-    ResetDatabase(title = R.string.delete_account)
+    ResetDatabase(title = R.string.reset_database)
 }
 
 /**
@@ -81,19 +81,13 @@ fun SettingsScreen(
     appViewModel: AppViewModel?,
     onboardUiState: OnboardUIState?,
     onboardViewModel: OnboardViewModel?,
-    appUiState: AppUiState?
+    appUiState: AppUiState?,
+    calUiState: CalendarUIState?
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = SettingScreenNavigation.valueOf(
         backStackEntry?.destination?.route ?: SettingScreenNavigation.Start.name
     )
-
-    // use appViewModel.getTrackedSymptoms to get a list of symptoms
-    // use appViewModel.setTrackedSymptoms to set the symptoms to a new list of symptoms
-    // remove this line below after using the appViewModel
-    if (appViewModel != null) {
-        Log.d("tracked symptoms", appViewModel.getTrackedSymptoms().toString())
-    }
 
     Scaffold(
     ) { innerPadding ->
@@ -111,18 +105,21 @@ fun SettingsScreen(
             modifier = modifier.padding(innerPadding)
         ) {
             composable(route = SettingScreenNavigation.Start.name) {
-                SettingScreenLayout(
-                    outController = outController,
-                    onNotificationClicked = {
-                        navController.navigate(SettingScreenNavigation.Notification.name)
-                    },
-                    onBackUpClicked = {
-                        navController.navigate(SettingScreenNavigation.BackUpAccount.name)
-                    },
-                    onDeleteClicked = {
-                        navController.navigate(SettingScreenNavigation.DeleteAccount.name)
-                    },
-                )
+                if (appViewModel != null) {
+                    SettingScreenLayout(
+                        outController = outController,
+                        onNotificationClicked = {
+                            navController.navigate(SettingScreenNavigation.Notification.name)
+                        },
+                        onBackUpClicked = {
+                            navController.navigate(SettingScreenNavigation.BackUpAccount.name)
+                        },
+                        onDeleteClicked = {
+                            navController.navigate(SettingScreenNavigation.DeleteAccount.name)
+                        },
+                        appViewModel = appViewModel
+                    )
+                }
             }
             composable(route = SettingScreenNavigation.Notification.name) {
 //                TimeWheel(context= LocalContext.current)
@@ -137,18 +134,30 @@ fun SettingsScreen(
                         )
                     } else mutableStateOf(true)
                 }
-                NotificationsLayout(
-                    context = context,
-                    hasNotificationPermission,
-                    appBar = SettingAppBar(
-                        currentScreen = currentScreen.name,
-                        canNavigateBack = navController.previousBackStackEntry != null,
-                        navigateUp = { navController.navigateUp() },
-                        color = Color.Transparent)
-                )
+//                var allowReminders = false
+//                if (appViewModel != null){
+//                    allowReminders = appViewModel.getAllowReminders()
+//                }
+                if (appViewModel != null) {
+                    NotificationsLayout(
+                        context = context,
+                        hasNotificationPermission,
+                        appBar = SettingAppBar(
+                            currentScreen = currentScreen.name,
+                            canNavigateBack = navController.previousBackStackEntry != null,
+                            navigateUp = { navController.navigateUp() },
+                            color = Color.Transparent),
+                        appViewModel
+                    )
+                }
             }
             composable(route = SettingScreenNavigation.BackUpAccount.name) {
-                BackUpAccountScreen()
+                BackUpAccountScreen(appbar = SettingAppBar(
+                    currentScreen = currentScreen.name,
+                    canNavigateBack = navController.previousBackStackEntry != null,
+                    navigateUp = { navController.navigateUp() },
+                    color = Color.White),
+                    navController = navController)
             }
             composable(route = SettingScreenNavigation.DeleteAccount.name) {
                 val context = LocalContext.current
@@ -162,9 +171,9 @@ fun SettingsScreen(
                 )
             }
             composable(route = SettingScreenNavigation.ResetDatabase.name) {
-                if (onboardViewModel != null && onboardUiState != null && appUiState != null) {
+                if (onboardViewModel != null && onboardUiState != null && appUiState != null && calUiState != null) {
                     ResetDatabase(context = context, viewModel = onboardViewModel, navController = navController, outController = outController, onboardUiState = onboardUiState,
-                    appUiState = appUiState)
+                    appUiState = appUiState, calUiState = calUiState)
                 }
             }
         }
