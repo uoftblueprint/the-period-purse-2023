@@ -127,13 +127,11 @@ fun calculateAverageCycleLength(periodHistory: ArrayList<Date>): Float {
 }
 
 /**
- * Calculate the the sweeping angle for the progress circle
- * assume one month contains 31 days, use the equation:
- * (number of days since last cycle / 31) * 360f
+ * Return the number of days since the last period
  */
-fun calculateArcAngle(periodHistory: ArrayList<Date>):Float {
+fun calculateDaysSinceLastPeriod(periodHistory: ArrayList<Date>): Long {
     if (periodHistory.isEmpty()) {
-        return 0f
+        return 0
     }
     sortPeriodHistory(periodHistory)
     val lastPeriodDate = periodHistory[periodHistory.size - 1].date?.time
@@ -143,8 +141,16 @@ fun calculateArcAngle(periodHistory: ArrayList<Date>):Float {
         ).atZone(ZoneId.systemDefault()).toInstant()
     ).time
     if (lastPeriodDate != null) {
-        val dayRatio = (currDate - lastPeriodDate)/86400000/31f
-        return 360f * min(1f, dayRatio)
+        return (currDate - lastPeriodDate)/86400000
     }
-    return 360f
+    return 0
+}
+
+/**
+ * Calculate the the sweeping angle for the progress circle
+ * assume one month contains 31 days, use the equation:
+ * (number of days since last cycle / 31) * 360f
+ */
+fun calculateArcAngle(periodHistory: ArrayList<Date>):Float {
+    return 360f * min(1f, calculateDaysSinceLastPeriod(periodHistory) / 31f)
 }

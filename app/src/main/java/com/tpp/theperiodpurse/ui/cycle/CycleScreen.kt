@@ -26,10 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.data.Date
-import com.tpp.theperiodpurse.data.calculateArcAngle
-import com.tpp.theperiodpurse.data.calculateAverageCycleLength
-import com.tpp.theperiodpurse.data.calculateAveragePeriodLength
+import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.ui.theme.ThePeriodPurseTheme
 
 private var periodLength = (-1).toFloat()
@@ -92,10 +89,10 @@ fun CurrentCycleBox(modifier: Modifier = Modifier, dates: ArrayList<Date>) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
-                        text = "1",
+                        text = calculateDaysSinceLastPeriod(dates).toString(),
                         fontSize = 50.sp,
                         fontWeight = FontWeight(900),
-                        color = Color(0xFFB12126),
+                        color = Color(0xFFB12126)
                     )
                     Text(
                         text = "Days since",
