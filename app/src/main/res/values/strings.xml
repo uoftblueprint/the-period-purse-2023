@@ -37,10 +37,11 @@
     </plurals>
     <string name="log_to_learn">Please start logging to learn more.</string>
     <string name="current_cycle">Current cycle</string>
-    <string name="cycle_history">Cycle history</string>
+    <string name="period_history">Period History</string>
     <string name="avg_period_len">Average period length</string>
     <string name="avg_cycle_len">Average cycle length</string>
     <string name="fab_to_calender">Average cycle length</string>
+    <string name="show_more">Show More ></string>
     <string name="log_multiple_dates_header_title">Tap date to log period</string>
     <string name="log_multiple_dates_header_body">Selected dates with have their Flow level set to Medium</string>
 
@@ -62,4 +63,5 @@
     <string name="settings_home">Settings</string>
     <string name="reminder_description">We\'ll remind you to log your symptoms.</string>
     <string name="copyright">© 2023 The Period Purse. All rights reserved.</string>
+    <string name="please_start_logging_to_learn_more">Please start logging to learn more</string>
 </resources>

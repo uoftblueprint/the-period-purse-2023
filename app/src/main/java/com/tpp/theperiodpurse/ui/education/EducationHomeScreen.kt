@@ -44,7 +44,8 @@ fun EducationScreenLayout(
 
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .padding(bottom = 50.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LazyVerticalGrid(
