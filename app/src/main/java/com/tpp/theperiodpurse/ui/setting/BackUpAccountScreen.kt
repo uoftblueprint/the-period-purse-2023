@@ -140,6 +140,7 @@ fun BackUpAccountScreen(appbar: Unit,
 
     if (confirmBackUp.value) {
         navController.navigate(SettingScreenNavigation.BackupDatabase.name)
+        confirmBackUp.value = false
     }
 
 }

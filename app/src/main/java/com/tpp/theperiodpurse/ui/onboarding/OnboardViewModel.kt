@@ -135,9 +135,12 @@ class OnboardViewModel @Inject constructor (
             }
     }
 
-    fun backupDatabase(account: Account, context: Context, ) {
+    fun backupDatabase(account: Account, context: Context) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
+
+
+
                 val credential = GoogleAccountCredential.usingOAuth2(
                     context,
                     listOf(DriveScopes.DRIVE_APPDATA,
@@ -187,7 +190,6 @@ class OnboardViewModel @Inject constructor (
                 }
                 inputStream.close()
                 outputStream.close()
-
                 isBackedUp.postValue(true)
             }
         }

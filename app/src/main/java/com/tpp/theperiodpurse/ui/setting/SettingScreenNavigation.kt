@@ -186,12 +186,10 @@ fun SettingsScreen(
             }
             composable(route = SettingScreenNavigation.BackupDatabase.name) {
                 if (onboardViewModel != null && onboardUiState != null) {
-                    onboardUiState.googleAccount?.let { it1 ->
-                        BackupDatabase(viewModel = onboardViewModel,
-                            navController = navController,
-                            account = it1,
-                            context = context)
-                    }
+                    BackupDatabase(viewModel = onboardViewModel,
+                        navController = navController,
+                        account = onboardUiState.googleAccount,
+                        context = context)
                 }
             }
             composable(route = SettingScreenNavigation.ConfirmBackup.name) {

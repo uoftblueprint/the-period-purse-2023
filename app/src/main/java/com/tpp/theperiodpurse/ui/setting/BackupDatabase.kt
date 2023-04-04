@@ -32,12 +32,17 @@ import kotlinx.coroutines.withContext
 @Composable
 fun BackupDatabase(viewModel: OnboardViewModel,
                    navController: NavHostController,
-                   account: Account,
+                   account: Account?,
                    context: Context) {
 
     val isBackedUp by viewModel.isBackedUp.observeAsState(initial = null)
+
+
     LaunchedEffect(Unit){
-        viewModel.backupDatabase(account = account, context)
+        if (account != null){
+            viewModel.backupDatabase(account = account, context)
+        }
+
     }
     if (isBackedUp == null){
         LoadingScreen()
