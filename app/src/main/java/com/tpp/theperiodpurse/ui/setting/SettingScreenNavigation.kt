@@ -22,7 +22,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -113,6 +112,7 @@ fun SettingsScreen(
         ) {
             composable(route = SettingScreenNavigation.Start.name) {
                 SettingScreenLayout(
+                    outController = outController,
                     onNotificationClicked = {
                         navController.navigate(SettingScreenNavigation.Notification.name)
                     },

@@ -32,6 +32,9 @@ enum class Screen {
     Cycle,
     Settings,
     Learn,
+}
+
+enum class LegalScreen {
     Terms,
     Privacy
 }
@@ -105,11 +108,11 @@ fun NavigationGraph(
             EducationScreen(outController = navController)
         }
 
-        composable(Screen.Terms.name) {
+        composable(LegalScreen.Terms.name) {
             TermsScreen(navController)
         }
 
-        composable(Screen.Privacy.name) {
+        composable(LegalScreen.Privacy.name) {
             PrivacyScreen(navController)
         }
 
@@ -117,6 +120,7 @@ fun NavigationGraph(
         // Welcome Screen
         composable(route = OnboardingScreen.Welcome.name) {
             WelcomeScreen(
+                navController = navController,
                 onNextButtonClicked =
                 { navController.navigate(OnboardingScreen.QuestionOne.name) },
                 signIn = signIn
