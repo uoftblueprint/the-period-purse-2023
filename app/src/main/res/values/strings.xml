@@ -58,7 +58,9 @@
     <string name="repeat">Repeat</string>
     <string name="back_up_account">Back Up Account</string>
     <string name="delete_account">Delete Account</string>
-    <string name="reset_database">Delete Account</string>
+    <string name="reset_database">Reset Database</string>
+    <string name="back_up_database">Back Up Database</string>
+    <string name="confirm_back_up">Confirm Back Up</string>
     <string name="settings_home">Settings</string>
     <string name="reminder_description">We\'ll remind you to log your symptoms.</string>
     <string name="copyright">© 2023 The Period Purse. All rights reserved.</string>

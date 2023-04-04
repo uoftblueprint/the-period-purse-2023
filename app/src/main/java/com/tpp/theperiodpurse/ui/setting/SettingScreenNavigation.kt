@@ -39,7 +39,9 @@ enum class SettingScreenNavigation(@StringRes val title: Int) {
         title = R.string.back_up_account
     ),
     DeleteAccount(title = R.string.delete_account),
-    ResetDatabase(title = R.string.reset_database)
+    ResetDatabase(title = R.string.reset_database),
+    BackupDatabase(title= R.string.back_up_database),
+    ConfirmBackup(title= R.string.confirm_back_up),
 }
 
 /**
@@ -161,7 +163,6 @@ fun SettingsScreen(
                     color = Color.White),
                     navController = navController,
                     signIn = signIn,
-                    outController = outController,
                     onboardUIState = onboardUiState,
                     context = context
                 )
@@ -182,6 +183,19 @@ fun SettingsScreen(
                     ResetDatabase(context = context, viewModel = onboardViewModel, navController = navController, outController = outController, onboardUiState = onboardUiState,
                     appUiState = appUiState, calUiState = calUiState, signout = signout)
                 }
+            }
+            composable(route = SettingScreenNavigation.BackupDatabase.name) {
+                if (onboardViewModel != null && onboardUiState != null) {
+                    onboardUiState.googleAccount?.let { it1 ->
+                        BackupDatabase(viewModel = onboardViewModel,
+                            navController = navController,
+                            account = it1,
+                            context = context)
+                    }
+                }
+            }
+            composable(route = SettingScreenNavigation.ConfirmBackup.name) {
+                ConfirmBackUp(navController = navController)
             }
         }
     }

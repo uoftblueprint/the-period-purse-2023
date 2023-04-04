@@ -1,13 +1,18 @@
 package com.tpp.theperiodpurse.ui.onboarding
 import android.accounts.Account
+import android.app.Activity
 import android.content.Context
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.lifecycle.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
+import com.google.api.client.http.ByteArrayContent
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
+import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.*
@@ -15,6 +20,8 @@ import com.tpp.theperiodpurse.data.Date
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import java.io.ByteArrayOutputStream
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.time.Duration
@@ -100,7 +107,7 @@ class OnboardViewModel @Inject constructor (
                         val credential = GoogleAccountCredential.usingOAuth2(
                             context,
                             listOf(
-                                DriveScopes.DRIVE_READONLY,
+                                DriveScopes.DRIVE_FILE,
                                 DriveScopes.DRIVE_APPDATA
                             )
                         )
@@ -131,23 +138,57 @@ class OnboardViewModel @Inject constructor (
     fun backupDatabase(account: Account, context: Context, ) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                async {
-                    val credential = GoogleAccountCredential.usingOAuth2(
-                        context, listOf(DriveScopes.DRIVE_READONLY,
-                            DriveScopes.DRIVE_APPDATA)
-                    )
-                    credential.selectedAccount = account
-                    val drive = Drive.Builder(
-                        AndroidHttp.newCompatibleTransport(),
-                        JacksonFactory.getDefaultInstance(),
-                        credential
-                    )
-                        .setApplicationName(context.getString(R.string.app_name))
-                        .build()
+                val credential = GoogleAccountCredential.usingOAuth2(
+                    context,
+                    listOf(DriveScopes.DRIVE_APPDATA,
+                        DriveScopes.DRIVE_FILE)
+                )
+                credential.selectedAccount = account
+                val drive = Drive.Builder(
+                    AndroidHttp.newCompatibleTransport(),
+                    JacksonFactory.getDefaultInstance(),
+                    credential
+                ).setApplicationName(context.getString(R.string.app_name)).build()
+//                val metadata = File()
+//                    .setParents(listOf("appDataFolder"))
+//                    .setMimeType("text/plain")
+//                    .setName("example.txt")
+//                val emptyContent = ByteArrayContent("text/plain", byteArrayOf())
+//                drive.files().create(metadata, emptyContent)
+//                    .setFields("id")
+//                    .execute()
 
+                val query =
+                    "mimeType='application/x-sqlite3' and trashed=false and 'appDataFolder' in parents and name='user_database.db'"
+                val fileList = drive.files().list().setQ(query).execute()
+                val fileId = if (fileList.files.isNotEmpty()) {
+                    fileList.files[0].id
+                } else {
+                    null
+                }
 
+                val outputStream = ByteArrayOutputStream()
+                val file = ApplicationRoomDatabase.DatabaseToFile(context)
+                val inputStream = FileInputStream(file)
+
+                inputStream.copyTo(outputStream)
+
+                if (fileId != null) {
+                    drive.files().update(fileId, null, ByteArrayContent(null, outputStream.toByteArray())).execute()
+                } else {
+                    val metadata = File()
+                        .setParents(listOf("appDataFolder"))
+                        .setMimeType("application/x-sqlite3")
+                        .setName("user_database.db")
+                    drive.files().create(metadata, ByteArrayContent(null, outputStream.toByteArray()))
+                        .setFields("id")
+                        .execute()
 
                 }
+                inputStream.close()
+                outputStream.close()
+
+                isBackedUp.postValue(true)
             }
         }
     }

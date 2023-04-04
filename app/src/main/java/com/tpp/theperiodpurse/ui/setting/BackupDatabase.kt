@@ -36,62 +36,16 @@ fun BackupDatabase(viewModel: OnboardViewModel,
                    context: Context) {
 
     val isBackedUp by viewModel.isBackedUp.observeAsState(initial = null)
-    var confirmBackUp = remember { mutableStateOf(false)  }
-
     LaunchedEffect(Unit){
         viewModel.backupDatabase(account = account, context)
     }
-
     if (isBackedUp == null){
         LoadingScreen()
+
     }
     else {
-        if (confirmBackUp.value) {
-
-            AlertDialog(
-                modifier = Modifier.padding(16.dp),
-                shape = RoundedCornerShape(10.dp),
-                backgroundColor = Color.White,
-                contentColor = Color.Black,
-                onDismissRequest = { confirmBackUp.value = false
-                    navController.navigate(SettingScreenNavigation.Start.name)},
-                title = {
-                    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = "Backup Succesful",
-                            style = MaterialTheme.typography.h6
-                        )
-                    }
-                },
-                text = {
-                    Text(
-                        text = "Your data has been backed up to your Google Drive!",
-                        style = MaterialTheme.typography.body1,
-                        textAlign = TextAlign.Center
-                    )
-                },
-                confirmButton = {
-                    OutlinedButton(
-                        onClick = {
-                            confirmBackUp.value = false
-                            navController.navigate(SettingScreenNavigation.Start.name)
-                        },
-                        modifier = Modifier
-                            .padding(2.dp)
-                            .height(48.dp)
-                            .fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
-                    ) {
-                        Text(
-                            text = "OK",
-                            style = MaterialTheme.typography.button,
-                            color = Color.Blue
-                        )
-                    }
-                },
-            )
-
+        LaunchedEffect(Unit){
+            navController.navigate(SettingScreenNavigation.ConfirmBackup.name)
         }
 
     }
