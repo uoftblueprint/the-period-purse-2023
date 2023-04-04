@@ -20,6 +20,7 @@ import com.tpp.theperiodpurse.ui.SummaryScreen
 import com.tpp.theperiodpurse.ui.calendar.CalendarScreen
 import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import com.tpp.theperiodpurse.ui.cycle.CycleScreenLayout
+import com.tpp.theperiodpurse.ui.cycle.PeriodHistoryLayout
 import com.tpp.theperiodpurse.ui.education.*
 import com.tpp.theperiodpurse.ui.onboarding.*
 import com.tpp.theperiodpurse.ui.setting.LoadDatabase
@@ -33,12 +34,13 @@ enum class Screen {
     Cycle,
     Settings,
     Learn,
-    LogMultipleDates
+    LogMultipleDates,
+    CycleFullHisotry
 }
 
 val screensWithNavigationBar = arrayOf(
     Screen.Calendar.name, Screen.Log.name, Screen.Cycle.name,
-    Screen.Settings.name, Screen.Learn.name
+    Screen.Settings.name, Screen.Learn.name, Screen.CycleFullHisotry.name
 )
 
 enum class OnboardingScreen {
@@ -115,11 +117,18 @@ fun NavigationGraph(
         composable(route = Screen.Cycle.name) {
             CycleScreenLayout(
                 appViewModel = appViewModel,
+                navController = navController
+            )
+        }
+
+        composable(route = Screen.CycleFullHisotry.name) {
+            PeriodHistoryLayout(
+                appViewModel = appViewModel,
+                navController = navController
             )
         }
 
         // Education Screens
-
         composable(route = Screen.Learn.name) {
             EducationScreenLayout()
         }
