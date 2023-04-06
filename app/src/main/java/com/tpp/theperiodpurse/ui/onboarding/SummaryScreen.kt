@@ -210,7 +210,6 @@ fun SummaryScreen(
                 .padding(horizontal = (screenheight * 0.02).dp)
                 .fillMaxWidth(),
             onClick = {
-                ApplicationRoomDatabase.openDatabase(context)
 
                 viewModel.addNewUser(
                     getSymptomsToTrack(onboardUiState.symptomsOptions),

@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.data.ApplicationRoomDatabase
 import com.tpp.theperiodpurse.data.OnboardUIState
 
 
@@ -50,6 +51,7 @@ fun QuestionOneScreen(
     var entered by rememberSaveable { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val configuration = LocalConfiguration.current
+
 
     val screenwidth = configuration.screenWidthDp;
 
