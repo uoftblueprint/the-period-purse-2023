@@ -24,9 +24,9 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import androidx.navigation.NavHostController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -114,34 +114,13 @@ fun WelcomeScreen(
 
             Spacer(modifier = Modifier.height((screenheight*0.006).dp))
 
-            val annotatedLinkString = buildAnnotatedString {
-                val str = "Terms and Conditions and Privacy Policy"
-                var startIndex = str.indexOf("Terms and Conditions")
-                var endIndex = startIndex + 20
-                addStyle(
-                    style = SpanStyle(
-                        textDecoration = TextDecoration.Underline,
-                        fontWeight = FontWeight.Bold
-                    ), start = startIndex, end = endIndex
-                )
-                startIndex = str.indexOf("Privacy Policy")
-                endIndex = startIndex + 14
-                addStyle(
-                    style = SpanStyle(
-                        textDecoration = TextDecoration.Underline,
-                        fontWeight = FontWeight.Bold
-                    ), start = startIndex, end = endIndex
-                )
-                append(str)
-            }
 
-            Text("By continuing, you accept the", textAlign = TextAlign.Center, )
-            Text(text = annotatedLinkString, textAlign = TextAlign.Center)
+            Text("By continuing, you accept the", textAlign = TextAlign.Center )
+            TermsAndPrivacyFooter(navController)
         }
 
 
-        Text("By continuing, you accept the", textAlign = TextAlign.Center )
-        TermsAndPrivacyFooter(navController)
+
     }
 
 }
@@ -150,35 +129,27 @@ fun WelcomeScreen(
 fun GoogleSignInButton(
     signInClicked: () -> Unit
 ) {
-    Surface(onClick = signInClicked,
+
+    Button(
+        onClick = signInClicked,
         modifier = Modifier
             .widthIn(min = 350.dp)
             .height(50.dp),
         shape= RoundedCornerShape(15),
         border = BorderStroke(width = 1.dp, color=Color.LightGray),
-        color = MaterialTheme.colors.surface
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
     ) {
-        Row (modifier = Modifier
-            .padding(
-                start = 12.dp,
-                end = 16.dp,
-                top = 12.dp,
-                bottom = 12.dp
-            ),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center){
-            Icon(
-                painter = painterResource(id = R.drawable.ic_google_logo),
-                contentDescription = "Google Button",
-                tint=Color.Unspecified,
+        Icon(
+            painter = painterResource(id = R.drawable.ic_google_logo),
+            contentDescription = "Google Button",
+            tint=Color.Unspecified,
 
-                )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = "Sign in with Google",
-                color = Color.Black, fontSize = 20.sp,
             )
-        }
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = "Sign in with Google",
+            color = Color.Black, fontSize = 20.sp,
+        )
     }
 }
 
@@ -200,3 +171,4 @@ fun QuickStartButton(
         Text("Quick Start", color = Color.White, fontSize = 20.sp)
     }
 }
+
