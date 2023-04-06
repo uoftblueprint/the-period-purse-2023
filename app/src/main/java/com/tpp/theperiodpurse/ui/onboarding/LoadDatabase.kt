@@ -31,8 +31,10 @@ fun LoadDatabase(
     }
     else {
         LaunchedEffect(Unit) {
+            appViewModel.isLoaded.postValue(null)
             navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
             navController.navigate(Screen.Calendar.name)
+
         }
 
     }

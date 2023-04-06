@@ -1,6 +1,7 @@
 package com.tpp.theperiodpurse.ui.onboarding
 import android.accounts.Account
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.lifecycle.*
@@ -53,30 +54,16 @@ class OnboardViewModel @Inject constructor (
     fun checkOnboardedStatus() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                async {
-                    userRepository.isOnboarded()
-                    isOnboarded = userRepository.isOnboarded
-                }
-
+                userRepository.isOnboarded()
+                isOnboarded = userRepository.isOnboarded
             }
         }
     }
     fun checkDeletedStatus(context: Context) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                async {
-
-                    ApplicationRoomDatabase.destroyInstance()
-
-                    ApplicationRoomDatabase.openDatabase(context)
-
-                    ApplicationRoomDatabase.clearDatabase()
-
-                    ApplicationRoomDatabase.openDatabase(context)
-
-                    isDeleted.postValue(true)
-                }
-
+                ApplicationRoomDatabase.clearDatabase()
+                isDeleted.postValue(true)
             }
         }
     }
@@ -85,28 +72,24 @@ class OnboardViewModel @Inject constructor (
     fun checkGoogleDrive(account: Account, context: Context, ) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                async {
-                    val credential = GoogleAccountCredential.usingOAuth2(
-                        context, listOf(DriveScopes.DRIVE_FILE,
-                            DriveScopes.DRIVE_APPDATA)
+                val credential = GoogleAccountCredential.usingOAuth2(
+                    context, listOf(DriveScopes.DRIVE_FILE,
+                        DriveScopes.DRIVE_APPDATA)
+                )
+                credential.selectedAccount = account
+                val drive = Drive
+                    .Builder(
+                        AndroidHttp.newCompatibleTransport(),
+                        JacksonFactory.getDefaultInstance(),
+                        credential
                     )
-                    credential.selectedAccount = account
-                    val drive = Drive
-                        .Builder(
-                            AndroidHttp.newCompatibleTransport(),
-                            JacksonFactory.getDefaultInstance(),
-                            credential
-                        )
-                        .setApplicationName(context.getString(R.string.app_name))
-                        .build()
+                    .setApplicationName(context.getString(R.string.app_name))
+                    .build()
 
 
-                    isDrive.postValue(drive.files().list()
-                        .setQ("name = 'user_database.db' and trashed = false")
-                        .setSpaces("appDataFolder").execute())
-
-                }
-
+                isDrive.postValue(drive.files().list()
+                    .setQ("name = 'user_database.db' and trashed = false")
+                    .setSpaces("appDataFolder").execute())
             }
         }
     }
@@ -114,7 +97,6 @@ class OnboardViewModel @Inject constructor (
     fun downloadBackup(account: Account, context: Context){
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
-                    ApplicationRoomDatabase.destroyInstance()
 
                     val credential = GoogleAccountCredential.usingOAuth2(
                         context,
@@ -158,18 +140,7 @@ class OnboardViewModel @Inject constructor (
                         close()
                     }
 
-                    val instance = Room.databaseBuilder(context.applicationContext, ApplicationRoomDatabase::class.java, "user_database.db")
-                        .createFromAsset("user_database.db")
-                        .fallbackToDestructiveMigration()
-                        .build()
-
-                    instance.openHelper.readableDatabase
-                    instance.openHelper.writableDatabase
-
-                    ApplicationRoomDatabase.destroyInstance()
                     ApplicationRoomDatabase.openDatabase(context)
-
-
 
 
                     isDownloaded.postValue(true)
@@ -201,27 +172,6 @@ class OnboardViewModel @Inject constructor (
                 } else {
                     null
                 }
-
-//                val outputStream = ByteArrayOutputStream()
-//                val file = ApplicationRoomDatabase.DatabaseToFile(context)
-//                val inputStream = FileInputStream(file)
-//
-//                inputStream.copyTo(outputStream)
-//
-//                if (fileId != null) {
-//                    drive.files().update(fileId, null, ByteArrayContent(null, outputStream.toByteArray())).execute()
-//                } else {
-//                    val metadata = File()
-//                        .setParents(listOf("appDataFolder"))
-//                        .setMimeType("application/x-sqlite3")
-//                        .setName("user_database.db")
-//                    drive.files().create(metadata, ByteArrayContent(null, outputStream.toByteArray()))
-//                        .setFields("id")
-//                        .execute()
-//
-//                }
-//                inputStream.close()
-//                outputStream.close()
                 ApplicationRoomDatabase.destroyInstance()
 
 
@@ -238,6 +188,9 @@ class OnboardViewModel @Inject constructor (
                         .execute()
 
                 ApplicationRoomDatabase.openDatabase(context)
+
+                inputStream.close()
+                outputStream.close()
 
                 isBackedUp.postValue(true)
             }

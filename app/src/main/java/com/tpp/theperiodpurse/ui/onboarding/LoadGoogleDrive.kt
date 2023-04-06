@@ -109,16 +109,19 @@ fun LoadGoogleDrive(googleAccount: Account?, viewModel: OnboardViewModel, navHos
         }
 
         if (isDrive!!.files.isNotEmpty() && confirmLoad.value && decision.value){
+            confirmLoad.value = false
             LaunchedEffect(Unit) {
                 navHostController.navigate(OnboardingScreen.DownloadBackup.name)
             }
-            confirmLoad.value = false
+
         }
         else if (confirmLoad.value) {
+            confirmLoad.value = false
             LaunchedEffect(Unit) {
                 navHostController.navigate(OnboardingScreen.QuestionOne.name)
+
             }
-            confirmLoad.value = false
+
         }
 
 

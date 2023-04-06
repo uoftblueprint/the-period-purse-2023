@@ -18,6 +18,7 @@ import androidx.navigation.NavHostController
 import com.google.api.services.drive.Drive
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.Screen
+import com.tpp.theperiodpurse.data.ApplicationRoomDatabase
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -26,6 +27,7 @@ fun DownloadBackup(googleAccount: Account?, viewModel: OnboardViewModel, navHost
     val isDownloaded by viewModel.isDownloaded.observeAsState(initial = null)
 
     LaunchedEffect(Unit){
+
         if (googleAccount != null) {
             viewModel.downloadBackup(googleAccount, context)
         }
@@ -34,7 +36,9 @@ fun DownloadBackup(googleAccount: Account?, viewModel: OnboardViewModel, navHost
         LoadingScreen()
     }
     else {
+
         LaunchedEffect(Unit){
+            viewModel.isDownloaded.postValue(null)
             navHostController.navigate(OnboardingScreen.LoadDatabase.name)
         }
 

@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.sqlite.db.SupportSQLiteDatabase
 import java.io.File
 
 @Database(entities=[User::class, Date::class], version = 6, exportSchema = false)
@@ -29,6 +30,7 @@ abstract class ApplicationRoomDatabase: RoomDatabase() {
                     ApplicationRoomDatabase::class.java,
                     databaseFile.absolutePath
                 )
+                    .addCallback(getCallback())
                     .fallbackToDestructiveMigration()
                     .build()
                 instance.openHelper.readableDatabase
@@ -38,10 +40,9 @@ abstract class ApplicationRoomDatabase: RoomDatabase() {
             }
         }
         fun clearDatabase(): Boolean {
-            if (INSTANCE?.isOpen == true) {
+            if (INSTANCE != null) {
                 INSTANCE!!.clearAllTables()
                 INSTANCE!!.close()
-                INSTANCE = null
             }
 
             return true
@@ -56,6 +57,7 @@ abstract class ApplicationRoomDatabase: RoomDatabase() {
                     ApplicationRoomDatabase::class.java,
                     databaseFile.absolutePath
                 )
+                    .addCallback(getCallback())
                     .fallbackToDestructiveMigration()
                     .build()
 
@@ -64,15 +66,25 @@ abstract class ApplicationRoomDatabase: RoomDatabase() {
 
                 INSTANCE = instance
             }
+
         }
 
         // close database
         fun destroyInstance() {
-            if (INSTANCE != null && INSTANCE!!.isOpen){
+            if (INSTANCE != null){
                 INSTANCE!!.close()
                 INSTANCE = null
-            }
 
+            }
+        }
+
+        fun getCallback(): Callback {
+            return object : Callback() {
+                override fun onOpen(db: SupportSQLiteDatabase) {
+                    super.onOpen(db)
+                    db.execSQL("CREATE TEMP TABLE room_table_modification_log(table_id INTEGER PRIMARY KEY, invalidated INTEGER NOT NULL DEFAULT 0)")
+                }
+            }
         }
 
     }
