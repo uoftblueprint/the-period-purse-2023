@@ -41,8 +41,9 @@ abstract class ApplicationRoomDatabase: RoomDatabase() {
             if (INSTANCE?.isOpen == true) {
                 INSTANCE!!.clearAllTables()
                 INSTANCE!!.close()
+                INSTANCE = null
             }
-            INSTANCE = null
+
             return true
         }
         fun openDatabase(context: Context){

@@ -114,8 +114,6 @@ class OnboardViewModel @Inject constructor (
     fun downloadBackup(account: Account, context: Context){
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
-
-                    ApplicationRoomDatabase.openDatabase(context)
                     ApplicationRoomDatabase.destroyInstance()
 
                     val credential = GoogleAccountCredential.usingOAuth2(
