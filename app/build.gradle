@@ -35,6 +35,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
+
     compileOptions {
         coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -70,9 +75,6 @@ dependencies {
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
     kapt ("androidx.room:room-compiler:$room_version")
     implementation 'com.google.code.gson:gson:2.10.1'
-    implementation('com.google.http-client:google-http-client-gson:1.26.0') {
-        exclude group: 'commons-logging', module: 'commons-logging'
-    }
 
     // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3-native-mt'
