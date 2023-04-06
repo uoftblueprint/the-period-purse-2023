@@ -55,8 +55,9 @@ class UserRepository(private val userDAO: UserDAO) {
     suspend fun isOnboarded() {
         isOnboarded.postValue(userDAO.getUsers().isNotEmpty())
     }
-    fun isDeleted(context: Context) {
-        isDeleted.postValue(ApplicationRoomDatabase.clearDatabase(context))
-    }
+//    fun isDeleted(context: Context) {
+//
+//        isDeleted.postValue(ApplicationRoomDatabase.clearDatabase(context))
+//    }
 
 }

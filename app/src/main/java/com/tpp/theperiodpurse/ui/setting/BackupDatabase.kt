@@ -21,6 +21,7 @@ import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.drive.Drive
 import com.tpp.theperiodpurse.AppUiState
 import com.tpp.theperiodpurse.OnboardingScreen
+import com.tpp.theperiodpurse.data.ApplicationRoomDatabase
 import com.tpp.theperiodpurse.data.OnboardUIState
 import com.tpp.theperiodpurse.ui.calendar.CalendarUIState
 import com.tpp.theperiodpurse.ui.onboarding.LoadingScreen
@@ -50,7 +51,10 @@ fun BackupDatabase(viewModel: OnboardViewModel,
     }
     else {
         LaunchedEffect(Unit){
+
+            viewModel.isBackedUp.postValue(null)
             navController.navigate(SettingScreenNavigation.ConfirmBackup.name)
+
         }
 
     }

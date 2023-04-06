@@ -40,7 +40,7 @@ class OnboardViewModel @Inject constructor (
     val uiState: StateFlow<OnboardUIState> = _uiState.asStateFlow()
 
     var isOnboarded: LiveData<Boolean?> = userRepository.isOnboarded
-    var isDeleted: LiveData<Boolean?> = userRepository.isDeleted
+    var isDeleted: MutableLiveData<Boolean?> = MutableLiveData(null)
     var isDrive: MutableLiveData<FileList?> = MutableLiveData(null)
     var isDownloaded: MutableLiveData<Boolean?> = MutableLiveData(null)
     var isBackedUp: MutableLiveData<Boolean?> = MutableLiveData(null)
@@ -65,8 +65,16 @@ class OnboardViewModel @Inject constructor (
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 async {
-                    userRepository.isDeleted(context = context)
-                    isDeleted = userRepository.isDeleted
+
+                    ApplicationRoomDatabase.destroyInstance()
+
+                    ApplicationRoomDatabase.openDatabase(context)
+
+                    ApplicationRoomDatabase.clearDatabase()
+
+                    ApplicationRoomDatabase.openDatabase(context)
+
+                    isDeleted.postValue(true)
                 }
 
             }
@@ -106,8 +114,9 @@ class OnboardViewModel @Inject constructor (
     fun downloadBackup(account: Account, context: Context){
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
-                    var instance = ApplicationRoomDatabase.getDatabase(context)
-                    instance.close()
+
+                    ApplicationRoomDatabase.openDatabase(context)
+                    ApplicationRoomDatabase.destroyInstance()
 
                     val credential = GoogleAccountCredential.usingOAuth2(
                         context,
@@ -117,7 +126,6 @@ class OnboardViewModel @Inject constructor (
                         )
                     )
                     credential.selectedAccount = account
-
                     val drive = Drive
                         .Builder(
                             AndroidHttp.newCompatibleTransport(),
@@ -126,23 +134,43 @@ class OnboardViewModel @Inject constructor (
                         )
                         .setApplicationName(context.getString(R.string.app_name))
                         .build()
-
-
                     val fileList = drive.files().list()
                         .setQ("name = 'user_database.db' and trashed = false")
                         .setSpaces("appDataFolder").execute()
 
+//                    val fileId = fileList.files[0].id
+//                    val outputStream = FileOutputStream(context.getDatabasePath("user_database.db"))
+//
+//                    drive.files().get(fileId).executeMediaAndDownloadTo(outputStream)
+//
+//                    context.deleteDatabase("user_database")
                     val fileId = fileList.files[0].id
-                    val outputStream = FileOutputStream(context.getDatabasePath("user_database.db"))
+
+                    val outputStream = ByteArrayOutputStream()
 
                     drive.files().get(fileId).executeMediaAndDownloadTo(outputStream)
 
-                    context.deleteDatabase("user_database")
+                    val data = outputStream.toByteArray()
 
-                    Room.databaseBuilder(context.applicationContext, ApplicationRoomDatabase::class.java, "user_database")
+                    val dbFilePath = context.getDatabasePath("user_database.db").path
+
+                    FileOutputStream(dbFilePath).apply {
+                        write(data)
+                        flush()
+                        close()
+                    }
+
+                    val instance = Room.databaseBuilder(context.applicationContext, ApplicationRoomDatabase::class.java, "user_database.db")
                         .createFromAsset("user_database.db")
                         .fallbackToDestructiveMigration()
                         .build()
+
+                    instance.openHelper.readableDatabase
+                    instance.openHelper.writableDatabase
+
+                    ApplicationRoomDatabase.destroyInstance()
+                    ApplicationRoomDatabase.openDatabase(context)
+
 
 
 
@@ -169,32 +197,50 @@ class OnboardViewModel @Inject constructor (
                val fileList = drive.files().list()
                    .setQ("name = 'user_database.db' and trashed = false")
                    .setSpaces("appDataFolder").execute()
-                val fileId = if (fileList.files.isNotEmpty()) {
-                    fileList.files[0].id
+                if (fileList.files.isNotEmpty()) {
+                    val fileId = fileList.files[0].id
+                    drive.files().delete(fileId).execute()
                 } else {
                     null
                 }
 
+//                val outputStream = ByteArrayOutputStream()
+//                val file = ApplicationRoomDatabase.DatabaseToFile(context)
+//                val inputStream = FileInputStream(file)
+//
+//                inputStream.copyTo(outputStream)
+//
+//                if (fileId != null) {
+//                    drive.files().update(fileId, null, ByteArrayContent(null, outputStream.toByteArray())).execute()
+//                } else {
+//                    val metadata = File()
+//                        .setParents(listOf("appDataFolder"))
+//                        .setMimeType("application/x-sqlite3")
+//                        .setName("user_database.db")
+//                    drive.files().create(metadata, ByteArrayContent(null, outputStream.toByteArray()))
+//                        .setFields("id")
+//                        .execute()
+//
+//                }
+//                inputStream.close()
+//                outputStream.close()
+                ApplicationRoomDatabase.destroyInstance()
+
+
+                val dbFile = java.io.File(context.getDatabasePath("user_database.db").absolutePath)
                 val outputStream = ByteArrayOutputStream()
-                val file = ApplicationRoomDatabase.DatabaseToFile(context)
-                val inputStream = FileInputStream(file)
-
+                val inputStream = FileInputStream(dbFile)
                 inputStream.copyTo(outputStream)
-
-                if (fileId != null) {
-                    drive.files().update(fileId, null, ByteArrayContent(null, outputStream.toByteArray())).execute()
-                } else {
-                    val metadata = File()
+                val metadata = File()
                         .setParents(listOf("appDataFolder"))
                         .setMimeType("application/x-sqlite3")
                         .setName("user_database.db")
-                    drive.files().create(metadata, ByteArrayContent(null, outputStream.toByteArray()))
+                drive.files().create(metadata, ByteArrayContent(null, outputStream.toByteArray()))
                         .setFields("id")
                         .execute()
 
-                }
-                inputStream.close()
-                outputStream.close()
+                ApplicationRoomDatabase.openDatabase(context)
+
                 isBackedUp.postValue(true)
             }
         }
