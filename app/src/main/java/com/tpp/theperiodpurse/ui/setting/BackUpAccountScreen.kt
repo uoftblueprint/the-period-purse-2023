@@ -39,14 +39,15 @@ fun BackUpAccountScreen(appbar: Unit,
 
     var confirmBackUp = remember { mutableStateOf(false)  }
 
+
     var firstCheck = remember {
         mutableStateOf(true)
     }
 
     if (firstCheck.value){
         val account = GoogleSignIn.getLastSignedInAccount(context)
-        if (account != null && onboardUIState?.googleAccount !=null){
-            onboardUIState.googleAccount= account.account
+        if (account != null && onboardUIState?.googleAccount ==null){
+            onboardUIState?.googleAccount= account.account
         }
         firstCheck.value = false
     }
@@ -54,7 +55,6 @@ fun BackUpAccountScreen(appbar: Unit,
     appbar
 
     if (onboardUIState?.googleAccount != null){
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -140,9 +140,11 @@ fun BackUpAccountScreen(appbar: Unit,
     }
 
     if (confirmBackUp.value) {
-        navController.navigate(SettingScreenNavigation.BackupDatabase.name)
         confirmBackUp.value = false
         firstCheck.value = true
+        navController.navigate(SettingScreenNavigation.BackupDatabase.name)
+
+
     }
 
 }
