@@ -22,13 +22,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import androidx.navigation.NavHostController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -36,6 +34,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.common.api.Status
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
 import com.tpp.theperiodpurse.data.OnboardUIState
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -50,7 +49,7 @@ fun WelcomeScreen(
 
     val configuration = LocalConfiguration.current
 
-    val screenheight = configuration.screenHeightDp;
+    val screenheight = configuration.screenHeightDp
 
     val account = GoogleSignIn.getLastSignedInAccount(context)
 
@@ -141,6 +140,8 @@ fun WelcomeScreen(
         }
 
 
+        Text("By continuing, you accept the", textAlign = TextAlign.Center )
+        TermsAndPrivacyFooter(navController)
     }
 
 }
@@ -196,6 +197,6 @@ fun QuickStartButton(
 //        color = Color(52, 235, 161)
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
     ) {
-        Text("Quick Start", color = Color.White, fontSize = 20.sp,)
+        Text("Quick Start", color = Color.White, fontSize = 20.sp)
     }
 }

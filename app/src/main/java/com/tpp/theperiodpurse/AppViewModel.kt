@@ -1,7 +1,6 @@
 package com.tpp.theperiodpurse
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -157,5 +156,9 @@ class AppViewModel @Inject constructor (
 
     fun saveDate(date: Date) {
         dateRepository.addDate(date)
+    }
+
+    fun deleteDate(date: Date) {
+        dateRepository.deletDate(date)
     }
 }
