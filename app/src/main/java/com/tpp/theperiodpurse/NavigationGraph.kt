@@ -65,9 +65,7 @@ fun NavigationGraph(
     modifier: Modifier = Modifier,
     context: Context,
     signIn: () -> Unit,
-    googleDrive: Drive? = null,
     signout: () -> Unit = {},
-    googleSignInClient: GoogleSignInClient
 ) {
     val onboardUIState by onboardViewModel.uiState.collectAsState()
     val appUiState by appViewModel.uiState.collectAsState()
@@ -142,7 +140,7 @@ fun NavigationGraph(
                 signIn = signIn,
                 navController = navController,
                 context = context,
-                onboardUIState = onboardUIState
+                onboardUIState = onboardUIState,
             )
         }
 
@@ -155,6 +153,9 @@ fun NavigationGraph(
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null,
                 onboardUiState = onboardUIState,
+                viewModel = onboardViewModel,
+                signOut = signout,
+                context = context
             )
         }
         composable(route = OnboardingScreen.QuestionTwo.name) {

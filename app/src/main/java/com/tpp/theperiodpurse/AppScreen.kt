@@ -111,7 +111,7 @@ class MainActivity : ComponentActivity() {
                         launcher.launch(POST_NOTIFICATIONS)
                     }
                 }
-                Application(context = applicationContext, signIn = { signIn() }, signout = { signOut() }, googleSignInClient = googleSignInClient )
+                Application(context = applicationContext, signIn = { signIn() }, signout = { signOut() })
 
             }
         }
@@ -169,9 +169,7 @@ fun Application(context: Context,
                 signIn: () -> Unit,
                 skipWelcome: Boolean = false,
                 skipDatabase: Boolean = false,
-                googleDrive: Drive? = null,
                 signout: () -> Unit = {},
-                googleSignInClient: GoogleSignInClient,
                 skipOnboarding: Boolean = false,
                 hasNotificationsPermission: Boolean = false) {
     ScreenApp(signIn = signIn,
@@ -179,9 +177,7 @@ fun Application(context: Context,
         skipWelcome = skipDatabase,
         skipDatabase = skipWelcome,
         context = context,
-        googleDrive = googleDrive,
         signout = signout,
-        googleSignInClient = googleSignInClient,
     hasNotificationsPermissions = hasNotificationsPermission)
     createNotificationChannel(context)
 }
@@ -215,9 +211,7 @@ fun ScreenApp(
     skipDatabase: Boolean = false,
     skipOnboarding: Boolean = false,
     context: Context,
-    googleDrive: Drive? = null,
     signout: () -> Unit = {},
-    googleSignInClient: GoogleSignInClient,
     hasNotificationsPermissions: Boolean = false,
 
 ) {
@@ -238,10 +232,7 @@ fun ScreenApp(
         if (!skipDatabase){
             skipOnboarding = (isOnboarded as Boolean)
         }
-        if (googleDrive != null) {
-            startdestination = OnboardingScreen.LoadGoogleDrive.name
-        }
-        else if (skipOnboarding) {
+        if (skipOnboarding) {
             startdestination = OnboardingScreen.LoadDatabase.name
         }
         else if (skipWelcome) {
@@ -278,9 +269,7 @@ fun ScreenApp(
                     modifier = modifier.padding(innerPadding),
                     signIn = signIn,
                     context = context,
-                    googleDrive = googleDrive,
                     signout = signout,
-                    googleSignInClient = googleSignInClient
                 )
 
             if (loggingOptionsVisible) {

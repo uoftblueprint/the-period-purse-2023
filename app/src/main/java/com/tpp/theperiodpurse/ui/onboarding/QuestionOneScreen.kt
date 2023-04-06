@@ -1,6 +1,7 @@
 package com.tpp.theperiodpurse.ui.onboarding
 
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
@@ -40,7 +41,10 @@ fun QuestionOneScreen(
     modifier: Modifier = Modifier, navigateUp: () -> Unit,
     canNavigateBack: Boolean,
     onboardUiState: OnboardUIState,
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: OnboardViewModel,
+    context: Context,
+    signOut: () -> Unit = {}
 ) {
     var periodCycle by rememberSaveable { mutableStateOf("") }
     var entered by rememberSaveable { mutableStateOf(false) }
@@ -58,7 +62,11 @@ fun QuestionOneScreen(
         onboardUiState.days = 0
         onboardUiState.symptomsOptions = listOf()
         onboardUiState.date = ""
-        navController.navigateUp()
+        if (viewModel.checkGoogleLogin(context)){
+            signOut()
+        }
+        onboardUiState.googleAccount = null
+        navController.navigate(OnboardingScreen.Welcome.name)
                }, canNavigateBack)
 
     Box(modifier = Modifier
