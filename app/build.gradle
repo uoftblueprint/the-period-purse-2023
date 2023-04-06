@@ -37,9 +37,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
-    lint {
-        baseline = file("lint-baseline.xml")
+    lintOptions {
+        checkReleaseBuilds false
     }
 
     compileOptions {

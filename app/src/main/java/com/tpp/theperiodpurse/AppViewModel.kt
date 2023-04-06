@@ -1,13 +1,11 @@
 package com.tpp.theperiodpurse
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tpp.theperiodpurse.data.Date
-import com.tpp.theperiodpurse.data.DateRepository
-import com.tpp.theperiodpurse.data.Symptom
-import com.tpp.theperiodpurse.data.UserRepository
+import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.ui.calendar.CalendarDayUIState
 import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,9 +30,12 @@ class AppViewModel @Inject constructor (
     var isLoaded: MutableLiveData<Boolean?> = MutableLiveData(null)
 
 
-    fun loadData(calendarViewModel: CalendarViewModel) {
+    fun loadData(calendarViewModel: CalendarViewModel, context: Context) {
         val trackedSymptoms: MutableList<Symptom> = mutableListOf()
         viewModelScope.launch {
+            withContext(Dispatchers.Main){
+                ApplicationRoomDatabase.openDatabase(context)
+            }
             Log.d(
                 "Lookies Here",
                 withContext(Dispatchers.Main) { !userRepository.isEmpty() }.toString()

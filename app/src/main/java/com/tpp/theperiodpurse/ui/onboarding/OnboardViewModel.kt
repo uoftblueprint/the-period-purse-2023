@@ -118,12 +118,6 @@ class OnboardViewModel @Inject constructor (
                         .setQ("name = 'user_database.db' and trashed = false")
                         .setSpaces("appDataFolder").execute()
 
-//                    val fileId = fileList.files[0].id
-//                    val outputStream = FileOutputStream(context.getDatabasePath("user_database.db"))
-//
-//                    drive.files().get(fileId).executeMediaAndDownloadTo(outputStream)
-//
-//                    context.deleteDatabase("user_database")
                     val fileId = fileList.files[0].id
 
                     val outputStream = ByteArrayOutputStream()
@@ -139,8 +133,6 @@ class OnboardViewModel @Inject constructor (
                         flush()
                         close()
                     }
-
-                    ApplicationRoomDatabase.openDatabase(context)
 
 
                     isDownloaded.postValue(true)
@@ -286,10 +278,13 @@ class OnboardViewModel @Inject constructor (
     }
 
     fun addNewUser(symptomsToTrack: ArrayList<Symptom>, periodHistory: ArrayList<Date>,
-                   averagePeriodLength: Int, averageCycleLength: Int, daysSinceLastPeriod: Int) {
+                   averagePeriodLength: Int, averageCycleLength: Int, daysSinceLastPeriod: Int, context: Context) {
         saveUser(createUser(symptomsToTrack, periodHistory, averagePeriodLength, averageCycleLength,
             daysSinceLastPeriod))
         viewModelScope.launch {
+            withContext(Dispatchers.Main){
+                ApplicationRoomDatabase.openDatabase(context)
+            }
             val user = withContext(Dispatchers.Main) { userRepository.getUser(1) }
             _uiState.value = _uiState.value.copy(user = user)
         }

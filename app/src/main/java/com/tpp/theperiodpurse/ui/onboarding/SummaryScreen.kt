@@ -216,7 +216,8 @@ fun SummaryScreen(
                     arrayListOf<Date>(),
                     onboardUiState.days,
                     0,
-                    getDaysSince(onboardUiState.date)
+                    getDaysSince(onboardUiState.date),
+                    context = context
                 )
 
                 onSendButtonClicked() },

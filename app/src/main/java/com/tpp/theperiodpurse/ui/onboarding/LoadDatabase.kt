@@ -1,6 +1,7 @@
 package com.tpp.theperiodpurse.ui.setting
 
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
@@ -20,11 +21,12 @@ fun LoadDatabase(
     navController: NavHostController,
     appViewModel: AppViewModel,
     calViewModel: CalendarViewModel,
+    context: Context
 ) {
     val isLoaded by appViewModel.isLoaded.observeAsState(initial = null)
 
 
-    appViewModel.loadData(calViewModel)
+    appViewModel.loadData(calViewModel, context)
 
     if (isLoaded == null){
         LoadingScreen()

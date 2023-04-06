@@ -221,7 +221,8 @@ fun NavigationGraph(
             LoadDatabase(
                 appViewModel = appViewModel,
                 calViewModel = calendarViewModel,
-                navController = navController
+                navController = navController,
+                context = context
             )
         }
         composable(route = OnboardingScreen.LoadGoogleDrive.name) {

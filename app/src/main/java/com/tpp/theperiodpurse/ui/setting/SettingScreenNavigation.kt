@@ -122,13 +122,13 @@ fun SettingsScreen(
                         onDeleteClicked = {
                             navController.navigate(SettingScreenNavigation.DeleteAccount.name)
                         },
-                        appViewModel = appViewModel
+                        appViewModel = appViewModel,
+                        context = context
                     )
                 }
             }
             composable(route = SettingScreenNavigation.Notification.name) {
 //                TimeWheel(context= LocalContext.current)
-                val context = LocalContext.current
                 val hasNotificationPermission by remember {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         mutableStateOf(
