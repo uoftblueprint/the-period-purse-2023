@@ -23,14 +23,13 @@ abstract class ApplicationRoomDatabase: RoomDatabase() {
         private var INSTANCE: ApplicationRoomDatabase? = null
         fun getDatabase(context: Context): ApplicationRoomDatabase {
             return INSTANCE ?: synchronized(this) {
-                val path = context.applicationContext.getDatabasePath("user_database.db").path
+                val path = context.getDatabasePath("user_database.db").path
                 val databaseFile = File(path)
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     ApplicationRoomDatabase::class.java,
                     databaseFile.absolutePath
                 )
-                    .createFromAsset(databaseFile.absolutePath)
                     .addCallback(getCallback())
                     .fallbackToDestructiveMigration()
                     .build()
