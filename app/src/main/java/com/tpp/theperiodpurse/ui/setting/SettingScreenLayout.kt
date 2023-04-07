@@ -114,6 +114,7 @@ fun SettingScreenLayout(
                )
            }
            Switch(
+               enabled = false,
                checked = appViewModel.getAllowReminders(),
                onCheckedChange = {appViewModel.toggleAllowReminders()},
                modifier = modifier
