@@ -1,12 +1,10 @@
 package com.tpp.theperiodpurse.ui.setting
 
 
-import android.Manifest
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -45,26 +43,13 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 
-
 class NotificationsScreen(private val appViewModel: AppViewModel) : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val context = LocalContext.current
-            val hasNotificationPermission by remember {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    mutableStateOf(
-                        ContextCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.POST_NOTIFICATIONS
-                        ) == PackageManager.PERMISSION_GRANTED
-                    )
-                } else mutableStateOf(true)
-            }
-
             NotificationsLayout(
-                LocalContext.current, hasNotificationPermission, temp(), appViewModel
+                temp(), appViewModel
             )
         }
     }
@@ -76,7 +61,7 @@ fun temp(){
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, appBar: Unit, appViewModel: AppViewModel){
+fun NotificationsLayout(appBar: Unit, appViewModel: AppViewModel){
 
     val formatter = DateTimeFormatter.ofPattern("h:mm a") // define the format of the input string
     var formattedTime = appViewModel.getReminderTime()
@@ -112,15 +97,6 @@ fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, a
             positiveButton(text = "Ok") {
                 formattedTime = pickedTime.format(DateTimeFormatter.ofPattern("h:mm a"))
                 appViewModel.setReminderTime(formattedTime)
-                if(hasNotificationsPermission){
-                    if(appViewModel.getAllowReminders()){
-                        setAlarm(context, pickedTime, appViewModel)
-                        println("alarm set")
-                    } else {
-                        println("didn't work")
-                    }
-                }
-                else {println("alarm not set")}
             }
             negativeButton(text = "Cancel")
         }
@@ -133,6 +109,24 @@ fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, a
         }
     }
 
+}
+
+@RequiresApi(Build.VERSION_CODES.M)
+fun cancelAlarm(context: Context, appViewModel: AppViewModel){
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+    val freq = appViewModel.getReminderFreq()
+    lateinit var intent: Intent
+    if (freq == "Every day"){
+        intent = Intent(context, Alarm::class.java)
+    } else if(freq == "Every week"){
+        intent = Intent(context, WeeklyAlarm::class.java)
+    } else if (freq == "Every month"){
+        intent = Intent(context, MonthlyAlarm::class.java)
+    }
+
+    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+    alarmManager.cancel(pendingIntent)
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -160,8 +154,12 @@ fun setAlarm(context: Context, pickedTime: LocalTime, appViewModel: AppViewModel
     } else if (freq == "Every month"){
         intent = Intent(context, MonthlyAlarm::class.java)
     }
+
+    intent.putExtra("hasRemindersPermissions", appViewModel.getAllowReminders())
     val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
     val hasAlarmPermission: Boolean = alarmManager.canScheduleExactAlarms()
+
 
     if(hasAlarmPermission){
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)

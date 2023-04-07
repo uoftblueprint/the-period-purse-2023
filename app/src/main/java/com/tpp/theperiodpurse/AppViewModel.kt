@@ -133,7 +133,12 @@ class AppViewModel @Inject constructor (
     fun toggleAllowReminders(){
         val currentReminderState = _uiState.value.allowReminders
         _uiState.update { currentState -> currentState.copy(allowReminders = !currentReminderState)}
-        userRepository.setReminders(!currentReminderState)
+        userRepository.setAllowReminders(!currentReminderState)
+    }
+
+    fun setAllowReminders(hasNotificationsPermission: Boolean){
+        _uiState.update { currentState -> currentState.copy(allowReminders = hasNotificationsPermission) }
+        userRepository.setAllowReminders(hasNotificationsPermission)
     }
 
     fun getReminderTime(): String{

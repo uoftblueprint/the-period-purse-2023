@@ -1,8 +1,8 @@
 package com.tpp.theperiodpurse.ui.setting
 
-import android.Manifest
+
 import android.content.Context
-import android.content.pm.PackageManager
+
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
@@ -19,7 +19,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.core.content.ContextCompat
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -71,7 +70,7 @@ fun SettingAppBar(
 }
 
 
-@RequiresApi(Build.VERSION_CODES.S)
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
@@ -124,24 +123,12 @@ fun SettingsScreen(
             composable(route = SettingScreenNavigation.Notification.name) {
 //                TimeWheel(context= LocalContext.current)
                 val context = LocalContext.current
-                val hasNotificationPermission by remember {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        mutableStateOf(
-                            ContextCompat.checkSelfPermission(
-                                context,
-                                Manifest.permission.POST_NOTIFICATIONS
-                            ) == PackageManager.PERMISSION_GRANTED
-                        )
-                    } else mutableStateOf(true)
-                }
 //                var allowReminders = false
 //                if (appViewModel != null){
 //                    allowReminders = appViewModel.getAllowReminders()
 //                }
                 if (appViewModel != null) {
                     NotificationsLayout(
-                        context = context,
-                        hasNotificationPermission,
                         appBar = SettingAppBar(
                             currentScreen = currentScreen.name,
                             canNavigateBack = navController.previousBackStackEntry != null,

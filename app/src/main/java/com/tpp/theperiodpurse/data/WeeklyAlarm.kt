@@ -11,9 +11,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.R
-import java.time.LocalTime
 import java.util.*
 
 class WeeklyAlarm: BroadcastReceiver() {
@@ -40,8 +38,7 @@ class WeeklyAlarm: BroadcastReceiver() {
         val hasAlarmPermission: Boolean = alarmManager.canScheduleExactAlarms()
 
         val calendar= Calendar.getInstance().apply {
-//            timeInMillis = System.currentTimeMillis() + 604800000 // 1 week in milliseconds
-            timeInMillis = System.currentTimeMillis() + 120000 // 1 week in milliseconds
+            timeInMillis = System.currentTimeMillis() + 604800000 // 1 week in milliseconds
         }
         if(hasAlarmPermission){
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)

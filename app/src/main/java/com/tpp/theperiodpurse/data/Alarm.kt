@@ -11,10 +11,9 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.R
-import java.time.LocalTime
 import java.util.*
+
 
 class Alarm: BroadcastReceiver() {
     @RequiresApi(Build.VERSION_CODES.S)
@@ -22,13 +21,27 @@ class Alarm: BroadcastReceiver() {
         try {
             println("reached Alarm Class")
             showNotification(context, "Daily Reminder to Log Symptoms!", "This is your daily reminder to log your symptoms")
-            setAlarm(context)
+            val extras = intent?.extras
+            val hasRemindersPermissions = extras?.getBoolean("hasRemindersPermissions", false)
+            if(hasRemindersPermissions == true){
+                setAlarm(context)
+            } else{
+                cancelAlarm(context)
+            }
+
 
         }catch (e: Exception){
             println("didn't work rip")
             Log.d("Recieved an Exception", e.printStackTrace().toString())
         }
 
+    }
+
+    private fun cancelAlarm(context: Context){
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, Alarm::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+        alarmManager.cancel(pendingIntent)
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -41,8 +54,7 @@ class Alarm: BroadcastReceiver() {
 
 
         val calendar= Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis() + 120000
-//            timeInMillis = System.currentTimeMillis() + AlarmManager.INTERVAL_DAY
+            timeInMillis = System.currentTimeMillis() + AlarmManager.INTERVAL_DAY
         }
         if(hasAlarmPermission){
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)

@@ -3,10 +3,12 @@ package com.tpp.theperiodpurse.ui.setting
 
 import android.Manifest
 import android.Manifest.permission.SCHEDULE_EXACT_ALARM
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -40,8 +42,11 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
 import com.tpp.theperiodpurse.AppViewModel
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun SettingScreenLayout(
     modifier: Modifier = Modifier,
@@ -75,6 +80,18 @@ fun SettingScreenLayout(
         }
     )
 
+    val hasNotificationPermission by remember {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            mutableStateOf(
+                ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+            )
+        } else mutableStateOf(true)
+    }
+//    appViewModel.setAllowReminders(hasNotificationPermission)
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         SideEffect {
             launcher.launch(SCHEDULE_EXACT_ALARM)
@@ -82,6 +99,11 @@ fun SettingScreenLayout(
     }
 
     val time = appViewModel.getReminderFreq() + " at " + appViewModel.getReminderTime()
+
+    val formatter = DateTimeFormatter.ofPattern("h:mm a") // define the format of the input string
+    val formattedTime = appViewModel.getReminderTime()
+    val pickedTime = LocalTime.parse(formattedTime, formatter)
+    onToggleClicked(hasNotificationPermission, context, pickedTime, appViewModel)
 
    Column(modifier = modifier
        .fillMaxSize()
@@ -102,6 +124,9 @@ fun SettingScreenLayout(
            fontWeight = FontWeight.Bold
        )
        Row(modifier = modifier.padding(20.dp)) {
+
+
+
            Column (modifier = Modifier) {
                Text(text = stringResource(
                    R.string.remind_me_to_log_symptoms),
@@ -114,9 +139,12 @@ fun SettingScreenLayout(
                )
            }
            Switch(
-               enabled = false,
+               enabled = true,
                checked = appViewModel.getAllowReminders(),
-               onCheckedChange = {appViewModel.toggleAllowReminders()},
+               onCheckedChange = {
+                   appViewModel.toggleAllowReminders()
+                   onToggleClicked(hasNotificationPermission, context, pickedTime, appViewModel)
+               },
                modifier = modifier
                    .fillMaxWidth()
                    .wrapContentWidth(Alignment.End),
@@ -169,6 +197,20 @@ fun SettingScreenLayout(
            Spacer(modifier = Modifier.size(80.dp))
        }
    }
+}
+
+@RequiresApi(Build.VERSION_CODES.S)
+fun onToggleClicked(hasNotificationsPermission: Boolean, context: Context, pickedTime: LocalTime, appViewModel: AppViewModel){
+    if(hasNotificationsPermission){
+        if(appViewModel.getAllowReminders()){
+            setAlarm(context, pickedTime, appViewModel)
+            println("alarm set")
+        } else {
+            cancelAlarm(context, appViewModel)
+            println("alarm canceled")
+        }
+    }
+
 }
 
 @Composable
@@ -271,6 +313,7 @@ fun NavigateButton(text: String, onClicked: () -> Unit ){
 /**
  * Preview for Settings Home Page
  */
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Preview
 @Composable
 fun SettingsScreenPreview() {

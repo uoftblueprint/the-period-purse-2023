@@ -224,6 +224,7 @@ fun ScreenApp(
     var skipOnboarding = skipOnboarding
     val isOnboarded by onboardViewModel.isOnboarded.observeAsState(initial = null)
 
+
     if (!skipDatabase){
         LaunchedEffect(Unit) {
             onboardViewModel.checkOnboardedStatus()
@@ -236,6 +237,7 @@ fun ScreenApp(
         if (!skipDatabase){
             skipOnboarding = (isOnboarded as Boolean)
         }
+
         Scaffold(
             floatingActionButton = {
                 if (currentRoute(navController) in screensWithNavigationBar) {
@@ -254,6 +256,7 @@ fun ScreenApp(
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.FillBounds
             )
+            appViewModel.setAllowReminders(hasNotificationsPermissions)
             Box {
                 NavigationGraph(
                     navController = navController,

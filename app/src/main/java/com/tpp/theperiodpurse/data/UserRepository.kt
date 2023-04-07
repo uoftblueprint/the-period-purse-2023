@@ -27,7 +27,8 @@ class UserRepository(private val userDAO: UserDAO) {
         }
     }
 
-    fun setReminders(allowReminders: Boolean) {
+
+    fun setAllowReminders(allowReminders: Boolean) {
         coroutineScope.launch (Dispatchers.IO) {
             userDAO.updateReminders(id = 1, allowReminders)
         }
