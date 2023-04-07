@@ -62,7 +62,9 @@ class OnboardViewModel @Inject constructor (
     fun checkDeletedStatus(context: Context) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                ApplicationRoomDatabase.clearDatabase()
+                val instance = ApplicationRoomDatabase.getDatabase(context)
+                instance.clearAllTables()
+                instance.close()
                 isDeleted.postValue(true)
             }
         }
@@ -134,6 +136,10 @@ class OnboardViewModel @Inject constructor (
                         close()
                     }
 
+                    val instance = ApplicationRoomDatabase.getDatabase(context)
+                    instance.close()
+
+
 
                     isDownloaded.postValue(true)
                 }
@@ -164,7 +170,8 @@ class OnboardViewModel @Inject constructor (
                 } else {
                     null
                 }
-                ApplicationRoomDatabase.destroyInstance()
+                val instance = ApplicationRoomDatabase.getDatabase(context)
+                instance.close()
 
 
                 val dbFile = java.io.File(context.getDatabasePath("user_database.db").absolutePath)
@@ -179,7 +186,7 @@ class OnboardViewModel @Inject constructor (
                         .setFields("id")
                         .execute()
 
-                ApplicationRoomDatabase.openDatabase(context)
+                ApplicationRoomDatabase.getDatabase(context)
 
                 inputStream.close()
                 outputStream.close()
@@ -283,7 +290,7 @@ class OnboardViewModel @Inject constructor (
             daysSinceLastPeriod))
         viewModelScope.launch {
             withContext(Dispatchers.Main){
-                ApplicationRoomDatabase.openDatabase(context)
+                ApplicationRoomDatabase.getDatabase(context)
             }
             val user = withContext(Dispatchers.Main) { userRepository.getUser(1) }
             _uiState.value = _uiState.value.copy(user = user)

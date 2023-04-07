@@ -195,15 +195,11 @@ class NavigationOnboardTest {
     }
     @Test
     fun appNavHost_blank_input_questionone() {
-        composeTestRule.runOnIdle {
-            navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
-        }
+        navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
         composeTestRule.onNodeWithContentDescription("Pick Days")
             .performImeAction()
+        navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
 
-        composeTestRule.runOnIdle {
-            navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
-        }
     }
 
     @Test

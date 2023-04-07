@@ -34,7 +34,7 @@ class AppViewModel @Inject constructor (
         val trackedSymptoms: MutableList<Symptom> = mutableListOf()
         viewModelScope.launch {
             withContext(Dispatchers.Main){
-                ApplicationRoomDatabase.openDatabase(context)
+                ApplicationRoomDatabase.getDatabase(context)
             }
             Log.d(
                 "Lookies Here",

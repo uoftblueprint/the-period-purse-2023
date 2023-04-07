@@ -30,6 +30,7 @@ abstract class ApplicationRoomDatabase: RoomDatabase() {
                     ApplicationRoomDatabase::class.java,
                     databaseFile.absolutePath
                 )
+                    .createFromAsset(databaseFile.absolutePath)
                     .addCallback(getCallback())
                     .fallbackToDestructiveMigration()
                     .build()
@@ -37,44 +38,6 @@ abstract class ApplicationRoomDatabase: RoomDatabase() {
                 instance.openHelper.writableDatabase
                 INSTANCE = instance
                 return instance
-            }
-        }
-        fun clearDatabase(): Boolean {
-            if (INSTANCE != null) {
-                INSTANCE!!.clearAllTables()
-                INSTANCE!!.close()
-                INSTANCE = null
-            }
-            return true
-        }
-        fun openDatabase(context: Context){
-            if (INSTANCE == null){
-                val path = context.applicationContext.getDatabasePath("user_database.db").path
-                val databaseFile = File(path)
-
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    ApplicationRoomDatabase::class.java,
-                    databaseFile.absolutePath
-                )
-                    .addCallback(getCallback())
-                    .fallbackToDestructiveMigration()
-                    .build()
-
-                instance.openHelper.readableDatabase
-                instance.openHelper.writableDatabase
-
-                INSTANCE = instance
-            }
-
-        }
-
-        // close database
-        fun destroyInstance() {
-            if (INSTANCE != null){
-                INSTANCE!!.close()
-                INSTANCE = null
-
             }
         }
 

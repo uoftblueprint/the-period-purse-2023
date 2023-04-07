@@ -27,7 +27,6 @@ fun DownloadBackup(googleAccount: Account?, viewModel: OnboardViewModel, navHost
     val isDownloaded by viewModel.isDownloaded.observeAsState(initial = null)
 
     LaunchedEffect(Unit){
-
         if (googleAccount != null) {
             viewModel.downloadBackup(googleAccount, context)
         }
