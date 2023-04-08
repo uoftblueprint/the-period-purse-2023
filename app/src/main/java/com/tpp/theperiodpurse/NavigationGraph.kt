@@ -112,7 +112,8 @@ fun NavigationGraph(
         composable(route = Screen.LogMultipleDates.name) {
             LogMultipleDatesScreen(
                 onClose = { navController.navigateUp() },
-                calendarViewModel
+                calendarViewModel,
+                appViewModel
             )
         }
 

@@ -18,9 +18,15 @@ class DateRepository(private val dateDAO: DateDAO) {
         return dateDAO.getDates()
     }
 
-    fun deletDate(date: Date) {
+    fun deleteDate(date: Date) {
         coroutineScope.launch (Dispatchers.IO) {
             dateDAO.delete(date)
+        }
+    }
+
+    fun deleteManyDates(dates: List<Long>) {
+        coroutineScope.launch (Dispatchers.IO) {
+            dateDAO.deleteMany(dates)
         }
     }
 }
