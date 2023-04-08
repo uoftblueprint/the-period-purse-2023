@@ -160,6 +160,11 @@ class AppViewModel @Inject constructor (
     }
 
     fun deleteDate(date: Date) {
-        dateRepository.deletDate(date)
+        dateRepository.deleteDate(date)
+    }
+
+    fun deleteManyDates(dates: List<java.util.Date>) {
+        val convertedDates = dates.map { it.time }
+        dateRepository.deleteManyDates(convertedDates)
     }
 }
