@@ -29,20 +29,20 @@ fun BottomNavigation(navController: NavController) {
     BottomNavigation(
         onInfoNavigationClicked = {
             navController.navigate(Screen.Learn.name) {
-                popUpTo(navController.graph.findStartDestination().id) {
-                    saveState = true
-                }
-                launchSingleTop = true
-                restoreState = true
+//                popUpTo(navController.graph.findStartDestination().id) {
+//                    saveState = true
+//                }
+//                launchSingleTop = true
+//                restoreState = true
             }
         },
         onSettingsNavigationClicked = {
             navController.navigate(Screen.Settings.name) {
-                popUpTo(navController.graph.findStartDestination().id) {
-                    saveState = true
-                }
-                launchSingleTop = true
-                restoreState = true
+//                popUpTo(navController.graph.findStartDestination().id) {
+//                    saveState = true
+//                }
+//                launchSingleTop = true
+//                restoreState = true
             }
         },
     )
@@ -129,11 +129,6 @@ fun FloatingActionButton(
                 onClickInCalendar()
             } else {
                 navController.navigate(Screen.Calendar.name) {
-                    popUpTo(navController.graph.findStartDestination().id) {
-                        saveState = true
-                    }
-                    launchSingleTop = true
-                    restoreState = true
                 }
             }
         },

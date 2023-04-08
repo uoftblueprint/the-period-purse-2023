@@ -18,23 +18,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun WelcomeScreen(signIn: () -> Unit,
+fun WelcomeScreen(navController: NavHostController,
+                  signIn: () -> Unit,
                   onNextButtonClicked: () -> Unit) {
 
     val configuration = LocalConfiguration.current
 
-    val screenheight = configuration.screenHeightDp;
+    val screenheight = configuration.screenHeightDp
 
     Image(
         painter = painterResource(id = R.drawable.background),
@@ -80,29 +80,8 @@ fun WelcomeScreen(signIn: () -> Unit,
         }
         Spacer(modifier = Modifier.height((screenheight*0.006).dp))
 
-        val annotatedLinkString = buildAnnotatedString {
-            val str = "Terms and Conditions and Privacy Policy"
-            var startIndex = str.indexOf("Terms and Conditions")
-            var endIndex = startIndex + 20
-            addStyle(
-                style = SpanStyle(
-                    textDecoration = TextDecoration.Underline,
-                    fontWeight = FontWeight.Bold
-                ), start = startIndex, end = endIndex
-            )
-            startIndex = str.indexOf("Privacy Policy")
-            endIndex = startIndex + 14
-            addStyle(
-                style = SpanStyle(
-                    textDecoration = TextDecoration.Underline,
-                    fontWeight = FontWeight.Bold
-                ), start = startIndex, end = endIndex
-            )
-            append(str)
-        }
-
-        Text("By continuing, you accept the", textAlign = TextAlign.Center, )
-        Text(text = annotatedLinkString, textAlign = TextAlign.Center)
+        Text("By continuing, you accept the", textAlign = TextAlign.Center )
+        TermsAndPrivacyFooter(navController)
     }
 }
 @OptIn(ExperimentalMaterialApi::class)
@@ -170,6 +149,6 @@ fun QuickStartButton(
 //        color = Color(52, 235, 161)
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
     ) {
-        Text("Quick Start", color = Color.White, fontSize = 20.sp,)
+        Text("Quick Start", color = Color.White, fontSize = 20.sp)
     }
 }

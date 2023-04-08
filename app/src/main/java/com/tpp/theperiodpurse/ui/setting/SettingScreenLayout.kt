@@ -35,15 +35,17 @@ import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.Symptom
 import com.tpp.theperiodpurse.ui.education.SocialMedia
-import com.tpp.theperiodpurse.ui.education.TermsAndPrivacyFooter
 import com.tpp.theperiodpurse.ui.education.teal
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavHostController
+import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
 import com.tpp.theperiodpurse.AppViewModel
 
 
 @Composable
 fun SettingScreenLayout(
     modifier: Modifier = Modifier,
+    outController: NavHostController,
     onNotificationClicked: () -> Unit,
     onBackUpClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
@@ -112,6 +114,7 @@ fun SettingScreenLayout(
                )
            }
            Switch(
+               enabled = false,
                checked = appViewModel.getAllowReminders(),
                onCheckedChange = {appViewModel.toggleAllowReminders()},
                modifier = modifier
@@ -146,7 +149,6 @@ fun SettingScreenLayout(
        Divider(modifier = Modifier.padding(start= 10.dp, end = 10.dp))
        Spacer(modifier = Modifier.padding(20.dp))
        val uriHandler = LocalUriHandler.current
-       val navController = rememberNavController()
        Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
            SocialMedia(uriHandler)
        }
@@ -163,7 +165,7 @@ fun SettingScreenLayout(
        Terms & Conditions, and Privacy Policy
         */
        Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-           TermsAndPrivacyFooter(navController)
+           TermsAndPrivacyFooter(outController)
            Spacer(modifier = Modifier.size(80.dp))
        }
    }
@@ -266,7 +268,6 @@ fun NavigateButton(text: String, onClicked: () -> Unit ){
     }
 }
 
-
 /**
  * Preview for Settings Home Page
  */
@@ -275,6 +276,7 @@ fun NavigateButton(text: String, onClicked: () -> Unit ){
 fun SettingsScreenPreview() {
     val navController = rememberNavController()
     SettingScreenLayout(
+        outController = navController,
         onNotificationClicked = {
             navController.navigate(SettingScreenNavigation.Notification.name)
         },
