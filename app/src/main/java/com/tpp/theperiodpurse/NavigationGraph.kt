@@ -59,7 +59,7 @@ enum class OnboardingScreen {
     LoadDatabase,
 }
 
-@RequiresApi(Build.VERSION_CODES.S)
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun NavigationGraph(
     navController: NavHostController,
