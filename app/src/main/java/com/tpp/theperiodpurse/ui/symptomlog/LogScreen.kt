@@ -147,8 +147,7 @@ fun LogScreen(
                                 ?.let { CrampSeverity.getSeverityByDisplayName(it) },
                             sleep = sleepDuration,
                             notes = logViewModel.getText(LogPrompt.Notes)
-                        ),
-                        context
+                        )
                     )
                 } else {
                     // chcek  if given date is in the db, if it is, delete the entry
@@ -158,11 +157,10 @@ fun LogScreen(
                             ?.toLocalDate()
                         if (thisDate != null) {
                             if (thisDate == day) {
-                                appViewModel.deleteDate(d, context)
+                                appViewModel.deleteDate(d)
                             }
                         }
                     }
-                    println("HELLO")
                 }
             })
 

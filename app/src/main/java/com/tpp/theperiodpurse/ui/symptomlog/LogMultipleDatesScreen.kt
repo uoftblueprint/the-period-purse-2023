@@ -49,7 +49,6 @@ fun LogMultipleDatesScreen(
     onClose: () -> Unit,
     calendarViewModel: CalendarViewModel,
     appViewModel: AppViewModel,
-     context: Context
 ) {
     Column(
         modifier = Modifier
@@ -122,8 +121,7 @@ fun LogMultipleDatesScreen(
                                 sleep = null,
                                 mood = null,
                                 notes = ""
-                            ),
-                        context
+                            )
                         )
                     calendarViewModel.updateDayInfo(it, CalendarDayUIState(flow = FlowSeverity.Medium))
                 }
@@ -133,7 +131,7 @@ fun LogMultipleDatesScreen(
                 unselectedDates.forEach {
                     calendarViewModel.clearFlow(it)
                 }
-                appViewModel.deleteManyDates(converted, context)
+                appViewModel.deleteManyDates(converted)
                 onClose()},
                 backgroundColor = SelectedColor1,
                 modifier = Modifier

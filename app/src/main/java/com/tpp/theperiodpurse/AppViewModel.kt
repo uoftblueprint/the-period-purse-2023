@@ -56,34 +56,32 @@ class AppViewModel @Inject constructor (
                     _uiState.value = _uiState.value.copy(dates = dates)
 
                     for (date in dates) {
-                        if (date.date != null) {
-                            // for it convert correctly we subtract 19 hours worth of milliseconds
-                            var convertedExcLen = ""
-                            if (date.exerciseLength != null){
-                                convertedExcLen = Time(
-                                    date.exerciseLength.toMillis()-19*36*100000
-                                ).toString()
-                            }
-
-                            var convertedSleepLen = ""
-                            if (date.sleep != null) {
-                                convertedSleepLen = Time(
-                                    date.sleep.toMillis()-19*36*100000
-                                ).toString()
-                            }
-
-                            calendarViewModel.setDayInfo(
-                                date.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
-                                CalendarDayUIState(
-                                    flow = date.flow,
-                                    mood = date.mood,
-                                    exerciseLengthString = convertedExcLen,
-                                    exerciseType = date.exerciseType,
-                                    crampSeverity = date.crampSeverity,
-                                    sleepString = convertedSleepLen
-                                )
-                            )
+                        // for it convert correctly we subtract 19 hours worth of milliseconds
+                        var convertedExcLen = ""
+                        if (date.exerciseLength != null){
+                            convertedExcLen = Time(
+                                date.exerciseLength.toMillis()-19*36*100000
+                            ).toString()
                         }
+
+                        var convertedSleepLen = ""
+                        if (date.sleep != null) {
+                            convertedSleepLen = Time(
+                                date.sleep.toMillis()-19*36*100000
+                            ).toString()
+                        }
+
+                        calendarViewModel.setDayInfo(
+                            date.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+                            CalendarDayUIState(
+                                flow = date.flow,
+                                mood = date.mood,
+                                exerciseLengthString = convertedExcLen,
+                                exerciseType = date.exerciseType,
+                                crampSeverity = date.crampSeverity,
+                                sleepString = convertedSleepLen
+                            )
+                        )
                     }
                 }
             }
@@ -157,20 +155,37 @@ class AppViewModel @Inject constructor (
         return uiState.value.reminderFrequency
     }
 
-    fun saveDate(date: Date, context: Context) {
+    fun saveDate(date: Date) {
         dateRepository.addDate(date)
-        var newList = uiState.value.dates.toMutableList()
+        val newList = uiState.value.dates.toMutableList()
         newList.add(date)
         _uiState.update { currentState -> currentState.copy(dates = newList) }
 
     }
 
-    fun deleteDate(date: Date, context: Context) {
+    fun deleteDate(date: Date) {
         dateRepository.deleteDate(date)
+        val newList = uiState.value.dates.toMutableList()
+        newList.remove(date)
+        _uiState.update { currentState -> currentState.copy(dates = newList) }
+
     }
 
-    fun deleteManyDates(dates: List<java.util.Date>, context: Context) {
+    fun deleteManyDates(dates: List<java.util.Date>) {
         val convertedDates = dates.map { it.time }
         dateRepository.deleteManyDates(convertedDates)
+
+        val newList = mutableListOf<Date>()
+
+        for (date in uiState.value.dates) {
+            if (!dates.contains(date.date)) {
+                newList.add(date)
+            }
+        }
+
+        _uiState.update { currentState -> currentState.copy(dates = newList) }
+
+
+
     }
 }
