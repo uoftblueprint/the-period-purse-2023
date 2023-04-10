@@ -326,5 +326,6 @@ fun SettingsScreenPreview() {
         onDeleteClicked = {
             navController.navigate(SettingScreenNavigation.DeleteAccount.name)
         },
+        context = LocalContext.current
     )
 }
