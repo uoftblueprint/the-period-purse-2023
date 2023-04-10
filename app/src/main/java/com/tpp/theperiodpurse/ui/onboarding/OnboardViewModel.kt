@@ -37,7 +37,7 @@ class OnboardViewModel @Inject constructor (
     private val dateRepository: DateRepository,
 ): ViewModel() {
 
-    private val _uiState = MutableStateFlow(OnboardUIState(dateOptions = dateOptions()))
+    private val _uiState = MutableStateFlow(OnboardUIState())
     val uiState: StateFlow<OnboardUIState> = _uiState.asStateFlow()
 
     var isOnboarded: LiveData<Boolean?> = userRepository.isOnboarded
@@ -243,30 +243,6 @@ class OnboardViewModel @Inject constructor (
         }
     }
 
-    /**
-     * Reset the onboard state
-     */
-    fun resetOrder() {
-        _uiState.value = OnboardUIState(dateOptions = dateOptions())
-    }
-
-
-    /**
-     * Returns a list of date options starting with the current date and the following 3 dates.
-     */
-
-    private fun dateOptions(): List<String> {
-        val dateOptions = mutableListOf<String>()
-        val formatter = SimpleDateFormat("E MMM d", Locale.getDefault())
-        val calendar = Calendar.getInstance()
-        // add current date and the following 30 previous dates.
-        repeat(4) {
-            dateOptions.add(formatter.format(calendar.time))
-            calendar.add(Calendar.DATE, -1)
-        }
-        dateOptions.reverse()
-        return dateOptions
-    }
 
     private fun createUser(symptomsToTrack: ArrayList<Symptom>, periodHistory: ArrayList<Date>,
                            averagePeriodLength: Int, averageCycleLength: Int,
@@ -297,30 +273,6 @@ class OnboardViewModel @Inject constructor (
         }
     }
 
-    private fun createDate(date: java.util.Date, flow: FlowSeverity, mood: Mood,
-                           exerciseLength: Duration?, exerciseType: Exercise,
-                           crampSeverity: CrampSeverity, sleep: Duration?): Date {
-        return Date(
-            date = date,
-            flow = flow,
-            mood = mood,
-            exerciseLength = exerciseLength,
-            exerciseType = exerciseType,
-            crampSeverity = crampSeverity,
-            sleep = sleep,
-            notes = ""
-        )
-    }
-
-    private fun saveDate(date: Date) {
-        dateRepository.addDate(date)
-    }
-
-    fun addNewDate(date: java.util.Date, flow: FlowSeverity, mood: Mood,
-                   exerciseLength: Duration?, exerciseType: Exercise,
-                   crampSeverity: CrampSeverity, sleep: Duration?) {
-        saveDate(createDate(date, flow, mood, exerciseLength, exerciseType, crampSeverity, sleep))
-    }
 
 
 }

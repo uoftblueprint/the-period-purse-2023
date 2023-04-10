@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import java.io.File
 
-@Database(entities=[User::class, Date::class], version = 6, exportSchema = false)
+@Database(entities=[User::class, Date::class], version = 7, exportSchema = true)
 @TypeConverters(
     SymptomConverter::class,
     DateConverter::class,

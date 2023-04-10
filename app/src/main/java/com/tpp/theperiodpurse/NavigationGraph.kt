@@ -104,7 +104,8 @@ fun NavigationGraph(
                     date = date,
                     navController = navController,
                     appViewModel = appViewModel,
-                    calendarViewModel = calendarViewModel
+                    calendarViewModel = calendarViewModel,
+                    context = context
                 )
             }
         }
@@ -113,7 +114,8 @@ fun NavigationGraph(
             LogMultipleDatesScreen(
                 onClose = { navController.navigateUp() },
                 calendarViewModel,
-                appViewModel
+                appViewModel,
+                context
             )
         }
 

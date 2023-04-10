@@ -87,6 +87,8 @@ class AppViewModel @Inject constructor (
                     }
                 }
             }
+
+
         }
         isLoaded.postValue(true)
     }
@@ -155,15 +157,19 @@ class AppViewModel @Inject constructor (
         return uiState.value.reminderFrequency
     }
 
-    fun saveDate(date: Date) {
+    fun saveDate(date: Date, context: Context) {
         dateRepository.addDate(date)
+        var newList = uiState.value.dates.toMutableList()
+        newList.add(date)
+        _uiState.update { currentState -> currentState.copy(dates = newList) }
+
     }
 
-    fun deleteDate(date: Date) {
+    fun deleteDate(date: Date, context: Context) {
         dateRepository.deleteDate(date)
     }
 
-    fun deleteManyDates(dates: List<java.util.Date>) {
+    fun deleteManyDates(dates: List<java.util.Date>, context: Context) {
         val convertedDates = dates.map { it.time }
         dateRepository.deleteManyDates(convertedDates)
     }

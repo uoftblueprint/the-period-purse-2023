@@ -1,5 +1,6 @@
 package com.tpp.theperiodpurse.ui.symptomlog
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -47,7 +48,8 @@ import java.util.Date.from
 fun LogMultipleDatesScreen(
     onClose: () -> Unit,
     calendarViewModel: CalendarViewModel,
-    appViewModel: AppViewModel
+    appViewModel: AppViewModel,
+     context: Context
 ) {
     Column(
         modifier = Modifier
@@ -120,7 +122,8 @@ fun LogMultipleDatesScreen(
                                 sleep = null,
                                 mood = null,
                                 notes = ""
-                            )
+                            ),
+                        context
                         )
                     calendarViewModel.updateDayInfo(it, CalendarDayUIState(flow = FlowSeverity.Medium))
                 }
@@ -130,7 +133,7 @@ fun LogMultipleDatesScreen(
                 unselectedDates.forEach {
                     calendarViewModel.clearFlow(it)
                 }
-                appViewModel.deleteManyDates(converted)
+                appViewModel.deleteManyDates(converted, context)
                 onClose()},
                 backgroundColor = SelectedColor1,
                 modifier = Modifier
@@ -165,11 +168,4 @@ private fun LogMultipleDatesText(modifier: Modifier = Modifier) {
             modifier = modifier
         )
     }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview
-@Composable
-fun LogMultipleDatesScreenPreview() {
-    LogMultipleDatesScreen({}, viewModel(), viewModel())
 }
