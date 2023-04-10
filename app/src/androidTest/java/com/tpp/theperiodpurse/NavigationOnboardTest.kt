@@ -94,7 +94,7 @@ class NavigationOnboardTest {
             ScreenApp(
                 navController = navController,
                 skipOnboarding = false,
-                skipWelcome = false,
+                skipWelcome = true,
                 onboardViewModel = onboardViewModel,
                 appViewModel = appViewModel,
                 signIn = { signIn() },
@@ -109,12 +109,6 @@ class NavigationOnboardTest {
     fun appNavHost_Onboard_navigatesToSummary_viewModel() {
 
         // welcome page
-        navController.assertCurrentRouteName(OnboardingScreen.Welcome.name)
-
-
-        // next to quesiton one page
-        composeTestRule.onNodeWithContentDescription("Next").performClick()
-            .performClick()
         navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
 
         // text field input test and next to question two page
@@ -161,11 +155,6 @@ class NavigationOnboardTest {
     }
     @Test
     fun appNavHost_clickOnboard_navigatesToSummaryBack() {
-        // welcome page
-        navController.assertCurrentRouteName(OnboardingScreen.Welcome.name)
-
-        // next to quesiton one page
-        composeTestRule.onNodeWithContentDescription("Next").performClick()
 
         composeTestRule.runOnIdle {
             navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
@@ -201,41 +190,20 @@ class NavigationOnboardTest {
         // back to quesiton one page
         navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
 
-        composeTestRule.onNodeWithContentDescription("Back").performClick()
-
-
-        // back to welcome page
-        navController.assertCurrentRouteName(OnboardingScreen.Welcome.name)
-
 
 
     }
     @Test
     fun appNavHost_blank_input_questionone() {
-        // check if no crash
-        navController.assertCurrentRouteName(OnboardingScreen.Welcome.name)
-
-        // next to quesiton one page
-        composeTestRule.onNodeWithContentDescription("Next").performClick()
-
-        composeTestRule.runOnIdle {
-            navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
-        }
+        navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
         composeTestRule.onNodeWithContentDescription("Pick Days")
             .performImeAction()
+        navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
 
-        composeTestRule.runOnIdle {
-            navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
-        }
     }
 
     @Test
     fun appNavHost_questionone_input_change() {
-        // welcome page
-        navController.assertCurrentRouteName(OnboardingScreen.Welcome.name)
-        // next to quesiton one page
-        composeTestRule.onNodeWithContentDescription("Next").performClick()
-            .performClick()
         navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
         val textFieldValue = "5"
         composeTestRule.onNodeWithContentDescription("Pick Days")

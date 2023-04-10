@@ -3,6 +3,7 @@ package com.tpp.theperiodpurse.ui.setting
 
 import android.Manifest
 import android.Manifest.permission.SCHEDULE_EXACT_ALARM
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -49,10 +50,10 @@ fun SettingScreenLayout(
     onNotificationClicked: () -> Unit,
     onBackUpClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
-    appViewModel: AppViewModel = viewModel()
+    appViewModel: AppViewModel = viewModel(),
+    context: Context
 ){
     val symptoms = appViewModel.getTrackedSymptoms()
-    val context = LocalContext.current
     var hasAlarmPermission by remember {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             mutableStateOf(
@@ -266,25 +267,4 @@ fun NavigateButton(text: String, onClicked: () -> Unit ){
         )
 
     }
-}
-
-/**
- * Preview for Settings Home Page
- */
-@Preview
-@Composable
-fun SettingsScreenPreview() {
-    val navController = rememberNavController()
-    SettingScreenLayout(
-        outController = navController,
-        onNotificationClicked = {
-            navController.navigate(SettingScreenNavigation.Notification.name)
-        },
-        onBackUpClicked = {
-            navController.navigate(SettingScreenNavigation.BackUpAccount.name)
-        },
-        onDeleteClicked = {
-            navController.navigate(SettingScreenNavigation.DeleteAccount.name)
-        },
-    )
 }

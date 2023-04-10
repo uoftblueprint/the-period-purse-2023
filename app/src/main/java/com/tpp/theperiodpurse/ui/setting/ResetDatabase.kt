@@ -17,6 +17,7 @@ import com.tpp.theperiodpurse.ui.onboarding.LoadingScreen
 import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlin.math.sign
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -27,7 +28,8 @@ fun ResetDatabase(
     navController: NavHostController,
     onboardUiState: OnboardUIState,
     appUiState: AppUiState,
-    calUiState: CalendarUIState
+    calUiState: CalendarUIState,
+    signout: () -> Unit = {}
 ) {
 
     val isDeleted by viewModel.isOnboarded.observeAsState(initial = null)
@@ -47,8 +49,18 @@ fun ResetDatabase(
         onboardUiState.days = 0
         onboardUiState.symptomsOptions = listOf()
         onboardUiState.date = ""
-        navController.popBackStack()
-        outController.navigate(OnboardingScreen.Welcome.name)
+        onboardUiState.googleAccount = null
+
+        if (viewModel.checkGoogleLogin(context)){
+            signout()
+        }
+
+        LaunchedEffect(Unit) {
+            navController.popBackStack()
+            outController.navigate(OnboardingScreen.Welcome.name)
+        }
+
+
     }
 
 }

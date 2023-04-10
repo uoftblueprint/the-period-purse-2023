@@ -5,8 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.sqlite.db.SupportSQLiteDatabase
+import java.io.File
 
-@Database(entities=[User::class, Date::class], version = 5, exportSchema = false)
+@Database(entities=[User::class, Date::class], version = 7, exportSchema = true)
 @TypeConverters(
     SymptomConverter::class,
     DateConverter::class,
@@ -21,28 +23,31 @@ abstract class ApplicationRoomDatabase: RoomDatabase() {
         private var INSTANCE: ApplicationRoomDatabase? = null
         fun getDatabase(context: Context): ApplicationRoomDatabase {
             return INSTANCE ?: synchronized(this) {
+                val path = context.getDatabasePath("user_database.db").path
+                val databaseFile = File(path)
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     ApplicationRoomDatabase::class.java,
-                    "user_database"
+                    databaseFile.absolutePath
                 )
+                    .addCallback(getCallback())
                     .fallbackToDestructiveMigration()
                     .build()
+                instance.openHelper.readableDatabase
+                instance.openHelper.writableDatabase
                 INSTANCE = instance
                 return instance
             }
         }
-        fun clearDatabase(context: Context): Boolean {
-            val instance = Room.databaseBuilder(
-                context.applicationContext,
-                ApplicationRoomDatabase::class.java,
-                "user_database"
-            )
-                .fallbackToDestructiveMigration()
-                .build()
 
-            instance.clearAllTables()
-            return true
+        fun getCallback(): Callback {
+            return object : Callback() {
+                override fun onOpen(db: SupportSQLiteDatabase) {
+                    super.onOpen(db)
+                    db.execSQL("CREATE TEMP TABLE room_table_modification_log(table_id INTEGER PRIMARY KEY, invalidated INTEGER NOT NULL DEFAULT 0)")
+                }
+            }
         }
+
     }
 }

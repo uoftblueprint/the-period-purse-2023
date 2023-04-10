@@ -32,13 +32,16 @@ import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.OnboardUIState
 import com.tpp.theperiodpurse.ui.calendar.CalendarUIState
 import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
+import kotlin.math.sign
 
 enum class SettingScreenNavigation(@StringRes val title: Int) {
     Start(title = R.string.settings_home), Notification(title = R.string.customize_notifications), BackUpAccount(
         title = R.string.back_up_account
     ),
     DeleteAccount(title = R.string.delete_account),
-    ResetDatabase(title = R.string.reset_database)
+    ResetDatabase(title = R.string.reset_database),
+    BackupDatabase(title= R.string.back_up_database),
+    ConfirmBackup(title= R.string.confirm_back_up),
 }
 
 /**
@@ -50,7 +53,7 @@ fun SettingAppBar(
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
-    color: Color,
+    color: Color
 ) {
     TopAppBar(
         title = { Text(currentScreen)},
@@ -82,7 +85,9 @@ fun SettingsScreen(
     onboardUiState: OnboardUIState?,
     onboardViewModel: OnboardViewModel?,
     appUiState: AppUiState?,
-    calUiState: CalendarUIState?
+    calUiState: CalendarUIState?,
+    signIn: () -> Unit,
+    signout: () -> Unit = {}
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = SettingScreenNavigation.valueOf(
@@ -117,13 +122,13 @@ fun SettingsScreen(
                         onDeleteClicked = {
                             navController.navigate(SettingScreenNavigation.DeleteAccount.name)
                         },
-                        appViewModel = appViewModel
+                        appViewModel = appViewModel,
+                        context = context
                     )
                 }
             }
             composable(route = SettingScreenNavigation.Notification.name) {
 //                TimeWheel(context= LocalContext.current)
-                val context = LocalContext.current
                 val hasNotificationPermission by remember {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         mutableStateOf(
@@ -157,7 +162,11 @@ fun SettingsScreen(
                     canNavigateBack = navController.previousBackStackEntry != null,
                     navigateUp = { navController.navigateUp() },
                     color = Color.White),
-                    navController = navController)
+                    navController = navController,
+                    signIn = signIn,
+                    onboardUIState = onboardUiState,
+                    context = context
+                )
             }
             composable(route = SettingScreenNavigation.DeleteAccount.name) {
                 val context = LocalContext.current
@@ -173,8 +182,19 @@ fun SettingsScreen(
             composable(route = SettingScreenNavigation.ResetDatabase.name) {
                 if (onboardViewModel != null && onboardUiState != null && appUiState != null && calUiState != null) {
                     ResetDatabase(context = context, viewModel = onboardViewModel, navController = navController, outController = outController, onboardUiState = onboardUiState,
-                    appUiState = appUiState, calUiState = calUiState)
+                    appUiState = appUiState, calUiState = calUiState, signout = signout)
                 }
+            }
+            composable(route = SettingScreenNavigation.BackupDatabase.name) {
+                if (onboardViewModel != null && onboardUiState != null) {
+                    BackupDatabase(viewModel = onboardViewModel,
+                        navController = navController,
+                        account = onboardUiState.googleAccount,
+                        context = context)
+                }
+            }
+            composable(route = SettingScreenNavigation.ConfirmBackup.name) {
+                ConfirmBackUp(navController = navController)
             }
         }
     }

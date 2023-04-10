@@ -9,7 +9,6 @@ import kotlinx.coroutines.launch
 
 class UserRepository(private val userDAO: UserDAO) {
     val isOnboarded: MutableLiveData<Boolean?> = MutableLiveData(null)
-    val isDeleted: MutableLiveData<Boolean?> = MutableLiveData(null)
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     fun addUser(user: User) {
@@ -54,9 +53,6 @@ class UserRepository(private val userDAO: UserDAO) {
 
     suspend fun isOnboarded() {
         isOnboarded.postValue(userDAO.getUsers().isNotEmpty())
-    }
-    fun isDeleted(context: Context) {
-        isDeleted.postValue(ApplicationRoomDatabase.clearDatabase(context))
     }
 
 }
