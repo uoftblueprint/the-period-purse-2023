@@ -40,41 +40,6 @@ fun PrivacyScreen(navController: NavHostController) {
     Scaffold(
         backgroundColor = Color.Transparent,
         scaffoldState = scaffoldState,
-        topBar = {
-            TopAppBar(
-                backgroundColor = Color.White
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .clickable(
-                                interactionSource = interactionSource, indication = null
-                            ) { navController.popBackStack() }
-                            .size(20.dp),
-                        painter = painterResource(R.drawable.arrow),
-                        contentDescription = "Back Button",
-                        tint = Color(teal)
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Text(
-                        fontSize = 20.sp,
-                        fontWeight = Bold,
-                        color = Color.Black,
-                        text = "Privacy Policy"
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                }
-            }
-        },
         content = {
             Column(
                 modifier = Modifier
@@ -133,25 +98,42 @@ fun PrivacyScreen(navController: NavHostController) {
                             "Your data is yours and yours only."
                 )
 
+                Header("Did you collect my data?")
+
+                Body(
+                    "We do not collect your data in any way. Your data is either stored locally " +
+                            "on-device or backed up to Google Drive. \n\nIn the case of " +
+                            "on-device storage," +
+                            " the data is only processed locally and not transmitted off-device. \n" +
+                            "\nIn" +
+                            " the case of storing in Google Drive, we will use Google Drive API and" +
+                            " OAuth to achieve end-to-end encryption, and store your data in a hidden," +
+                            " application specific folder such that no parties, including you or any" +
+                            " other application can access it. The only way you can access this data" +
+                            " is when you sign into Menstruation Nation with your Google Account. At" +
+                            " any time, you can uninstall Menstruation Nation to delete the backed-up " +
+                            "data in Google Drive."
+                )
+
 
                 Header("Do you share my information with anyone?")
 
                 Body(
-                    "We do not disclose your data to any third party. We could not if we wanted to " +
-                            "since we do not have it!\n\n" +
-                            "All the data that you add to the app to keep track of your periods and your " +
-                            "health is stored locally, on your phone, with one exception. We wanted you to " +
-                            "be able to transfer your data from one device to the other in case you change " +
-                            "phone, so that you do not lose your history. To make sure this would not " +
-                            "jeopardize your privacy, we created an optional feature that enables you to " +
-                            "connect your Android account to your app and download all your data on your " +
-                            "Cloud. Upon request, data goes straight from the app to your Google account. " +
-                            "You can then download it from your new phone.\n\n" +
-                            "Once your data is on your Cloud, the Cloud privacy policy applies. We invite " +
-                            "you to read it if you have any question on how Apple protects your " +
-                            "information.\n\n" +
-                            "The app also includes some links to social media pages. If you click those " +
-                            "links, these pages’ privacy policy applies.\n"
+                    "We do not disclose your data to any third party. We could not if we " +
+                        "wanted to since we do not have it! All the data that you add to the app" +
+                         "to keep track of your periods and your health is stored locally, on " +
+                            "your phone, with one exception. We wanted you to be able to " +
+                            "transfer your data from one device to the other in case you change" +
+                            " phone, so that you do not lose your history. To make sure this " +
+                            "would not jeopardize your privacy, we created an optional feature " +
+                            "that enables you to connect your Google account to your app and download" +
+                            " all your data on your Google Drive. Upon request, data goes straight " +
+                            "from the app to your Google account. You can then access it by logging into " +
+                            "Menstruation Nation on your new device.Once your data is in your Google Drive, " +
+                            "the Google privacy policy applies. We invite you to read it if you have any " +
+                            "questions on how Google protects your information. The app also includes " +
+                            "some links to social media pages. If you click those links, these pages’ " +
+                            "privacy policy applies."
                 )
 
 
@@ -173,13 +155,50 @@ fun PrivacyScreen(navController: NavHostController) {
 
                 Header("Changes to this privacy policy.")
 
-                Body("If any of the above were to change, we will update this document to " +
-                        "inform you.")
+                Body(
+                    "If any of the above were to change, we will update this document to " +
+                            "inform you."
+                )
 
                 Header("Questions and contact information")
                 ReachOut("Any question? Just email us: hello@periodpurse.com.")
 
                 Spacer(modifier = Modifier.size(36.dp))
+            }
+        },
+        topBar = {
+            TopAppBar(
+                backgroundColor = Color.White
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .clickable(
+                                interactionSource = interactionSource, indication = null
+                            ) { navController.popBackStack() }
+                            .size(20.dp),
+                        painter = painterResource(R.drawable.arrow),
+                        contentDescription = "Back Button",
+                        tint = Color(teal)
+                    )
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    Text(
+                        fontSize = 20.sp,
+                        fontWeight = Bold,
+                        color = Color.Black,
+                        text = "Privacy Policy"
+                    )
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                }
             }
         }
     )
@@ -200,7 +219,8 @@ fun Header(str: String) {
     Column {
         Spacer(modifier = Modifier.size(12.dp))
 
-        Text(modifier = Modifier.padding(vertical = 2.dp),
+        Text(
+            modifier = Modifier.padding(vertical = 2.dp),
             fontSize = 14.sp,
             fontWeight = Bold,
             lineHeight = 24.sp,
@@ -235,15 +255,17 @@ fun ReachOut(string: String) {
             start = startIndex,
             end = endIndex
         )
-     }
+    }
 
     ClickableText(
         style = TextStyle(fontSize = 14.sp),
         text = annotatedString,
-        onClick = { annotatedString
-            .getStringAnnotations(tag = "email", it, it).firstOrNull()?.let {
-                    stringAnnotation -> uriHandler.openUri(stringAnnotation.item)
-            }
+        onClick = {
+            annotatedString
+                .getStringAnnotations(tag = "email", it, it).firstOrNull()
+                ?.let { stringAnnotation ->
+                    uriHandler.openUri(stringAnnotation.item)
+                }
         }
     )
 }
