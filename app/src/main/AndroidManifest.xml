@@ -4,8 +4,9 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
 
-
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 <uses-permission android:name="android.permission.INTERNET"/>
+
 
     <application
         android:allowBackup="true"
@@ -30,8 +31,8 @@
             </intent-filter>
 
             <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
+                android:name="com.google.android.gms.drive.services.menstruation-nation-382503"
+                android:value="1:941432711682:android:c987af18ea56ebfcd8151b" />
         </activity>
         <receiver android:name=".data.Alarm" android:exported="false">
             <intent-filter>

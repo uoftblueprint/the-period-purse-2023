@@ -1,16 +1,21 @@
 package com.tpp.theperiodpurse.data
 
+import android.content.Context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 
 class DateRepository(private val dateDAO: DateDAO) {
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     fun addDate(date: Date) {
         coroutineScope.launch (Dispatchers.IO) {
-            dateDAO.save(date)
+            withContext(Dispatchers.IO) {
+                dateDAO.save(date)
+            }
         }
     }
 
@@ -18,9 +23,20 @@ class DateRepository(private val dateDAO: DateDAO) {
         return dateDAO.getDates()
     }
 
-    fun deletDate(date: Date) {
+    fun deleteDate(date: Date) {
         coroutineScope.launch (Dispatchers.IO) {
-            dateDAO.delete(date)
+            withContext(Dispatchers.IO) {
+                dateDAO.delete(date)
+            }
+        }
+    }
+
+    fun deleteManyDates(dates: List<Long>) {
+
+        coroutineScope.launch (Dispatchers.IO) {
+            withContext(Dispatchers.IO) {
+                dateDAO.deleteMany(dates)
+            }
         }
     }
 }

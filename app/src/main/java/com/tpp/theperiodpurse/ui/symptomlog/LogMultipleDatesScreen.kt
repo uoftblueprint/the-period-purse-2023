@@ -1,5 +1,6 @@
 package com.tpp.theperiodpurse.ui.symptomlog
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -35,16 +36,19 @@ import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
-import com.tpp.theperiodpurse.data.Symptom
-import com.tpp.theperiodpurse.ui.calendar.components.getDayColorAndIcon
+import com.tpp.theperiodpurse.AppViewModel
+import com.tpp.theperiodpurse.data.Date
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.ZoneId
+import java.util.Date.from
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LogMultipleDatesScreen(
     onClose: () -> Unit,
-    calendarViewModel: CalendarViewModel
+    calendarViewModel: CalendarViewModel,
+    appViewModel: AppViewModel,
 ) {
     Column(
         modifier = Modifier
@@ -107,11 +111,27 @@ fun LogMultipleDatesScreen(
 
             FloatingActionButton(onClick = {
                 selectedDates.forEach {
+                    appViewModel.saveDate(
+                            Date(
+                                date = from(it.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                                flow = FlowSeverity.Medium,
+                                exerciseType = null,
+                                exerciseLength = null,
+                                crampSeverity = null,
+                                sleep = null,
+                                mood = null,
+                                notes = ""
+                            )
+                        )
                     calendarViewModel.updateDayInfo(it, CalendarDayUIState(flow = FlowSeverity.Medium))
+                }
+                val converted = unselectedDates.toList().map {
+                    from(it.atStartOfDay(ZoneId.systemDefault()).toInstant())
                 }
                 unselectedDates.forEach {
                     calendarViewModel.clearFlow(it)
                 }
+                appViewModel.deleteManyDates(converted)
                 onClose()},
                 backgroundColor = SelectedColor1,
                 modifier = Modifier
@@ -146,11 +166,4 @@ private fun LogMultipleDatesText(modifier: Modifier = Modifier) {
             modifier = modifier
         )
     }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview
-@Composable
-fun LogMultipleDatesScreenPreview() {
-    LogMultipleDatesScreen({}, viewModel())
 }
