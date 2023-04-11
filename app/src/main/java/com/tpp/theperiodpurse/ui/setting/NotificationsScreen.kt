@@ -22,13 +22,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import com.tpp.theperiodpurse.AppViewModel
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.Alarm
@@ -130,10 +128,13 @@ fun cancelAlarm(context: Context, appViewModel: AppViewModel){
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
-fun setAlarm(context: Context, pickedTime: LocalTime, appViewModel: AppViewModel){
-//    Alarm(appViewModel)
+fun setAlarm(context: Context, pickedTime: LocalTime, appViewModel: AppViewModel, isFirstAlarm: Boolean){
 
-    val calendar=Calendar.getInstance().apply {
+
+    val curr_time = Calendar.getInstance().apply {
+        timeInMillis = System.currentTimeMillis()
+    }
+    val calendar = Calendar.getInstance().apply {
         timeInMillis = System.currentTimeMillis()
     }
     calendar.apply {
@@ -162,7 +163,11 @@ fun setAlarm(context: Context, pickedTime: LocalTime, appViewModel: AppViewModel
 
 
     if(hasAlarmPermission){
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+        if(isFirstAlarm && curr_time.timeInMillis > calendar.timeInMillis){
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis + 86400000, pendingIntent)
+        } else {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+        }
     }
 
 }

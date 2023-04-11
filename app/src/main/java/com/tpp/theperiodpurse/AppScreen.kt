@@ -256,7 +256,6 @@ fun ScreenApp(
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.FillBounds
             )
-            appViewModel.setAllowReminders(hasNotificationsPermissions)
             Box {
                 NavigationGraph(
                     navController = navController,

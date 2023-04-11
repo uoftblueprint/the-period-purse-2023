@@ -1,12 +1,13 @@
 package com.tpp.theperiodpurse
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -203,11 +204,25 @@ fun NavigationGraph(
 //                },
             )
         }
+
         composable(route = OnboardingScreen.LoadDatabase.name) {
+
+            var hasNotificationPermission by remember {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    mutableStateOf(
+                        ContextCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.POST_NOTIFICATIONS
+                        ) == PackageManager.PERMISSION_GRANTED
+                    )
+                } else mutableStateOf(true)
+            }
+
             LoadDatabase(
                 appViewModel = appViewModel,
                 calViewModel = calendarViewModel,
-                navController = navController
+                navController = navController,
+                hasNotificationsPermissions = hasNotificationPermission
             )
         }
     }
