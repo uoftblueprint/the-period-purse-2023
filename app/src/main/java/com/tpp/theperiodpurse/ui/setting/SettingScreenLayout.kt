@@ -103,7 +103,7 @@ fun SettingScreenLayout(
     val formatter = DateTimeFormatter.ofPattern("h:mm a") // define the format of the input string
     val formattedTime = appViewModel.getReminderTime()
     val pickedTime = LocalTime.parse(formattedTime, formatter)
-    onToggleClicked(hasNotificationPermission, context, pickedTime, appViewModel, true)
+    processAlarm(hasNotificationPermission, context, pickedTime, appViewModel, true)
 
    Column(modifier = modifier
        .fillMaxSize()
@@ -140,7 +140,7 @@ fun SettingScreenLayout(
                checked = appViewModel.getAllowReminders(),
                onCheckedChange = {
                    appViewModel.toggleAllowReminders()
-                   onToggleClicked(hasNotificationPermission, context, pickedTime, appViewModel, false)
+                   processAlarm(hasNotificationPermission, context, pickedTime, appViewModel, false)
                },
                modifier = modifier
                    .fillMaxWidth()
@@ -197,7 +197,7 @@ fun SettingScreenLayout(
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
-fun onToggleClicked(hasNotificationsPermission: Boolean, context: Context, pickedTime: LocalTime, appViewModel: AppViewModel, isFirstAlarm: Boolean){
+fun processAlarm(hasNotificationsPermission: Boolean, context: Context, pickedTime: LocalTime, appViewModel: AppViewModel, isFirstAlarm: Boolean){
     if(hasNotificationsPermission){
         if(appViewModel.getAllowReminders()){
             setAlarm(context, pickedTime, appViewModel, isFirstAlarm)
