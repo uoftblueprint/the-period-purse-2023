@@ -45,7 +45,8 @@ class SettingsNavigationTest {
                 onboardUiState = null,
                 onboardViewModel = null,
                 appUiState = null,
-                calUiState = null
+                calUiState = null,
+                signIn = {}
             )
         }
     }

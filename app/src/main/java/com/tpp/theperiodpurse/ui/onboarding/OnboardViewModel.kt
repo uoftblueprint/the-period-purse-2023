@@ -1,16 +1,31 @@
 package com.tpp.theperiodpurse.ui.onboarding
+import android.accounts.Account
+import android.app.Activity
+import android.app.Application
 import android.content.Context
-import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.lifecycle.*
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.api.client.extensions.android.http.AndroidHttp
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
+import com.google.api.client.http.ByteArrayContent
+import com.google.api.client.json.jackson2.JacksonFactory
+import com.google.api.services.drive.Drive
+import com.google.api.services.drive.DriveScopes
+import com.google.api.services.drive.model.File
+import com.google.api.services.drive.model.FileList
+import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.data.Date
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import java.io.ByteArrayOutputStream
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.util.*
@@ -22,32 +37,161 @@ class OnboardViewModel @Inject constructor (
     private val dateRepository: DateRepository,
 ): ViewModel() {
 
-    private val _uiState = MutableStateFlow(OnboardUIState(dateOptions = dateOptions()))
+    private val _uiState = MutableStateFlow(OnboardUIState())
     val uiState: StateFlow<OnboardUIState> = _uiState.asStateFlow()
 
     var isOnboarded: LiveData<Boolean?> = userRepository.isOnboarded
-    var isDeleted: LiveData<Boolean?> = userRepository.isDeleted
+    var isDeleted: MutableLiveData<Boolean?> = MutableLiveData(null)
+    var isDrive: MutableLiveData<FileList?> = MutableLiveData(null)
+    var isDownloaded: MutableLiveData<Boolean?> = MutableLiveData(null)
+    var isBackedUp: MutableLiveData<Boolean?> = MutableLiveData(null)
 
+    fun checkGoogleLogin(context: Context): Boolean{
+        val account = GoogleSignIn.getLastSignedInAccount(context)
+        return (account!=null)
+    }
 
     fun checkOnboardedStatus() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                async {
-                    userRepository.isOnboarded()
-                    isOnboarded = userRepository.isOnboarded
-                }
-
+                userRepository.isOnboarded()
+                isOnboarded = userRepository.isOnboarded
             }
         }
     }
     fun checkDeletedStatus(context: Context) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                async {
-                    userRepository.isDeleted(context = context)
-                    isDeleted = userRepository.isDeleted
-                }
+                val instance = ApplicationRoomDatabase.getDatabase(context)
+                instance.clearAllTables()
+                instance.close()
+                isDeleted.postValue(true)
+            }
+        }
+    }
 
+
+    fun checkGoogleDrive(account: Account, context: Context, ) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val credential = GoogleAccountCredential.usingOAuth2(
+                    context, listOf(DriveScopes.DRIVE_FILE,
+                        DriveScopes.DRIVE_APPDATA)
+                )
+                credential.selectedAccount = account
+                val drive = Drive
+                    .Builder(
+                        AndroidHttp.newCompatibleTransport(),
+                        JacksonFactory.getDefaultInstance(),
+                        credential
+                    )
+                    .setApplicationName(context.getString(R.string.app_name))
+                    .build()
+
+
+                isDrive.postValue(drive.files().list()
+                    .setQ("name = 'user_database.db' and trashed = false")
+                    .setSpaces("appDataFolder").execute())
+            }
+        }
+    }
+
+    fun downloadBackup(account: Account, context: Context){
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+
+                    val credential = GoogleAccountCredential.usingOAuth2(
+                        context,
+                        listOf(
+                            DriveScopes.DRIVE_FILE,
+                            DriveScopes.DRIVE_APPDATA
+                        )
+                    )
+                    credential.selectedAccount = account
+                    val drive = Drive
+                        .Builder(
+                            AndroidHttp.newCompatibleTransport(),
+                            JacksonFactory.getDefaultInstance(),
+                            credential
+                        )
+                        .setApplicationName(context.getString(R.string.app_name))
+                        .build()
+                    val fileList = drive.files().list()
+                        .setQ("name = 'user_database.db' and trashed = false")
+                        .setSpaces("appDataFolder").execute()
+
+                    val fileId = fileList.files[0].id
+
+                    val outputStream = ByteArrayOutputStream()
+
+                    drive.files().get(fileId).executeMediaAndDownloadTo(outputStream)
+
+                    val data = outputStream.toByteArray()
+
+                    val dbFilePath = context.getDatabasePath("user_database.db").path
+
+                    FileOutputStream(dbFilePath).apply {
+                        write(data)
+                        flush()
+                        close()
+                    }
+
+                    val instance = ApplicationRoomDatabase.getDatabase(context)
+                    instance.close()
+
+
+
+                    isDownloaded.postValue(true)
+                }
+            }
+    }
+
+    fun backupDatabase(account: Account, context: Context) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val credential = GoogleAccountCredential.usingOAuth2(
+                    context,
+                    listOf(DriveScopes.DRIVE_APPDATA,
+                        DriveScopes.DRIVE_FILE)
+                )
+                credential.selectedAccount = account
+                val drive = Drive.Builder(
+                    AndroidHttp.newCompatibleTransport(),
+                    JacksonFactory.getDefaultInstance(),
+                    credential
+                ).setApplicationName(context.getString(R.string.app_name)).build()
+
+               val fileList = drive.files().list()
+                   .setQ("name = 'user_database.db' and trashed = false")
+                   .setSpaces("appDataFolder").execute()
+                if (fileList.files.isNotEmpty()) {
+                    val fileId = fileList.files[0].id
+                    drive.files().delete(fileId).execute()
+                } else {
+                    null
+                }
+                val instance = ApplicationRoomDatabase.getDatabase(context)
+                instance.close()
+
+
+                val dbFile = java.io.File(context.getDatabasePath("user_database.db").absolutePath)
+                val outputStream = ByteArrayOutputStream()
+                val inputStream = FileInputStream(dbFile)
+                inputStream.copyTo(outputStream)
+                val metadata = File()
+                        .setParents(listOf("appDataFolder"))
+                        .setMimeType("application/x-sqlite3")
+                        .setName("user_database.db")
+                drive.files().create(metadata, ByteArrayContent(null, outputStream.toByteArray()))
+                        .setFields("id")
+                        .execute()
+
+                ApplicationRoomDatabase.getDatabase(context)
+
+                inputStream.close()
+                outputStream.close()
+
+                isBackedUp.postValue(true)
             }
         }
     }
@@ -99,30 +243,6 @@ class OnboardViewModel @Inject constructor (
         }
     }
 
-    /**
-     * Reset the onboard state
-     */
-    fun resetOrder() {
-        _uiState.value = OnboardUIState(dateOptions = dateOptions())
-    }
-
-
-    /**
-     * Returns a list of date options starting with the current date and the following 3 dates.
-     */
-
-    private fun dateOptions(): List<String> {
-        val dateOptions = mutableListOf<String>()
-        val formatter = SimpleDateFormat("E MMM d", Locale.getDefault())
-        val calendar = Calendar.getInstance()
-        // add current date and the following 30 previous dates.
-        repeat(4) {
-            dateOptions.add(formatter.format(calendar.time))
-            calendar.add(Calendar.DATE, -1)
-        }
-        dateOptions.reverse()
-        return dateOptions
-    }
 
     private fun createUser(symptomsToTrack: ArrayList<Symptom>, periodHistory: ArrayList<Date>,
                            averagePeriodLength: Int, averageCycleLength: Int,
@@ -141,39 +261,18 @@ class OnboardViewModel @Inject constructor (
     }
 
     fun addNewUser(symptomsToTrack: ArrayList<Symptom>, periodHistory: ArrayList<Date>,
-                   averagePeriodLength: Int, averageCycleLength: Int, daysSinceLastPeriod: Int) {
+                   averagePeriodLength: Int, averageCycleLength: Int, daysSinceLastPeriod: Int, context: Context) {
         saveUser(createUser(symptomsToTrack, periodHistory, averagePeriodLength, averageCycleLength,
             daysSinceLastPeriod))
         viewModelScope.launch {
+            withContext(Dispatchers.Main){
+                ApplicationRoomDatabase.getDatabase(context)
+            }
             val user = withContext(Dispatchers.Main) { userRepository.getUser(1) }
             _uiState.value = _uiState.value.copy(user = user)
         }
     }
 
-    private fun createDate(date: java.util.Date, flow: FlowSeverity, mood: Mood,
-                           exerciseLength: Duration?, exerciseType: Exercise,
-                           crampSeverity: CrampSeverity, sleep: Duration?): Date {
-        return Date(
-            date = date,
-            flow = flow,
-            mood = mood,
-            exerciseLength = exerciseLength,
-            exerciseType = exerciseType,
-            crampSeverity = crampSeverity,
-            sleep = sleep,
-            notes = ""
-        )
-    }
-
-    private fun saveDate(date: Date) {
-        dateRepository.addDate(date)
-    }
-
-    fun addNewDate(date: java.util.Date, flow: FlowSeverity, mood: Mood,
-                   exerciseLength: Duration?, exerciseType: Exercise,
-                   crampSeverity: CrampSeverity, sleep: Duration?) {
-        saveDate(createDate(date, flow, mood, exerciseLength, exerciseType, crampSeverity, sleep))
-    }
 
 
 }

@@ -1,14 +1,14 @@
 package com.tpp.theperiodpurse
 
-import android.content.Intent
 import android.Manifest.permission.POST_NOTIFICATIONS
+import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -19,23 +19,27 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.rememberNavController
-import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.android.gms.common.api.Scope
+import com.google.android.gms.tasks.Task
+import com.google.api.services.drive.DriveScopes
 import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import com.tpp.theperiodpurse.ui.component.BottomNavigation
 import com.tpp.theperiodpurse.ui.component.FloatingActionButton
@@ -44,10 +48,6 @@ import com.tpp.theperiodpurse.ui.symptomlog.LoggingOptionsPopup
 import com.tpp.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.unit.dp
 
 
 @AndroidEntryPoint
@@ -57,17 +57,16 @@ class MainActivity : ComponentActivity() {
         const val RC_SIGN_IN = 100
     }
 
-    private lateinit var mAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mAuth = FirebaseAuth.getInstance()
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
+            .requestScopes(Scope(DriveScopes.DRIVE_FILE), Scope(DriveScopes.DRIVE_APPDATA))
+            .requestIdToken(getString(R.string.default_web_client_id))
             .build()
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
@@ -101,11 +100,8 @@ class MainActivity : ComponentActivity() {
                         launcher.launch(POST_NOTIFICATIONS)
                     }
                 }
-                if (mAuth.currentUser == null) {
-                    Application(context = applicationContext, signIn = { signIn() }, hasNotificationsPermission = hasNotificationPermission )
-                } else {
-                    Application(context = applicationContext, signIn = { signIn() }, hasNotificationsPermission = hasNotificationPermission)
-                }
+                Application(context = applicationContext, signIn = { signIn() }, signout = { signOut() })
+
             }
         }
     }
@@ -114,60 +110,46 @@ class MainActivity : ComponentActivity() {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
+    private fun signOut() {
+        googleSignInClient.revokeAccess().addOnCompleteListener {
+            googleSignInClient.signOut().addOnCompleteListener {
+                Toast.makeText(this, "SignOut Successful", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        // result returned from launching the intent from GoogleSignInApi.getSignInIntent()
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            val exception = task.exception
-            if (task.isSuccessful) {
-                try {
-                    // Google SignIn was successful, authenticate with Firebase.
-                    val account = task.getResult(ApiException::class.java)!!
-                    firebaseAuthWithGoogle(account.idToken!!)
-                } catch (e: Exception) {
-                    // Google SignIn Failed
-                    Log.d("SignIn", "Google SignIn Failed")
-                }
-            } else {
-                Log.d("SignIn", exception.toString())
-            }
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode === RC_SIGN_IN && resultCode == Activity.RESULT_OK) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            val task: Task<GoogleSignInAccount> =
+                GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleSignInResult(task)
         }
 
     }
-
-
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun firebaseAuthWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        mAuth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // SignIn Successful
-                    Toast.makeText(this, "SignIn Successful", Toast.LENGTH_SHORT).show()
-                    setContent {
+    fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        try {
+            if (completedTask.isSuccessful){
+                val account = completedTask.getResult(ApiException::class.java)!!.account
+                Toast.makeText(this, "SignIn Successful", Toast.LENGTH_SHORT).show()
 
-                        val hasNotificationPermission by remember {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                mutableStateOf(
-                                    ContextCompat.checkSelfPermission(
-                                        applicationContext,
-                                        POST_NOTIFICATIONS
-                                    ) == PackageManager.PERMISSION_GRANTED
-                                )
-                            } else mutableStateOf(true)
-                        }
-
-                        Application(context = applicationContext, skipDatabase = true, skipWelcome = true, signIn = { signIn() }, hasNotificationsPermission = hasNotificationPermission)
-                    }
-                } else {
-                    // SignIn Failed
-                    Toast.makeText(this, "SignIn Failed", Toast.LENGTH_SHORT).show()
-                }
             }
+            else {
+                Toast.makeText(this, "SignIn Failed", Toast.LENGTH_SHORT).show()
+            }
+
+        } catch (e: ApiException) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Toast.makeText(this, "SignIn Failed", Toast.LENGTH_SHORT).show()
+
+        }
+
     }
 }
 
@@ -177,6 +159,7 @@ fun Application(context: Context,
                 signIn: () -> Unit,
                 skipWelcome: Boolean = false,
                 skipDatabase: Boolean = false,
+                signout: () -> Unit = {},
                 skipOnboarding: Boolean = false,
                 hasNotificationsPermission: Boolean = false) {
     ScreenApp(signIn = signIn,
@@ -184,6 +167,7 @@ fun Application(context: Context,
         skipWelcome = skipDatabase,
         skipDatabase = skipWelcome,
         context = context,
+        signout = signout,
     hasNotificationsPermissions = hasNotificationsPermission)
     createNotificationChannel(context)
 }
@@ -217,6 +201,7 @@ fun ScreenApp(
     skipDatabase: Boolean = false,
     skipOnboarding: Boolean = false,
     context: Context,
+    signout: () -> Unit = {},
     hasNotificationsPermissions: Boolean = false,
 
 ) {
@@ -224,12 +209,12 @@ fun ScreenApp(
     var skipOnboarding = skipOnboarding
     val isOnboarded by onboardViewModel.isOnboarded.observeAsState(initial = null)
 
-
     if (!skipDatabase){
         LaunchedEffect(Unit) {
             onboardViewModel.checkOnboardedStatus()
         }
     }
+    val startdestination : String
 
     if (isOnboarded == null && !skipDatabase){
         LoadingScreen()
@@ -237,7 +222,15 @@ fun ScreenApp(
         if (!skipDatabase){
             skipOnboarding = (isOnboarded as Boolean)
         }
-
+        if (skipOnboarding) {
+            startdestination = OnboardingScreen.LoadDatabase.name
+        }
+        else if (skipWelcome) {
+            startdestination = OnboardingScreen.QuestionOne.name
+        }
+        else {
+            startdestination = OnboardingScreen.Welcome.name
+        }
         Scaffold(
             floatingActionButton = {
                 if (currentRoute(navController) in screensWithNavigationBar) {
@@ -259,13 +252,14 @@ fun ScreenApp(
             Box {
                 NavigationGraph(
                     navController = navController,
-                    startDestination = if (skipOnboarding) OnboardingScreen.LoadDatabase.name else if (skipWelcome) OnboardingScreen.QuestionOne.name else OnboardingScreen.Welcome.name,
+                    startDestination = startdestination,
                     onboardViewModel = onboardViewModel,
                     appViewModel= appViewModel,
                     calendarViewModel = calendarViewModel,
                     modifier = modifier.padding(innerPadding),
                     signIn = signIn,
-                    context = context
+                    context = context,
+                    signout = signout,
                 )
 
             if (loggingOptionsVisible) {
@@ -293,3 +287,4 @@ fun ScreenApp(
         }
     }
 }
+

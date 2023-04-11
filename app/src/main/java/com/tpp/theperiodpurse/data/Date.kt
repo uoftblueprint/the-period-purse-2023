@@ -9,7 +9,7 @@ import java.util.Date
 data class Date (
     @PrimaryKey
     @TypeConverters(DaysConverter::class)
-    val date: Date?,
+    val date: Date,
     val flow: FlowSeverity?,
     val mood: Mood?,
     @TypeConverters(DurationConverter::class)

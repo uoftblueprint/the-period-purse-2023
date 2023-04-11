@@ -1,4 +1,5 @@
 package com.tpp.theperiodpurse.ui
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -19,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.data.ApplicationRoomDatabase
 import com.tpp.theperiodpurse.data.Date
 import com.tpp.theperiodpurse.ui.onboarding.backbutton
 import com.tpp.theperiodpurse.data.OnboardUIState
@@ -40,6 +42,7 @@ fun SummaryScreen(
     navigateUp: () -> Unit,
     canNavigateBack: Boolean,
     viewModel: OnboardViewModel,
+    context: Context
 ) {
     val resources = LocalContext.current.resources
 
@@ -213,7 +216,8 @@ fun SummaryScreen(
                     arrayListOf<Date>(),
                     onboardUiState.days,
                     0,
-                    getDaysSince(onboardUiState.date)
+                    getDaysSince(onboardUiState.date),
+                    context = context
                 )
 
                 onSendButtonClicked() },

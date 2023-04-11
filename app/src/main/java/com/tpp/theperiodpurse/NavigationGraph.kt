@@ -15,6 +15,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.api.services.drive.Drive
 import com.tpp.theperiodpurse.ui.symptomlog.LogMultipleDatesScreen
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.ui.SummaryScreen
@@ -57,7 +59,9 @@ enum class OnboardingScreen {
     QuestionTwo,
     QuestionThree,
     Summary,
+    LoadGoogleDrive,
     LoadDatabase,
+    DownloadBackup
 }
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -70,7 +74,8 @@ fun NavigationGraph(
     appViewModel: AppViewModel,
     modifier: Modifier = Modifier,
     context: Context,
-    signIn: () -> Unit
+    signIn: () -> Unit,
+    signout: () -> Unit = {},
 ) {
     val onboardUIState by onboardViewModel.uiState.collectAsState()
     val appUiState by appViewModel.uiState.collectAsState()
@@ -100,7 +105,8 @@ fun NavigationGraph(
                     date = date,
                     navController = navController,
                     appViewModel = appViewModel,
-                    calendarViewModel = calendarViewModel
+                    calendarViewModel = calendarViewModel,
+                    context = context
                 )
             }
         }
@@ -108,7 +114,8 @@ fun NavigationGraph(
         composable(route = Screen.LogMultipleDates.name) {
             LogMultipleDatesScreen(
                 onClose = { navController.navigateUp() },
-                calendarViewModel
+                calendarViewModel,
+                appViewModel
             )
         }
 
@@ -119,7 +126,9 @@ fun NavigationGraph(
                 onboardUiState = onboardUIState,
                 onboardViewModel = onboardViewModel,
                 appUiState = appUiState,
-                calUiState = calUiState)
+                calUiState = calUiState,
+                signIn = signIn,
+                signout = signout)
         }
 
         composable(route = Screen.Cycle.name) {
@@ -137,6 +146,7 @@ fun NavigationGraph(
         }
 
         // Education Screens
+
         composable(route = Screen.Learn.name) {
             EducationScreen(outController = navController)
         }
@@ -153,10 +163,12 @@ fun NavigationGraph(
         // Welcome Screen
         composable(route = OnboardingScreen.Welcome.name) {
             WelcomeScreen(
-                navController = navController,
                 onNextButtonClicked =
                 { navController.navigate(OnboardingScreen.QuestionOne.name) },
-                signIn = signIn
+                signIn = signIn,
+                navController = navController,
+                context = context,
+                onboardUIState = onboardUIState,
             )
         }
 
@@ -169,6 +181,9 @@ fun NavigationGraph(
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null,
                 onboardUiState = onboardUIState,
+                viewModel = onboardViewModel,
+                signOut = signout,
+                context = context
             )
         }
         composable(route = OnboardingScreen.QuestionTwo.name) {
@@ -198,7 +213,8 @@ fun NavigationGraph(
                 },
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null,
-                viewModel = onboardViewModel
+                viewModel = onboardViewModel,
+                context = context
 //                onCancelButtonClicked = {
 //                    cancelOrderAndNavigateToStart(onboardViewModel, navController)
 //                },
@@ -222,30 +238,35 @@ fun NavigationGraph(
                 appViewModel = appViewModel,
                 calViewModel = calendarViewModel,
                 navController = navController,
+                context = context,
                 hasNotificationsPermissions = hasNotificationPermission
             )
         }
+        composable(route = OnboardingScreen.LoadGoogleDrive.name) {
+                LoadGoogleDrive(
+                    viewModel = onboardViewModel,
+                    navHostController = navController,
+                    context = context,
+                    googleAccount = onboardUIState.googleAccount)
+        }
+
+        composable(route = OnboardingScreen.DownloadBackup.name) {
+            DownloadBackup(googleAccount = onboardUIState.googleAccount,
+                viewModel = onboardViewModel,
+                navHostController = navController,
+                context = context)
+        }
+
     }
-}
-
-/**
- * Resets the [OnboardUIState] and pops up to [OnboardingScreen.Start]
- */
-private fun cancelOrderAndNavigateToStart(
-    viewModel: OnboardViewModel,
-    navController: NavHostController
-) {
-    viewModel.resetOrder()
-    navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = false)
-}
-
-fun navigateToLogScreenWithDate(date: LocalDate, navController: NavController) {
-    navController.navigate(route = "%s/%s/%s"
-        .format(Screen.Calendar, Screen.Log, date.toString()))
 }
 
 @Composable
 fun currentRoute(navController: NavController): String? {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     return navBackStackEntry?.destination?.route
+}
+
+fun navigateToLogScreenWithDate(date: LocalDate, navController: NavController) {
+    navController.navigate(route = "%s/%s/%s"
+        .format(Screen.Calendar, Screen.Log, date.toString()))
 }

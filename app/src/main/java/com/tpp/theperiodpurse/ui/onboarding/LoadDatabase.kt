@@ -20,6 +20,7 @@ fun LoadDatabase(
     navController: NavHostController,
     appViewModel: AppViewModel,
     calViewModel: CalendarViewModel,
+    context: Context,
     hasNotificationsPermissions: Boolean,
 ) {
     val isLoaded by appViewModel.isLoaded.observeAsState(initial = null)
@@ -27,18 +28,19 @@ fun LoadDatabase(
 
 
     LaunchedEffect(Unit){
-        appViewModel.loadData(calViewModel)
+        appViewModel.loadData(calViewModel, context)
         appViewModel.setAllowReminders(hasNotificationsPermissions)
     }
-
 
     if (isLoaded == null){
         LoadingScreen()
     }
     else {
         LaunchedEffect(Unit) {
+            appViewModel.isLoaded.postValue(null)
             navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
             navController.navigate(Screen.Calendar.name)
+
         }
 
     }

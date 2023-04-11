@@ -54,10 +54,10 @@ fun SettingScreenLayout(
     onNotificationClicked: () -> Unit,
     onBackUpClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
-    appViewModel: AppViewModel = viewModel()
+    appViewModel: AppViewModel = viewModel(),
+    context: Context
 ){
     val symptoms = appViewModel.getTrackedSymptoms()
-    val context = LocalContext.current
     var hasAlarmPermission by remember {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             mutableStateOf(
@@ -124,9 +124,6 @@ fun SettingScreenLayout(
            fontWeight = FontWeight.Bold
        )
        Row(modifier = modifier.padding(20.dp)) {
-
-
-
            Column (modifier = Modifier) {
                Text(text = stringResource(
                    R.string.remind_me_to_log_symptoms),
@@ -329,5 +326,6 @@ fun SettingsScreenPreview() {
         onDeleteClicked = {
             navController.navigate(SettingScreenNavigation.DeleteAccount.name)
         },
+        context = LocalContext.current
     )
 }
