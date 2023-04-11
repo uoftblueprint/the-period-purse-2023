@@ -33,8 +33,10 @@ class AppViewModel @Inject constructor (
     fun loadData(calendarViewModel: CalendarViewModel, context: Context) {
         val trackedSymptoms: MutableList<Symptom> = mutableListOf()
         viewModelScope.launch {
-            withContext(Dispatchers.Main){
-                ApplicationRoomDatabase.getDatabase(context)
+            withContext(Dispatchers.Main) {
+                val instance = ApplicationRoomDatabase.getDatabase(context)
+                instance.openHelper.readableDatabase
+                instance.openHelper.writableDatabase
             }
             Log.d(
                 "Lookies Here",
@@ -46,11 +48,14 @@ class AppViewModel @Inject constructor (
                 trackedSymptoms.addAll(user.symptomsToTrack)
                 _uiState.update { currentState ->
                     currentState.copy(trackedSymptoms = trackedSymptoms,
-                    allowReminders = user.allowReminders,
-                    reminderFrequency = user.reminderFreq,
-                    reminderTime = user.reminderTime,)
+                        allowReminders = user.allowReminders,
+                        reminderFrequency = user.reminderFreq,
+                        reminderTime = user.reminderTime,)
                 }
             }
+
+
+
             withContext(Dispatchers.IO) {
                 dateRepository.getAllDates().collect { dates ->
                     _uiState.value = _uiState.value.copy(dates = dates)
@@ -84,6 +89,7 @@ class AppViewModel @Inject constructor (
                         )
                     }
                 }
+
             }
 
 
@@ -155,25 +161,25 @@ class AppViewModel @Inject constructor (
         return uiState.value.reminderFrequency
     }
 
-    fun saveDate(date: Date) {
-        dateRepository.addDate(date)
+    fun saveDate(date: Date, context : Context) {
+        dateRepository.addDate(date, context)
         val newList = uiState.value.dates.toMutableList()
         newList.add(date)
         _uiState.update { currentState -> currentState.copy(dates = newList) }
 
     }
 
-    fun deleteDate(date: Date) {
-        dateRepository.deleteDate(date)
+    fun deleteDate(date: Date, context : Context) {
+        dateRepository.deleteDate(date, context)
         val newList = uiState.value.dates.toMutableList()
         newList.remove(date)
         _uiState.update { currentState -> currentState.copy(dates = newList) }
 
     }
 
-    fun deleteManyDates(dates: List<java.util.Date>) {
+    fun deleteManyDates(dates: List<java.util.Date>, context : Context) {
         val convertedDates = dates.map { it.time }
-        dateRepository.deleteManyDates(convertedDates)
+        dateRepository.deleteManyDates(convertedDates, context)
 
         val newList = mutableListOf<Date>()
 

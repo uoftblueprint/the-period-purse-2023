@@ -99,6 +99,8 @@ class OnboardViewModel @Inject constructor (
     fun downloadBackup(account: Account, context: Context){
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
+                    val old_instance = ApplicationRoomDatabase.getDatabase(context)
+                    old_instance.close()
 
                     val credential = GoogleAccountCredential.usingOAuth2(
                         context,
@@ -186,10 +188,16 @@ class OnboardViewModel @Inject constructor (
                         .setFields("id")
                         .execute()
 
-                ApplicationRoomDatabase.getDatabase(context)
-
                 inputStream.close()
                 outputStream.close()
+
+
+                instance.openHelper.readableDatabase
+                instance.openHelper.writableDatabase
+
+
+
+
 
                 isBackedUp.postValue(true)
             }
@@ -266,10 +274,12 @@ class OnboardViewModel @Inject constructor (
             daysSinceLastPeriod))
         viewModelScope.launch {
             withContext(Dispatchers.Main){
-                ApplicationRoomDatabase.getDatabase(context)
+                val instance = ApplicationRoomDatabase.getDatabase(context)
+                instance.openHelper.readableDatabase
+                instance.openHelper.writableDatabase
+                val user = withContext(Dispatchers.Main) { userRepository.getUser(1) }
+                _uiState.value = _uiState.value.copy(user = user)
             }
-            val user = withContext(Dispatchers.Main) { userRepository.getUser(1) }
-            _uiState.value = _uiState.value.copy(user = user)
         }
     }
 

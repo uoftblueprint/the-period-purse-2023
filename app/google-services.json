@@ -1,20 +1,28 @@
 {
   "project_info": {
-    "project_number": "941432711682",
-    "project_id": "menstruation-nation-382503",
-    "storage_bucket": "menstruation-nation-382503.appspot.com"
+    "project_number": "497474155885",
+    "project_id": "mn-android-app",
+    "storage_bucket": "mn-android-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:941432711682:android:c987af18ea56ebfcd8151b",
+        "mobilesdk_app_id": "1:497474155885:android:b9c9a8b2cd985409f61664",
         "android_client_info": {
           "package_name": "com.tpp.theperiodpurse"
         }
       },
       "oauth_client": [
         {
-          "client_id": "941432711682-e648chv0m2h1ibt3rfp36fpco67lebi4.apps.googleusercontent.com",
+          "client_id": "497474155885-6g97i1ui9gp2tcus7e3buca048c47kic.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tpp.theperiodpurse",
+            "certificate_hash": "71ab6f8e147b2db8e8c492d742b0ba2c2ce14a9c"
+          }
+        },
+        {
+          "client_id": "497474155885-ioj64hnos9ir42psp87vq7o53g61im21.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.tpp.theperiodpurse",
@@ -22,20 +30,28 @@
           }
         },
         {
-          "client_id": "941432711682-q1edmoah7qan023krcvitfch5sp1uhqi.apps.googleusercontent.com",
+          "client_id": "497474155885-klq4kuedb3684hnk9hkj57ua4mjspidu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tpp.theperiodpurse",
+            "certificate_hash": "7739632f41443b494a6cc72aea2a7fe4722834ab"
+          }
+        },
+        {
+          "client_id": "497474155885-e256g3urktvitafdhdicevfueueadled.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCscv98ohFXfB0fMiJZazhb4jw2DkBtE78"
+          "current_key": "AIzaSyAgyVVn1etMbW5mEqUKT_x2tjEQJAuFtdM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "941432711682-q1edmoah7qan023krcvitfch5sp1uhqi.apps.googleusercontent.com",
+              "client_id": "497474155885-e256g3urktvitafdhdicevfueueadled.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

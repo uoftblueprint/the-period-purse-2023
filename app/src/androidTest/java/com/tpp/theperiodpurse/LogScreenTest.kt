@@ -1,5 +1,6 @@
 package com.tpp.theperiodpurse
 
+import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -8,6 +9,7 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
+import androidx.test.platform.app.InstrumentationRegistry
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
 import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
@@ -25,6 +27,7 @@ import javax.inject.Inject
 
 @HiltAndroidTest
 class LogScreenTest {
+    lateinit var context: Context
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
     private lateinit var navController: TestNavHostController
@@ -65,7 +68,8 @@ class LogScreenTest {
 
     private fun insertDate() {
         runBlocking {
-            dateRepository.addDate(dateList[0])
+            context = InstrumentationRegistry.getInstrumentation().context
+            dateRepository.addDate(dateList[0], context)
         }
     }
 
