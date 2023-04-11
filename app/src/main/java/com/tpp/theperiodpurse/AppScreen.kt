@@ -23,13 +23,10 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -73,33 +70,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             ThePeriodPurseTheme {
-                val context = LocalContext.current
-                var hasNotificationPermission by remember {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        mutableStateOf(
-                            ContextCompat.checkSelfPermission(
-                                context,
-                                POST_NOTIFICATIONS
-                            ) == PackageManager.PERMISSION_GRANTED
-                        )
-                    } else mutableStateOf(true)
-                }
-                val launcher = rememberLauncherForActivityResult(
-                    contract = ActivityResultContracts.RequestPermission(),
-                    onResult = { isGranted ->
-                        hasNotificationPermission = isGranted
-                        if (!isGranted) {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                shouldShowRequestPermissionRationale(POST_NOTIFICATIONS)
-                            }
-                        }
-                    }
-                )
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    SideEffect {
-                        launcher.launch(POST_NOTIFICATIONS)
-                    }
-                }
                 Application(context = applicationContext, signIn = { signIn() }, signout = { signOut() })
 
             }
@@ -167,8 +137,7 @@ fun Application(context: Context,
         skipWelcome = skipDatabase,
         skipDatabase = skipWelcome,
         context = context,
-        signout = signout,
-    hasNotificationsPermissions = hasNotificationsPermission)
+        signout = signout)
     createNotificationChannel(context)
 }
 
@@ -202,7 +171,6 @@ fun ScreenApp(
     skipOnboarding: Boolean = false,
     context: Context,
     signout: () -> Unit = {},
-    hasNotificationsPermissions: Boolean = false,
 
 ) {
     var loggingOptionsVisible by remember { mutableStateOf(false) }
@@ -216,11 +184,36 @@ fun ScreenApp(
     }
     val startdestination : String
 
+    var hasNotificationPermission by remember {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            mutableStateOf(
+                ContextCompat.checkSelfPermission(
+                    context,
+                    POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+            )
+        } else mutableStateOf(true)
+    }
+
     if (isOnboarded == null && !skipDatabase){
         LoadingScreen()
     } else{
         if (!skipDatabase){
             skipOnboarding = (isOnboarded as Boolean)
+            if (!skipOnboarding){
+                val launcher = rememberLauncherForActivityResult(
+                    contract = ActivityResultContracts.RequestPermission(),
+                    onResult = { isGranted ->
+                        hasNotificationPermission = isGranted
+                    }
+                )
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    SideEffect {
+                        launcher.launch(POST_NOTIFICATIONS)
+                    }
+                }
+
+            }
         }
         if (skipOnboarding) {
             startdestination = OnboardingScreen.LoadDatabase.name
@@ -250,17 +243,22 @@ fun ScreenApp(
                 contentScale = ContentScale.FillBounds
             )
             Box {
-                NavigationGraph(
-                    navController = navController,
-                    startDestination = startdestination,
-                    onboardViewModel = onboardViewModel,
-                    appViewModel= appViewModel,
-                    calendarViewModel = calendarViewModel,
-                    modifier = modifier.padding(innerPadding),
-                    signIn = signIn,
-                    context = context,
-                    signout = signout,
-                )
+                isOnboarded?.let {
+                    NavigationGraph(
+                        navController = navController,
+                        startDestination = startdestination,
+                        onboardViewModel = onboardViewModel,
+                        appViewModel= appViewModel,
+                        calendarViewModel = calendarViewModel,
+                        modifier = modifier.padding(innerPadding),
+                        signIn = signIn,
+                        context = context,
+                        signout = signout,
+                        isOnboarded = it,
+                        hasNotificationsPermission = hasNotificationPermission
+
+                    )
+                }
 
             if (loggingOptionsVisible) {
                 LoggingOptionsPopup(

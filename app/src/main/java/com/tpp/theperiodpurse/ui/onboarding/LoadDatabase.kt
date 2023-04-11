@@ -1,6 +1,7 @@
 package com.tpp.theperiodpurse.ui.setting
 
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
@@ -22,15 +23,23 @@ fun LoadDatabase(
     calViewModel: CalendarViewModel,
     context: Context,
     hasNotificationsPermissions: Boolean,
+    isOnboarded: Boolean = false
 ) {
     val isLoaded by appViewModel.isLoaded.observeAsState(initial = null)
 
 
 
-    LaunchedEffect(Unit){
-        appViewModel.loadData(calViewModel, context)
-        appViewModel.setAllowReminders(hasNotificationsPermissions)
+    if(!isOnboarded){
+        LaunchedEffect(Unit){
+            appViewModel.setAllowReminders(hasNotificationsPermissions)
+            appViewModel.loadData(calViewModel, context)
+        }
+    } else {
+        LaunchedEffect(Unit){
+            appViewModel.loadData(calViewModel, context)
+        }
     }
+
 
     if (isLoaded == null){
         LoadingScreen()

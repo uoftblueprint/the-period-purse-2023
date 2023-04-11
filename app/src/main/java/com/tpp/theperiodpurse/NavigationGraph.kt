@@ -1,13 +1,10 @@
 package com.tpp.theperiodpurse
 
-import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -15,8 +12,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.api.services.drive.Drive
 import com.tpp.theperiodpurse.ui.symptomlog.LogMultipleDatesScreen
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.ui.SummaryScreen
@@ -76,6 +71,8 @@ fun NavigationGraph(
     context: Context,
     signIn: () -> Unit,
     signout: () -> Unit = {},
+    isOnboarded: Boolean,
+    hasNotificationsPermission: Boolean
 ) {
     val onboardUIState by onboardViewModel.uiState.collectAsState()
     val appUiState by appViewModel.uiState.collectAsState()
@@ -223,23 +220,24 @@ fun NavigationGraph(
 
         composable(route = OnboardingScreen.LoadDatabase.name) {
 
-            var hasNotificationPermission by remember {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    mutableStateOf(
-                        ContextCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.POST_NOTIFICATIONS
-                        ) == PackageManager.PERMISSION_GRANTED
-                    )
-                } else mutableStateOf(true)
-            }
+//            var hasNotificationPermission by remember {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//                    mutableStateOf(
+//                        ContextCompat.checkSelfPermission(
+//                            context,
+//                            Manifest.permission.POST_NOTIFICATIONS
+//                        ) == PackageManager.PERMISSION_GRANTED
+//                    )
+//                } else mutableStateOf(true)
+//            }
 
             LoadDatabase(
                 appViewModel = appViewModel,
                 calViewModel = calendarViewModel,
                 navController = navController,
                 context = context,
-                hasNotificationsPermissions = hasNotificationPermission
+                hasNotificationsPermissions = hasNotificationsPermission,
+                isOnboarded = isOnboarded
             )
         }
         composable(route = OnboardingScreen.LoadGoogleDrive.name) {
