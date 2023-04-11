@@ -25,7 +25,7 @@ fun LoadDatabase(
 ) {
     val isLoaded by appViewModel.isLoaded.observeAsState(initial = null)
 
-
+    
     appViewModel.loadData(calViewModel, context)
 
     if (isLoaded == null){
