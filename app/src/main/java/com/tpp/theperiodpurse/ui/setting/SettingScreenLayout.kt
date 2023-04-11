@@ -172,7 +172,7 @@ fun SettingScreenLayout(
            onClicked = onDeleteClicked
        )
        Divider(modifier = Modifier.padding(start= 10.dp, end = 10.dp))
-       Spacer(modifier = Modifier.padding(20.dp))
+       Spacer(modifier = Modifier.padding(50.dp))
        val uriHandler = LocalUriHandler.current
        Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
            SocialMedia(uriHandler)
