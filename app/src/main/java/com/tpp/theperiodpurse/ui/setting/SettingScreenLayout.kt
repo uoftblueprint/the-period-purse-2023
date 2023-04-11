@@ -63,7 +63,7 @@ fun SettingScreenLayout(
             mutableStateOf(
                 ContextCompat.checkSelfPermission(
                     context,
-                    Manifest.permission.POST_NOTIFICATIONS
+                    SCHEDULE_EXACT_ALARM
                 ) == PackageManager.PERMISSION_GRANTED
             )
         } else mutableStateOf(true)
