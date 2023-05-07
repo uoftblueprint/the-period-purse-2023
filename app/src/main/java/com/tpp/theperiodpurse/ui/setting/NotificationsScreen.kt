@@ -148,16 +148,20 @@ fun setAlarm(context: Context, pickedTime: LocalTime, appViewModel: AppViewModel
 
     val freq = appViewModel.getReminderFreq()
     lateinit var intent: Intent
-    if (freq == "Every day"){
-        intent = Intent(context, Alarm::class.java)
-    } else if(freq == "Every week"){
-        intent = Intent(context, WeeklyAlarm::class.java)
-    } else if (freq == "Every month"){
-        intent = Intent(context, MonthlyAlarm::class.java)
+    when (freq) {
+        "Every day" -> {
+            intent = Intent(context, Alarm::class.java)
+        }
+        "Every week" -> {
+            intent = Intent(context, WeeklyAlarm::class.java)
+        }
+        "Every month" -> {
+            intent = Intent(context, MonthlyAlarm::class.java)
+        }
     }
 
     intent.putExtra("hasRemindersPermissions", appViewModel.getAllowReminders())
-    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE)
 
     val hasAlarmPermission: Boolean = alarmManager.canScheduleExactAlarms()
 
