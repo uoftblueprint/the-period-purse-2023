@@ -60,7 +60,8 @@ enum class OnboardingScreen {
     Summary,
     LoadGoogleDrive,
     LoadDatabase,
-    DownloadBackup
+    DownloadBackup,
+    DateRangePicker
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -240,6 +241,10 @@ fun NavigationGraph(
                 viewModel = onboardViewModel,
                 navHostController = navController,
                 context = context)
+        }
+
+        composable(route = OnboardingScreen.DateRangePicker.name) {
+            DateRangePicker()
         }
 
     }

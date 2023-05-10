@@ -13,6 +13,11 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.DateRangePicker
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.graphics.Color
@@ -23,14 +28,18 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.OnboardUIState
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun QuestionTwoScreen(
@@ -124,7 +133,7 @@ fun QuestionTwoScreen(
             Spacer(Modifier.height((screenheight * (0.02)).dp))
             Button(
                 onClick = {
-                    mDatePickerDialog.show()
+                    navController.navigate(OnboardingScreen.DateRangePicker.name)
                     entered = true
                 }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
                 modifier = modifier
@@ -214,4 +223,42 @@ fun setDateTo(day: Int, month: Int, year: Int, range: Int): String {
     date.set(year, month, day);
     date.add(Calendar.DATE, range)
     return formatter.format(date.time)
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun dateRangePicker(){
+    val snackState = remember { SnackbarHostState() }
+    val snackScope = rememberCoroutineScope()
+    SnackbarHost(hostState = snackState, Modifier.zIndex(1f))
+    val state = rememberDateRangePickerState()
+    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top) {
+        // Add a row with "Save" and dismiss actions.
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 12.dp, end = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            IconButton(onClick = { /* dismiss the UI */ }) {
+                Icon(Icons.Filled.Close, contentDescription = "Localized description")
+            }
+            TextButton(
+                onClick = {
+                    snackScope.launch {
+                        snackState.showSnackbar(
+                            "Saved range (timestamps): " +
+                                    "${state.selectedStartDateMillis!!..state.selectedEndDateMillis!!}"
+                        )
+                    }
+                },
+                enabled = state.selectedEndDateMillis != null
+            ) {
+                Text(text = "Save")
+            }
+        }
+
+        DateRangePicker(state = state, modifier = Modifier.weight(1f))
+    }
 }
