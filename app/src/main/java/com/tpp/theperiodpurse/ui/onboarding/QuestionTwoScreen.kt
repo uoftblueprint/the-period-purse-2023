@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.data.OnboardUIState
+import com.tpp.theperiodpurse.ui.state.OnboardUIState
 import java.text.SimpleDateFormat
 import java.util.*
 

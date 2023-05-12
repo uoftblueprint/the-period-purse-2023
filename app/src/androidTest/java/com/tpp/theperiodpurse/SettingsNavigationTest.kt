@@ -8,6 +8,7 @@ import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import com.tpp.theperiodpurse.ui.setting.SettingScreenNavigation
 import com.tpp.theperiodpurse.ui.setting.SettingsScreen
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before

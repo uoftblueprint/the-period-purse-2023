@@ -26,13 +26,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.tpp.theperiodpurse.AppUiState
-import com.tpp.theperiodpurse.AppViewModel
+import com.tpp.theperiodpurse.ui.state.AppUiState
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.data.OnboardUIState
-import com.tpp.theperiodpurse.ui.calendar.CalendarUIState
-import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
-import kotlin.math.sign
+import com.tpp.theperiodpurse.ui.state.OnboardUIState
+import com.tpp.theperiodpurse.ui.state.CalendarUIState
+import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 
 enum class SettingScreenNavigation(@StringRes val title: Int) {
     Start(title = R.string.settings_home), Notification(title = R.string.customize_notifications), BackUpAccount(

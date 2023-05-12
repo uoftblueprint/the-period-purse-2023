@@ -9,15 +9,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavHostController
-import com.tpp.theperiodpurse.AppUiState
+import com.tpp.theperiodpurse.ui.state.AppUiState
 import com.tpp.theperiodpurse.OnboardingScreen
-import com.tpp.theperiodpurse.data.OnboardUIState
-import com.tpp.theperiodpurse.ui.calendar.CalendarUIState
+import com.tpp.theperiodpurse.ui.state.OnboardUIState
+import com.tpp.theperiodpurse.ui.state.CalendarUIState
 import com.tpp.theperiodpurse.ui.onboarding.LoadingScreen
-import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlin.math.sign
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

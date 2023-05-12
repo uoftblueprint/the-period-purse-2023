@@ -20,9 +20,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.tpp.theperiodpurse.AppViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.addOneDay
+import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.data.findYears
 import com.tpp.theperiodpurse.data.parseDatesIntoPeriods
 import java.text.SimpleDateFormat
@@ -135,7 +136,7 @@ fun PeriodHistoryLayout(
 }
 
 @Composable
-fun PeriodEntries(periods: ArrayList<ArrayList<com.tpp.theperiodpurse.data.Date>>, upperbound: Int?) {
+fun PeriodEntries(periods: ArrayList<ArrayList<Date>>, upperbound: Int?) {
     if (periods.size == 0 || periods[0].size == 0) {
         Text(text = stringResource(R.string.please_start_logging_to_learn_more))
     } else {

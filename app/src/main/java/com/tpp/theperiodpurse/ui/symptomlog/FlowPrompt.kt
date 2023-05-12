@@ -10,8 +10,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.tpp.theperiodpurse.data.LogPrompt
-import com.tpp.theperiodpurse.data.LogSquare
+import com.tpp.theperiodpurse.data.model.LogPrompt
+import com.tpp.theperiodpurse.data.model.LogSquare
+import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
 
 @Composable
 fun FlowPrompt (logViewModel: LogViewModel) {

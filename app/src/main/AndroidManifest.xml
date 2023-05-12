@@ -34,17 +34,17 @@
                 android:name="com.google.android.gms.drive.services.menstruation-nation-382503"
                 android:value="1:941432711682:android:c987af18ea56ebfcd8151b" />
         </activity>
-        <receiver android:name=".data.Alarm" android:exported="false">
+        <receiver android:name=".utility.alarm.Alarm" android:exported="false">
             <intent-filter>
                 <action android:name="APP_SPECIFIC_BROADCAST" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".data.WeeklyAlarm" android:exported="false">
+        <receiver android:name=".utility.alarm.WeeklyAlarm" android:exported="false">
             <intent-filter>
                 <action android:name="APP_SPECIFIC_BROADCAST" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".data.MonthlyAlarm" android:exported="false">
+        <receiver android:name=".utility.alarm.MonthlyAlarm" android:exported="false">
             <intent-filter>
                 <action android:name="APP_SPECIFIC_BROADCAST" />
             </intent-filter>
