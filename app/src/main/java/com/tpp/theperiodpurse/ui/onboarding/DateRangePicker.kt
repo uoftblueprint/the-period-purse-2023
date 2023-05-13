@@ -18,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.zIndex
 import com.tpp.theperiodpurse.data.OnboardUIState
+import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -30,7 +31,7 @@ import java.util.*
 fun DateRangePicker(onSendButtonClicked: () -> Unit, viewModel: OnboardViewModel, uiState: OnboardUIState) {
     val calendar = Calendar.getInstance()
     val snackState = remember { SnackbarHostState() }
-    val dayRange = uiState.days.toLong()
+    val dayRange = (uiState.days - 1).toLong()
     SnackbarHost(hostState = snackState, Modifier.zIndex(1f),)
     val state = rememberDateRangePickerState(
         yearRange = IntRange(calendar.get(Calendar.YEAR)-3, calendar.get(Calendar.YEAR)),
