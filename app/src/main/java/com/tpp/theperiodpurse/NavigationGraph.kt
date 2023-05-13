@@ -212,6 +212,8 @@ fun NavigationGraph(
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null,
                 viewModel = onboardViewModel,
+                appViewModel = appViewModel,
+                calendarViewModel = calendarViewModel,
                 context = context
 //                onCancelButtonClicked = {
 //                    cancelOrderAndNavigateToStart(onboardViewModel, navController)

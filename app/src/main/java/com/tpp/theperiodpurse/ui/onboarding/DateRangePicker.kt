@@ -43,7 +43,7 @@ fun DateRangePicker(onSendButtonClicked: () -> Unit, viewModel: OnboardViewModel
         }
     )
 
-    if (uiState.date != "" && uiState.date != "Choose Date" && state.selectedStartDateMillis == null){
+    if (uiState.date != "" && uiState.date != "Choose date" && state.selectedStartDateMillis == null){
         var dates= uiState.date.split(" to ")
         val date = convertDateToEpochMillis(dates[0])
         val endDate = convertDateToEpochMillis(dates[1])
@@ -130,7 +130,7 @@ fun convertDateToEpochMillis(dateString: String): Long {
     return instant.toEpochMilli()
 }
 
-fun getDatesBetween(startEpochMilliseconds: Long, endEpochMilliseconds: Long): List<Date> {
+fun getDatesBetween(startEpochMilliseconds: Long, endEpochMilliseconds: Long): List<LocalDate> {
     val startDate = Instant.ofEpochMilli(startEpochMilliseconds)
         .atZone(ZoneOffset.UTC)
         .toLocalDate()
@@ -138,14 +138,14 @@ fun getDatesBetween(startEpochMilliseconds: Long, endEpochMilliseconds: Long): L
         .atZone(ZoneOffset.UTC)
         .toLocalDate()
 
-    val dates = mutableListOf<Date>()
+    val dates = mutableListOf<LocalDate>()
     var currentDate = startDate
 
     while (!currentDate.isAfter(endDate)) {
-        val date = Date.from(currentDate.atStartOfDay(ZoneOffset.UTC).toInstant())
-        dates.add(date)
+        dates.add(currentDate)
         currentDate = currentDate.plusDays(1)
     }
+
 
     return dates
 }
