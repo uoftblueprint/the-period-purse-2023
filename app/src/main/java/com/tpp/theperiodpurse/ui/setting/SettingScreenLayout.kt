@@ -23,24 +23,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.data.Symptom
+import com.tpp.theperiodpurse.data.model.Symptom
 import com.tpp.theperiodpurse.ui.education.SocialMedia
 import com.tpp.theperiodpurse.ui.education.teal
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
-import com.tpp.theperiodpurse.AppViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 
 @Composable
@@ -222,7 +219,8 @@ fun TrackingPreferencesRow(symptoms: List<Symptom>, modifier: Modifier = Modifie
 @Composable
 fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter,
                          contentDescription: String, ischecked: Boolean,
-                         symptom: Symptom, appViewModel: AppViewModel) {
+                         symptom: Symptom, appViewModel: AppViewModel
+) {
 
     val color = if (appViewModel.isSymptomChecked(symptom)) Color(teal) else Color.White
     Column(

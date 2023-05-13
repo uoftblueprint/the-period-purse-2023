@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.tpp.theperiodpurse.data.Product
-import com.tpp.theperiodpurse.data.ProductsList
+import com.tpp.theperiodpurse.ui.datasource.Product
+import com.tpp.theperiodpurse.ui.datasource.ProductsList
 import com.tpp.theperiodpurse.R
 
 

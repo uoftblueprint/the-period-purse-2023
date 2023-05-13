@@ -14,13 +14,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.api.services.drive.Drive
 import com.tpp.theperiodpurse.ui.symptomlog.LogMultipleDatesScreen
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.ui.SummaryScreen
 import com.tpp.theperiodpurse.ui.calendar.CalendarScreen
-import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import com.tpp.theperiodpurse.ui.cycle.CycleScreenLayout
 import com.tpp.theperiodpurse.ui.cycle.PeriodHistoryLayout
 import com.tpp.theperiodpurse.ui.education.*
@@ -30,6 +28,8 @@ import com.tpp.theperiodpurse.ui.onboarding.*
 import com.tpp.theperiodpurse.ui.setting.LoadDatabase
 import com.tpp.theperiodpurse.ui.setting.SettingsScreen
 import com.tpp.theperiodpurse.ui.symptomlog.LogScreen
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 import java.time.LocalDate
 
 enum class Screen {

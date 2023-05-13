@@ -12,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -21,11 +20,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.common.api.Status
-import com.tpp.theperiodpurse.OnboardingScreen
-import com.tpp.theperiodpurse.Screen
-import com.tpp.theperiodpurse.data.OnboardUIState
+import com.tpp.theperiodpurse.ui.state.OnboardUIState
 import com.tpp.theperiodpurse.ui.onboarding.GoogleSignInButton
-import kotlin.math.sign
 
 @Composable
 fun BackUpAccountScreen(appbar: Unit,
