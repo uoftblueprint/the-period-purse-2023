@@ -15,9 +15,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.google.api.services.drive.Drive
 import com.tpp.theperiodpurse.OnboardingScreen
-import com.tpp.theperiodpurse.Screen
+import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

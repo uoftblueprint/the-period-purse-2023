@@ -29,11 +29,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.tpp.theperiodpurse.AppViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.Screen
 import com.tpp.theperiodpurse.data.*
-import com.tpp.theperiodpurse.data.Date
+import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.ui.education.teal
 import kotlin.collections.ArrayList
 

@@ -16,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tpp.theperiodpurse.AppViewModel
@@ -24,8 +23,12 @@ import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.ui.calendar.CalendarDayUIState
 import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
+import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.ui.onboarding.backbutton
 import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
+import com.tpp.theperiodpurse.ui.state.OnboardUIState
+import com.tpp.theperiodpurse.data.model.Symptom
+import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter

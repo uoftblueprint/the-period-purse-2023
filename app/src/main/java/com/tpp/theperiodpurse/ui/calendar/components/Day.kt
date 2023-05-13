@@ -20,9 +20,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.data.*
-import com.tpp.theperiodpurse.ui.calendar.CalendarDayUIState
-import com.kizitonwose.calendar.core.CalendarDay
+import com.tpp.theperiodpurse.data.model.*
+import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
 import java.time.LocalDate
 
 val greyedOutColor = Color(237, 237, 237)

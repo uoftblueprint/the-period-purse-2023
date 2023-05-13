@@ -1,7 +1,7 @@
 package com.tpp.theperiodpurse
 
-import com.tpp.theperiodpurse.data.DateRepository
-import com.tpp.theperiodpurse.data.UserRepository
+import com.tpp.theperiodpurse.data.repository.DateRepository
+import com.tpp.theperiodpurse.data.repository.UserRepository
 import dagger.hilt.android.testing.HiltAndroidTest
 
 @HiltAndroidTest

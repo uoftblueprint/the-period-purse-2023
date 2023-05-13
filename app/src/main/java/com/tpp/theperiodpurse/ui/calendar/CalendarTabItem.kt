@@ -4,8 +4,9 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import com.tpp.theperiodpurse.AppViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.cycle.CycleScreenLayout
+import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 
 typealias ComposableNavFun = @Composable (calendarViewModel: CalendarViewModel, navController: NavController, appViewModel: AppViewModel) -> Unit
 

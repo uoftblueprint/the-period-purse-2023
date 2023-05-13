@@ -9,8 +9,9 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
-import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
-import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before

@@ -26,10 +26,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -40,12 +38,14 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Task
 import com.google.api.services.drive.DriveScopes
-import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import com.tpp.theperiodpurse.ui.component.BottomNavigation
 import com.tpp.theperiodpurse.ui.component.FloatingActionButton
 import com.tpp.theperiodpurse.ui.onboarding.*
 import com.tpp.theperiodpurse.ui.symptomlog.LoggingOptionsPopup
 import com.tpp.theperiodpurse.ui.theme.ThePeriodPurseTheme
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
@@ -203,7 +203,7 @@ fun ScreenApp(
     signout: () -> Unit = {},
     hasNotificationsPermissions: Boolean = false,
 
-) {
+    ) {
     var loggingOptionsVisible by remember { mutableStateOf(false) }
     var skipOnboarding = skipOnboarding
     val isOnboarded by onboardViewModel.isOnboarded.observeAsState(initial = null)

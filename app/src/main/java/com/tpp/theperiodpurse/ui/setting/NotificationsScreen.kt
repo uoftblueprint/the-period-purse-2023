@@ -31,11 +31,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import com.tpp.theperiodpurse.AppViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.data.Alarm
-import com.tpp.theperiodpurse.data.MonthlyAlarm
-import com.tpp.theperiodpurse.data.WeeklyAlarm
+import com.tpp.theperiodpurse.utility.alarm.Alarm
+import com.tpp.theperiodpurse.utility.alarm.MonthlyAlarm
+import com.tpp.theperiodpurse.utility.alarm.WeeklyAlarm
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.MaterialDialogState
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
