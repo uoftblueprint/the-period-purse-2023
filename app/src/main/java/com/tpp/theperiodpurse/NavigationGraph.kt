@@ -14,8 +14,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.api.services.drive.Drive
 import com.tpp.theperiodpurse.ui.symptomlog.LogMultipleDatesScreen
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.ui.SummaryScreen
@@ -191,7 +189,7 @@ fun NavigationGraph(
                 navController = navController,
                 onboardUiState = onboardUIState,
                 onSelectionChanged = { onboardViewModel.setDate(it) },
-                navigateUp = { navController.navigateUp() },
+                navigateUp = { navController.navigate(OnboardingScreen.QuestionOne.name) },
                 canNavigateBack = navController.previousBackStackEntry != null
             )
         }
@@ -244,7 +242,10 @@ fun NavigationGraph(
         }
 
         composable(route = OnboardingScreen.DateRangePicker.name) {
-            DateRangePicker()
+            DateRangePicker(
+                { navController.navigate(OnboardingScreen.QuestionTwo.name) },
+                onboardViewModel,
+                onboardUIState)
         }
 
     }

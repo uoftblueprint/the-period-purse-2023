@@ -62,22 +62,9 @@ fun QuestionTwoScreen(
         mDateTo.value = onboardUiState.date.split(" to ")[1]
         entered = true
     }
-    val mCalendar = Calendar.getInstance()
-    mYear = mCalendar.get(Calendar.YEAR)
-    mMonth = mCalendar.get(Calendar.MONTH)
-    mDay = mCalendar.get(Calendar.DAY_OF_MONTH)
-    val mDatePickerDialog = DatePickerDialog(
-        mContext,
-        { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
-            mDate.value = setDateTo(mDayOfMonth, mMonth, mYear, 0)
-            mDateTo.value = setDateTo(mDayOfMonth, mMonth, mYear, onboardUiState.days)
-            onSelectionChanged(mDate.value + "|" + mDateTo.value)
-        }, mYear, mMonth, mDay
-    )
     val configuration = LocalConfiguration.current
     val screenwidth = configuration.screenWidthDp;
     val screenheight = configuration.screenHeightDp;
-    mDatePickerDialog.getDatePicker().setMaxDate(Date().getTime())
     backbutton(navigateUp, canNavigateBack)
     Box(modifier = Modifier
         .fillMaxHeight()
@@ -189,8 +176,9 @@ fun QuestionTwoScreen(
             TextButton(
                 onClick = {
                     onboardUiState.date = "Choose date"
+                    onboardUiState.dateOptions = listOf()
                     navController.navigate(OnboardingScreen.QuestionThree.name)
-                          },
+                },
                 modifier = modifier
                     .padding(start = (screenwidth * (0.1)).dp)
                     .weight(1f)
@@ -204,7 +192,7 @@ fun QuestionTwoScreen(
                 onClick = {
                     onSelectionChanged(mDate.value + "|" + mDateTo.value)
                     navController.navigate(OnboardingScreen.QuestionThree.name)
-                          },
+                },
                 enabled = entered,
                 modifier = modifier
                     .padding(end = (screenwidth * (0.1)).dp)
@@ -215,50 +203,5 @@ fun QuestionTwoScreen(
                 Text(stringResource(R.string.next), color = Color.White, fontSize = 20.sp)
             }
         }
-    }
-}
-fun setDateTo(day: Int, month: Int, year: Int, range: Int): String {
-    val date = Calendar.getInstance()
-    val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-    date.set(year, month, day);
-    date.add(Calendar.DATE, range)
-    return formatter.format(date.time)
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun dateRangePicker(){
-    val snackState = remember { SnackbarHostState() }
-    val snackScope = rememberCoroutineScope()
-    SnackbarHost(hostState = snackState, Modifier.zIndex(1f))
-    val state = rememberDateRangePickerState()
-    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top) {
-        // Add a row with "Save" and dismiss actions.
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 12.dp, end = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            IconButton(onClick = { /* dismiss the UI */ }) {
-                Icon(Icons.Filled.Close, contentDescription = "Localized description")
-            }
-            TextButton(
-                onClick = {
-                    snackScope.launch {
-                        snackState.showSnackbar(
-                            "Saved range (timestamps): " +
-                                    "${state.selectedStartDateMillis!!..state.selectedEndDateMillis!!}"
-                        )
-                    }
-                },
-                enabled = state.selectedEndDateMillis != null
-            ) {
-                Text(text = "Save")
-            }
-        }
-
-        DateRangePicker(state = state, modifier = Modifier.weight(1f))
     }
 }
