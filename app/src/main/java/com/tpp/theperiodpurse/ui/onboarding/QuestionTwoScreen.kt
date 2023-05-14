@@ -6,7 +6,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import android.app.DatePickerDialog
 import android.os.Build
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
@@ -32,7 +31,7 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.data.OnboardUIState
+import com.tpp.theperiodpurse.ui.state.OnboardUIState
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*

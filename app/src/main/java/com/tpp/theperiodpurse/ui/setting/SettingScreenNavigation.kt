@@ -29,7 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.ui.state.AppUiState
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.data.OnboardUIState
+import com.tpp.theperiodpurse.ui.state.OnboardUIState
 import com.tpp.theperiodpurse.ui.state.CalendarUIState
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 

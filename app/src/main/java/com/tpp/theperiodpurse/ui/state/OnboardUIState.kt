@@ -1,4 +1,4 @@
-package com.tpp.theperiodpurse.data
+package com.tpp.theperiodpurse.ui.state
 
 import android.accounts.Account
 import java.time.LocalDate
