@@ -161,7 +161,7 @@ fun setAlarm(context: Context, pickedTime: LocalTime, appViewModel: AppViewModel
     }
 
     intent.putExtra("hasRemindersPermissions", appViewModel.getAllowReminders())
-    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE)
+    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
     val hasAlarmPermission: Boolean = alarmManager.canScheduleExactAlarms()
 
