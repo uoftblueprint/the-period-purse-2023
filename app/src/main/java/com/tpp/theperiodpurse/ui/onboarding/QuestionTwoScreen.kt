@@ -7,38 +7,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import android.os.Build
-import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.DateRangePicker
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.state.OnboardUIState
-import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
 
-
-
-@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun QuestionTwoScreen(
@@ -49,10 +35,6 @@ fun QuestionTwoScreen(
     canNavigateBack: Boolean,
     navController: NavHostController
 ) {
-    val mYear: Int
-    val mMonth: Int
-    val mDay: Int
-    val mContext = LocalContext.current
     var entered by rememberSaveable { mutableStateOf(false) }
     val mDate = rememberSaveable { mutableStateOf("Choose date") }
     val mDateTo = rememberSaveable { mutableStateOf("") }
@@ -62,8 +44,8 @@ fun QuestionTwoScreen(
         entered = true
     }
     val configuration = LocalConfiguration.current
-    val screenwidth = configuration.screenWidthDp;
-    val screenheight = configuration.screenHeightDp;
+    val screenwidth = configuration.screenWidthDp
+    val screenheight = configuration.screenHeightDp
     backbutton(navigateUp, canNavigateBack)
     Box(modifier = Modifier
         .fillMaxHeight()
