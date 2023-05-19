@@ -18,12 +18,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -87,7 +89,7 @@ fun WelcomeScreen(
             Spacer(modifier = Modifier.height((screenheight*0.05).dp))
 
             // Welcome text
-            Text(text = stringResource(R.string.welcome), style = MaterialTheme.typography.h4, fontWeight = FontWeight.Bold)
+            Text(text = stringResource(R.string.welcome), style = MaterialTheme.typography.h4, fontWeight = FontWeight.Bold, fontSize = 35.scaledSp())
             Spacer(modifier = Modifier.height((screenheight*0.13).dp))
 
             // Quick Start button
@@ -147,7 +149,7 @@ fun GoogleSignInButton(
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = "Sign in with Google",
-            color = Color.Black, fontSize = 20.sp,
+            color = Color.Black, fontSize = 20.scaledSp(),
         )
     }
 }
@@ -167,7 +169,33 @@ fun QuickStartButton(
 //        color = Color(52, 235, 161)
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
     ) {
-        Text("Quick Start", color = Color.White, fontSize = 20.sp)
+        Text("Quick Start", color = Color.White, fontSize = 20.scaledSp())
     }
 }
 
+
+@Composable
+fun Double.scaledSp(): TextUnit {
+    val value: Double = this
+    return with(LocalDensity.current) {
+        val fontScale = this.fontScale
+        val textSize = value / fontScale
+        textSize.sp
+    }
+}
+
+val Double.scaledSp: TextUnit
+    @Composable get() =  scaledSp()
+
+@Composable
+fun Int.scaledSp(): TextUnit {
+    val value: Int = this
+    return with(LocalDensity.current) {
+        val fontScale = this.fontScale
+        val textSize = value / fontScale
+        textSize.sp
+    }
+}
+
+val Int.scaledSp: TextUnit
+    @Composable get() =  scaledSp()

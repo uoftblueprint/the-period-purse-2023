@@ -102,7 +102,7 @@ fun QuestionThreeScreen(
             }
             Text(
                 text = stringResource(R.string.question_three),
-                fontSize = (screenheight * (0.035)).sp,
+                fontSize = (screenheight * (0.035)).scaledSp(),
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .width(300.dp),
@@ -113,7 +113,7 @@ fun QuestionThreeScreen(
 
             Text(
                 text = stringResource(R.string.description_three),
-                fontSize = 16.sp,
+                fontSize = 16.scaledSp(),
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(),
@@ -160,7 +160,7 @@ fun QuestionThreeScreen(
 
                         Text(
                             text = stringResource(R.string.flow),
-                            fontSize = 15.sp,
+                            fontSize = 15.scaledSp(),
                             color = Color.Gray
 
                         )
@@ -169,7 +169,7 @@ fun QuestionThreeScreen(
 
                     Text(
                         text = stringResource(R.string.caption_three),
-                        fontSize = 15.sp,
+                        fontSize = 15.scaledSp(),
 
                         )
 
@@ -229,7 +229,7 @@ fun QuestionThreeScreen(
 
                     Text(
                         text = stringResource(R.string.mood),
-                        fontSize = 15.sp,
+                        fontSize = 15.scaledSp(),
 
                         )
                 }
@@ -282,7 +282,7 @@ fun QuestionThreeScreen(
 
                     Text(
                         text = stringResource(R.string.exercise),
-                        fontSize = 15.sp,
+                        fontSize = 15.scaledSp(),
 
                         )
 
@@ -336,7 +336,7 @@ fun QuestionThreeScreen(
                     }
                     Text(
                         text = stringResource(R.string.cramps),
-                        fontSize = 15.sp,
+                        fontSize = 15.scaledSp(),
 
                         )
 
@@ -393,7 +393,7 @@ fun QuestionThreeScreen(
                     }
                     Text(
                         text = stringResource(R.string.sleep),
-                        fontSize = 15.sp,
+                        fontSize = 15.scaledSp(),
 
                         )
                 }
@@ -421,7 +421,7 @@ fun QuestionThreeScreen(
                 Text(
                     stringResource(R.string.skip),
                     color = Color(97, 153, 154),
-                    fontSize = 20.sp
+                    fontSize = 20.scaledSp()
                 )
             }
             Button(
@@ -437,7 +437,7 @@ fun QuestionThreeScreen(
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
             ) {
-                Text(stringResource(R.string.next), color = Color.White, fontSize = 20.sp)
+                Text(stringResource(R.string.next), color = Color.White, fontSize = 20.scaledSp())
             }
         }
 

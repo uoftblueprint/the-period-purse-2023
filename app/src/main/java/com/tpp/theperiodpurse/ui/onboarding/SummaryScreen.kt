@@ -23,6 +23,7 @@ import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.ui.onboarding.backbutton
 import com.tpp.theperiodpurse.ui.state.OnboardUIState
 import com.tpp.theperiodpurse.data.model.Symptom
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -75,7 +76,8 @@ fun SummaryScreen(
         Text(
             text = "You're all set!",
             style = MaterialTheme.typography.h4,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            fontSize = 35.scaledSp()
         )
         Spacer(modifier = Modifier.height((screenheight * 0.08).dp))
 
@@ -88,13 +90,13 @@ fun SummaryScreen(
                     modifier = Modifier.fillMaxWidth(),
                     color = Color(97, 153, 154),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 15.sp
+                    fontSize = 15.scaledSp()
                 )
                 Text(
                     text = numberOfDays, modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 10.dp),
-                    fontSize = 17.sp,
+                    fontSize = 17.scaledSp(),
 
                 )
             }
@@ -113,7 +115,7 @@ fun SummaryScreen(
                     modifier = Modifier.fillMaxWidth(),
                     color = Color(97, 153, 154),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 15.sp
+                    fontSize = 15.scaledSp()
                 )
 
                 Text(
@@ -121,7 +123,7 @@ fun SummaryScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 10.dp),
-                    fontSize = 17.sp
+                    fontSize = 17.scaledSp()
                 )
             }
 
@@ -138,7 +140,7 @@ fun SummaryScreen(
                 modifier = Modifier.fillMaxWidth(),
                 color = Color(97, 153, 154),
                 fontWeight = FontWeight.Bold,
-                fontSize = 15.sp
+                fontSize = 15.scaledSp()
             )
 
             val symptoms = listOf(
@@ -222,7 +224,7 @@ fun SummaryScreen(
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
 
         ) {
-            Text(stringResource(R.string.lets_go), color = Color.White, fontSize = 25.sp)
+            Text(stringResource(R.string.lets_go), color = Color.White, fontSize = 25.scaledSp())
         }
 
     }

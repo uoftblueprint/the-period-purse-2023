@@ -18,11 +18,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.R
@@ -106,7 +108,7 @@ fun QuestionTwoScreen(
             }
             Text(
                 text = stringResource(R.string.question_two),
-                fontSize = (screenheight * (0.035)).sp,
+                fontSize = (screenheight * (0.035)).scaledSp(),
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .width(250.dp),
@@ -115,7 +117,7 @@ fun QuestionTwoScreen(
             )
             Text(
                 text = stringResource(R.string.description_two),
-                fontSize = 18.sp,
+                fontSize = 18.scaledSp(),
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .width((screenwidth * (0.6)).dp),
@@ -144,7 +146,7 @@ fun QuestionTwoScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        Text(text = mDate.value, color = Color.Gray, fontSize = 14.sp)
+                        Text(text = mDate.value, color = Color.Gray, fontSize = 14.scaledSp())
                         Image(
                             painter = painterResource(R.drawable.onboard_calendar),
                             contentDescription = null,
@@ -164,7 +166,7 @@ fun QuestionTwoScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        Text(text = mDate.value, color = Color.Black, fontSize = 18.sp)
+                        Text(text = mDate.value, color = Color.Black, fontSize = 18.scaledSp())
                     }
                 }
             }
@@ -189,7 +191,7 @@ fun QuestionTwoScreen(
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
 
             ) {
-                Text(stringResource(R.string.skip), color = Color(97, 153, 154), fontSize = 20.sp)
+                Text(stringResource(R.string.skip), color = Color(97, 153, 154), fontSize = 20.scaledSp())
             }
             Button(
                 onClick = {
@@ -203,7 +205,7 @@ fun QuestionTwoScreen(
                     .semantics { contentDescription = "Next" },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
             ) {
-                Text(stringResource(R.string.next), color = Color.White, fontSize = 20.sp)
+                Text(stringResource(R.string.next), color = Color.White, fontSize = 20.scaledSp())
             }
         }
     }
