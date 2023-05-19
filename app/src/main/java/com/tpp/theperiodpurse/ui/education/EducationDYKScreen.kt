@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 
 @Composable
 fun EducationDYKScreen(navController: NavHostController) {
@@ -59,7 +60,7 @@ fun EducationDYKScreen(navController: NavHostController) {
 
         Text(modifier = Modifier.padding(horizontal = 72.dp, vertical = 0.dp),
             textAlign = TextAlign.Center,
-            lineHeight = 20.sp,
+            lineHeight = 20.scaledSp(),
             text = "There is a board game that educates youth all about periods, " +
                 "called \"The Period Game\"")
 

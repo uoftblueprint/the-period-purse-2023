@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.LegalScreen
 import com.tpp.theperiodpurse.ui.education.teal
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 
 @Composable
 fun TermsAndPrivacyFooter(navController: NavHostController) {
@@ -35,14 +36,14 @@ fun TermsAndPrivacyFooter(navController: NavHostController) {
                 textDecoration = TextDecoration.Underline,
                 color = Color(teal),
                 textAlign = TextAlign.Center,
-                fontSize = 14.sp
+                fontSize = 14.scaledSp()
             ),
             text = AnnotatedString("Terms and Conditions")
         )
 
         Text(
             textAlign = TextAlign.Center,
-            fontSize = 14.sp,
+            fontSize = 14.scaledSp(),
             text = " and "
         )
 
@@ -52,7 +53,7 @@ fun TermsAndPrivacyFooter(navController: NavHostController) {
                 textDecoration = TextDecoration.Underline,
                 color = Color(teal),
                 textAlign = TextAlign.Center,
-                fontSize = 14.sp
+                fontSize = 14.scaledSp()
             ),
             text = AnnotatedString("Privacy Policy"),
         )

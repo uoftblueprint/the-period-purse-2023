@@ -25,6 +25,7 @@ import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.datasource.Product
 import com.tpp.theperiodpurse.ui.datasource.ProductsList
 import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 
 const val gray = 0xFF6D6E71
 const val teal = 0xFF72C6B7
@@ -144,7 +145,7 @@ fun DYKCard(navController: NavHostController) {
                     .width(200.dp)
                     .padding(horizontal = 24.dp),
                     textAlign = TextAlign.Left,
-                    fontSize = 13.sp,
+                    fontSize = 13.scaledSp(),
                     maxLines = 2,
                     text = "There is a board game that educates youth ...")
             }

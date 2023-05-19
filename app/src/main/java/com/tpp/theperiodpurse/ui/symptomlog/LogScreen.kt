@@ -52,6 +52,7 @@ import java.time.*
 import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
 import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import com.tpp.theperiodpurse.ui.component.PopupTopBar
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
 import java.time.LocalDate
 import java.time.YearMonth
@@ -266,7 +267,7 @@ private fun LogScreenTopBarContent(navController: NavController, date: LocalDate
             Text(
                 text = "Log your symptoms for:",
                 color = Color(50, 50, 50),
-                fontSize = 12.sp
+                fontSize = 12.scaledSp()
             )
             Text(
                 text = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)),
@@ -370,7 +371,7 @@ fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
                     text = stringResource(logPrompt.title),
                     fontWeight = FontWeight.Bold,
                     color = tabColor.value,
-                    fontSize = 16.sp
+                    fontSize = 16.scaledSp()
                 )
                 Spacer(Modifier.weight(1f))
                 ChangeableExpandButton(expanded = expanded) {

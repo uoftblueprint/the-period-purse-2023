@@ -22,6 +22,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.common.api.Status
 import com.tpp.theperiodpurse.ui.state.OnboardUIState
 import com.tpp.theperiodpurse.ui.onboarding.GoogleSignInButton
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 
 @Composable
 fun BackUpAccountScreen(appbar: Unit,
@@ -63,11 +64,11 @@ fun BackUpAccountScreen(appbar: Unit,
         ) {Column() {
             Text(text= "Back Up Account",
                 color = Color.DarkGray,
-                fontSize = 18.sp)
+                fontSize = 18.scaledSp())
 
             Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))
             Text(text= "Backing up to Google Drive will upload your data to Google Drive and ensure you can access it on other devices.",
-                fontSize = 13.sp)
+                fontSize = 13.scaledSp())
             Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))
             Button(modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp),
@@ -80,7 +81,7 @@ fun BackUpAccountScreen(appbar: Unit,
             Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))
             Text(text= "Last backup: Not available",
                 color = Color.Gray,
-                fontSize = 13.sp)
+                fontSize = 13.scaledSp())
             }
         }
     }
@@ -109,12 +110,12 @@ fun BackUpAccountScreen(appbar: Unit,
                 Column() {
                     Text(text= "Back Up Account",
                         color = Color.Gray,
-                        fontSize = 18.sp)
+                        fontSize = 18.scaledSp())
 
                     Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))
 
                     Text(text= "Sign in to backup your data",
-                        fontSize = 15.sp)
+                        fontSize = 15.scaledSp())
 
                     Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))
 

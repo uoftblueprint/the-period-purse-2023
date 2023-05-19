@@ -37,6 +37,7 @@ import com.tpp.theperiodpurse.ui.education.teal
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 
@@ -89,7 +90,8 @@ fun SettingScreenLayout(
            text = stringResource(R.string.tracking_preferences),
            modifier = modifier.padding(top = 30.dp, start = 10.dp),
            color = Color.DarkGray,
-           fontWeight = FontWeight.Bold
+           fontWeight = FontWeight.Bold,
+           fontSize = 20.scaledSp()
        )
 
        TrackingPreferencesRow(symptoms, appViewModel = appViewModel)
@@ -97,18 +99,20 @@ fun SettingScreenLayout(
            text = stringResource(R.string.notifications_heading),
            modifier = modifier.padding(top = 5.dp, start = 10.dp),
            color = Color.DarkGray,
-           fontWeight = FontWeight.Bold
+           fontWeight = FontWeight.Bold,
+           fontSize = 20.scaledSp()
        )
        Row(modifier = modifier.padding(20.dp)) {
            Column (modifier = Modifier) {
                Text(text = stringResource(
                    R.string.remind_me_to_log_symptoms),
-                   fontWeight = FontWeight.Bold)
+                   fontWeight = FontWeight.Bold,
+                   fontSize = 20.scaledSp(),)
                Spacer(modifier = modifier.padding(3.dp))
                Text(text = time,
                    modifier = Modifier.padding(start = 5.dp),
                    color = Color.Gray,
-                   fontSize = 15.sp,
+                   fontSize = 15.scaledSp(),
                )
            }
            Switch(
@@ -135,7 +139,8 @@ fun SettingScreenLayout(
            text = stringResource(R.string.account_settings_heading),
            modifier = Modifier.padding(start= 10.dp, top = 30.dp),
            color = Color.DarkGray,
-           fontWeight = FontWeight.Bold
+           fontWeight = FontWeight.Bold,
+           fontSize = 20.scaledSp()
        )
        NavigateButton( text = stringResource(R.string.back_up_account),
            onClicked = onBackUpClicked
@@ -156,7 +161,8 @@ fun SettingScreenLayout(
            .align(Alignment.CenterHorizontally),
            text = "© 2023 The Period Purse. All rights reserved.",
            textAlign = TextAlign.Center,
-           color = Color.DarkGray
+           color = Color.DarkGray,
+           fontSize = 15.scaledSp()
        )
 
        /*
@@ -245,7 +251,8 @@ fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter,
 
         }
         Text(modifier = Modifier.padding(5.dp),
-            text = label)
+            text = label,
+            fontSize = 14.scaledSp())
     }
 }
 
@@ -256,7 +263,8 @@ fun NavigateButton(text: String, onClicked: () -> Unit ){
         Text(
             modifier = Modifier.weight(1f),
             text = text,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.scaledSp()
         )
         Icon(
             imageVector = Icons.Filled.KeyboardArrowRight,
