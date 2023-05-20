@@ -16,7 +16,6 @@ import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.data.entity.User
 import com.tpp.theperiodpurse.data.model.Symptom
-import com.tpp.theperiodpurse.data.repository.DateRepository
 import com.tpp.theperiodpurse.data.repository.UserRepository
 import com.tpp.theperiodpurse.ui.state.OnboardUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,7 +30,6 @@ import javax.inject.Inject
 @HiltViewModel
 class OnboardViewModel @Inject constructor (
     private val userRepository: UserRepository,
-    private val dateRepository: DateRepository,
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(OnboardUIState())

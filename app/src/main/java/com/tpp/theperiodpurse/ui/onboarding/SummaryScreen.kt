@@ -1,4 +1,5 @@
 package com.tpp.theperiodpurse.ui
+
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -19,13 +20,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.data.entity.Date
-import com.tpp.theperiodpurse.ui.onboarding.backbutton
-import com.tpp.theperiodpurse.ui.state.OnboardUIState
+import com.tpp.theperiodpurse.data.model.FlowSeverity
 import com.tpp.theperiodpurse.data.model.Symptom
-import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.onboarding.backbutton
+import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
+import com.tpp.theperiodpurse.ui.state.OnboardUIState
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
@@ -41,6 +47,8 @@ fun SummaryScreen(
     navigateUp: () -> Unit,
     canNavigateBack: Boolean,
     viewModel: OnboardViewModel,
+    appViewModel: AppViewModel,
+    calendarViewModel: CalendarViewModel,
     context: Context
 ) {
     val resources = LocalContext.current.resources
@@ -76,8 +84,7 @@ fun SummaryScreen(
         Text(
             text = "You're all set!",
             style = MaterialTheme.typography.h4,
-            fontWeight = FontWeight.Bold,
-            fontSize = 35.scaledSp()
+            fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height((screenheight * 0.08).dp))
 
@@ -90,13 +97,13 @@ fun SummaryScreen(
                     modifier = Modifier.fillMaxWidth(),
                     color = Color(97, 153, 154),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 15.scaledSp()
+                    fontSize = 15.sp
                 )
                 Text(
                     text = numberOfDays, modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 10.dp),
-                    fontSize = 17.scaledSp(),
+                    fontSize = 17.sp,
 
                 )
             }
@@ -115,7 +122,7 @@ fun SummaryScreen(
                     modifier = Modifier.fillMaxWidth(),
                     color = Color(97, 153, 154),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 15.scaledSp()
+                    fontSize = 15.sp
                 )
 
                 Text(
@@ -123,7 +130,7 @@ fun SummaryScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 10.dp),
-                    fontSize = 17.scaledSp()
+                    fontSize = 17.sp
                 )
             }
 
@@ -140,7 +147,7 @@ fun SummaryScreen(
                 modifier = Modifier.fillMaxWidth(),
                 color = Color(97, 153, 154),
                 fontWeight = FontWeight.Bold,
-                fontSize = 15.scaledSp()
+                fontSize = 15.sp
             )
 
             val symptoms = listOf(
@@ -219,12 +226,29 @@ fun SummaryScreen(
                     getDaysSince(onboardUiState.date),
                     context = context
                 )
+                onboardUiState.dateOptions.forEach {
+                    appViewModel.saveDate(
+                        Date(
+                            date = java.util.Date.from(
+                                it.atStartOfDay(ZoneId.systemDefault()).toInstant()
+                            ),
+                            flow = FlowSeverity.Medium,
+                            exerciseType = null,
+                            exerciseLength = null,
+                            crampSeverity = null,
+                            sleep = null,
+                            mood = null,
+                            notes = ""
+                        )
+                    )
+                    calendarViewModel.updateDayInfo(it, CalendarDayUIState(flow = FlowSeverity.Medium))
+                }
 
                 onSendButtonClicked() },
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
 
         ) {
-            Text(stringResource(R.string.lets_go), color = Color.White, fontSize = 25.scaledSp())
+            Text(stringResource(R.string.lets_go), color = Color.White, fontSize = 25.sp)
         }
 
     }

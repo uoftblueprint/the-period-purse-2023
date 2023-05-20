@@ -60,7 +60,8 @@ enum class OnboardingScreen {
     Summary,
     LoadGoogleDrive,
     LoadDatabase,
-    DownloadBackup
+    DownloadBackup,
+    DateRangePicker
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -190,7 +191,7 @@ fun NavigationGraph(
                 navController = navController,
                 onboardUiState = onboardUIState,
                 onSelectionChanged = { onboardViewModel.setDate(it) },
-                navigateUp = { navController.navigateUp() },
+                navigateUp = { navController.navigate(OnboardingScreen.QuestionOne.name) },
                 canNavigateBack = navController.previousBackStackEntry != null
             )
         }
@@ -213,6 +214,8 @@ fun NavigationGraph(
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null,
                 viewModel = onboardViewModel,
+                appViewModel = appViewModel,
+                calendarViewModel = calendarViewModel,
                 context = context
 //                onCancelButtonClicked = {
 //                    cancelOrderAndNavigateToStart(onboardViewModel, navController)
@@ -240,6 +243,13 @@ fun NavigationGraph(
                 viewModel = onboardViewModel,
                 navHostController = navController,
                 context = context)
+        }
+
+        composable(route = OnboardingScreen.DateRangePicker.name) {
+            DateRangePicker(
+                { navController.navigate(OnboardingScreen.QuestionTwo.name) },
+                onboardViewModel,
+                onboardUIState)
         }
 
     }
