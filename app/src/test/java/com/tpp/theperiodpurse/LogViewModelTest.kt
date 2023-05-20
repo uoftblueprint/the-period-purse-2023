@@ -1,8 +1,8 @@
 package com.tpp.theperiodpurse
 
-import com.tpp.theperiodpurse.data.*
-import com.tpp.theperiodpurse.ui.calendar.CalendarDayUIState
-import com.tpp.theperiodpurse.ui.symptomlog.LogViewModel
+import com.tpp.theperiodpurse.data.model.*
+import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
+import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
 import org.junit.Test
 
 class LogViewModelTest {

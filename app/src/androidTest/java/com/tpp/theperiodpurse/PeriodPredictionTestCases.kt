@@ -1,8 +1,11 @@
 package com.tpp.theperiodpurse
 
-import com.tpp.theperiodpurse.data.*
+import com.tpp.theperiodpurse.data.entity.Date
+import com.tpp.theperiodpurse.data.model.CrampSeverity
+import com.tpp.theperiodpurse.data.model.Exercise
+import com.tpp.theperiodpurse.data.model.FlowSeverity
+import com.tpp.theperiodpurse.data.model.Mood
 import java.text.SimpleDateFormat
-import java.time.Duration
 
 val periodHistoryEmpty = arrayListOf<Date>()
 

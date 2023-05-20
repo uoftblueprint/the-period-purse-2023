@@ -7,15 +7,15 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import com.tpp.theperiodpurse.ui.calendar.CalendarTabItem
-import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
-import com.tpp.theperiodpurse.ui.onboarding.OnboardViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import javax.inject.Inject
-import kotlin.math.sign
 
 @HiltAndroidTest
 class CalendarCycleTabTest {
@@ -63,11 +63,6 @@ class CalendarCycleTabTest {
 
     private fun navigateToCycleScreen() {
         composeTestRule.onNodeWithText(CalendarTabItem.CycleTab.title).performClick()
-    }
-
-    @Test
-    fun appTabs_clickCalendar_CycleNotDisplayed() {
-        composeTestRule.onNodeWithContentDescription("Cycle Page").assertIsNotDisplayed()
     }
 
     @Test

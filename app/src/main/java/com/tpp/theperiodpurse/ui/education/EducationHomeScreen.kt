@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.data.Product
-import com.tpp.theperiodpurse.data.ProductsList
+import com.tpp.theperiodpurse.ui.datasource.Product
+import com.tpp.theperiodpurse.ui.datasource.ProductsList
 import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
 
 const val gray = 0xFF6D6E71

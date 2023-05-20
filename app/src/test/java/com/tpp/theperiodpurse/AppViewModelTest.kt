@@ -1,8 +1,7 @@
 package com.tpp.theperiodpurse
 
-import com.tpp.theperiodpurse.data.DateRepository
-import com.tpp.theperiodpurse.data.UserRepository
-import org.junit.Test
+import com.tpp.theperiodpurse.data.repository.DateRepository
+import com.tpp.theperiodpurse.data.repository.UserRepository
 
 class AppViewModelTest {
     private lateinit var dateRepository: DateRepository

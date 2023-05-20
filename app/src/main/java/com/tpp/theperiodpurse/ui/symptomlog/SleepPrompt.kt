@@ -19,8 +19,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.data.LogPrompt
+import com.tpp.theperiodpurse.data.model.LogPrompt
 import com.tpp.theperiodpurse.ui.onboarding.EditNumberField
+import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
 import java.sql.Time
 
 @OptIn(ExperimentalComposeUiApi::class)
