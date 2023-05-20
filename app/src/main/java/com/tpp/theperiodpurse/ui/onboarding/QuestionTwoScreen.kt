@@ -1,8 +1,6 @@
 package com.tpp.theperiodpurse.ui.onboarding
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -11,19 +9,31 @@ import android.os.Build
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.TextUnit
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.OnboardingScreen
@@ -68,9 +78,8 @@ fun QuestionTwoScreen(
         }, mYear, mMonth, mDay
     )
     val configuration = LocalConfiguration.current
-    val screenwidth = configuration.screenWidthDp;
-    val screenheight = configuration.screenHeightDp;
-    mDatePickerDialog.getDatePicker().setMaxDate(Date().getTime())
+    val screenwidth = configuration.screenWidthDp
+    val screenheight = configuration.screenHeightDp
     backbutton(navigateUp, canNavigateBack)
     Box(modifier = Modifier
         .fillMaxHeight()
@@ -126,7 +135,7 @@ fun QuestionTwoScreen(
             Spacer(Modifier.height((screenheight * (0.02)).dp))
             Button(
                 onClick = {
-                    mDatePickerDialog.show()
+                    navController.navigate(OnboardingScreen.DateRangePicker.name)
                     entered = true
                 }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
                 modifier = modifier
@@ -182,8 +191,9 @@ fun QuestionTwoScreen(
             TextButton(
                 onClick = {
                     onboardUiState.date = "Choose date"
+                    onboardUiState.dateOptions = listOf()
                     navController.navigate(OnboardingScreen.QuestionThree.name)
-                          },
+                },
                 modifier = modifier
                     .padding(start = (screenwidth * (0.1)).dp)
                     .weight(1f)
@@ -197,7 +207,7 @@ fun QuestionTwoScreen(
                 onClick = {
                     onSelectionChanged(mDate.value + "|" + mDateTo.value)
                     navController.navigate(OnboardingScreen.QuestionThree.name)
-                          },
+                },
                 enabled = entered,
                 modifier = modifier
                     .padding(end = (screenwidth * (0.1)).dp)

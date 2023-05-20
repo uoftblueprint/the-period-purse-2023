@@ -37,9 +37,9 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideOnboardViewModel(userRepository: UserRepository, dateRepository: DateRepository):
+    fun provideOnboardViewModel(userRepository: UserRepository):
             OnboardViewModel {
-        return OnboardViewModel(userRepository, dateRepository)
+        return OnboardViewModel(userRepository)
     }
 
     @Singleton

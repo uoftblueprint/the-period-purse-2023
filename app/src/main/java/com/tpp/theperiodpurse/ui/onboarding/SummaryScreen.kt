@@ -1,4 +1,5 @@
 package com.tpp.theperiodpurse.ui
+
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -19,13 +20,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.data.entity.Date
-import com.tpp.theperiodpurse.ui.onboarding.backbutton
-import com.tpp.theperiodpurse.ui.state.OnboardUIState
+import com.tpp.theperiodpurse.data.model.FlowSeverity
 import com.tpp.theperiodpurse.data.model.Symptom
+import com.tpp.theperiodpurse.ui.onboarding.backbutton
+import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
+import com.tpp.theperiodpurse.ui.state.OnboardUIState
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
@@ -41,6 +48,8 @@ fun SummaryScreen(
     navigateUp: () -> Unit,
     canNavigateBack: Boolean,
     viewModel: OnboardViewModel,
+    appViewModel: AppViewModel,
+    calendarViewModel: CalendarViewModel,
     context: Context
 ) {
     val resources = LocalContext.current.resources
@@ -219,6 +228,23 @@ fun SummaryScreen(
                     getDaysSince(onboardUiState.date),
                     context = context
                 )
+                onboardUiState.dateOptions.forEach {
+                    appViewModel.saveDate(
+                        Date(
+                            date = java.util.Date.from(
+                                it.atStartOfDay(ZoneId.systemDefault()).toInstant()
+                            ),
+                            flow = FlowSeverity.Medium,
+                            exerciseType = null,
+                            exerciseLength = null,
+                            crampSeverity = null,
+                            sleep = null,
+                            mood = null,
+                            notes = ""
+                        )
+                    )
+                    calendarViewModel.updateDayInfo(it, CalendarDayUIState(flow = FlowSeverity.Medium))
+                }
 
                 onSendButtonClicked() },
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))

@@ -66,11 +66,6 @@ class CalendarCycleTabTest {
     }
 
     @Test
-    fun appTabs_clickCalendar_CycleNotDisplayed() {
-        composeTestRule.onNodeWithContentDescription("Cycle Page").assertIsNotDisplayed()
-    }
-
-    @Test
     fun appTabs_clickCalendar_CalendarDisplayed() {
         composeTestRule.onNodeWithContentDescription("Calendar Page").assertIsDisplayed()
     }

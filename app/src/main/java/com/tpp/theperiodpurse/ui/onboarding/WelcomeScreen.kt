@@ -35,8 +35,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.common.api.Status
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
 import com.tpp.theperiodpurse.ui.state.OnboardUIState
+import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
