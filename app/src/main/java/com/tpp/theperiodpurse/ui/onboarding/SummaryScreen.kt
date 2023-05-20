@@ -1,4 +1,4 @@
-package com.tpp.theperiodpurse.ui
+package com.tpp.theperiodpurse.ui.onboarding
 
 import android.content.Context
 import android.os.Build
