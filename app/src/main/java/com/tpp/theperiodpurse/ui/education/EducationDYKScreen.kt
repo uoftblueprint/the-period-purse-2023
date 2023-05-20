@@ -56,11 +56,14 @@ fun EducationDYKScreen(navController: NavHostController) {
 
         Text(modifier = Modifier.padding(24.dp),
             fontWeight = FontWeight.Bold,
-            text = "Did you know?")
+            text = "Did you know?",
+            fontSize = 25.scaledSp(),)
+
 
         Text(modifier = Modifier.padding(horizontal = 72.dp, vertical = 0.dp),
             textAlign = TextAlign.Center,
             lineHeight = 20.scaledSp(),
+            fontSize = 20.scaledSp(),
             text = "There is a board game that educates youth all about periods, " +
                 "called \"The Period Game\"")
 

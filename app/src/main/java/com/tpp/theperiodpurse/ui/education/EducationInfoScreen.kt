@@ -92,7 +92,9 @@ fun EducationInfoScreen(
         Text(modifier = Modifier
             .padding(12.dp),
             textAlign = TextAlign.Center,
-            text = product.description
+            text = product.description,
+            fontSize = 18.scaledSp()
+
         )
 
         Spacer(modifier = Modifier.weight(3f))

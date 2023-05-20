@@ -89,7 +89,7 @@ fun QuestionTwoScreen(
             }
             Text(
                 text = stringResource(R.string.question_two),
-                fontSize = (screenheight * (0.035)).sp,
+                fontSize = (screenheight * (0.035)).scaledSp(),
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .width(250.dp),
@@ -98,7 +98,7 @@ fun QuestionTwoScreen(
             )
             Text(
                 text = stringResource(R.string.description_two),
-                fontSize = 18.sp,
+                fontSize = 18.scaledSp(),
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .width((screenwidth * (0.6)).dp),
@@ -127,7 +127,7 @@ fun QuestionTwoScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        Text(text = mDate.value, color = Color.Gray, fontSize = 14.sp)
+                        Text(text = mDate.value, color = Color.Gray, fontSize = 14.scaledSp())
                         Image(
                             painter = painterResource(R.drawable.onboard_calendar),
                             contentDescription = null,
@@ -173,7 +173,7 @@ fun QuestionTwoScreen(
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
 
             ) {
-                Text(stringResource(R.string.skip), color = Color(97, 153, 154), fontSize = 20.sp)
+                Text(stringResource(R.string.skip), color = Color(97, 153, 154), fontSize = 20.scaledSp())
             }
             Button(
                 onClick = {
@@ -187,7 +187,7 @@ fun QuestionTwoScreen(
                     .semantics { contentDescription = "Next" },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
             ) {
-                Text(stringResource(R.string.next), color = Color.White, fontSize = 20.sp)
+                Text(stringResource(R.string.next), color = Color.White, fontSize = 20.scaledSp())
             }
         }
     }

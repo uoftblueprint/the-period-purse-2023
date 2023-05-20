@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.utility.alarm.Alarm
 import com.tpp.theperiodpurse.utility.alarm.MonthlyAlarm
 import com.tpp.theperiodpurse.utility.alarm.WeeklyAlarm
@@ -95,10 +96,12 @@ fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, a
 
         Text(text = stringResource(id = R.string.remind_me_to_log_symptoms),
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(15.dp, top = 60.dp))
+            modifier = Modifier.padding(15.dp, top = 60.dp),
+            fontSize = 20.scaledSp())
         Text(text = stringResource(id = R.string.reminder_description),
             modifier = Modifier.padding(start = 15.dp),
-            fontWeight = FontWeight.Light)
+            fontWeight = FontWeight.Light,
+            fontSize = 20.scaledSp())
         Divider(color = Color.Gray, thickness = 0.7.dp)
         Expandable(appViewModel)
         Divider(color = Color.Gray, thickness = 0.7.dp)
@@ -195,22 +198,26 @@ private fun TimePicker(
                     .padding(bottom = extraPadding.coerceAtLeast(0.dp))
                     .align(Alignment.CenterVertically)
             ) {
-                Text(text = stringResource(id = R.string.reminder_time), modifier = Modifier.padding(start = 5.dp))
-                Button(colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                    elevation = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.End)
-                        .background(Color.Transparent),
-                    onClick = {
-                        timeDialogState.show()
-                    }) {
-                    Text(
-                        text = formattedTime,
-                        style = TextStyle(color = Color(0xFF74C5B7)),
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                Text(text = stringResource(id = R.string.reminder_time),
+                    modifier = Modifier.padding(start = 5.dp),
+                    fontSize = 18.scaledSp())
+
+            }
+            Button(colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                elevation = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth(Alignment.End)
+                    .background(Color.Transparent),
+                onClick = {
+                    timeDialogState.show()
+                }) {
+                Text(
+                    text = formattedTime,
+                    style = TextStyle(color = Color(0xFF74C5B7)),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.scaledSp()
+                )
             }
         }
     }
@@ -242,13 +249,14 @@ fun Expandable(appViewModel: AppViewModel){
                     .padding(bottom = extraPadding.coerceAtLeast(0.dp))
                     .align(Alignment.CenterVertically)
             ) {
-                Text(text = stringResource(id = R.string.repeat), modifier = Modifier.padding(start = 5.dp))
+                Text(text = stringResource(id = R.string.repeat), fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 5.dp),
+                    fontSize = 18.scaledSp())
                 if (repeatExpanded) {
                     RadioButtons(radioOptions, selectedOption, appViewModel)
                 }
 
             }
-            Text(text = selectedOption, modifier =
+            Text(text = selectedOption, style = TextStyle(color = Color(0xFF74C5B7)), fontSize = 18.scaledSp(), modifier =
             if(!repeatExpanded) Modifier.align(Alignment.CenterVertically) else Modifier.align(
                 Alignment.Top
             ))
@@ -296,7 +304,8 @@ fun RadioButtons(radioOptions: List<String>, selectedOption: String, appViewMode
                         text = text,
                         modifier = Modifier
                             .padding(start = 16.dp)
-                            .align(Alignment.CenterVertically)
+                            .align(Alignment.CenterVertically),
+                        fontSize = 18.scaledSp()
                     )
                 }
             }

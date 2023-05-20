@@ -71,6 +71,7 @@ fun EducationScreenLayout(
                         textAlign = TextAlign.Left,
                         color = Color(gray),
                         fontWeight = FontWeight.W800,
+                        fontSize = 15.scaledSp(),
                         text = "Tap to learn more about period products."
                     )
                 }
@@ -99,6 +100,7 @@ fun EducationScreenLayout(
                         .align(Alignment.CenterHorizontally),
                         text = "© 2023 The Period Purse. All rights reserved.",
                         textAlign = TextAlign.Center,
+                        fontSize = 15.scaledSp(),
                         color = Color.DarkGray
                     )
 
@@ -203,6 +205,7 @@ fun PeriodProducts (navController: NavHostController, it: Product) {
                     .align(Alignment.CenterHorizontally),
                 textAlign = TextAlign.Center,
                 fontWeight = Bold,
+                fontSize = 18.scaledSp(),
                 text = it.ProductName
             )
         }
@@ -231,14 +234,16 @@ fun TPPCard(uriHandler: UriHandler) {
                 .fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 fontWeight = Bold,
-                text = "Learn more about The Period Purse")
+                text = "Learn more about The Period Purse",
+                fontSize = 15.scaledSp())
 
             Text(modifier = Modifier.padding(horizontal = 16.dp, vertical = 0.dp),
                 textAlign = TextAlign.Center,
                 text = "The Period Purse strives to achieve menstrual equity by providing " +
                         "people who menstruate with access to free menstrual products, and to " +
                         "reduce the stigma surrounding period through public education and " +
-                        "advocacy.")
+                        "advocacy.",
+                fontSize = 13.scaledSp(),)
 
             Button(modifier = Modifier
                 .padding(16.dp)
@@ -249,7 +254,7 @@ fun TPPCard(uriHandler: UriHandler) {
                     contentColor = Color.Black
                 ),
                 onClick = { uriHandler.openUri("https://www.theperiodpurse.com/") }) {
-                Text(text = "Visit the website")
+                Text(text = "Visit the website", fontSize = 15.scaledSp())
             }
         }
     }
