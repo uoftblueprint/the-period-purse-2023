@@ -3,13 +3,9 @@ package com.tpp.theperiodpurse.ui.onboarding
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import android.app.DatePickerDialog
 import android.os.Build
-import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -24,23 +20,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.TextUnit
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.state.OnboardUIState
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -53,10 +41,6 @@ fun QuestionTwoScreen(
     canNavigateBack: Boolean,
     navController: NavHostController
 ) {
-    val mYear: Int
-    val mMonth: Int
-    val mDay: Int
-    val mContext = LocalContext.current
     var entered by rememberSaveable { mutableStateOf(false) }
     val mDate = rememberSaveable { mutableStateOf("Choose date") }
     val mDateTo = rememberSaveable { mutableStateOf("") }
@@ -65,18 +49,6 @@ fun QuestionTwoScreen(
         mDateTo.value = onboardUiState.date.split(" to ")[1]
         entered = true
     }
-    val mCalendar = Calendar.getInstance()
-    mYear = mCalendar.get(Calendar.YEAR)
-    mMonth = mCalendar.get(Calendar.MONTH)
-    mDay = mCalendar.get(Calendar.DAY_OF_MONTH)
-    val mDatePickerDialog = DatePickerDialog(
-        mContext,
-        { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
-            mDate.value = setDateTo(mDayOfMonth, mMonth, mYear, 0)
-            mDateTo.value = setDateTo(mDayOfMonth, mMonth, mYear, onboardUiState.days)
-            onSelectionChanged(mDate.value + "|" + mDateTo.value)
-        }, mYear, mMonth, mDay
-    )
     val configuration = LocalConfiguration.current
     val screenwidth = configuration.screenWidthDp
     val screenheight = configuration.screenHeightDp
@@ -219,11 +191,4 @@ fun QuestionTwoScreen(
             }
         }
     }
-}
-fun setDateTo(day: Int, month: Int, year: Int, range: Int): String {
-    val date = Calendar.getInstance()
-    val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-    date.set(year, month, day);
-    date.add(Calendar.DATE, range)
-    return formatter.format(date.time)
 }
