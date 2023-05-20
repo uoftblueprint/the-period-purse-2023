@@ -16,7 +16,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.tpp.theperiodpurse.ui.symptomlog.LogMultipleDatesScreen
 import com.tpp.theperiodpurse.data.*
-import com.tpp.theperiodpurse.ui.SummaryScreen
+import com.tpp.theperiodpurse.ui.onboarding.SummaryScreen
 import com.tpp.theperiodpurse.ui.calendar.CalendarScreen
 import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import com.tpp.theperiodpurse.ui.cycle.CycleScreenLayout
