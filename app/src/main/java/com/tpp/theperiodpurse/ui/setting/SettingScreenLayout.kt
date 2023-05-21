@@ -173,6 +173,7 @@ fun SettingScreenLayout(
            TermsAndPrivacyFooter(outController)
            Spacer(modifier = Modifier.size(80.dp))
        }
+       Spacer(modifier = Modifier.size(80.dp).padding(bottom = 5.dp))
    }
 }
 
