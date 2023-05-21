@@ -1,4 +1,4 @@
-package com.tpp.theperiodpurse.ui
+package com.tpp.theperiodpurse.ui.onboarding
 
 import android.content.Context
 import android.os.Build
@@ -85,7 +85,8 @@ fun SummaryScreen(
         Text(
             text = "You're all set!",
             style = MaterialTheme.typography.h4,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            fontSize = 33.scaledSp()
         )
         Spacer(modifier = Modifier.height((screenheight * 0.08).dp))
 

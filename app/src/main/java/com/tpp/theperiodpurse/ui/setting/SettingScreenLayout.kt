@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -231,7 +232,7 @@ fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter,
     val color = if (appViewModel.isSymptomChecked(symptom)) Color(teal) else Color.White
     Column(
         modifier = modifier
-            .padding(10.dp),
+            .padding(8.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,) {
         IconToggleButton(
@@ -239,20 +240,25 @@ fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter,
             onCheckedChange = {appViewModel.updateSymptoms(symptom)},
             modifier = Modifier.clip(RoundedCornerShape(20.dp))
         ) {
+
+            val configuration = LocalConfiguration.current
+            val screenheight = configuration.screenHeightDp;
+
             Icon(
                 painter = icon,
                 contentDescription = contentDescription,
                 modifier = Modifier
+                    .clip(RoundedCornerShape(20.dp))
                     .background(color)
-                    .height(50.dp)
-                    .width(50.dp)
-                    .padding(10.dp)
+                    .height((screenheight*0.10).dp)
+                    .width((screenheight*0.10).dp)
+                    .padding((screenheight*0.02).dp)
             )
 
         }
         Text(modifier = Modifier.padding(5.dp),
             text = label,
-            fontSize = 14.scaledSp())
+            fontSize = 12.scaledSp())
     }
 }
 

@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.zIndex
 import com.tpp.theperiodpurse.ui.state.OnboardUIState
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
+import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -90,7 +91,7 @@ fun DateRangePicker(onSendButtonClicked: () -> Unit, viewModel: OnboardViewModel
             DateRangePicker(
                 state = state,
                 modifier = Modifier.weight(1f),
-                colors = DatePickerDefaults.colors(
+                colors = androidx.compose.material3.DatePickerDefaults.colors(
                     dayInSelectionRangeContainerColor = Color(97, 153, 154).copy(alpha = 0.3f),
                     selectedDayContainerColor = Color(97, 153, 154),
                     todayContentColor = Color.Black,

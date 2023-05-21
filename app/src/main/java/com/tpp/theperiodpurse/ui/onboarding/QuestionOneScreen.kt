@@ -126,14 +126,14 @@ fun QuestionOneScreen(
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
-            Spacer(Modifier.height((screenheight * (0.02)).dp))
+            Spacer(Modifier.height((screenheight * (0.01)).dp))
 
             Text(
                 text = stringResource(R.string.description_one),
-                fontSize = 18.scaledSp(),
+                fontSize = (screenheight * (0.03)).scaledSp(),
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .width((screenwidth * (0.6)).dp),
+                    .width((screenwidth * (0.7)).dp),
                 textAlign = TextAlign.Center
             )
             Spacer(Modifier.height((screenheight * (0.02)).dp))
@@ -157,14 +157,14 @@ fun QuestionOneScreen(
                 onboardUiState = onboardUiState
             )
 
-            Spacer(Modifier.height((screenheight * (0.03)).dp))
+            Spacer(Modifier.height((screenheight * (0.01)).dp))
 
         }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .padding(bottom = (screenheight * (0.03)).dp),
+                .padding(bottom = (screenheight * (0.02)).dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             TextButton(

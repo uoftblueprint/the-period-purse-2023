@@ -7,7 +7,9 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -71,7 +73,7 @@ fun WelcomeScreen(
 
         Column(
             modifier = Modifier
-                .padding((screenheight * 0.02).dp)
+                .padding((screenheight * 0.03).dp)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -86,11 +88,11 @@ fun WelcomeScreen(
                 contentDescription = null,
                 modifier = Modifier.size((screenheight*0.25).dp)
             )
-            Spacer(modifier = Modifier.height((screenheight*0.05).dp))
+            Spacer(modifier = Modifier.height((screenheight*0.02).dp))
 
             // Welcome text
             Text(text = stringResource(R.string.welcome), style = MaterialTheme.typography.h4, fontWeight = FontWeight.Bold, fontSize = 35.scaledSp())
-            Spacer(modifier = Modifier.height((screenheight*0.13).dp))
+            Spacer(modifier = Modifier.height((screenheight*0.05).dp))
 
             // Quick Start button
             QuickStartButton(
@@ -116,7 +118,7 @@ fun WelcomeScreen(
             Spacer(modifier = Modifier.height((screenheight*0.006).dp))
 
 
-            Text("By continuing, you accept the", textAlign = TextAlign.Center )
+            Text("By continuing, you accept the", textAlign = TextAlign.Center, fontSize = 14.scaledSp())
             TermsAndPrivacyFooter(navController)
         }
 

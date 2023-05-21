@@ -35,7 +35,7 @@ fun DeleteAccountScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(
-                top = (screenheight * 0.09).dp,
+                top = (screenheight * 0.10).dp,
                 start = (screenheight * 0.03).dp,
                 end = (screenheight * 0.03).dp
             ),

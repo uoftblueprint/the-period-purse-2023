@@ -78,7 +78,7 @@ fun QuestionTwoScreen(
                         .size(imageheight.dp)
                         .align(Alignment.Center),
                 )
-                val barheight1 = (screenheight * (0.09))
+                val barheight1 = (screenheight * (0.08))
                 Image(
                     painter = painterResource(R.drawable.onboard_bar2),
                     contentDescription = null,
@@ -98,13 +98,13 @@ fun QuestionTwoScreen(
             )
             Text(
                 text = stringResource(R.string.description_two),
-                fontSize = 18.scaledSp(),
+                fontSize = (screenheight * (0.03)).scaledSp(),
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .width((screenwidth * (0.6)).dp),
+                    .width((screenwidth * (0.7)).dp),
                 textAlign = TextAlign.Center
             )
-            Spacer(Modifier.height((screenheight * (0.02)).dp))
+            Spacer(Modifier.height((screenheight * (0.005)).dp))
             Button(
                 onClick = {
                     navController.navigate(OnboardingScreen.DateRangePicker.name)
@@ -147,17 +147,17 @@ fun QuestionTwoScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        Text(text = mDate.value, color = Color.Black, fontSize = 18.sp)
+                        Text(text = mDate.value, color = Color.Black, fontSize = 17.scaledSp())
                     }
                 }
             }
-            Spacer(Modifier.height((screenwidth * (0.02)).dp))
+            Spacer(Modifier.height((screenwidth * (0.01)).dp))
         }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .padding(bottom = (screenheight * (0.03)).dp),
+                .padding(bottom = (screenheight * (0.02)).dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             TextButton(
