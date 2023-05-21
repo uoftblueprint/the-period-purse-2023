@@ -144,7 +144,6 @@ fun setAlarm(context: Context, pickedTime: LocalTime, appViewModel: AppViewModel
     }
 
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//    val intent = Intent(context, Alarm::class.java)
 
     val freq = appViewModel.getReminderFreq()
     lateinit var intent: Intent

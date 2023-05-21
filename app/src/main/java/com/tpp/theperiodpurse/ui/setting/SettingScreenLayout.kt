@@ -2,6 +2,7 @@ package com.tpp.theperiodpurse.ui.setting
 
 
 import android.Manifest
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.Manifest.permission.SCHEDULE_EXACT_ALARM
 import android.content.Context
 import android.content.pm.PackageManager
@@ -139,8 +140,15 @@ fun SettingScreenLayout(
                enabled = true,
                checked = appViewModel.getAllowReminders(),
                onCheckedChange = {
-                   appViewModel.toggleAllowReminders()
-                   processAlarm(hasNotificationPermission, context, pickedTime, appViewModel, false)
+                   // ask for notifications permissions again here, if it's currently off in settings
+                   if(!hasNotificationPermission){
+                       launcher.launch(POST_NOTIFICATIONS)
+                   }
+                   println(hasNotificationPermission)
+                   if(hasNotificationPermission){
+                       appViewModel.toggleAllowReminders()
+                       processAlarm(hasNotificationPermission, context, pickedTime, appViewModel, false)
+                   }
                },
                modifier = modifier
                    .fillMaxWidth()
