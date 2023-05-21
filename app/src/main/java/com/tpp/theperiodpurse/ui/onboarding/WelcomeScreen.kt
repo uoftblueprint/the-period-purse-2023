@@ -53,6 +53,7 @@ fun WelcomeScreen(
     val configuration = LocalConfiguration.current
 
     val screenheight = configuration.screenHeightDp
+    val screenwidth = configuration.screenWidthDp
 
     val account = GoogleSignIn.getLastSignedInAccount(context)
 
@@ -118,7 +119,7 @@ fun WelcomeScreen(
             Spacer(modifier = Modifier.height((screenheight*0.006).dp))
 
 
-            Text("By continuing, you accept the", textAlign = TextAlign.Center, fontSize = 14.scaledSp())
+            Text("By continuing, you accept the", textAlign = TextAlign.Center, fontSize = (screenwidth*0.04).scaledSp())
             TermsAndPrivacyFooter(navController)
         }
 
