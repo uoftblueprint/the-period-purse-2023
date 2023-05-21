@@ -80,7 +80,6 @@ fun SettingScreenLayout(
             launcher.launch(SCHEDULE_EXACT_ALARM)
         }
     }
-
     val time = appViewModel.getReminderFreq() + " at " + appViewModel.getReminderTime()
 
    Column(modifier = modifier
@@ -108,7 +107,7 @@ fun SettingScreenLayout(
                Text(text = stringResource(
                    R.string.remind_me_to_log_symptoms),
                    fontWeight = FontWeight.Bold,
-                   fontSize = 20.scaledSp(),)
+                   fontSize = 15.scaledSp(),)
                Spacer(modifier = modifier.padding(3.dp))
                Text(text = time,
                    modifier = Modifier.padding(start = 5.dp),
@@ -230,30 +229,28 @@ fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter,
                          symptom: Symptom, appViewModel: AppViewModel
 ) {
 
+    val configuration = LocalConfiguration.current
+    val screenwidth = configuration.screenWidthDp;
     val color = if (appViewModel.isSymptomChecked(symptom)) Color(teal) else Color.White
     Column(
         modifier = modifier
-            .padding(8.dp),
+            .padding((screenwidth *0.02).dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,) {
         IconToggleButton(
             checked = ischecked,
             onCheckedChange = {appViewModel.updateSymptoms(symptom)},
-            modifier = Modifier.clip(RoundedCornerShape(20.dp))
+            modifier = Modifier.clip(RoundedCornerShape(10.dp))
         ) {
-
-            val configuration = LocalConfiguration.current
-            val screenheight = configuration.screenHeightDp;
-
             Icon(
                 painter = icon,
                 contentDescription = contentDescription,
                 modifier = Modifier
-                    .clip(RoundedCornerShape(20.dp))
+                    .clip(RoundedCornerShape(10.dp))
                     .background(color)
-                    .height((screenheight*0.10).dp)
-                    .width((screenheight*0.10).dp)
-                    .padding((screenheight*0.02).dp)
+                    .height((screenwidth *0.12).dp)
+                    .width((screenwidth *0.12).dp)
+                    .padding((screenwidth *0.02).dp)
             )
 
         }
@@ -271,7 +268,7 @@ fun NavigateButton(text: String, onClicked: () -> Unit ){
             modifier = Modifier.weight(1f),
             text = text,
             fontWeight = FontWeight.Bold,
-            fontSize = 16.scaledSp()
+            fontSize = 15.scaledSp()
         )
         Icon(
             imageVector = Icons.Filled.KeyboardArrowRight,
