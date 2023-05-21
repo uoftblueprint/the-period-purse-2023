@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -264,16 +265,19 @@ private fun LogScreenTopBarContent(navController: NavController, date: LocalDate
             modifier = Modifier
                 .weight(.8f)
         ) {
+            val configuration = LocalConfiguration.current
+            val screenwidth = configuration.screenWidthDp;
+
             Text(
                 text = "Log your symptoms for:",
                 color = Color(50, 50, 50),
-                fontSize = 17.scaledSp()
+                fontSize = (screenwidth*0.05).scaledSp()
             )
             Text(
                 text = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)),
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                fontSize = 18.scaledSp(),
+                fontSize = 14.scaledSp(),
                 modifier = Modifier
                     .testTag("DateLabel")
                     .semantics { contentDescription = "DateLabel" }
