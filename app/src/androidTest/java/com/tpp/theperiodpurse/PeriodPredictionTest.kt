@@ -1,10 +1,10 @@
 package com.tpp.theperiodpurse
 
-import com.tpp.theperiodpurse.data.calculateAverageCycleLength
-import com.tpp.theperiodpurse.data.calculateAveragePeriodLength
+import com.tpp.theperiodpurse.data.*
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Assert.*
 import org.junit.Test
+import java.text.SimpleDateFormat
 
 @HiltAndroidTest
 class PeriodPredictionTest {
@@ -12,7 +12,7 @@ class PeriodPredictionTest {
     @Test
     fun sortPeriodHistory() {
         val testedList = periodHistoryUnsorted
-        com.tpp.theperiodpurse.data.sortPeriodHistory(testedList)
+        sortPeriodHistory(testedList)
 
         assertEquals(
             testedList, periodHistoryOneCycle
@@ -22,64 +22,210 @@ class PeriodPredictionTest {
     @Test
     fun calculatePeriodLength_EmptyList() {
         assertEquals(
-            (-1).toFloat(), calculateAveragePeriodLength(periodHistoryEmpty)
+            -1f, calculateAveragePeriodLength(periodHistoryEmpty)
         )
     }
 
     @Test
     fun calculatePeriodLength_Unsorted() {
         assertEquals(
-            3.toFloat(), calculateAveragePeriodLength(periodHistoryUnsorted)
+            3f, calculateAveragePeriodLength(periodHistoryUnsorted)
         )
     }
 
     @Test
     fun calculatePeriodLength_OneCycle() {
         assertEquals(
-            3.0.toFloat(), calculateAveragePeriodLength(periodHistoryOneCycle)
+            3f, calculateAveragePeriodLength(periodHistoryOneCycle)
         )
     }
 
     @Test
     fun calculatePeriodLength_TwoCycles() {
         assertEquals(
-            1.5.toFloat(), calculateAveragePeriodLength(periodHistoryTwoCycles)
+            1.5f, calculateAveragePeriodLength(periodHistoryTwoCycles)
         )
     }
 
     @Test
     fun calculatePeriodLength_ThreeCycles() {
         assertEquals(
-            2.toFloat(), calculateAveragePeriodLength(periodHistoryThreeCycles)
+            2f, calculateAveragePeriodLength(periodHistoryThreeCycles)
         )
     }
 
     @Test
     fun calculateCycleLength_EmptyList() {
         assertEquals(
-            (-1).toFloat(), calculateAverageCycleLength(periodHistoryEmpty)
+            -1f, calculateAverageCycleLength(periodHistoryEmpty)
         )
     }
 
     @Test
     fun calculateCycleLength_OneCycle() {
         assertEquals(
-            (-2).toFloat(), calculateAverageCycleLength(periodHistoryOneCycle)
+            -2f, calculateAverageCycleLength(periodHistoryOneCycle)
         )
     }
 
     @Test
     fun calculateCycleLength_TwoCycles() {
         assertEquals(
-            31.toFloat(), calculateAverageCycleLength(periodHistoryTwoCycles)
+            31f, calculateAverageCycleLength(periodHistoryTwoCycles)
         )
     }
 
     @Test
     fun calculateCycleLength_ThreeCycles() {
         assertEquals(
-            6.toFloat(), calculateAverageCycleLength(periodHistoryThreeCycles)
+            6f, calculateAverageCycleLength(periodHistoryThreeCycles)
         )
     }
 
+    @Test
+    fun parseDatesIntoPeriods_NoCycles() {
+        assertEquals(
+            ArrayList<ArrayList<Date>>(), parseDatesIntoPeriods(periodHistoryEmpty)
+        )
+    }
+
+    @Test
+    fun parseDatesIntoPeriods_OneCycle() {
+        assertEquals(
+            arrayListOf(periodHistoryOneCycle), parseDatesIntoPeriods(periodHistoryOneCycle)
+        )
+    }
+
+    @Test
+    fun parseDatesIntoPeriods_MultipleCycles() {
+        val expected = arrayListOf(
+            arrayListOf(
+                Date(
+                date = SimpleDateFormat("dd/MM/yyyy").parse("04/01/2023")!!,
+                flow = FlowSeverity.Light,
+                mood = Mood.HAPPY,
+                exerciseLength = null,
+                exerciseType = Exercise.CARDIO,
+                crampSeverity = CrampSeverity.None,
+                sleep = null,
+                notes = ""
+                )
+            ),
+            arrayListOf(
+                Date(
+                    date = halfMonthDate,
+                    flow = FlowSeverity.Light,
+                    mood = Mood.HAPPY,
+                    exerciseLength = null,
+                    exerciseType = Exercise.CARDIO,
+                    crampSeverity = CrampSeverity.None,
+                    sleep = null,
+                    notes = ""
+                )
+            )
+        )
+        assertEquals(
+            expected, parseDatesIntoPeriods(periodHistoryHalfMonthMultiple)
+        )
+    }
+
+    @Test
+    fun calculateDaysSinceLastPeriod_EmptyList() {
+        assertEquals(
+            0, calculateDaysSinceLastPeriod(periodHistoryEmpty)
+        )
+    }
+
+    @Test
+    fun calculateDaysSinceLastPeriod_CurrDate() {
+        assertEquals(
+            0, calculateDaysSinceLastPeriod(periodHistoryCurrentDate)
+        )
+    }
+
+    @Test
+    fun calculateDaysSinceLastPeriod_OneCycle() {
+        assertEquals(
+            14, calculateDaysSinceLastPeriod(periodHistoryHalfMonth)
+        )
+    }
+
+    @Test
+    fun calculateDaysSinceLastPeriod_MultipleCycles() {
+        assertEquals(
+            14, calculateDaysSinceLastPeriod(periodHistoryHalfMonthMultiple)
+        )
+    }
+
+    @Test
+    fun arcAngleCalculation_ZeroDays() {
+        assertEquals(
+            0f, calculateArcAngle(periodHistoryCurrentDate)
+        )
+    }
+
+    @Test
+    fun arcAngleCalculation() {
+        assertEquals(
+            360f * 14 / 31, calculateArcAngle(periodHistoryHalfMonth)
+        )
+    }
+
+    @Test
+    fun arcAngleCalculation_MaxDays() {
+        assertEquals(
+            360f, calculateArcAngle(periodHistoryOneCycle)
+        )
+    }
+
+    @Test
+    fun findYears_EmptyList() {
+        val lst = parseDatesIntoPeriods(periodHistoryEmpty)
+        assertEquals(
+            null, findYears(lst)
+        )
+    }
+
+    @Test
+    fun findYears_OneCycle() {
+        val map = findYears(parseDatesIntoPeriods(periodHistoryOneCycle))
+
+        assertEquals(
+            "[2023]", map?.keys.toString()
+        )
+
+        assertEquals(
+            1, map?.values?.toList()?.get(0)?.size
+        )
+    }
+
+    @Test
+    fun findYears_MultipleCycles() {
+        val map = findYears(parseDatesIntoPeriods(periodHistoryThreeCycles))
+
+        assertEquals(
+            "[2023]", map?.keys.toString()
+        )
+
+        assertEquals(
+            3, map?.values?.toList()?.get(0)?.size
+        )
+    }
+
+    @Test
+    fun findYears_MultipleYears() {
+        val map = findYears(parseDatesIntoPeriods(periodHistoryMultipleYears))
+
+        assertEquals(
+            "[2022, 2023]", map?.keys.toString()
+        )
+
+        assertEquals(
+            2, map?.values?.toList()?.size
+        )
+
+        assertEquals(
+            1, map?.values?.toList()?.get(0)?.size
+        )
+    }
 }
