@@ -22,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.education.EducationBackground
 import com.tpp.theperiodpurse.ui.education.teal
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -58,7 +59,7 @@ fun TermsScreen(navController: NavHostController) {
                     Spacer(modifier = Modifier.weight(1f))
 
                     Text(
-                        fontSize = 20.sp,
+                        fontSize = 20.scaledSp(),
                         fontWeight = FontWeight.Bold,
                         color = Color.Black,
                         text = "Terms and Conditions"
@@ -77,7 +78,7 @@ fun TermsScreen(navController: NavHostController) {
                     .verticalScroll(rememberScrollState())
             ) {
                 Text(
-                    fontSize = 32.sp,
+                    fontSize = 32.scaledSp(),
                     fontWeight = FontWeight.Bold,
                     text = "Terms and Conditions"
                 )

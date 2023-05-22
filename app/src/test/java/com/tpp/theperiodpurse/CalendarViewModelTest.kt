@@ -1,17 +1,18 @@
 package com.tpp.theperiodpurse
 
-import com.tpp.theperiodpurse.data.CrampSeverity
-import com.tpp.theperiodpurse.data.Exercise
-import com.tpp.theperiodpurse.data.FlowSeverity
-import com.tpp.theperiodpurse.data.Mood
-import com.tpp.theperiodpurse.ui.calendar.CalendarDayUIState
-import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
+import com.tpp.theperiodpurse.data.model.CrampSeverity
+import com.tpp.theperiodpurse.data.model.Exercise
+import com.tpp.theperiodpurse.data.model.FlowSeverity
+import com.tpp.theperiodpurse.data.model.Mood
+import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
+import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import org.junit.Test
 import java.time.LocalDate
 
 class CalendarViewModelTest {
     private val viewModel = CalendarViewModel()
-    private val originalDayUIState = CalendarDayUIState(FlowSeverity.Heavy, Mood.ANGRY,
+    private val originalDayUIState = CalendarDayUIState(
+        FlowSeverity.Heavy, Mood.ANGRY,
         "11:00:00", Exercise.CARDIO, CrampSeverity.Bad, "08:00:00")
     private val date = LocalDate.of(2020, 1, 1)
 

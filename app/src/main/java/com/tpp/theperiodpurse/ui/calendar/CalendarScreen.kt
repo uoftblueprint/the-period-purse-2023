@@ -31,16 +31,19 @@ import com.google.accompanist.pager.*
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.*
-import com.tpp.theperiodpurse.AppViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.data.Symptom
+import com.tpp.theperiodpurse.data.model.Symptom
 import com.tpp.theperiodpurse.navigateToLogScreenWithDate
 import com.tpp.theperiodpurse.ui.calendar.components.Day
 import com.tpp.theperiodpurse.ui.calendar.components.SymptomTab
 import com.tpp.theperiodpurse.ui.calendar.components.getDayColorAndIcon
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
 import com.tpp.theperiodpurse.ui.theme.HeaderColor1
 import com.tpp.theperiodpurse.ui.theme.SelectedColor1
 import com.tpp.theperiodpurse.ui.theme.ThePeriodPurseTheme
+import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import kotlinx.coroutines.launch
 import java.time.Month
 import java.time.YearMonth
@@ -264,7 +267,7 @@ fun MonthHeader(calendarMonth: CalendarMonth) {
         Text(
             modifier = Modifier.padding(12.dp),
             textAlign = TextAlign.Center,
-            fontSize = 18.sp,
+            fontSize = 18.scaledSp(),
             fontWeight = FontWeight.W500,
             text = calendarMonth.yearMonth.displayText()
         )
@@ -277,7 +280,7 @@ fun MonthHeader(calendarMonth: CalendarMonth) {
                         .weight(1f)
                         .offset(y = 10.dp),
                     textAlign = TextAlign.Center,
-                    fontSize = 10.sp,
+                    fontSize = 10.scaledSp(),
                     fontWeight = FontWeight.ExtraBold,
                     text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
                 )

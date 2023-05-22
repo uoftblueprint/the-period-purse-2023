@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -42,14 +43,18 @@ import com.tpp.theperiodpurse.ui.theme.HeaderColor1
 import com.tpp.theperiodpurse.ui.theme.SecondaryFontColor
 import com.tpp.theperiodpurse.ui.theme.SelectedColor1
 import com.kizitonwose.calendar.core.atStartOfMonth
-import com.tpp.theperiodpurse.AppViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.*
+import com.tpp.theperiodpurse.data.entity.Date
+import com.tpp.theperiodpurse.data.model.*
 import java.sql.Time
 import java.time.*
-import com.tpp.theperiodpurse.ui.calendar.CalendarDayUIState
-import com.tpp.theperiodpurse.ui.calendar.CalendarViewModel
+import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
+import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import com.tpp.theperiodpurse.ui.component.PopupTopBar
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -260,15 +265,19 @@ private fun LogScreenTopBarContent(navController: NavController, date: LocalDate
             modifier = Modifier
                 .weight(.8f)
         ) {
+            val configuration = LocalConfiguration.current
+            val screenwidth = configuration.screenWidthDp;
+
             Text(
                 text = "Log your symptoms for:",
                 color = Color(50, 50, 50),
-                fontSize = 12.sp
+                fontSize = (screenwidth*0.05).scaledSp()
             )
             Text(
                 text = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)),
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
+                fontSize = 14.scaledSp(),
                 modifier = Modifier
                     .testTag("DateLabel")
                     .semantics { contentDescription = "DateLabel" }
@@ -367,7 +376,7 @@ fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
                     text = stringResource(logPrompt.title),
                     fontWeight = FontWeight.Bold,
                     color = tabColor.value,
-                    fontSize = 16.sp
+                    fontSize = 16.scaledSp()
                 )
                 Spacer(Modifier.weight(1f))
                 ChangeableExpandButton(expanded = expanded) {

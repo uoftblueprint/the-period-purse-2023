@@ -20,9 +20,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.data.*
-import com.tpp.theperiodpurse.ui.calendar.CalendarDayUIState
-import com.kizitonwose.calendar.core.CalendarDay
+import com.tpp.theperiodpurse.data.model.*
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
 import java.time.LocalDate
 
 val greyedOutColor = Color(237, 237, 237)
@@ -64,7 +64,7 @@ fun Day(
         ) {
             Text(
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
-                fontSize = 12.sp,
+                fontSize = 12.scaledSp(),
                 fontWeight = FontWeight.Bold,
                 text = date.dayOfMonth.toString(),
                 color = if (dayDisabled(date)) Color(190, 190, 190) else Color.Black

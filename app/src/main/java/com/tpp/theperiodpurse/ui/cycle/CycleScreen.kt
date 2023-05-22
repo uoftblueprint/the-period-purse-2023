@@ -29,12 +29,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.tpp.theperiodpurse.AppViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.Screen
 import com.tpp.theperiodpurse.data.*
-import com.tpp.theperiodpurse.data.Date
+import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.ui.education.teal
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import kotlin.collections.ArrayList
 
 private var periodLength = (-1).toFloat()
@@ -50,7 +51,7 @@ fun CurrentCycleBox(modifier: Modifier = Modifier, dates: ArrayList<Date>) {
     ) {
         Text(
             text = stringResource(R.string.current_cycle),
-            fontSize = 20.sp,
+            fontSize = 20.scaledSp(),
             fontWeight = FontWeight(700),
             color = Color(0xFFB12126),
             modifier = modifier.padding(start = 20.dp, top = 20.dp)
@@ -98,19 +99,19 @@ fun CurrentCycleBox(modifier: Modifier = Modifier, dates: ArrayList<Date>) {
                 ) {
                     Text(
                         text = calculateDaysSinceLastPeriod(dates).toString(),
-                        fontSize = 50.sp,
+                        fontSize = 50.scaledSp(),
                         fontWeight = FontWeight(900),
                         color = Color(0xFFB12126)
                     )
                     Text(
                         text = "Days since",
-                        fontSize = 16.sp,
+                        fontSize = 16.scaledSp(),
                         fontWeight = FontWeight(500),
                         color = Color(0xFF868083),
                     )
                     Text(
                         text = "last period",
-                        fontSize = 16.sp,
+                        fontSize = 16.scaledSp(),
                         fontWeight = FontWeight(500),
                         color = Color(0xFF868083),
                     )
@@ -137,7 +138,7 @@ fun AverageLengthBox(
         Column(modifier.padding(18.dp)) {
             Text(
                 text = title,
-                fontSize = 12.sp,
+                fontSize = 12.scaledSp(),
                 fontWeight = FontWeight(700),
                 color = Color(0xFF868083),
             )
@@ -150,9 +151,9 @@ fun AverageLengthBox(
                         else -> "%.2f Days".format(length)
                     },
                     fontSize = when (length) {
-                        (-1).toFloat() -> 10.sp
-                        (-2).toFloat() -> 10.sp
-                        else -> 20.sp
+                        (-1).toFloat() -> 10.scaledSp()
+                        (-2).toFloat() -> 10.scaledSp()
+                        else -> 20.scaledSp()
                     },
                     fontWeight = FontWeight(500),
                     modifier = modifier.width(55.dp)
@@ -195,7 +196,7 @@ fun CycleHistoryBox(modifier: Modifier = Modifier, dates: ArrayList<Date>?, onCl
             ){
                 Text(
                     text = stringResource(R.string.period_history),
-                    fontSize = 15.sp,
+                    fontSize = 15.scaledSp(),
                     fontWeight = FontWeight(700),
                     color = Color(0xFF868083),
                 )
@@ -204,7 +205,7 @@ fun CycleHistoryBox(modifier: Modifier = Modifier, dates: ArrayList<Date>?, onCl
                     style = TextStyle(
                         color = Color(teal),
                         fontWeight = FontWeight(700),
-                        fontSize = 15.sp
+                        fontSize = 15.scaledSp()
                     ),
                     text = AnnotatedString(stringResource(id = R.string.show_more))
                 )

@@ -20,11 +20,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.tpp.theperiodpurse.AppViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.addOneDay
+import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.data.findYears
 import com.tpp.theperiodpurse.data.parseDatesIntoPeriods
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
@@ -57,7 +59,7 @@ fun PeriodHistoryLayout(
                         .wrapContentHeight(),
                     text = "Period History",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
+                    fontSize = 20.scaledSp()
                 )},
                 backgroundColor = Color.White,
                 elevation = 0.dp,
@@ -114,7 +116,7 @@ fun PeriodHistoryLayout(
                             Text(
                                 // replace with year
                                 text = yearSelected.toString(),
-                                fontSize = 15.sp,
+                                fontSize = 15.scaledSp(),
                                 fontWeight = FontWeight(700),
                                 color = Color(0xFF868083),
                             )
@@ -135,7 +137,7 @@ fun PeriodHistoryLayout(
 }
 
 @Composable
-fun PeriodEntries(periods: ArrayList<ArrayList<com.tpp.theperiodpurse.data.Date>>, upperbound: Int?) {
+fun PeriodEntries(periods: ArrayList<ArrayList<Date>>, upperbound: Int?) {
     if (periods.size == 0 || periods[0].size == 0) {
         Text(text = stringResource(R.string.please_start_logging_to_learn_more))
     } else {
@@ -165,7 +167,7 @@ fun PeriodEntries(periods: ArrayList<ArrayList<com.tpp.theperiodpurse.data.Date>
                         Text(text = "$startString - $endString")
                         Text(
                             text = "$periodLength-day period",
-                            fontSize = 13.sp
+                            fontSize = 13.scaledSp()
                         )
                     }
                 }

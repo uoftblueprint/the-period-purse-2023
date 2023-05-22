@@ -6,6 +6,12 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.tpp.theperiodpurse.data.entity.Date
+import com.tpp.theperiodpurse.data.entity.User
+import com.tpp.theperiodpurse.data.helper.DateConverter
+import com.tpp.theperiodpurse.data.helper.DaysConverter
+import com.tpp.theperiodpurse.data.helper.DurationConverter
+import com.tpp.theperiodpurse.data.helper.SymptomConverter
 import java.io.File
 
 @Database(entities=[User::class, Date::class], version = 7, exportSchema = true)
