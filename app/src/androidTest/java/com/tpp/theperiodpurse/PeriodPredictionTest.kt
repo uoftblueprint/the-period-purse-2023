@@ -1,6 +1,11 @@
 package com.tpp.theperiodpurse
 
 import com.tpp.theperiodpurse.data.*
+import com.tpp.theperiodpurse.data.entity.*
+import com.tpp.theperiodpurse.data.model.CrampSeverity
+import com.tpp.theperiodpurse.data.model.Exercise
+import com.tpp.theperiodpurse.data.model.FlowSeverity
+import com.tpp.theperiodpurse.data.model.Mood
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Assert.*
 import org.junit.Test
