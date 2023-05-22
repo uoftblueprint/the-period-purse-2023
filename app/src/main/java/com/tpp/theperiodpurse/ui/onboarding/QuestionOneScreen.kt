@@ -119,21 +119,21 @@ fun QuestionOneScreen(
 
             Text(
                 text = stringResource(R.string.question_one),
-                fontSize = (screenheight * (0.035)).sp,
+                fontSize = (screenheight * (0.035)).scaledSp(),
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .width(300.dp),
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
-            Spacer(Modifier.height((screenheight * (0.02)).dp))
+            Spacer(Modifier.height((screenheight * (0.01)).dp))
 
             Text(
                 text = stringResource(R.string.description_one),
-                fontSize = 18.sp,
+                fontSize = (screenheight * (0.03)).scaledSp(),
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .width((screenwidth * (0.6)).dp),
+                    .width((screenwidth * (0.7)).dp),
                 textAlign = TextAlign.Center
             )
             Spacer(Modifier.height((screenheight * (0.02)).dp))
@@ -157,14 +157,14 @@ fun QuestionOneScreen(
                 onboardUiState = onboardUiState
             )
 
-            Spacer(Modifier.height((screenheight * (0.03)).dp))
+            Spacer(Modifier.height((screenheight * (0.01)).dp))
 
         }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .padding(bottom = (screenheight * (0.03)).dp),
+                .padding(bottom = (screenheight * (0.02)).dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             TextButton(
@@ -185,7 +185,7 @@ fun QuestionOneScreen(
                 Text(
                     stringResource(R.string.skip),
                     color = Color(97, 153, 150),
-                    fontSize = 20.sp
+                    fontSize = 20.scaledSp()
                 )
             }
 
@@ -200,7 +200,7 @@ fun QuestionOneScreen(
                     .semantics { contentDescription = "Next" },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 150)),
             ) {
-                Text(stringResource(R.string.next), color = Color.White, fontSize = 20.sp)
+                Text(stringResource(R.string.next), color = Color.White, fontSize = 20.scaledSp())
             }
 
 
@@ -266,7 +266,7 @@ fun EditDaysField(
         colors = TextFieldDefaults.textFieldColors(backgroundColor=Color.White),
         value = value,
         onValueChange = onValueChange,
-        placeholder = {Text("Tap to input", modifier = Modifier.padding(start=10.dp))},
+        placeholder = {Text("Tap to input", fontSize = 17.scaledSp(), modifier = Modifier.padding(start=10.dp))},
 
         modifier = Modifier
             .width(175.dp)
@@ -278,7 +278,7 @@ fun EditDaysField(
             )
             .semantics { contentDescription = "Pick Days" },
         trailingIcon = { if (entered || value != ""){
-            Text(text = "days", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.Black, modifier = Modifier.padding(end=20.dp))
+            Text(text = "days", fontSize = 18.scaledSp(), fontWeight = FontWeight.Bold, color = Color.Black, modifier = Modifier.padding(end=20.dp))
 
         }
         else {
@@ -290,7 +290,7 @@ fun EditDaysField(
         }
 
         },
-        textStyle = androidx.compose.ui.text.TextStyle(fontSize = 20.sp, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold),
+        textStyle = androidx.compose.ui.text.TextStyle(fontSize = 20.scaledSp(), textAlign = TextAlign.Center, fontWeight = FontWeight.Bold),
 
         singleLine = true,
         keyboardOptions = keyboardOptions,

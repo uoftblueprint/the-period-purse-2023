@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -34,7 +35,7 @@ fun DeleteAccountScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(
-                top = (screenheight * 0.09).dp,
+                top = (screenheight * 0.10).dp,
                 start = (screenheight * 0.03).dp,
                 end = (screenheight * 0.03).dp
             ),
@@ -42,7 +43,7 @@ fun DeleteAccountScreen(
     ) {
         Column() {
             Text(text = "Are you sure you want to delete your account? You cannot undo this action.",
-            fontSize = 15.sp)
+            fontSize = 15.scaledSp())
             Button(modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp),
                 onClick = {

@@ -7,7 +7,9 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,12 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -49,6 +53,7 @@ fun WelcomeScreen(
     val configuration = LocalConfiguration.current
 
     val screenheight = configuration.screenHeightDp
+    val screenwidth = configuration.screenWidthDp
 
     val account = GoogleSignIn.getLastSignedInAccount(context)
 
@@ -69,7 +74,7 @@ fun WelcomeScreen(
 
         Column(
             modifier = Modifier
-                .padding((screenheight * 0.02).dp)
+                .padding((screenheight * 0.03).dp)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -84,11 +89,11 @@ fun WelcomeScreen(
                 contentDescription = null,
                 modifier = Modifier.size((screenheight*0.25).dp)
             )
-            Spacer(modifier = Modifier.height((screenheight*0.05).dp))
+            Spacer(modifier = Modifier.height((screenheight*0.02).dp))
 
             // Welcome text
-            Text(text = stringResource(R.string.welcome), style = MaterialTheme.typography.h4, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height((screenheight*0.13).dp))
+            Text(text = stringResource(R.string.welcome), style = MaterialTheme.typography.h4, fontWeight = FontWeight.Bold, fontSize = 35.scaledSp())
+            Spacer(modifier = Modifier.height((screenheight*0.05).dp))
 
             // Quick Start button
             QuickStartButton(
@@ -114,7 +119,7 @@ fun WelcomeScreen(
             Spacer(modifier = Modifier.height((screenheight*0.006).dp))
 
 
-            Text("By continuing, you accept the", textAlign = TextAlign.Center )
+            Text("By continuing, you accept the", textAlign = TextAlign.Center, fontSize = (screenwidth*0.04).scaledSp())
             TermsAndPrivacyFooter(navController)
         }
 
@@ -147,7 +152,7 @@ fun GoogleSignInButton(
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = "Sign in with Google",
-            color = Color.Black, fontSize = 20.sp,
+            color = Color.Black, fontSize = 20.scaledSp(),
         )
     }
 }
@@ -167,7 +172,33 @@ fun QuickStartButton(
 //        color = Color(52, 235, 161)
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
     ) {
-        Text("Quick Start", color = Color.White, fontSize = 20.sp)
+        Text("Quick Start", color = Color.White, fontSize = 20.scaledSp())
     }
 }
 
+
+@Composable
+fun Double.scaledSp(): TextUnit {
+    val value: Double = this
+    return with(LocalDensity.current) {
+        val fontScale = this.fontScale
+        val textSize = value / fontScale
+        textSize.sp
+    }
+}
+
+val Double.scaledSp: TextUnit
+    @Composable get() =  scaledSp()
+
+@Composable
+fun Int.scaledSp(): TextUnit {
+    val value: Int = this
+    return with(LocalDensity.current) {
+        val fontScale = this.fontScale
+        val textSize = value / fontScale
+        textSize.sp
+    }
+}
+
+val Int.scaledSp: TextUnit
+    @Composable get() =  scaledSp()

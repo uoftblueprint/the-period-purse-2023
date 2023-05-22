@@ -62,7 +62,41 @@ fun QuestionThreeScreen(
         Modifier
             .fillMaxHeight()
             .fillMaxWidth()) {
+        val ratio = 0.45
+        val ratioimage = 0.17
+        val height = (screenheight * ratio)
+        val imageheight = (screenheight * ratioimage)
 
+        Box(
+            modifier = Modifier
+                .width(screenwidth.dp)
+                .height(height.dp)
+        )
+        {
+
+            Image(
+                painter = painterResource(R.drawable.background_shape__1_),
+                contentDescription = null,
+                modifier = Modifier.size((screenheight*0.65).dp)
+            )
+
+
+            Image(
+                painter = painterResource(R.drawable.menstruation_calendar__1_),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(imageheight.dp)
+                    .align(Alignment.Center),
+            )
+            Image(
+                painter = painterResource(R.drawable.onboard_bar3),
+                contentDescription = null,
+                modifier = Modifier
+                    .size((screenheight * (0.09)).dp)
+                    .align(Alignment.BottomCenter),
+            )
+
+        }
 
         Column(
             verticalArrangement = Arrangement.spacedBy((screenheight * (0.0025)).dp),
@@ -71,41 +105,14 @@ fun QuestionThreeScreen(
 
             ) {
 
-            val ratio = 0.45
-            val ratioimage = 0.20
-            val height = (screenheight * ratio)
-            val imageheight = (screenheight * ratioimage)
-            Box(
-                modifier = Modifier
-                    .width(screenwidth.dp)
-                    .height(height.dp)
-            )
-            {
-                background_shape()
+            Spacer(Modifier.height((screenheight * (0.40)).dp))
 
-
-                Image(
-                    painter = painterResource(R.drawable.menstruation_calendar__1_),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(imageheight.dp)
-                        .align(Alignment.Center),
-                )
-                Image(
-                    painter = painterResource(R.drawable.onboard_bar3),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size((screenheight * (0.09)).dp)
-                        .align(Alignment.BottomCenter),
-                )
-
-            }
             Text(
                 text = stringResource(R.string.question_three),
-                fontSize = (screenheight * (0.035)).sp,
+                fontSize = (screenheight * (0.035)).scaledSp(),
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .width(300.dp),
+                    .width((screenheight * (0.7)).dp),
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
@@ -113,7 +120,7 @@ fun QuestionThreeScreen(
 
             Text(
                 text = stringResource(R.string.description_three),
-                fontSize = 16.sp,
+                fontSize = (screenheight * (0.03)).scaledSp(),
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(),
@@ -123,24 +130,26 @@ fun QuestionThreeScreen(
             Spacer(modifier = Modifier.height((screenheight * (0.005)).dp))
             Box(
                 modifier = Modifier
-                    .padding(horizontal = 10.dp)
-                    .height(110.dp)
+                    .padding(horizontal = (screenheight * (0.02)).dp)
+                    .height((screenheight * (0.15)).dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(15))
                     .background(Color(rgb(188, 235, 214))),
 
                 ) {
                 Row(
-                    modifier = Modifier.padding(20.dp),
-                    horizontalArrangement = Arrangement.spacedBy(25.dp),
+                    modifier = Modifier.padding(top =(screenheight * (0.02)).dp,
+                        start =(screenheight * (0.03)).dp,
+                        end =(screenheight * (0.03)).dp),
+                    horizontalArrangement = Arrangement.spacedBy((screenheight * (0.04)).dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
                         Box(
                             modifier = Modifier
-                                .height(50.dp)
-                                .width(50.dp)
+                                .height((screenheight * (0.08)).dp)
+                                .width((screenheight * (0.08)).dp)
                                 .clip(RoundedCornerShape(30))
                                 .background(Color(rgb(220, 242, 240)))
                         ) {
@@ -149,7 +158,7 @@ fun QuestionThreeScreen(
                                 painter = painterResource(R.drawable.opacity_black_24dp),
                                 contentDescription = null,
                                 modifier = Modifier
-                                    .size(25.dp)
+                                    .size((screenheight * (0.05)).dp)
                                     .align(Alignment.Center),
                                 colorFilter = ColorFilter.tint(Color.Gray)
 
@@ -160,7 +169,7 @@ fun QuestionThreeScreen(
 
                         Text(
                             text = stringResource(R.string.flow),
-                            fontSize = 15.sp,
+                            fontSize = 12.scaledSp(),
                             color = Color.Gray
 
                         )
@@ -169,7 +178,7 @@ fun QuestionThreeScreen(
 
                     Text(
                         text = stringResource(R.string.caption_three),
-                        fontSize = 15.sp,
+                        fontSize = 13.scaledSp(),
 
                         )
 
@@ -206,8 +215,8 @@ fun QuestionThreeScreen(
                 ) {
                     Box(
                         modifier = Modifier
-                            .height(50.dp)
-                            .width(50.dp)
+                            .height((screenheight * (0.08)).dp)
+                            .width((screenheight * (0.08)).dp)
                             .clip(RoundedCornerShape(30))
                             .then(
                                 if (!selectedValue.contains("Mood")) Modifier.background(Color.White) else Modifier.background(
@@ -220,7 +229,7 @@ fun QuestionThreeScreen(
                             painter = painterResource(R.drawable.sentiment_neutral_black_24dp),
                             contentDescription = "Mood",
                             modifier = Modifier
-                                .size(25.dp)
+                                .size((screenheight * (0.05)).dp)
                                 .align(Alignment.Center)
 
                         )
@@ -229,7 +238,7 @@ fun QuestionThreeScreen(
 
                     Text(
                         text = stringResource(R.string.mood),
-                        fontSize = 15.sp,
+                        fontSize = 13.scaledSp(),
 
                         )
                 }
@@ -258,8 +267,8 @@ fun QuestionThreeScreen(
                 ) {
                     Box(
                         modifier = Modifier
-                            .height(50.dp)
-                            .width(50.dp)
+                            .height((screenheight * (0.08)).dp)
+                            .width((screenheight * (0.08)).dp)
                             .clip(RoundedCornerShape(30))
                             .then(
                                 if (!selectedValue.contains("Exercise")) Modifier.background(Color.White) else Modifier.background(
@@ -272,7 +281,7 @@ fun QuestionThreeScreen(
                             painter = painterResource(R.drawable.self_improvement_black_24dp),
                             contentDescription = "Exercise",
                             modifier = Modifier
-                                .size(25.dp)
+                                .size((screenheight * (0.05)).dp)
                                 .align(Alignment.Center),
 
                             )
@@ -282,7 +291,7 @@ fun QuestionThreeScreen(
 
                     Text(
                         text = stringResource(R.string.exercise),
-                        fontSize = 15.sp,
+                        fontSize = 13.scaledSp(),
 
                         )
 
@@ -314,8 +323,8 @@ fun QuestionThreeScreen(
 
                     Box(
                         modifier = Modifier
-                            .height(50.dp)
-                            .width(50.dp)
+                            .height((screenheight * (0.08)).dp)
+                            .width((screenheight * (0.08)).dp)
                             .clip(RoundedCornerShape(30))
                             .then(
                                 if (!selectedValue.contains("Cramps")) Modifier.background(Color.White) else Modifier.background(
@@ -328,7 +337,7 @@ fun QuestionThreeScreen(
                             painter = painterResource(R.drawable.sick_black_24dp),
                             contentDescription = "Cramps",
                             modifier = Modifier
-                                .size(25.dp)
+                                .size((screenheight * (0.05)).dp)
                                 .align(Alignment.Center),
 
                             )
@@ -336,7 +345,7 @@ fun QuestionThreeScreen(
                     }
                     Text(
                         text = stringResource(R.string.cramps),
-                        fontSize = 15.sp,
+                        fontSize = 13.scaledSp(),
 
                         )
 
@@ -370,8 +379,8 @@ fun QuestionThreeScreen(
 
                     Box(
                         modifier = Modifier
-                            .height(50.dp)
-                            .width(50.dp)
+                            .height((screenheight * (0.08)).dp)
+                            .width((screenheight * (0.08)).dp)
                             .clip(RoundedCornerShape(30))
                             .semantics { contentDescription = "Sleep" }
                             .then(
@@ -385,7 +394,7 @@ fun QuestionThreeScreen(
                             painter = painterResource(R.drawable.nightlight_black_24dp),
                             contentDescription = "Sleep",
                             modifier = Modifier
-                                .size(25.dp)
+                                .size((screenheight * (0.05)).dp)
                                 .align(Alignment.Center),
 
                             )
@@ -393,7 +402,7 @@ fun QuestionThreeScreen(
                     }
                     Text(
                         text = stringResource(R.string.sleep),
-                        fontSize = 15.sp,
+                        fontSize = 13.scaledSp(),
 
                         )
                 }
@@ -403,7 +412,7 @@ fun QuestionThreeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .padding(bottom = (screenheight * (0.01)).dp),
+                .padding(bottom = (screenheight * (0.005)).dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             TextButton(
@@ -421,7 +430,7 @@ fun QuestionThreeScreen(
                 Text(
                     stringResource(R.string.skip),
                     color = Color(97, 153, 154),
-                    fontSize = 20.sp
+                    fontSize = 20.scaledSp()
                 )
             }
             Button(
@@ -437,7 +446,7 @@ fun QuestionThreeScreen(
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
             ) {
-                Text(stringResource(R.string.next), color = Color.White, fontSize = 20.sp)
+                Text(stringResource(R.string.next), color = Color.White, fontSize = 20.scaledSp())
             }
         }
 

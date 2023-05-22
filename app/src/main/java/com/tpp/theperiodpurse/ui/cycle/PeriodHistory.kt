@@ -26,6 +26,7 @@ import com.tpp.theperiodpurse.data.addOneDay
 import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.data.findYears
 import com.tpp.theperiodpurse.data.parseDatesIntoPeriods
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
@@ -58,7 +59,7 @@ fun PeriodHistoryLayout(
                         .wrapContentHeight(),
                     text = "Period History",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
+                    fontSize = 20.scaledSp()
                 )},
                 backgroundColor = Color.White,
                 elevation = 0.dp,
@@ -115,7 +116,7 @@ fun PeriodHistoryLayout(
                             Text(
                                 // replace with year
                                 text = yearSelected.toString(),
-                                fontSize = 15.sp,
+                                fontSize = 15.scaledSp(),
                                 fontWeight = FontWeight(700),
                                 color = Color(0xFF868083),
                             )
@@ -166,7 +167,7 @@ fun PeriodEntries(periods: ArrayList<ArrayList<Date>>, upperbound: Int?) {
                         Text(text = "$startString - $endString")
                         Text(
                             text = "$periodLength-day period",
-                            fontSize = 13.sp
+                            fontSize = 13.scaledSp()
                         )
                     }
                 }

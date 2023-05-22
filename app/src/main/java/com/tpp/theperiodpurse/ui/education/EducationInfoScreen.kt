@@ -24,6 +24,7 @@ import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.ui.datasource.Product
 import com.tpp.theperiodpurse.ui.datasource.ProductsList
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 
 
 @Composable
@@ -81,7 +82,7 @@ fun EducationInfoScreen(
         Product Name
          */
         Text(fontWeight = Bold,
-            fontSize = 32.sp,
+            fontSize = 32.scaledSp(),
             text = product.ProductName
         )
 
@@ -91,7 +92,9 @@ fun EducationInfoScreen(
         Text(modifier = Modifier
             .padding(12.dp),
             textAlign = TextAlign.Center,
-            text = product.description
+            text = product.description,
+            fontSize = 18.scaledSp()
+
         )
 
         Spacer(modifier = Modifier.weight(3f))
