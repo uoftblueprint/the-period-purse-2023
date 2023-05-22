@@ -28,7 +28,6 @@ fun TermsAndPrivacyFooter(navController: NavHostController) {
 
     val screenwidth = configuration.screenWidthDp;
 
-    val screenheight = configuration.screenHeightDp;
     Row(
         modifier = Modifier
             .wrapContentHeight()
