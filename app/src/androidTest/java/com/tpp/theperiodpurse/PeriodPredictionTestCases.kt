@@ -180,5 +180,79 @@ val periodHistoryThreeCycles = arrayListOf(
         sleep = null,
 		notes = "" 
     )
+)
 
+val currDate = java.util.Date(System.currentTimeMillis())
+val halfMonthDate = java.util.Date(System.currentTimeMillis() - 15*24*60*60*1000)
+
+val periodHistoryCurrentDate = arrayListOf(
+    Date(
+        date = currDate,
+        flow = FlowSeverity.Light,
+        mood = Mood.HAPPY,
+        exerciseLength = null,
+        exerciseType = Exercise.CARDIO,
+        crampSeverity = CrampSeverity.None,
+        sleep = null,
+        notes = ""
+    ),
+)
+
+val periodHistoryHalfMonth = arrayListOf(
+    Date(
+        date = halfMonthDate,
+        flow = FlowSeverity.Light,
+        mood = Mood.HAPPY,
+        exerciseLength = null,
+        exerciseType = Exercise.CARDIO,
+        crampSeverity = CrampSeverity.None,
+        sleep = null,
+        notes = ""
+    )
+)
+
+val periodHistoryHalfMonthMultiple = arrayListOf(
+    Date(
+        date = SimpleDateFormat("dd/MM/yyyy").parse("04/01/2023")!!,
+        flow = FlowSeverity.Light,
+        mood = Mood.HAPPY,
+        exerciseLength = null,
+        exerciseType = Exercise.CARDIO,
+        crampSeverity = CrampSeverity.None,
+        sleep = null,
+        notes = ""
+    ),
+    Date(
+        date = halfMonthDate,
+        flow = FlowSeverity.Light,
+        mood = Mood.HAPPY,
+        exerciseLength = null,
+        exerciseType = Exercise.CARDIO,
+        crampSeverity = CrampSeverity.None,
+        sleep = null,
+        notes = ""
+    )
+)
+
+val periodHistoryMultipleYears = arrayListOf(
+    Date(
+        date = SimpleDateFormat("dd/MM/yyyy").parse("03/01/2022")!!,
+        flow = FlowSeverity.Light,
+        mood = Mood.HAPPY,
+        exerciseLength = null,
+        exerciseType = Exercise.CARDIO,
+        crampSeverity = CrampSeverity.None,
+        sleep = null,
+        notes = ""
+    ),
+    Date(
+        date = SimpleDateFormat("dd/MM/yyyy").parse("03/01/2023")!!,
+        flow = FlowSeverity.Light,
+        mood = Mood.HAPPY,
+        exerciseLength = null,
+        exerciseType = Exercise.CARDIO,
+        crampSeverity = CrampSeverity.None,
+        sleep = null,
+        notes = ""
+    ),
 )

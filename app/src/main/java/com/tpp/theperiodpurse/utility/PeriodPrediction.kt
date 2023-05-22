@@ -29,6 +29,11 @@ fun parseDatesIntoPeriods(periodHistory: ArrayList<Date>): ArrayList<ArrayList<D
     sortPeriodHistory(periodHistory)
     val periods = ArrayList<ArrayList<Date>>()
     var currPeriod = ArrayList<Date>()
+
+    if (periodHistory.size == 0) {
+        return periods
+    }
+
     for (i in 0 until periodHistory.size) {
         // check if next element in the array is within one day
         if (i == 0) {
@@ -38,7 +43,7 @@ fun parseDatesIntoPeriods(periodHistory: ArrayList<Date>): ArrayList<ArrayList<D
             val date2 = periodHistory[i - 1].date
             if (date1 != null && date2 != null ) {
                 val diff = date1.time - date2.time
-                if ( diff <= 86400000) {
+                if (diff <= 86400000) {
                     currPeriod.add(periodHistory[i])
                 } else {
                     periods.add(currPeriod)
@@ -183,7 +188,7 @@ fun calculateDaysSinceLastPeriod(periodHistory: ArrayList<Date>): Long {
  * assume one month contains 31 days, use the equation:
  * (number of days since last cycle / 31) * 360f
  */
-fun calculateArcAngle(periodHistory: ArrayList<Date>):Float {
+fun calculateArcAngle(periodHistory: ArrayList<Date>): Float {
     return 360f * min(1f, calculateDaysSinceLastPeriod(periodHistory) / 31f)
 }
 
