@@ -59,7 +59,6 @@ class OnboardViewModel @Inject constructor (
             withContext(Dispatchers.IO) {
                 val instance = ApplicationRoomDatabase.getDatabase(context)
                 instance.clearAllTables()
-                instance.close()
                 isDeleted.postValue(true)
             }
         }
@@ -94,6 +93,9 @@ class OnboardViewModel @Inject constructor (
     fun downloadBackup(account: Account, context: Context){
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
+
+                    val instance = ApplicationRoomDatabase.getDatabase(context)
+                    instance.close()
 
                     val credential = GoogleAccountCredential.usingOAuth2(
                         context,
@@ -130,12 +132,7 @@ class OnboardViewModel @Inject constructor (
                         flush()
                         close()
                     }
-
-                    val instance = ApplicationRoomDatabase.getDatabase(context)
-                    instance.close()
-
-
-
+                    ApplicationRoomDatabase.getDatabase(context)
                     isDownloaded.postValue(true)
                 }
             }
@@ -165,7 +162,7 @@ class OnboardViewModel @Inject constructor (
                 } else {
                     null
                 }
-                val instance = ApplicationRoomDatabase.getDatabase(context)
+                var instance = ApplicationRoomDatabase.getDatabase(context)
                 instance.close()
 
 
@@ -181,7 +178,8 @@ class OnboardViewModel @Inject constructor (
                         .setFields("id")
                         .execute()
 
-                ApplicationRoomDatabase.getDatabase(context)
+                instance = ApplicationRoomDatabase.getDatabase(context)
+                instance.isOpen
 
                 inputStream.close()
                 outputStream.close()
@@ -206,8 +204,6 @@ class OnboardViewModel @Inject constructor (
                 )
         }
     }
-
-
 
     /**
      * Set the [logSymptoms] to track for onboarding session.

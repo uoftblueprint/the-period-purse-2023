@@ -28,10 +28,18 @@ abstract class ApplicationRoomDatabase: RoomDatabase() {
         @Volatile
         private var INSTANCE: ApplicationRoomDatabase? = null
         fun getDatabase(context: Context): ApplicationRoomDatabase {
-            return INSTANCE ?: synchronized(this) {
+            var instance = INSTANCE
+            if (instance != null && instance.isOpen) {
+                return instance // Return the existing open instance
+            }
+            synchronized(this) {
+                instance = INSTANCE
+                if (instance != null && instance!!.isOpen) {
+                    return instance as ApplicationRoomDatabase // Return the existing open instance
+                }
                 val path = context.getDatabasePath("user_database.db").path
                 val databaseFile = File(path)
-                val instance = Room.databaseBuilder(
+                instance = Room.databaseBuilder(
                     context.applicationContext,
                     ApplicationRoomDatabase::class.java,
                     databaseFile.absolutePath
@@ -39,12 +47,13 @@ abstract class ApplicationRoomDatabase: RoomDatabase() {
                     .addCallback(getCallback())
                     .fallbackToDestructiveMigration()
                     .build()
-                instance.openHelper.readableDatabase
-                instance.openHelper.writableDatabase
+                instance!!.openHelper.readableDatabase
+                instance!!.openHelper.writableDatabase
                 INSTANCE = instance
-                return instance
+                return instance!!
             }
         }
+
 
         fun getCallback(): Callback {
             return object : Callback() {
