@@ -25,8 +25,10 @@ fun LoadDatabase(
 ) {
     val isLoaded by appViewModel.isLoaded.observeAsState(initial = null)
 
+    LaunchedEffect(Unit){
+        appViewModel.loadData(calViewModel, context)
+    }
 
-    appViewModel.loadData(calViewModel, context)
 
     if (isLoaded == null){
         LoadingScreen()

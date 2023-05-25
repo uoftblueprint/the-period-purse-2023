@@ -1,5 +1,6 @@
 package com.tpp.theperiodpurse.ui.symptomlog
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -47,6 +48,7 @@ fun LogMultipleDatesScreen(
     onClose: () -> Unit,
     calendarViewModel: CalendarViewModel,
     appViewModel: AppViewModel,
+    context: Context
 ) {
     Column(
         modifier = Modifier
@@ -119,7 +121,8 @@ fun LogMultipleDatesScreen(
                                 sleep = null,
                                 mood = null,
                                 notes = ""
-                            )
+                            ),
+                        context
                         )
                     calendarViewModel.updateDayInfo(it, CalendarDayUIState(flow = FlowSeverity.Medium))
                 }

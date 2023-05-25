@@ -241,7 +241,8 @@ fun SummaryScreen(
                             sleep = null,
                             mood = null,
                             notes = ""
-                        )
+                        ),
+                        context
                     )
                     calendarViewModel.updateDayInfo(it, CalendarDayUIState(flow = FlowSeverity.Medium))
                 }

@@ -115,7 +115,8 @@ fun NavigationGraph(
             LogMultipleDatesScreen(
                 onClose = { navController.navigateUp() },
                 calendarViewModel,
-                appViewModel
+                appViewModel,
+                context
             )
         }
 

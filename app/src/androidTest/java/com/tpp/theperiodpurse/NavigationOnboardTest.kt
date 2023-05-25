@@ -1,5 +1,6 @@
 package com.tpp.theperiodpurse
 
+import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.*
@@ -63,9 +64,9 @@ class NavigationOnboardTest {
         )
     )
 
-    private fun insertDate() {
+    private fun insertDate(context: Context) {
         runBlocking {
-            dateRepository.addDate(dateList[0])
+            dateRepository.addDate(dateList[0], context)
         }
     }
 
@@ -89,9 +90,9 @@ class NavigationOnboardTest {
     @Before
     fun setupNavHost() {
         hiltRule.inject()
-        insertDate()
         insertUser()
         composeTestRule.setContent {
+            insertDate(LocalContext.current)
             navController = TestNavHostController(LocalContext.current)
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()

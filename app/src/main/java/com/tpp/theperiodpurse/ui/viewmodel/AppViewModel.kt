@@ -37,15 +37,12 @@ class AppViewModel @Inject constructor (
     fun loadData(calendarViewModel: CalendarViewModel, context: Context) {
         val trackedSymptoms: MutableList<Symptom> = mutableListOf()
         viewModelScope.launch {
-            withContext(Dispatchers.Main){
-                ApplicationRoomDatabase.getDatabase(context)
-            }
             Log.d(
                 "Lookies Here",
-                withContext(Dispatchers.Main) { !userRepository.isEmpty() }.toString()
+                withContext(Dispatchers.Main) { !userRepository.isEmpty(context) }.toString()
             )
-            if (withContext(Dispatchers.Main) { !userRepository.isEmpty() }) {
-                val user = withContext(Dispatchers.Main) { userRepository.getUser(1) }
+            if (withContext(Dispatchers.Main) { !userRepository.isEmpty(context) }) {
+                val user = withContext(Dispatchers.Main) { userRepository.getUser(1, context) }
                 trackedSymptoms.add(Symptom.FLOW)
                 trackedSymptoms.addAll(user.symptomsToTrack)
                 _uiState.update { currentState ->
@@ -56,7 +53,7 @@ class AppViewModel @Inject constructor (
                 }
             }
             withContext(Dispatchers.IO) {
-                dateRepository.getAllDates().collect { dates ->
+                dateRepository.getAllDates(context).collect { dates ->
                     _uiState.value = _uiState.value.copy(dates = dates)
 
                     for (date in dates) {
@@ -159,8 +156,8 @@ class AppViewModel @Inject constructor (
         return uiState.value.reminderFrequency
     }
 
-    fun saveDate(date: Date) {
-        dateRepository.addDate(date)
+    fun saveDate(date: Date, context: Context) {
+        dateRepository.addDate(date, context)
         val newList = uiState.value.dates.toMutableList()
         newList.add(date)
         _uiState.update { currentState -> currentState.copy(dates = newList) }
