@@ -253,10 +253,7 @@ class OnboardViewModel @Inject constructor (
         saveUser(createUser(symptomsToTrack, periodHistory, averagePeriodLength, averageCycleLength,
             daysSinceLastPeriod))
         viewModelScope.launch {
-            withContext(Dispatchers.Main){
-                ApplicationRoomDatabase.getDatabase(context)
-            }
-            val user = withContext(Dispatchers.Main) { userRepository.getUser(1) }
+            val user = withContext(Dispatchers.Main) { userRepository.getUser(1, context) }
             _uiState.value = _uiState.value.copy(user = user)
         }
     }

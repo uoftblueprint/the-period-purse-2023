@@ -23,8 +23,8 @@ class DateRepository(private val dateDAO: DateDAO) {
         }
     }
 
-    fun getAllDates(): Flow<List<Date>> {
-        return dateDAO.getDates()
+    fun getAllDates(context: Context): Flow<List<Date>> {
+        return ApplicationRoomDatabase.getDatabase(context).dateDAO().getDates()
     }
 
     fun deleteDate(date: Date) {

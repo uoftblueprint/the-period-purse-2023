@@ -39,10 +39,10 @@ class AppViewModel @Inject constructor (
         viewModelScope.launch {
             Log.d(
                 "Lookies Here",
-                withContext(Dispatchers.Main) { !userRepository.isEmpty() }.toString()
+                withContext(Dispatchers.Main) { !userRepository.isEmpty(context) }.toString()
             )
-            if (withContext(Dispatchers.Main) { !userRepository.isEmpty() }) {
-                val user = withContext(Dispatchers.Main) { userRepository.getUser(1) }
+            if (withContext(Dispatchers.Main) { !userRepository.isEmpty(context) }) {
+                val user = withContext(Dispatchers.Main) { userRepository.getUser(1, context) }
                 trackedSymptoms.add(Symptom.FLOW)
                 trackedSymptoms.addAll(user.symptomsToTrack)
                 _uiState.update { currentState ->
@@ -53,7 +53,7 @@ class AppViewModel @Inject constructor (
                 }
             }
             withContext(Dispatchers.IO) {
-                dateRepository.getAllDates().collect { dates ->
+                dateRepository.getAllDates(context).collect { dates ->
                     _uiState.value = _uiState.value.copy(dates = dates)
 
                     for (date in dates) {
