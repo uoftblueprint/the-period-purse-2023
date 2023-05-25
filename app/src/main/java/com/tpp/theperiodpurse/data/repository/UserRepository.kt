@@ -2,6 +2,7 @@ package com.tpp.theperiodpurse.data.repository
 
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
+import com.tpp.theperiodpurse.data.ApplicationRoomDatabase
 import com.tpp.theperiodpurse.data.model.Symptom
 import com.tpp.theperiodpurse.data.entity.User
 import com.tpp.theperiodpurse.data.UserDAO
