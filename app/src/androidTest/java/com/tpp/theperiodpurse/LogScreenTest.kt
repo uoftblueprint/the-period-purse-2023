@@ -1,5 +1,6 @@
 package com.tpp.theperiodpurse
 
+import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.SemanticsProperties
@@ -66,10 +67,9 @@ class LogScreenTest {
             notes = ""
         )
     )
-
-    private fun insertDate() {
+    private fun insertDate(context: Context) {
         runBlocking {
-            dateRepository.addDate(dateList[0])
+            dateRepository.addDate(dateList[0], context)
         }
     }
 
@@ -93,9 +93,9 @@ class LogScreenTest {
     @Before
     fun setupNavHost() {
         hiltRule.inject()
-        insertDate()
         insertUser()
         composeTestRule.setContent {
+            insertDate(LocalContext.current)
             navController = TestNavHostController(LocalContext.current)
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
