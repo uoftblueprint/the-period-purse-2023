@@ -1,6 +1,7 @@
 package com.tpp.theperiodpurse.ui.state
 
 import android.accounts.Account
+import java.time.LocalDate
 import com.tpp.theperiodpurse.data.entity.User
 
 data class OnboardUIState(/** Selected days quantity  */
@@ -10,7 +11,7 @@ data class OnboardUIState(/** Selected days quantity  */
                           /** Available Symptoms dates for the order*/
                           var symptomsOptions: List<String> = listOf(),
                           /** Available dates for the track*/
-                          val dateOptions: List<String> = listOf(),
+                          var dateOptions: List<LocalDate> = listOf(),
                           val user: User? = null,
                           var googleAccount: Account? = null
 )

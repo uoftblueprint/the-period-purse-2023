@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -37,6 +38,7 @@ import com.tpp.theperiodpurse.ui.education.teal
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 
@@ -78,7 +80,6 @@ fun SettingScreenLayout(
             launcher.launch(SCHEDULE_EXACT_ALARM)
         }
     }
-
     val time = appViewModel.getReminderFreq() + " at " + appViewModel.getReminderTime()
 
    Column(modifier = modifier
@@ -89,7 +90,8 @@ fun SettingScreenLayout(
            text = stringResource(R.string.tracking_preferences),
            modifier = modifier.padding(top = 30.dp, start = 10.dp),
            color = Color.DarkGray,
-           fontWeight = FontWeight.Bold
+           fontWeight = FontWeight.Bold,
+           fontSize = 20.scaledSp()
        )
 
        TrackingPreferencesRow(symptoms, appViewModel = appViewModel)
@@ -97,18 +99,20 @@ fun SettingScreenLayout(
            text = stringResource(R.string.notifications_heading),
            modifier = modifier.padding(top = 5.dp, start = 10.dp),
            color = Color.DarkGray,
-           fontWeight = FontWeight.Bold
+           fontWeight = FontWeight.Bold,
+           fontSize = 20.scaledSp()
        )
        Row(modifier = modifier.padding(20.dp)) {
            Column (modifier = Modifier) {
                Text(text = stringResource(
                    R.string.remind_me_to_log_symptoms),
-                   fontWeight = FontWeight.Bold)
+                   fontWeight = FontWeight.Bold,
+                   fontSize = 15.scaledSp(),)
                Spacer(modifier = modifier.padding(3.dp))
                Text(text = time,
                    modifier = Modifier.padding(start = 5.dp),
                    color = Color.Gray,
-                   fontSize = 15.sp,
+                   fontSize = 15.scaledSp(),
                )
            }
            Switch(
@@ -135,7 +139,8 @@ fun SettingScreenLayout(
            text = stringResource(R.string.account_settings_heading),
            modifier = Modifier.padding(start= 10.dp, top = 30.dp),
            color = Color.DarkGray,
-           fontWeight = FontWeight.Bold
+           fontWeight = FontWeight.Bold,
+           fontSize = 20.scaledSp()
        )
        NavigateButton( text = stringResource(R.string.back_up_account),
            onClicked = onBackUpClicked
@@ -156,7 +161,8 @@ fun SettingScreenLayout(
            .align(Alignment.CenterHorizontally),
            text = "© 2023 The Period Purse. All rights reserved.",
            textAlign = TextAlign.Center,
-           color = Color.DarkGray
+           color = Color.DarkGray,
+           fontSize = 15.scaledSp()
        )
 
        /*
@@ -166,6 +172,7 @@ fun SettingScreenLayout(
            TermsAndPrivacyFooter(outController)
            Spacer(modifier = Modifier.size(80.dp))
        }
+       Spacer(modifier = Modifier.size(80.dp).padding(bottom = 5.dp))
    }
 }
 
@@ -222,30 +229,34 @@ fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter,
                          symptom: Symptom, appViewModel: AppViewModel
 ) {
 
+    val configuration = LocalConfiguration.current
+    val screenwidth = configuration.screenWidthDp;
     val color = if (appViewModel.isSymptomChecked(symptom)) Color(teal) else Color.White
     Column(
         modifier = modifier
-            .padding(10.dp),
+            .padding((screenwidth *0.02).dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,) {
         IconToggleButton(
             checked = ischecked,
             onCheckedChange = {appViewModel.updateSymptoms(symptom)},
-            modifier = Modifier.clip(RoundedCornerShape(20.dp))
+            modifier = Modifier.clip(RoundedCornerShape(10.dp))
         ) {
             Icon(
                 painter = icon,
                 contentDescription = contentDescription,
                 modifier = Modifier
+                    .clip(RoundedCornerShape(10.dp))
                     .background(color)
-                    .height(50.dp)
-                    .width(50.dp)
-                    .padding(10.dp)
+                    .height((screenwidth *0.12).dp)
+                    .width((screenwidth *0.12).dp)
+                    .padding((screenwidth *0.02).dp)
             )
 
         }
         Text(modifier = Modifier.padding(5.dp),
-            text = label)
+            text = label,
+            fontSize = 12.scaledSp())
     }
 }
 
@@ -256,7 +267,8 @@ fun NavigateButton(text: String, onClicked: () -> Unit ){
         Text(
             modifier = Modifier.weight(1f),
             text = text,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            fontSize = 15.scaledSp()
         )
         Icon(
             imageVector = Icons.Filled.KeyboardArrowRight,

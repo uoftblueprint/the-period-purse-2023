@@ -11,12 +11,12 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
+import com.tpp.theperiodpurse.Application
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.data.entity.User
 import com.tpp.theperiodpurse.data.model.Symptom
-import com.tpp.theperiodpurse.data.repository.DateRepository
 import com.tpp.theperiodpurse.data.repository.UserRepository
 import com.tpp.theperiodpurse.ui.state.OnboardUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,7 +31,6 @@ import javax.inject.Inject
 @HiltViewModel
 class OnboardViewModel @Inject constructor (
     private val userRepository: UserRepository,
-    private val dateRepository: DateRepository,
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(OnboardUIState())
@@ -61,7 +60,6 @@ class OnboardViewModel @Inject constructor (
             withContext(Dispatchers.IO) {
                 val instance = ApplicationRoomDatabase.getDatabase(context)
                 instance.clearAllTables()
-                instance.close()
                 isDeleted.postValue(true)
             }
         }
@@ -96,6 +94,8 @@ class OnboardViewModel @Inject constructor (
     fun downloadBackup(account: Account, context: Context){
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
+                    val instance = ApplicationRoomDatabase.getDatabase(context)
+                    instance.close()
 
                     val credential = GoogleAccountCredential.usingOAuth2(
                         context,
@@ -133,11 +133,6 @@ class OnboardViewModel @Inject constructor (
                         close()
                     }
 
-                    val instance = ApplicationRoomDatabase.getDatabase(context)
-                    instance.close()
-
-
-
                     isDownloaded.postValue(true)
                 }
             }
@@ -167,7 +162,7 @@ class OnboardViewModel @Inject constructor (
                 } else {
                     null
                 }
-                val instance = ApplicationRoomDatabase.getDatabase(context)
+                var instance = ApplicationRoomDatabase.getDatabase(context)
                 instance.close()
 
 
@@ -182,8 +177,6 @@ class OnboardViewModel @Inject constructor (
                 drive.files().create(metadata, ByteArrayContent(null, outputStream.toByteArray()))
                         .setFields("id")
                         .execute()
-
-                ApplicationRoomDatabase.getDatabase(context)
 
                 inputStream.close()
                 outputStream.close()
@@ -208,8 +201,6 @@ class OnboardViewModel @Inject constructor (
                 )
         }
     }
-
-
 
     /**
      * Set the [logSymptoms] to track for onboarding session.
@@ -262,10 +253,7 @@ class OnboardViewModel @Inject constructor (
         saveUser(createUser(symptomsToTrack, periodHistory, averagePeriodLength, averageCycleLength,
             daysSinceLastPeriod))
         viewModelScope.launch {
-            withContext(Dispatchers.Main){
-                ApplicationRoomDatabase.getDatabase(context)
-            }
-            val user = withContext(Dispatchers.Main) { userRepository.getUser(1) }
+            val user = withContext(Dispatchers.Main) { userRepository.getUser(1, context) }
             _uiState.value = _uiState.value.copy(user = user)
         }
     }

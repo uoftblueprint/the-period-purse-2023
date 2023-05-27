@@ -29,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.education.EducationBackground
 import com.tpp.theperiodpurse.ui.education.teal
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -48,7 +49,7 @@ fun PrivacyScreen(navController: NavHostController) {
                     .verticalScroll(rememberScrollState())
             ) {
                 Text(
-                    fontSize = 32.sp,
+                    fontSize = 32.scaledSp(),
                     fontWeight = Bold,
                     text = "Privacy Policy"
                 )
@@ -190,7 +191,7 @@ fun PrivacyScreen(navController: NavHostController) {
                     Spacer(modifier = Modifier.weight(1f))
 
                     Text(
-                        fontSize = 20.sp,
+                        fontSize = 20.scaledSp(),
                         fontWeight = Bold,
                         color = Color.Black,
                         text = "Privacy Policy"
@@ -207,8 +208,8 @@ fun PrivacyScreen(navController: NavHostController) {
 @Composable
 fun Body(str: String) {
     Text(
-        fontSize = 14.sp,
-        lineHeight = 16.sp,
+        fontSize = 14.scaledSp(),
+        lineHeight = 16.scaledSp(),
         text = str
     )
 }
@@ -221,9 +222,9 @@ fun Header(str: String) {
 
         Text(
             modifier = Modifier.padding(vertical = 2.dp),
-            fontSize = 14.sp,
+            fontSize = 14.scaledSp(),
             fontWeight = Bold,
-            lineHeight = 24.sp,
+            lineHeight = 24.scaledSp(),
             text = str
         )
     }
@@ -258,7 +259,7 @@ fun ReachOut(string: String) {
     }
 
     ClickableText(
-        style = TextStyle(fontSize = 14.sp),
+        style = TextStyle(fontSize = 14.scaledSp()),
         text = annotatedString,
         onClick = {
             annotatedString

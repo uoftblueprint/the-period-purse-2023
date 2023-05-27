@@ -100,7 +100,7 @@ class MainActivity : ComponentActivity() {
                         launcher.launch(POST_NOTIFICATIONS)
                     }
                 }
-                Application(context = applicationContext, signIn = { signIn() }, signout = { signOut() })
+                Application(context = context, signIn = { signIn() }, signout = { signOut() })
 
             }
         }

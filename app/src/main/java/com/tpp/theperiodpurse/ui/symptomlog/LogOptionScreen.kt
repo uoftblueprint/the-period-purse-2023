@@ -13,11 +13,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.theme.Red
 import com.tpp.theperiodpurse.ui.theme.Shapes
 
@@ -109,7 +111,8 @@ private fun LoggingOptionButton(
         Text(
             text = title,
             textAlign = TextAlign.Center,
-            modifier = Modifier.width(100.dp)
+            modifier = Modifier.width(100.dp),
+            fontSize = 15.scaledSp()
         )
         Spacer(modifier = Modifier.height(4.dp))
         FloatingActionButton(

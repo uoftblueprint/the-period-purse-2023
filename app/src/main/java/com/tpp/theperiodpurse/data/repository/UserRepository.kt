@@ -1,7 +1,9 @@
 package com.tpp.theperiodpurse.data.repository
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
+import com.tpp.theperiodpurse.data.ApplicationRoomDatabase
 import com.tpp.theperiodpurse.data.model.Symptom
 import com.tpp.theperiodpurse.data.entity.User
 import com.tpp.theperiodpurse.data.UserDAO
@@ -46,11 +48,11 @@ class UserRepository(private val userDAO: UserDAO) {
         }
     }
 
-    suspend fun getUser(id: Int): User {
-        return userDAO.get(id)
+    suspend fun getUser(id: Int, context: Context): User {
+        return ApplicationRoomDatabase.getDatabase(context).userDAO().get(id)
     }
-    suspend fun isEmpty(): Boolean {
-        return userDAO.getUsers().isEmpty()
+    suspend fun isEmpty(context: Context): Boolean {
+        return ApplicationRoomDatabase.getDatabase(context).userDAO().getUsers().isEmpty()
     }
 
     suspend fun isOnboarded() {

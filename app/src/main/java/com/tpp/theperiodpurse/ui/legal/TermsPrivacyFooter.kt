@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -19,9 +20,14 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.LegalScreen
 import com.tpp.theperiodpurse.ui.education.teal
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 
 @Composable
 fun TermsAndPrivacyFooter(navController: NavHostController) {
+    val configuration = LocalConfiguration.current
+
+    val screenwidth = configuration.screenWidthDp;
+
     Row(
         modifier = Modifier
             .wrapContentHeight()
@@ -35,14 +41,14 @@ fun TermsAndPrivacyFooter(navController: NavHostController) {
                 textDecoration = TextDecoration.Underline,
                 color = Color(teal),
                 textAlign = TextAlign.Center,
-                fontSize = 14.sp
+                fontSize = (screenwidth*0.04).scaledSp()
             ),
             text = AnnotatedString("Terms and Conditions")
         )
 
         Text(
             textAlign = TextAlign.Center,
-            fontSize = 14.sp,
+            fontSize = (screenwidth*0.04).scaledSp(),
             text = " and "
         )
 
@@ -52,7 +58,7 @@ fun TermsAndPrivacyFooter(navController: NavHostController) {
                 textDecoration = TextDecoration.Underline,
                 color = Color(teal),
                 textAlign = TextAlign.Center,
-                fontSize = 14.sp
+                fontSize = (screenwidth*0.04).scaledSp()
             ),
             text = AnnotatedString("Privacy Policy"),
         )

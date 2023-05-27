@@ -1,5 +1,6 @@
 package com.tpp.theperiodpurse.ui.symptomlog
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -35,6 +36,7 @@ import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.data.entity.Date
+import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.ZoneId
@@ -46,6 +48,7 @@ fun LogMultipleDatesScreen(
     onClose: () -> Unit,
     calendarViewModel: CalendarViewModel,
     appViewModel: AppViewModel,
+    context: Context
 ) {
     Column(
         modifier = Modifier
@@ -118,7 +121,8 @@ fun LogMultipleDatesScreen(
                                 sleep = null,
                                 mood = null,
                                 notes = ""
-                            )
+                            ),
+                        context
                         )
                     calendarViewModel.updateDayInfo(it, CalendarDayUIState(flow = FlowSeverity.Medium))
                 }
@@ -152,14 +156,14 @@ private fun LogMultipleDatesText(modifier: Modifier = Modifier) {
     ) {
         Text(
             stringResource(R.string.log_multiple_dates_header_title),
-            fontSize = 20.sp,
+            fontSize = 20.scaledSp(),
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             modifier = modifier
         )
         Text(
             stringResource(R.string.log_multiple_dates_header_body),
-            fontSize = 13.sp,
+            fontSize = 13.scaledSp(),
             modifier = modifier
         )
     }
