@@ -15,7 +15,7 @@ The Period Purse strives to achieve menstrual equity by providing people who men
 
 Following the [release of Menstruation Nation on the Apple App Store](https://apps.apple.com/app/id1621201647), UofT Blueprint has partnered with The Period Purse for a second project. This time making the Menstruation Nation more accessible by bringing it to the Google Play Store.
 
-Menstruation Nation is in open testing available on [Google Play Store](https://play.google.com/store/apps/details?id=com.tpp.theperiodpurse)
+Menstruation Nation is now available to everyone on [Google Play Store](https://play.google.com/store/apps/details?id=com.tpp.theperiodpurse&gl=CA)
 
 ## Use cases
 
