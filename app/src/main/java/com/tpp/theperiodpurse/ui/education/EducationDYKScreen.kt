@@ -28,23 +28,22 @@ fun EducationDYKScreen(navController: NavHostController) {
 
     EducationBackground()
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(24.dp),
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Icon(
-            modifier = Modifier
-                .clickable(interactionSource = interactionSource,
-                    indication = null)
-                { navController.navigate(EducationNavigation.Learn.name) }
-                .size(20.dp)
-                .align(Alignment.Start),
+        Icon(modifier = Modifier
+            .clickable(
+                interactionSource = interactionSource, indication = null
+            ) { navController.navigate(EducationNavigation.Learn.name) }
+            .size(20.dp)
+            .align(Alignment.Start),
             painter = painterResource(R.drawable.arrow),
             contentDescription = "Back Button",
-            tint = Color(teal)
-        )
+            tint = Color(teal))
 
         Spacer(modifier = Modifier.weight(1f))
 
@@ -54,18 +53,20 @@ fun EducationDYKScreen(navController: NavHostController) {
             contentDescription = "Paddy"
         )
 
-        Text(modifier = Modifier.padding(24.dp),
+        Text(
+            modifier = Modifier.padding(24.dp),
             fontWeight = FontWeight.Bold,
             text = "Did you know?",
-            fontSize = 25.scaledSp(),)
+            fontSize = 25.scaledSp(),
+        )
 
-
-        Text(modifier = Modifier.padding(horizontal = 72.dp, vertical = 0.dp),
+        Text(
+            modifier = Modifier.padding(horizontal = 72.dp, vertical = 0.dp),
             textAlign = TextAlign.Center,
             lineHeight = 20.scaledSp(),
             fontSize = 20.scaledSp(),
-            text = "There is a board game that educates youth all about periods, " +
-                "called \"The Period Game\"")
+            text = "There is a board game that educates youth all about periods, " + "called \"The Period Game\""
+        )
 
         Spacer(modifier = Modifier.weight(1f))
     }
