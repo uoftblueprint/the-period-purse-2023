@@ -12,11 +12,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
@@ -42,7 +42,7 @@ fun EducationDYKScreen(navController: NavHostController) {
             .size(20.dp)
             .align(Alignment.Start),
             painter = painterResource(R.drawable.arrow),
-            contentDescription = "Back Button",
+            contentDescription = stringResource(R.string.back_button_label),
             tint = Color(teal))
 
         Spacer(modifier = Modifier.weight(1f))
@@ -50,13 +50,13 @@ fun EducationDYKScreen(navController: NavHostController) {
         Image(
             modifier = Modifier.height(150.dp),
             painter = painterResource(R.drawable.dykpad),
-            contentDescription = "Paddy"
+            contentDescription = stringResource(R.string.paddy)
         )
 
         Text(
             modifier = Modifier.padding(24.dp),
             fontWeight = FontWeight.Bold,
-            text = "Did you know?",
+            text = stringResource(R.string.did_you_know),
             fontSize = 25.scaledSp(),
         )
 
@@ -65,7 +65,7 @@ fun EducationDYKScreen(navController: NavHostController) {
             textAlign = TextAlign.Center,
             lineHeight = 20.scaledSp(),
             fontSize = 20.scaledSp(),
-            text = "There is a board game that educates youth all about periods, " + "called \"The Period Game\""
+            text = stringResource(R.string.board_game_long)
         )
 
         Spacer(modifier = Modifier.weight(1f))

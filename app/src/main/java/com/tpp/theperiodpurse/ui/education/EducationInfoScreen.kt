@@ -14,11 +14,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.ui.datasource.Product
@@ -56,7 +56,7 @@ fun EducationInfoScreen(
             .size(20.dp)
             .align(Alignment.Start),
             painter = painterResource(R.drawable.arrow),
-            contentDescription = "Back Button",
+            contentDescription = stringResource(R.string.back_button_label),
             tint = Color(teal))
 
         Spacer(modifier = Modifier.weight(1f))
@@ -67,7 +67,9 @@ fun EducationInfoScreen(
                 .align(Alignment.CenterHorizontally)
                 .padding(12.dp),
             painter = painterResource(id = product.imageID),
-            contentDescription = "$elementId Image"
+            contentDescription = stringResource(
+                R.string.product_image_description, elementId
+            )
         )
 
         Text(

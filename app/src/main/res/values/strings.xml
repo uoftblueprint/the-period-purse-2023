@@ -66,4 +66,18 @@
     <string name="reminder_description">We\'ll remind you to log your symptoms.</string>
     <string name="copyright">© 2023 The Period Purse. All rights reserved.</string>
     <string name="please_start_logging_to_learn_more">Please start logging to learn more</string>
+    <string name="back_button_label">Back Button</string>
+    <string name="product_image_description">%s Image</string>
+    <string name="tap_to_learn_more">Tap to learn more about period products.</string>
+    <string name="did_you_know">Did you know?</string>
+    <string name="board_game">There is a board game that educates youth …</string>
+    <string name="board_game_long">There is a board game that educates youth all about periods, called The Period Game</string>
+    <string name="paddy">Paddy</string>
+    <string name="facebook">Facebook</string>
+    <string name="twitter">Twitter</string>
+    <string name="youtube">YouTube</string>
+    <string name="tiktok">TikTok</string>
+    <string name="instagram">Instagram</string>
+    <string name="learn_more">Learn more about The Period Purse</string>
+    <string name="strives_to_achieve">The Period Purse strives to achieve menstrual equity by providing people who menstruate with access to free menstrual products, and to reduce the stigma surrounding period through public education and advocacy.</string>
 </resources>

@@ -13,12 +13,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
@@ -67,7 +67,7 @@ fun EducationScreenLayout(
                         color = Color(gray),
                         fontWeight = FontWeight.W800,
                         fontSize = 15.scaledSp(),
-                        text = "Tap to learn more about period products."
+                        text = stringResource(R.string.tap_to_learn_more)
                     )
                 }
             }
@@ -88,7 +88,7 @@ fun EducationScreenLayout(
                         modifier = Modifier
                             .padding(horizontal = 8.dp, vertical = 12.dp)
                             .align(Alignment.CenterHorizontally),
-                        text = "© 2023 The Period Purse. All rights reserved.",
+                        text = stringResource(R.string.copyright),
                         textAlign = TextAlign.Center,
                         fontSize = 15.scaledSp(),
                         color = Color.DarkGray
@@ -126,7 +126,7 @@ fun DYKCard(navController: NavHostController) {
                     textAlign = TextAlign.Left,
                     color = Color.White,
                     fontWeight = FontWeight.W800,
-                    text = "Did you know?"
+                    text = stringResource(R.string.did_you_know)
                 )
 
                 Text(
@@ -136,7 +136,7 @@ fun DYKCard(navController: NavHostController) {
                     textAlign = TextAlign.Left,
                     fontSize = 13.scaledSp(),
                     maxLines = 2,
-                    text = "There is a board game that educates youth ..."
+                    text = stringResource(R.string.board_game)
                 )
             }
 
@@ -181,7 +181,9 @@ fun PeriodProducts(navController: NavHostController, it: Product) {
                     .align(Alignment.CenterHorizontally)
                     .padding(2.dp),
                 painter = painterResource(id = it.imageID),
-                contentDescription = "$it Image"
+                contentDescription = stringResource(
+                    R.string.product_image_description, it
+                )
             )
 
             Text(
@@ -216,14 +218,14 @@ fun TPPCard(uriHandler: UriHandler) {
                     .fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 fontWeight = Bold,
-                text = "Learn more about The Period Purse",
+                text = stringResource(R.string.learn_more),
                 fontSize = 15.scaledSp()
             )
 
             Text(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 0.dp),
                 textAlign = TextAlign.Center,
-                text = "The Period Purse strives to achieve menstrual equity by providing " + "people who menstruate with access to free menstrual products, and to " + "reduce the stigma surrounding period through public education and " + "advocacy.",
+                text = stringResource(R.string.strives_to_achieve),
                 fontSize = 13.scaledSp()
             )
 
@@ -255,7 +257,7 @@ fun SocialMedia(uriHandler: UriHandler) {
             .padding(horizontal = 8.dp)
             .size(24.dp),
             painter = painterResource(R.drawable.instagram),
-            contentDescription = "Instagram",
+            contentDescription = stringResource(R.string.instagram),
             tint = Color(teal))
 
         Icon(modifier = Modifier
@@ -263,7 +265,7 @@ fun SocialMedia(uriHandler: UriHandler) {
             .padding(horizontal = 8.dp)
             .size(24.dp),
             painter = painterResource(R.drawable.tiktok),
-            contentDescription = "Tik Tok",
+            contentDescription = stringResource(R.string.tiktok),
             tint = Color(teal))
 
         Icon(modifier = Modifier
@@ -275,7 +277,7 @@ fun SocialMedia(uriHandler: UriHandler) {
             .padding(horizontal = 8.dp)
             .size(24.dp),
             painter = painterResource(R.drawable.youtube),
-            contentDescription = "YouTube",
+            contentDescription = stringResource(R.string.youtube),
             tint = Color(teal))
 
         Icon(modifier = Modifier
@@ -283,7 +285,7 @@ fun SocialMedia(uriHandler: UriHandler) {
             .padding(horizontal = 8.dp)
             .size(24.dp),
             painter = painterResource(R.drawable.twitter),
-            contentDescription = "Twitter",
+            contentDescription = stringResource(R.string.twitter),
             tint = Color(teal))
 
         Icon(modifier = Modifier
@@ -291,7 +293,7 @@ fun SocialMedia(uriHandler: UriHandler) {
             .padding(horizontal = 8.dp)
             .size(24.dp),
             painter = painterResource(R.drawable.facebook),
-            contentDescription = "Facebook",
+            contentDescription = stringResource(R.string.facebook),
             tint = Color(teal))
     }
 }
