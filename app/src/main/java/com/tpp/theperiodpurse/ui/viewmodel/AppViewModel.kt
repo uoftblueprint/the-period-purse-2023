@@ -100,25 +100,25 @@ class AppViewModel @Inject constructor (
         return uiState.value.dates
     }
 
-    fun setTrackedSymptoms(trackedSymptoms: ArrayList<Symptom>) {
+    fun setTrackedSymptoms(trackedSymptoms: ArrayList<Symptom>, context: Context) {
         _uiState.update { currentState ->
             currentState.copy(trackedSymptoms = trackedSymptoms)
         }
         val sympCopy = trackedSymptoms.toMutableList()
         sympCopy.remove(Symptom.FLOW)
-        userRepository.setSymptoms(sympCopy)
+        userRepository.setSymptoms(sympCopy, context)
     }
 
-    fun updateSymptoms(symptom: Symptom): Boolean {
+    fun updateSymptoms(symptom: Symptom, context: Context): Boolean {
         val symptoms = getTrackedSymptoms()
         val sympCopy = symptoms.toMutableList()
         if(symptoms.contains(symptom)){
             sympCopy.remove(symptom)
-            setTrackedSymptoms(sympCopy as ArrayList<Symptom>)
+            setTrackedSymptoms(sympCopy as ArrayList<Symptom>, context)
             return false
         } else {
             sympCopy.add(symptom)
-            setTrackedSymptoms(sympCopy as ArrayList<Symptom>)
+            setTrackedSymptoms(sympCopy as ArrayList<Symptom>, context)
             return true
         }
     }
@@ -132,19 +132,19 @@ class AppViewModel @Inject constructor (
         return uiState.value.allowReminders
     }
 
-    fun toggleAllowReminders(){
+    fun toggleAllowReminders(context: Context){
         val currentReminderState = _uiState.value.allowReminders
         _uiState.update { currentState -> currentState.copy(allowReminders = !currentReminderState)}
-        userRepository.setReminders(!currentReminderState)
+        userRepository.setReminders(!currentReminderState, context)
     }
 
     fun getReminderTime(): String{
         return uiState.value.reminderTime
     }
 
-    fun setReminderTime(time: String){
+    fun setReminderTime(time: String, context: Context){
         _uiState.update { currentState -> currentState.copy(reminderTime = time) }
-        userRepository.setReminderTime(time)
+        userRepository.setReminderTime(time, context)
     }
 
     fun setReminderFreq(freq: String){
@@ -164,8 +164,8 @@ class AppViewModel @Inject constructor (
 
     }
 
-    fun deleteDate(date: Date) {
-        dateRepository.deleteDate(date)
+    fun deleteDate(date: Date, context: Context) {
+        dateRepository.deleteDate(date, context)
         val newList = uiState.value.dates.toMutableList()
         newList.remove(date)
         _uiState.update { currentState -> currentState.copy(dates = newList) }

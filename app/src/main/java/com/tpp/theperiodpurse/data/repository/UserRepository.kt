@@ -15,30 +15,30 @@ class UserRepository(private val userDAO: UserDAO) {
     val isOnboarded: MutableLiveData<Boolean?> = MutableLiveData(null)
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-    fun addUser(user: User) {
+    fun addUser(user: User, context: Context) {
         coroutineScope.launch (Dispatchers.IO) {
-            userDAO.save(user)
+            ApplicationRoomDatabase.getDatabase(context).userDAO().save(user)
         }
     }
 
-    fun setSymptoms(symptoms: List<Symptom>) {
+    fun setSymptoms(symptoms: List<Symptom>, context: Context) {
         coroutineScope.launch (Dispatchers.IO) {
             val jsonSymptoms = Gson().toJson(symptoms);
             if (jsonSymptoms != null) {
-                userDAO.updateSymptoms(symptoms = jsonSymptoms, id = 1)
+                ApplicationRoomDatabase.getDatabase(context).userDAO().updateSymptoms(symptoms = jsonSymptoms, id = 1)
             }
         }
     }
 
-    fun setReminders(allowReminders: Boolean) {
+    fun setReminders(allowReminders: Boolean, context: Context) {
         coroutineScope.launch (Dispatchers.IO) {
-            userDAO.updateReminders(id = 1, allowReminders)
+            ApplicationRoomDatabase.getDatabase(context).userDAO().updateReminders(id = 1, allowReminders)
         }
     }
 
-    fun setReminderTime(time: String) {
+    fun setReminderTime(time: String, context: Context) {
         coroutineScope.launch (Dispatchers.IO) {
-            userDAO.updateReminderTime(id = 1, time)
+            ApplicationRoomDatabase.getDatabase(context).userDAO().updateReminderTime(id = 1, time)
         }
     }
 
@@ -55,8 +55,8 @@ class UserRepository(private val userDAO: UserDAO) {
         return ApplicationRoomDatabase.getDatabase(context).userDAO().getUsers().isEmpty()
     }
 
-    suspend fun isOnboarded() {
-        isOnboarded.postValue(userDAO.getUsers().isNotEmpty())
+    suspend fun isOnboarded(context: Context) {
+        isOnboarded.postValue(ApplicationRoomDatabase.getDatabase(context).userDAO().getUsers().isNotEmpty())
     }
 
 }

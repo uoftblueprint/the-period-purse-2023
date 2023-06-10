@@ -210,7 +210,7 @@ fun ScreenApp(
 
     if (!skipDatabase){
         LaunchedEffect(Unit) {
-            onboardViewModel.checkOnboardedStatus()
+            onboardViewModel.checkOnboardedStatus(context)
         }
     }
     val startdestination : String

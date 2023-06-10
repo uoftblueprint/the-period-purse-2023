@@ -163,7 +163,7 @@ fun LogScreen(
                             ?.toLocalDate()
                         if (thisDate != null) {
                             if (thisDate == day) {
-                                appViewModel.deleteDate(d)
+                                appViewModel.deleteDate(d, context)
                             }
                         }
                     }
