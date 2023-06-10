@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -24,34 +25,33 @@ import com.tpp.theperiodpurse.ui.onboarding.GoogleSignInButton
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 
 @Composable
-fun BackUpAccountScreen(
-    appbar: Unit,
-    navController: NavHostController = rememberNavController(),
-    signIn: () -> Unit,
-    onboardUIState: OnboardUIState?,
-    context: Context
+fun BackUpAccountScreen(appbar: Unit,
+                        navController: NavHostController = rememberNavController(),
+                        signIn: () -> Unit,
+                        onboardUIState: OnboardUIState?,
+                        context: Context
 ) {
     val configuration = LocalConfiguration.current
     val screenheight = configuration.screenHeightDp
 
-    var confirmBackUp = remember { mutableStateOf(false) }
+    var confirmBackUp = remember { mutableStateOf(false)  }
 
 
     var firstCheck = remember {
         mutableStateOf(true)
     }
 
-    if (firstCheck.value) {
+    if (firstCheck.value){
         val account = GoogleSignIn.getLastSignedInAccount(context)
-        if (account != null && onboardUIState?.googleAccount == null) {
-            onboardUIState?.googleAccount = account.account
+        if (account != null && onboardUIState?.googleAccount ==null){
+            onboardUIState?.googleAccount= account.account
         }
         firstCheck.value = false
     }
 
     appbar
 
-    if (onboardUIState?.googleAccount != null) {
+    if (onboardUIState?.googleAccount != null){
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -61,55 +61,42 @@ fun BackUpAccountScreen(
                     end = (screenheight * 0.03).dp
                 ),
             contentAlignment = Alignment.TopStart
-        ) {
-            Column() {
-                Text(
-                    text = "Back Up Account",
-                    color = Color.DarkGray,
-                    fontSize = 18.scaledSp()
-                )
+        ) {Column() {
+            Text(text= "Back Up Account",
+                color = Color.DarkGray,
+                fontSize = 18.scaledSp())
 
-                Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))
-                Text(
-                    text = "Backing up to Google Drive will upload your data to Google Drive and ensure you can access it on other devices.",
-                    fontSize = 13.scaledSp()
-                )
-                Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(10.dp),
-                    onClick = {
-                        confirmBackUp.value = true
-                    },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
-                ) {
-                    Text(text = "Back Up Account", color = Color.White)
-                }
-                Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))
-                Text(
-                    text = "Last backup: Not available",
-                    color = Color.Gray,
-                    fontSize = 13.scaledSp()
-                )
+            Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))
+            Text(text= "Backing up to Google Drive will upload your data to Google Drive and ensure you can access it on other devices.",
+                fontSize = 13.scaledSp())
+            Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))
+            Button(modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(10.dp),
+                onClick = {
+                    confirmBackUp.value = true
+                },
+                colors =  ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))) {
+                Text(text = "Back Up Account", color = Color.White)
+            }
+            Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))
+            Text(text= "Last backup: Not available",
+                color = Color.Gray,
+                fontSize = 13.scaledSp())
             }
         }
-    } else {
+    }
+    else {
+
         val account = GoogleSignIn.getLastSignedInAccount(context)
 
-        if (account != null) {
+        if (account != null){
             if (onboardUIState != null) {
                 onboardUIState.googleAccount = account.account
                 confirmBackUp.value = true
             }
-        } else {
-            val signInResult = remember {
-                mutableStateOf(
-                    GoogleSignInResult(
-                        GoogleSignInAccount.createDefault(),
-                        Status.RESULT_CANCELED
-                    )
-                )
-            }
+        }
+        else {
+            val signInResult = remember { mutableStateOf(GoogleSignInResult(GoogleSignInAccount.createDefault(), Status.RESULT_CANCELED)) }
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -121,18 +108,14 @@ fun BackUpAccountScreen(
                 contentAlignment = Alignment.TopStart
             ) {
                 Column() {
-                    Text(
-                        text = "Back Up Account",
+                    Text(text= "Back Up Account",
                         color = Color.Gray,
-                        fontSize = 18.scaledSp()
-                    )
+                        fontSize = 18.scaledSp())
 
                     Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))
 
-                    Text(
-                        text = "Sign in to backup your data",
-                        fontSize = 15.scaledSp()
-                    )
+                    Text(text= "Sign in to backup your data",
+                        fontSize = 15.scaledSp())
 
                     Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))
 
@@ -142,11 +125,9 @@ fun BackUpAccountScreen(
                     LaunchedEffect(signInResult.value) {
                         if (signInResult.value.isSuccess) {
                             navController.navigate(SettingScreenNavigation.BackUpAccount.name)
-                        } else {
-                            signInResult.value = GoogleSignInResult(
-                                GoogleSignInAccount.createDefault(),
-                                Status.RESULT_CANCELED
-                            )
+                        }
+                        else {
+                            signInResult.value = GoogleSignInResult(GoogleSignInAccount.createDefault(), Status.RESULT_CANCELED)
                         }
                     }
                 }
