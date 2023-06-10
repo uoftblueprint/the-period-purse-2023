@@ -57,23 +57,25 @@ fun QuestionOneScreen(
 
     val screenheight = configuration.screenHeightDp;
 
-    if (periodCycle == ""){
+    if (periodCycle == "") {
         entered = false
     }
     backbutton({
         onboardUiState.days = 0
         onboardUiState.symptomsOptions = listOf()
         onboardUiState.date = ""
-        if (viewModel.checkGoogleLogin(context)){
+        if (viewModel.checkGoogleLogin(context)) {
             signOut()
         }
         onboardUiState.googleAccount = null
         navController.navigate(OnboardingScreen.Welcome.name)
-               }, canNavigateBack)
+    }, canNavigateBack)
 
-    Box(modifier = Modifier
-        .fillMaxHeight()
-        .fillMaxWidth()) {
+    Box(
+        modifier = Modifier
+            .fillMaxHeight()
+            .fillMaxWidth()
+    ) {
 
 
         Column(
@@ -171,7 +173,7 @@ fun QuestionOneScreen(
                 onClick = {
                     onboardUiState.days = 0
                     navController.navigate(OnboardingScreen.QuestionTwo.name)
-                          },
+                },
                 modifier = modifier
                     .padding(start = (screenwidth * (0.1)).dp)
                     .weight(1f)
@@ -192,7 +194,8 @@ fun QuestionOneScreen(
             Button(
                 onClick = {
                     onSelectionChanged(periodCycle);
-                    navController.navigate(OnboardingScreen.QuestionTwo.name) },
+                    navController.navigate(OnboardingScreen.QuestionTwo.name)
+                },
                 enabled = entered,
                 modifier = modifier
                     .padding(end = (screenwidth * (0.1)).dp)
@@ -237,7 +240,7 @@ fun EditNumberField(
     keyboardOptions: KeyboardOptions,
     onValueChange: (String) -> Unit,
     keyboardActions: KeyboardActions,
-){
+) {
 
     TextField(
         value = value,
@@ -260,13 +263,19 @@ fun EditDaysField(
     keyboardActions: KeyboardActions,
     entered: Boolean,
     onboardUiState: OnboardUIState
-){
+) {
     TextField(
         shape = RoundedCornerShape(20),
-        colors = TextFieldDefaults.textFieldColors(backgroundColor=Color.White),
+        colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
         value = value,
         onValueChange = onValueChange,
-        placeholder = {Text("Tap to input", fontSize = 17.scaledSp(), modifier = Modifier.padding(start=10.dp))},
+        placeholder = {
+            Text(
+                "Tap to input",
+                fontSize = 17.scaledSp(),
+                modifier = Modifier.padding(start = 10.dp)
+            )
+        },
 
         modifier = Modifier
             .width(175.dp)
@@ -277,29 +286,40 @@ fun EditDaysField(
                 shape = RoundedCornerShape(20)
             )
             .semantics { contentDescription = "Pick Days" },
-        trailingIcon = { if (entered || value != ""){
-            Text(text = "days", fontSize = 18.scaledSp(), fontWeight = FontWeight.Bold, color = Color.Black, modifier = Modifier.padding(end=20.dp))
+        trailingIcon = {
+            if (entered || value != "") {
+                Text(
+                    text = "days",
+                    fontSize = 18.scaledSp(),
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
+                    modifier = Modifier.padding(end = 20.dp)
+                )
 
-        }
-        else {
-            Image(
-                painter = painterResource(R.drawable.onboard_keyboard),
-                contentDescription = null,
-                modifier = Modifier.padding(start = 0.dp, end=20.dp),
-            )
-        }
+            } else {
+                Image(
+                    painter = painterResource(R.drawable.onboard_keyboard),
+                    contentDescription = null,
+                    modifier = Modifier.padding(start = 0.dp, end = 20.dp),
+                )
+            }
 
         },
-        textStyle = androidx.compose.ui.text.TextStyle(fontSize = 20.scaledSp(), textAlign = TextAlign.Center, fontWeight = FontWeight.Bold),
+        textStyle = androidx.compose.ui.text.TextStyle(
+            fontSize = 20.scaledSp(),
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold
+        ),
 
         singleLine = true,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
 
 
-    )
+        )
 
 }
+
 @Composable
 fun background_shape() {
 
