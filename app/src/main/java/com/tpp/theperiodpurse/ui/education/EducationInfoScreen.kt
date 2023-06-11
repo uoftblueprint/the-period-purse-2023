@@ -83,7 +83,7 @@ fun EducationInfoScreen(
             fontSize = 18.scaledSp()
         )
 
-        Spacer(modifier = Modifier.weight(3f))
+        Spacer(modifier = Modifier.weight(45f))
     }
 }
 
