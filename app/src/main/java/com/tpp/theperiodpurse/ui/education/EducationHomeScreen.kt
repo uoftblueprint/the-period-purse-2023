@@ -40,6 +40,15 @@ fun EducationScreenLayout(
 
     EducationBackground()
 
+    EducationScreenContent(navController, uriHandler, outController)
+}
+
+@Composable
+fun EducationScreenContent(
+    navController: NavHostController,
+    uriHandler: UriHandler,
+    outController: NavHostController
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -52,24 +61,7 @@ fun EducationScreenLayout(
             state = rememberLazyGridState()
         ) {
             item(span = { GridItemSpan(2) }) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally)
-                ) {
-                    Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                        DYKCard(navController)
-                    }
-
-                    Text(
-                        modifier = Modifier.padding(8.dp),
-                        textAlign = TextAlign.Left,
-                        color = Color(gray),
-                        fontWeight = FontWeight.W800,
-                        fontSize = 15.scaledSp(),
-                        text = stringResource(R.string.tap_to_learn_more)
-                    )
-                }
+                TopSection(navController)
             }
 
             items(ProductsList, span = { GridItemSpan(1) }) {
@@ -77,31 +69,58 @@ fun EducationScreenLayout(
             }
 
             item(span = { GridItemSpan(2) }) {
-                Column {
-                    TPPCard(uriHandler)
-
-                    Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                        SocialMedia(uriHandler)
-                    }
-
-                    Text(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp, vertical = 12.dp)
-                            .align(Alignment.CenterHorizontally),
-                        text = stringResource(R.string.copyright),
-                        textAlign = TextAlign.Center,
-                        fontSize = 15.scaledSp(),
-                        color = Color.DarkGray
-                    )
-
-                    Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                        TermsAndPrivacyFooter(outController)
-                    }
-
-                    Spacer(modifier = Modifier.size(64.dp))
-                }
+                BottomSection(uriHandler, outController)
             }
         }
+    }
+}
+
+@Composable
+fun TopSection(navController: NavHostController) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentWidth(Alignment.CenterHorizontally)
+    ) {
+        Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            DYKCard(navController)
+        }
+
+        Text(
+            modifier = Modifier.padding(8.dp),
+            textAlign = TextAlign.Left,
+            color = Color(gray),
+            fontWeight = FontWeight.W800,
+            fontSize = 15.scaledSp(),
+            text = stringResource(R.string.tap_to_learn_more)
+        )
+    }
+}
+
+@Composable
+fun BottomSection(uriHandler: UriHandler, outController: NavHostController) {
+    Column {
+        TPPCard(uriHandler)
+
+        Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            SocialMedia(uriHandler)
+        }
+
+        Text(
+            modifier = Modifier
+                .padding(horizontal = 8.dp, vertical = 12.dp)
+                .align(Alignment.CenterHorizontally),
+            text = stringResource(R.string.copyright),
+            textAlign = TextAlign.Center,
+            fontSize = 15.scaledSp(),
+            color = Color.DarkGray
+        )
+
+        Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            TermsAndPrivacyFooter(outController)
+        }
+
+        Spacer(modifier = Modifier.size(64.dp))
     }
 }
 
