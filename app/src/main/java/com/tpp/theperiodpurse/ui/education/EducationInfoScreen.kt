@@ -97,7 +97,7 @@ fun EducationInfoScreen(
 
         )
 
-        Spacer(modifier = Modifier.weight(45f))
+        Spacer(modifier = Modifier.weight(3f))
 
     }
 }
