@@ -25,9 +25,7 @@ import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 @Composable
 fun EducationDYKScreen(navController: NavHostController) {
     val interactionSource = remember { MutableInteractionSource() }
-
     EducationBackground()
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -44,22 +42,18 @@ fun EducationDYKScreen(navController: NavHostController) {
             painter = painterResource(R.drawable.arrow),
             contentDescription = stringResource(R.string.back_button_label),
             tint = Color(teal))
-
         Spacer(modifier = Modifier.weight(1f))
-
         Image(
             modifier = Modifier.height(150.dp),
             painter = painterResource(R.drawable.dykpad),
             contentDescription = stringResource(R.string.paddy)
         )
-
         Text(
             modifier = Modifier.padding(24.dp),
             fontWeight = FontWeight.Bold,
             text = stringResource(R.string.did_you_know),
             fontSize = 25.scaledSp(),
         )
-
         Text(
             modifier = Modifier.padding(horizontal = 72.dp, vertical = 0.dp),
             textAlign = TextAlign.Center,
@@ -67,7 +61,6 @@ fun EducationDYKScreen(navController: NavHostController) {
             fontSize = 20.scaledSp(),
             text = stringResource(R.string.board_game_long)
         )
-
         Spacer(modifier = Modifier.weight(1f))
     }
 }

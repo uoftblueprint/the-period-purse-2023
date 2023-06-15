@@ -37,17 +37,13 @@ fun EducationScreenLayout(
     navController: NavHostController,
 ) {
     val uriHandler = LocalUriHandler.current
-
     EducationBackground()
-
     EducationScreenContent(navController, uriHandler, outController)
 }
 
 @Composable
 fun EducationScreenContent(
-    navController: NavHostController,
-    uriHandler: UriHandler,
-    outController: NavHostController
+    navController: NavHostController, uriHandler: UriHandler, outController: NavHostController
 ) {
     Column(
         modifier = Modifier
@@ -63,11 +59,9 @@ fun EducationScreenContent(
             item(span = { GridItemSpan(2) }) {
                 TopSection(navController)
             }
-
             items(ProductsList, span = { GridItemSpan(1) }) {
                 PeriodProducts(navController, it)
             }
-
             item(span = { GridItemSpan(2) }) {
                 BottomSection(uriHandler, outController)
             }
@@ -85,7 +79,6 @@ fun TopSection(navController: NavHostController) {
         Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             DYKCard(navController)
         }
-
         Text(
             modifier = Modifier.padding(8.dp),
             textAlign = TextAlign.Left,
@@ -101,11 +94,9 @@ fun TopSection(navController: NavHostController) {
 fun BottomSection(uriHandler: UriHandler, outController: NavHostController) {
     Column {
         TPPCard(uriHandler)
-
         Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             SocialMedia(uriHandler)
         }
-
         Text(
             modifier = Modifier
                 .padding(horizontal = 8.dp, vertical = 12.dp)
@@ -115,11 +106,9 @@ fun BottomSection(uriHandler: UriHandler, outController: NavHostController) {
             fontSize = 15.scaledSp(),
             color = Color.DarkGray
         )
-
         Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             TermsAndPrivacyFooter(outController)
         }
-
         Spacer(modifier = Modifier.size(64.dp))
     }
 }
@@ -147,7 +136,6 @@ fun DYKCard(navController: NavHostController) {
                     fontWeight = FontWeight.W800,
                     text = stringResource(R.string.did_you_know)
                 )
-
                 Text(
                     modifier = Modifier
                         .width(200.dp)
@@ -158,7 +146,6 @@ fun DYKCard(navController: NavHostController) {
                     text = stringResource(R.string.board_game)
                 )
             }
-
             Image(
                 modifier = Modifier
                     .height(120.dp)
@@ -204,7 +191,6 @@ fun PeriodProducts(navController: NavHostController, it: Product) {
                     R.string.product_image_description, it
                 )
             )
-
             Text(
                 modifier = Modifier
                     .padding(8.dp)
@@ -240,14 +226,12 @@ fun TPPCard(uriHandler: UriHandler) {
                 text = stringResource(R.string.learn_more),
                 fontSize = 15.scaledSp()
             )
-
             Text(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 0.dp),
                 textAlign = TextAlign.Center,
                 text = stringResource(R.string.strives_to_achieve),
                 fontSize = 13.scaledSp()
             )
-
             Button(modifier = Modifier
                 .padding(16.dp)
                 .align(Alignment.CenterHorizontally),
@@ -278,7 +262,6 @@ fun SocialMedia(uriHandler: UriHandler) {
             painter = painterResource(R.drawable.instagram),
             contentDescription = stringResource(R.string.instagram),
             tint = Color(teal))
-
         Icon(modifier = Modifier
             .clickable { uriHandler.openUri("https://www.tiktok.com/@theperiodpurse") }
             .padding(horizontal = 8.dp)
@@ -286,7 +269,6 @@ fun SocialMedia(uriHandler: UriHandler) {
             painter = painterResource(R.drawable.tiktok),
             contentDescription = stringResource(R.string.tiktok),
             tint = Color(teal))
-
         Icon(modifier = Modifier
             .clickable {
                 uriHandler.openUri(
@@ -298,7 +280,6 @@ fun SocialMedia(uriHandler: UriHandler) {
             painter = painterResource(R.drawable.youtube),
             contentDescription = stringResource(R.string.youtube),
             tint = Color(teal))
-
         Icon(modifier = Modifier
             .clickable { uriHandler.openUri("https://twitter.com/ThePeriodPurse") }
             .padding(horizontal = 8.dp)
@@ -306,7 +287,6 @@ fun SocialMedia(uriHandler: UriHandler) {
             painter = painterResource(R.drawable.twitter),
             contentDescription = stringResource(R.string.twitter),
             tint = Color(teal))
-
         Icon(modifier = Modifier
             .clickable { uriHandler.openUri("https://www.facebook.com/theperiodpurse") }
             .padding(horizontal = 8.dp)

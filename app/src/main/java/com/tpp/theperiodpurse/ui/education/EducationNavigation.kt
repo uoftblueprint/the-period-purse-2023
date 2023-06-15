@@ -28,18 +28,15 @@ fun EducationScreen(
         composable(route = EducationNavigation.Learn.name) {
             EducationScreenLayout(outController, navController)
         }
-
         composable(EducationNavigation.DYK.name) {
             EducationDYKScreen(navController)
         }
-
         composable(
             route = EducationNavigation.ProductInfo.name,
             arguments = listOf(navArgument("elementId") { nullable = true })
         ) {
             val elementId =
                 navController.previousBackStackEntry?.savedStateHandle?.get<String>("elementId")
-
             if (elementId != null) {
                 EducationInfoScreen(navController, elementId)
             }

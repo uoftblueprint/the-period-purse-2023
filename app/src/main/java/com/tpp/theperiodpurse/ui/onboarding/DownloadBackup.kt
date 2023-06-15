@@ -14,27 +14,24 @@ import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DownloadBackup(googleAccount: Account?, viewModel: OnboardViewModel, navHostController: NavHostController, context: Context) {
-
+fun DownloadBackup(
+    googleAccount: Account?,
+    viewModel: OnboardViewModel,
+    navHostController: NavHostController,
+    context: Context
+) {
     val isDownloaded by viewModel.isDownloaded.observeAsState(initial = null)
-
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         if (googleAccount != null) {
             viewModel.downloadBackup(googleAccount, context)
         }
     }
-    if (isDownloaded == null){
+    if (isDownloaded == null) {
         LoadingScreen()
-    }
-    else {
-
-        LaunchedEffect(Unit){
+    } else {
+        LaunchedEffect(Unit) {
             viewModel.isDownloaded.postValue(null)
             navHostController.navigate(OnboardingScreen.LoadDatabase.name)
         }
-
     }
-
-
-
 }

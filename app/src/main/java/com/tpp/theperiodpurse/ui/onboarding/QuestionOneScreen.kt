@@ -1,6 +1,5 @@
 package com.tpp.theperiodpurse.ui.onboarding
 
-
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -34,12 +33,12 @@ import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.state.OnboardUIState
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 
-
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun QuestionOneScreen(
+    modifier: Modifier = Modifier,
     onSelectionChanged: (String) -> Unit = {},
-    modifier: Modifier = Modifier, navigateUp: () -> Unit,
+    navigateUp: () -> Unit,
     canNavigateBack: Boolean,
     onboardUiState: OnboardUIState,
     navController: NavHostController,
@@ -51,53 +50,41 @@ fun QuestionOneScreen(
     var entered by rememberSaveable { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val configuration = LocalConfiguration.current
-
-
     val screenwidth = configuration.screenWidthDp;
-
     val screenheight = configuration.screenHeightDp;
-
-    if (periodCycle == ""){
+    if (periodCycle == "") {
         entered = false
     }
     backbutton({
         onboardUiState.days = 0
         onboardUiState.symptomsOptions = listOf()
         onboardUiState.date = ""
-        if (viewModel.checkGoogleLogin(context)){
+        if (viewModel.checkGoogleLogin(context)) {
             signOut()
         }
         onboardUiState.googleAccount = null
         navController.navigate(OnboardingScreen.Welcome.name)
-               }, canNavigateBack)
-
-    Box(modifier = Modifier
-        .fillMaxHeight()
-        .fillMaxWidth()) {
-
-
+    }, canNavigateBack)
+    Box(
+        modifier = Modifier
+            .fillMaxHeight()
+            .fillMaxWidth()
+    ) {
         Column(
-
             horizontalAlignment = Alignment.CenterHorizontally,
-
-            ) {
-
+        ) {
             val ratio = 0.5
             val ratioimage = 0.2
             val height = (screenheight * ratio)
             val imageheight = (screenheight * ratioimage)
-
             Spacer(Modifier.height((screenheight * (0.02)).dp))
-
             Box(
                 modifier = Modifier
                     .width(screenwidth.dp)
                     .height(height.dp)
 
-            )
-            {
-                background_shape()
-
+            ) {
+                Background_shape()
                 Image(
                     painter = painterResource(R.drawable.last_period_length),
                     contentDescription = null,
@@ -106,7 +93,6 @@ fun QuestionOneScreen(
                         .align(Alignment.Center),
                 )
                 val barheight1 = (screenheight * (0.09))
-
                 Image(
                     painter = painterResource(R.drawable.onboard_bar1),
                     contentDescription = null,
@@ -114,9 +100,7 @@ fun QuestionOneScreen(
                         .size(barheight1.dp)
                         .align(Alignment.BottomCenter),
                 )
-
             }
-
             Text(
                 text = stringResource(R.string.question_one),
                 fontSize = (screenheight * (0.035)).scaledSp(),
@@ -127,7 +111,6 @@ fun QuestionOneScreen(
                 textAlign = TextAlign.Center
             )
             Spacer(Modifier.height((screenheight * (0.01)).dp))
-
             Text(
                 text = stringResource(R.string.description_one),
                 fontSize = (screenheight * (0.03)).scaledSp(),
@@ -137,15 +120,12 @@ fun QuestionOneScreen(
                 textAlign = TextAlign.Center
             )
             Spacer(Modifier.height((screenheight * (0.02)).dp))
-
             EditDaysField(
                 label = R.string.tap_to_input,
                 value = periodCycle,
                 onValueChange = { periodCycle = it },
-
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Done
+                    keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(
                     onDone = {
@@ -156,9 +136,7 @@ fun QuestionOneScreen(
                 entered = entered,
                 onboardUiState = onboardUiState
             )
-
             Spacer(Modifier.height((screenheight * (0.01)).dp))
-
         }
         Row(
             modifier = Modifier
@@ -171,7 +149,7 @@ fun QuestionOneScreen(
                 onClick = {
                     onboardUiState.days = 0
                     navController.navigate(OnboardingScreen.QuestionTwo.name)
-                          },
+                },
                 modifier = modifier
                     .padding(start = (screenwidth * (0.1)).dp)
                     .weight(1f)
@@ -180,19 +158,18 @@ fun QuestionOneScreen(
                     backgroundColor = Color.Transparent,
                     disabledBackgroundColor = Color.Transparent,
                 ),
-
-                ) {
+            ) {
                 Text(
                     stringResource(R.string.skip),
                     color = Color(97, 153, 150),
                     fontSize = 20.scaledSp()
                 )
             }
-
             Button(
                 onClick = {
                     onSelectionChanged(periodCycle);
-                    navController.navigate(OnboardingScreen.QuestionTwo.name) },
+                    navController.navigate(OnboardingScreen.QuestionTwo.name)
+                },
                 enabled = entered,
                 modifier = modifier
                     .padding(end = (screenwidth * (0.1)).dp)
@@ -202,33 +179,23 @@ fun QuestionOneScreen(
             ) {
                 Text(stringResource(R.string.next), color = Color.White, fontSize = 20.scaledSp())
             }
-
-
         }
     }
 }
 
 @Composable
 fun backbutton(navigateUp: () -> Unit, canNavigateBack: Boolean) {
-
-    TopAppBar(
-        title = { "" },
-        navigationIcon = {
-            if (canNavigateBack) {
-                IconButton(onClick = navigateUp) {
-                    Image(
-                        painter = painterResource(R.drawable.back_icon),
-                        contentDescription = "Back"
-                    )
-                }
+    TopAppBar(title = { "" }, navigationIcon = {
+        if (canNavigateBack) {
+            IconButton(onClick = navigateUp) {
+                Image(
+                    painter = painterResource(R.drawable.back_icon), contentDescription = "Back"
+                )
             }
-        },
-        backgroundColor = Color.Transparent,
-        elevation = 0.dp
-
+        }
+    }, backgroundColor = Color.Transparent, elevation = 0.dp
     )
 }
-
 
 @Composable
 fun EditNumberField(
@@ -237,8 +204,7 @@ fun EditNumberField(
     keyboardOptions: KeyboardOptions,
     onValueChange: (String) -> Unit,
     keyboardActions: KeyboardActions,
-){
-
+) {
     TextField(
         value = value,
         onValueChange = onValueChange,
@@ -247,7 +213,6 @@ fun EditNumberField(
         singleLine = true,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions
-
     )
 }
 
@@ -260,55 +225,57 @@ fun EditDaysField(
     keyboardActions: KeyboardActions,
     entered: Boolean,
     onboardUiState: OnboardUIState
-){
+) {
     TextField(
         shape = RoundedCornerShape(20),
-        colors = TextFieldDefaults.textFieldColors(backgroundColor=Color.White),
+        colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
         value = value,
         onValueChange = onValueChange,
-        placeholder = {Text("Tap to input", fontSize = 17.scaledSp(), modifier = Modifier.padding(start=10.dp))},
-
+        placeholder = {
+            Text(
+                "Tap to input", fontSize = 17.scaledSp(), modifier = Modifier.padding(start = 10.dp)
+            )
+        },
         modifier = Modifier
             .width(175.dp)
             .height(60.dp)
             .background(color = Color.White, shape = RoundedCornerShape(20))
             .border(
-                BorderStroke(2.dp, SolidColor(Color.Transparent)),
-                shape = RoundedCornerShape(20)
+                BorderStroke(2.dp, SolidColor(Color.Transparent)), shape = RoundedCornerShape(20)
             )
             .semantics { contentDescription = "Pick Days" },
-        trailingIcon = { if (entered || value != ""){
-            Text(text = "days", fontSize = 18.scaledSp(), fontWeight = FontWeight.Bold, color = Color.Black, modifier = Modifier.padding(end=20.dp))
-
-        }
-        else {
-            Image(
-                painter = painterResource(R.drawable.onboard_keyboard),
-                contentDescription = null,
-                modifier = Modifier.padding(start = 0.dp, end=20.dp),
-            )
-        }
-
+        trailingIcon = {
+            if (entered || value != "") {
+                Text(
+                    text = "days",
+                    fontSize = 18.scaledSp(),
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
+                    modifier = Modifier.padding(end = 20.dp)
+                )
+            } else {
+                Image(
+                    painter = painterResource(R.drawable.onboard_keyboard),
+                    contentDescription = null,
+                    modifier = Modifier.padding(start = 0.dp, end = 20.dp),
+                )
+            }
         },
-        textStyle = androidx.compose.ui.text.TextStyle(fontSize = 20.scaledSp(), textAlign = TextAlign.Center, fontWeight = FontWeight.Bold),
-
+        textStyle = androidx.compose.ui.text.TextStyle(
+            fontSize = 20.scaledSp(), textAlign = TextAlign.Center, fontWeight = FontWeight.Bold
+        ),
         singleLine = true,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
-
-
     )
-
 }
-@Composable
-fun background_shape() {
 
+@Composable
+fun Background_shape() {
     Image(
         painter = painterResource(R.drawable.background_shape__1_),
         contentDescription = null,
         modifier = Modifier.size(1000.dp)
     )
-
-
 }
 

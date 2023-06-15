@@ -32,16 +32,13 @@ fun EducationInfoScreen(
     elementId: String,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-
     var product = Product()
     ProductsList.forEach {
         if (it.ProductName == elementId) {
             product = it
         }
     }
-
     EducationBackground()
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -58,9 +55,7 @@ fun EducationInfoScreen(
             painter = painterResource(R.drawable.arrow),
             contentDescription = stringResource(R.string.back_button_label),
             tint = Color(teal))
-
         Spacer(modifier = Modifier.weight(1f))
-
         Image(
             modifier = Modifier
                 .height(200.dp)
@@ -71,18 +66,15 @@ fun EducationInfoScreen(
                 R.string.product_image_description, elementId
             )
         )
-
         Text(
             fontWeight = Bold, fontSize = 32.scaledSp(), text = product.ProductName
         )
-
         Text(
             modifier = Modifier.padding(12.dp),
             textAlign = TextAlign.Center,
             text = product.description,
             fontSize = 18.scaledSp()
         )
-
         Spacer(modifier = Modifier.weight(45f))
     }
 }

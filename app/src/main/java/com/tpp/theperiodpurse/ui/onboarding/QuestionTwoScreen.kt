@@ -25,7 +25,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.R
@@ -34,9 +33,9 @@ import com.tpp.theperiodpurse.ui.state.OnboardUIState
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun QuestionTwoScreen(
+    modifier: Modifier = Modifier,
     onboardUiState: OnboardUIState,
     onSelectionChanged: (String) -> Unit = {},
-    modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
     canNavigateBack: Boolean,
     navController: NavHostController
@@ -44,7 +43,7 @@ fun QuestionTwoScreen(
     var entered by rememberSaveable { mutableStateOf(false) }
     val mDate = rememberSaveable { mutableStateOf("Choose date") }
     val mDateTo = rememberSaveable { mutableStateOf("") }
-    if (onboardUiState.date.contains("/")){
+    if (onboardUiState.date.contains("/")) {
         mDate.value = onboardUiState.date.split(" to ")[0]
         mDateTo.value = onboardUiState.date.split(" to ")[1]
         entered = true
@@ -53,9 +52,11 @@ fun QuestionTwoScreen(
     val screenwidth = configuration.screenWidthDp
     val screenheight = configuration.screenHeightDp
     backbutton(navigateUp, canNavigateBack)
-    Box(modifier = Modifier
-        .fillMaxHeight()
-        .fillMaxWidth()) {
+    Box(
+        modifier = Modifier
+            .fillMaxHeight()
+            .fillMaxWidth()
+    ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -68,9 +69,8 @@ fun QuestionTwoScreen(
                 modifier = Modifier
                     .width(screenwidth.dp)
                     .height(height.dp)
-            )
-            {
-                background_shape()
+            ) {
+                Background_shape()
                 Image(
                     painter = painterResource(R.drawable.flow_with_heart),
                     contentDescription = null,
@@ -109,21 +109,18 @@ fun QuestionTwoScreen(
                 onClick = {
                     navController.navigate(OnboardingScreen.DateRangePicker.name)
                     entered = true
-                }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
                 modifier = modifier
                     .width(175.dp)
                     .semantics { contentDescription = "datepick" },
                 shape = RoundedCornerShape(20)
             ) {
-                if (mDate.value.contains("Choose date")){
+                if (mDate.value.contains("Choose date")) {
                     Row(
-                        modifier = Modifier
-                            .padding(
-                                start = 12.dp,
-                                end = 16.dp,
-                                top = 12.dp,
-                                bottom = 12.dp
-                            ),
+                        modifier = Modifier.padding(
+                            start = 12.dp, end = 16.dp, top = 12.dp, bottom = 12.dp
+                        ),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
@@ -131,19 +128,14 @@ fun QuestionTwoScreen(
                         Image(
                             painter = painterResource(R.drawable.onboard_calendar),
                             contentDescription = null,
-                            modifier = Modifier.padding(start = 10.dp, end=0.dp),
+                            modifier = Modifier.padding(start = 10.dp, end = 0.dp),
                         )
                     }
-                }
-                else {
+                } else {
                     Row(
-                        modifier = Modifier
-                            .padding(
-                                start = 12.dp,
-                                end = 12.dp,
-                                top = 12.dp,
-                                bottom = 12.dp
-                            ),
+                        modifier = Modifier.padding(
+                            start = 12.dp, end = 12.dp, top = 12.dp, bottom = 12.dp
+                        ),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
@@ -173,7 +165,11 @@ fun QuestionTwoScreen(
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
 
             ) {
-                Text(stringResource(R.string.skip), color = Color(97, 153, 154), fontSize = 20.scaledSp())
+                Text(
+                    stringResource(R.string.skip),
+                    color = Color(97, 153, 154),
+                    fontSize = 20.scaledSp()
+                )
             }
             Button(
                 onClick = {

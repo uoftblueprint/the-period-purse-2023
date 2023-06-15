@@ -20,38 +20,37 @@ import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun LoadGoogleDrive(googleAccount: Account?, viewModel: OnboardViewModel, navHostController: NavHostController, context: Context) {
-
+fun LoadGoogleDrive(
+    googleAccount: Account?,
+    viewModel: OnboardViewModel,
+    navHostController: NavHostController,
+    context: Context
+) {
     val isDrive by viewModel.isDrive.observeAsState(initial = null)
-
-    var confirmLoad = remember { mutableStateOf(false)  }
-
-    var decision = remember { mutableStateOf(false)  }
-
-    if (googleAccount == null){
+    val confirmLoad = remember { mutableStateOf(false) }
+    val decision = remember { mutableStateOf(false) }
+    if (googleAccount == null) {
         navHostController.navigate(OnboardingScreen.QuestionOne.name)
     }
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         if (googleAccount != null) {
             viewModel.checkGoogleDrive(account = googleAccount, context = context)
         }
     }
-
-    if (isDrive == null){
+    if (isDrive == null) {
         LoadingScreen()
-    }
-    else {
-
-        if (!confirmLoad.value){
-
-            AlertDialog(
-                modifier = Modifier.padding(16.dp),
+    } else {
+        if (!confirmLoad.value) {
+            AlertDialog(modifier = Modifier.padding(16.dp),
                 shape = RoundedCornerShape(10.dp),
                 backgroundColor = Color.White,
                 contentColor = Color.Black,
                 onDismissRequest = { },
                 title = {
-                    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         Text(
                             text = "Use Backup",
                             style = MaterialTheme.typography.h6,
@@ -71,7 +70,6 @@ fun LoadGoogleDrive(googleAccount: Account?, viewModel: OnboardViewModel, navHos
                         onClick = {
                             confirmLoad.value = true
                             decision.value = true
-
                         },
                         modifier = Modifier
                             .padding(2.dp)
@@ -93,7 +91,6 @@ fun LoadGoogleDrive(googleAccount: Account?, viewModel: OnboardViewModel, navHos
                             .padding(2.dp)
                             .height(48.dp)
                             .fillMaxWidth(),
-
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
                     ) {
                         Text(
@@ -102,33 +99,18 @@ fun LoadGoogleDrive(googleAccount: Account?, viewModel: OnboardViewModel, navHos
                             color = Color(195, 50, 50),
                         )
                     }
-                }
-            )
-
+                })
         }
-
-        if (isDrive!!.files.isNotEmpty() && confirmLoad.value && decision.value){
+        if (isDrive!!.files.isNotEmpty() && confirmLoad.value && decision.value) {
             confirmLoad.value = false
             LaunchedEffect(Unit) {
                 navHostController.navigate(OnboardingScreen.DownloadBackup.name)
             }
-
-        }
-        else if (confirmLoad.value) {
+        } else if (confirmLoad.value) {
             confirmLoad.value = false
             LaunchedEffect(Unit) {
                 navHostController.navigate(OnboardingScreen.QuestionOne.name)
-
             }
-
         }
-
-
     }
-
-
-
-
-
-
 }
