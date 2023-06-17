@@ -80,4 +80,7 @@
     <string name="instagram">Instagram</string>
     <string name="learn_more">Learn more about The Period Purse</string>
     <string name="strives_to_achieve">The Period Purse strives to achieve menstrual equity by providing people who menstruate with access to free menstrual products, and to reduce the stigma surrounding period through public education and advocacy.</string>
+
+    <string name="calendar">Calendar</string>
+    <string name="calendar_page">Calendar Page</string>
 </resources>
