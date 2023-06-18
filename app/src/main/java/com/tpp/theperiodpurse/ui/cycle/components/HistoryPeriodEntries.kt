@@ -19,8 +19,7 @@ fun PeriodEntries(periods: ArrayList<ArrayList<Date>>, upperbound: Int?) {
     if (periods.size == 0 || periods[0].size == 0) {
         Text(text = stringResource(R.string.please_start_logging_to_learn_more))
     } else {
-        val length = if (upperbound != null) kotlin.math.min(periods.size, upperbound)
-        else periods.size
+        val length = if (upperbound != null) kotlin.math.min(periods.size, upperbound) else periods.size
         periods.reverse()
         Column {
             val formatter = SimpleDateFormat("MMM d", Locale.getDefault())
@@ -32,7 +31,7 @@ fun PeriodEntries(periods: ArrayList<ArrayList<Date>>, upperbound: Int?) {
                 val current = LocalDate.now().year
                 if (i == 0 && converted == current) {
                     val formattedDate = formatter.format(date)
-                    // only if same year
+                    // Only if same year
                     Text(text = "Most Recent Period: Started $formattedDate")
                 } else {
                     val period = periods[i]

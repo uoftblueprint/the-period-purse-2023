@@ -27,7 +27,9 @@ fun CurrentCycleBox(modifier: Modifier = Modifier, dates: ArrayList<Date>) {
     Card(
         modifier
             .fillMaxWidth()
-            .height(300.dp), elevation = 2.dp, shape = RoundedCornerShape(5)
+            .height(300.dp),
+        elevation = 2.dp,
+        shape = RoundedCornerShape(5)
     ) {
         Text(
             text = stringResource(R.string.current_cycle),
@@ -36,7 +38,9 @@ fun CurrentCycleBox(modifier: Modifier = Modifier, dates: ArrayList<Date>) {
             color = Color(0xFFB12126),
             modifier = modifier.padding(start = 20.dp, top = 20.dp)
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(
+            modifier = Modifier.height(16.dp)
+        )
         Box(
             modifier = Modifier
                 .padding(20.dp)

@@ -43,18 +43,20 @@ fun PeriodHistoryLayout(
         years[LocalDate.now().year] = ArrayList()
     }
     var yearSelected by remember { mutableStateOf(years.keys.last()) }
-    // Iterateing over years and create horizontally scrollable buttons
+    // Iterate over years and create horizontally scrollable buttons
     Scaffold(
         topBar = {
             TopAppBar (
-                {Text(
+                {
+                    Text(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight(),
                     text = "Period History",
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.scaledSp()
-                )},
+                    )
+                },
                 backgroundColor = Color.White,
                 elevation = 0.dp,
                 navigationIcon = {
@@ -100,7 +102,9 @@ fun PeriodHistoryLayout(
                     }
                 }
                 Card(
-                    modifier.fillMaxWidth(), elevation = 2.dp, shape = RoundedCornerShape(10)
+                    modifier.fillMaxWidth(),
+                    elevation = 2.dp,
+                    shape = RoundedCornerShape(10)
                 ) {
                     Column(modifier.padding(horizontal = 15.dp, vertical = 15.dp)) {
                         Row(

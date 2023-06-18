@@ -33,10 +33,10 @@ fun CycleHistoryBox(
             .padding(bottom = 20.dp),
         elevation = 2.dp,
         shape = RoundedCornerShape(10)
-
     ) {
         Column(modifier.padding(horizontal = 15.dp, vertical = 15.dp)) {
-            Row (modifier = Modifier.fillMaxWidth(),
+            Row(
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(

@@ -50,9 +50,7 @@ fun CycleScreenLayout(
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
                 .fillMaxHeight()
-                .padding(
-                    horizontal = 20.dp, vertical = 25.dp
-                )
+                .padding(horizontal = 20.dp, vertical = 25.dp)
         ) {
             CurrentCycleBox(dates = dates)
             Spacer(modifier.height(30.dp))
