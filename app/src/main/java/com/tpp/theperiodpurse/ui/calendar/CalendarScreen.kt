@@ -1,7 +1,5 @@
 package com.tpp.theperiodpurse.ui.calendar
 
-
-
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -21,7 +19,6 @@ import com.tpp.theperiodpurse.ui.calendar.components.*
 import com.tpp.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import java.util.*
-
 
 val tabModifier = Modifier
     .background(Color.White)
