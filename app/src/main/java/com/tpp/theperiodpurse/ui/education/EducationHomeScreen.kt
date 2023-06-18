@@ -13,12 +13,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
@@ -31,9 +31,6 @@ const val gray = 0xFF6D6E71
 const val teal = 0xFF72C6B7
 const val pink = 0xFFFFA3A4
 
-/**
- * Education Home Screen for the Learn/Info Tab on the App.
- */
 @Composable
 fun EducationScreenLayout(
     outController: NavHostController = rememberNavController(),
@@ -43,9 +40,18 @@ fun EducationScreenLayout(
 
     EducationBackground()
 
+    EducationScreenContent(navController, uriHandler, outController)
+}
 
+@Composable
+fun EducationScreenContent(
+    navController: NavHostController,
+    uriHandler: UriHandler,
+    outController: NavHostController
+) {
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .padding(bottom = 50.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -54,78 +60,75 @@ fun EducationScreenLayout(
             contentPadding = PaddingValues(8.dp),
             state = rememberLazyGridState()
         ) {
-            item (span = { GridItemSpan(2) }) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally)
-                ) {
-
-                    /* DYK Card Facts */
-                    Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                        DYKCard(navController)
-                    }
-
-                    Text(
-                        modifier = Modifier.padding(8.dp),
-                        textAlign = TextAlign.Left,
-                        color = Color(gray),
-                        fontWeight = FontWeight.W800,
-                        fontSize = 15.scaledSp(),
-                        text = "Tap to learn more about period products."
-                    )
-                }
+            item(span = { GridItemSpan(2) }) {
+                TopSection(navController)
             }
 
-            /* Grid for Period Products */
-            items(
-                ProductsList,
-            span = { GridItemSpan(1) }) {
+            items(ProductsList, span = { GridItemSpan(1) }) {
                 PeriodProducts(navController, it)
             }
 
-            /* Bottom Section */
-            item (
-                span = {GridItemSpan(2)}
-            ) {
-                Column {
-                    TPPCard(uriHandler)
-
-                    Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                        SocialMedia(uriHandler)
-                    }
-
-                    Text(modifier = Modifier
-                        .padding(horizontal = 8.dp, vertical = 12.dp)
-                        .align(Alignment.CenterHorizontally),
-                        text = "© 2023 The Period Purse. All rights reserved.",
-                        textAlign = TextAlign.Center,
-                        fontSize = 15.scaledSp(),
-                        color = Color.DarkGray
-                    )
-
-                    /*
-                    Terms & Conditions, and Privacy Policy
-                     */
-                    Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                        TermsAndPrivacyFooter(outController)
-                    }
-
-                    Spacer(modifier = Modifier.size(64.dp))
-                }
+            item(span = { GridItemSpan(2) }) {
+                BottomSection(uriHandler, outController)
             }
         }
     }
 }
 
+@Composable
+fun TopSection(navController: NavHostController) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentWidth(Alignment.CenterHorizontally)
+    ) {
+        Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            DYKCard(navController)
+        }
+
+        Text(
+            modifier = Modifier.padding(8.dp),
+            textAlign = TextAlign.Left,
+            color = Color(gray),
+            fontWeight = FontWeight.W800,
+            fontSize = 15.scaledSp(),
+            text = stringResource(R.string.tap_to_learn_more)
+        )
+    }
+}
+
+@Composable
+fun BottomSection(uriHandler: UriHandler, outController: NavHostController) {
+    Column {
+        TPPCard(uriHandler)
+
+        Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            SocialMedia(uriHandler)
+        }
+
+        Text(
+            modifier = Modifier
+                .padding(horizontal = 8.dp, vertical = 12.dp)
+                .align(Alignment.CenterHorizontally),
+            text = stringResource(R.string.copyright),
+            textAlign = TextAlign.Center,
+            fontSize = 15.scaledSp(),
+            color = Color.DarkGray
+        )
+
+        Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            TermsAndPrivacyFooter(outController)
+        }
+
+        Spacer(modifier = Modifier.size(64.dp))
+    }
+}
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DYKCard(navController: NavHostController) {
     Card(
-        modifier = Modifier
-            .padding(12.dp),
-
+        modifier = Modifier.padding(12.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = 10.dp,
         backgroundColor = Color(teal),
@@ -135,26 +138,31 @@ fun DYKCard(navController: NavHostController) {
             Column(
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(modifier = Modifier
-                    .width(200.dp)
-                    .padding(vertical = 12.dp, horizontal = 24.dp),
+                Text(
+                    modifier = Modifier
+                        .width(200.dp)
+                        .padding(vertical = 12.dp, horizontal = 24.dp),
                     textAlign = TextAlign.Left,
                     color = Color.White,
                     fontWeight = FontWeight.W800,
-                    text = "Did you know?")
+                    text = stringResource(R.string.did_you_know)
+                )
 
-                Text(modifier = Modifier
-                    .width(200.dp)
-                    .padding(horizontal = 24.dp),
+                Text(
+                    modifier = Modifier
+                        .width(200.dp)
+                        .padding(horizontal = 24.dp),
                     textAlign = TextAlign.Left,
                     fontSize = 13.scaledSp(),
                     maxLines = 2,
-                    text = "There is a board game that educates youth ...")
+                    text = stringResource(R.string.board_game)
+                )
             }
 
-            Image(modifier = Modifier
-                .height(120.dp)
-                .padding(12.dp),
+            Image(
+                modifier = Modifier
+                    .height(120.dp)
+                    .padding(12.dp),
                 painter = painterResource(R.drawable.dykpad),
                 contentDescription = null
             )
@@ -162,25 +170,23 @@ fun DYKCard(navController: NavHostController) {
     }
 }
 
-/**
- * Grid View for different Period Products.
- */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PeriodProducts (navController: NavHostController, it: Product) {
+fun PeriodProducts(navController: NavHostController, it: Product) {
     Card(
         modifier = Modifier
             .padding(12.dp)
             .height(IntrinsicSize.Min)
             .aspectRatio(1f),
-        shape = RoundedCornerShape(12.dp), elevation = 10.dp,
+        shape = RoundedCornerShape(12.dp),
+        elevation = 10.dp,
         backgroundColor = Color(pink),
         onClick = {
             navController.currentBackStackEntry?.savedStateHandle?.set(
-                key = "elementId",
-                value = it.ProductName
+                key = "elementId", value = it.ProductName
             )
-            navController.navigate(EducationNavigation.ProductInfo.name) },
+            navController.navigate(EducationNavigation.ProductInfo.name)
+        },
     ) {
         Column(
             modifier = Modifier
@@ -193,10 +199,10 @@ fun PeriodProducts (navController: NavHostController, it: Product) {
                     .height(60.dp)
                     .align(Alignment.CenterHorizontally)
                     .padding(2.dp),
-                painter = painterResource(
-                    id = it.imageID
-                ),
-                contentDescription = "$it Image"
+                painter = painterResource(id = it.imageID),
+                contentDescription = stringResource(
+                    R.string.product_image_description, it
+                )
             )
 
             Text(
@@ -212,10 +218,6 @@ fun PeriodProducts (navController: NavHostController, it: Product) {
     }
 }
 
-
-/**
- * TPP Info Card
- */
 @Composable
 fun TPPCard(uriHandler: UriHandler) {
     Card(
@@ -229,29 +231,29 @@ fun TPPCard(uriHandler: UriHandler) {
         Column(
             modifier = Modifier.wrapContentSize(Alignment.Center)
         ) {
-            Text(modifier = Modifier
-                .padding(vertical = 16.dp)
-                .fillMaxWidth(),
+            Text(
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
+                    .fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 fontWeight = Bold,
-                text = "Learn more about The Period Purse",
-                fontSize = 15.scaledSp())
+                text = stringResource(R.string.learn_more),
+                fontSize = 15.scaledSp()
+            )
 
-            Text(modifier = Modifier.padding(horizontal = 16.dp, vertical = 0.dp),
+            Text(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 0.dp),
                 textAlign = TextAlign.Center,
-                text = "The Period Purse strives to achieve menstrual equity by providing " +
-                        "people who menstruate with access to free menstrual products, and to " +
-                        "reduce the stigma surrounding period through public education and " +
-                        "advocacy.",
-                fontSize = 13.scaledSp(),)
+                text = stringResource(R.string.strives_to_achieve),
+                fontSize = 13.scaledSp()
+            )
 
             Button(modifier = Modifier
                 .padding(16.dp)
                 .align(Alignment.CenterHorizontally),
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(teal),
-                    contentColor = Color.Black
+                    backgroundColor = Color(teal), contentColor = Color.Black
                 ),
                 onClick = { uriHandler.openUri("https://www.theperiodpurse.com/") }) {
                 Text(text = "Visit the website", fontSize = 15.scaledSp())
@@ -259,7 +261,6 @@ fun TPPCard(uriHandler: UriHandler) {
         }
     }
 }
-
 
 @Composable
 fun SocialMedia(uriHandler: UriHandler) {
@@ -270,67 +271,52 @@ fun SocialMedia(uriHandler: UriHandler) {
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            modifier = Modifier
-                .clickable { uriHandler.openUri("https://www.instagram.com/theperiodpurse/") }
-                .padding(horizontal = 8.dp)
-                .size(24.dp),
+        Icon(modifier = Modifier
+            .clickable { uriHandler.openUri("https://www.instagram.com/theperiodpurse/") }
+            .padding(horizontal = 8.dp)
+            .size(24.dp),
             painter = painterResource(R.drawable.instagram),
-            contentDescription = "Instagram",
-            tint = Color(teal)
-        )
+            contentDescription = stringResource(R.string.instagram),
+            tint = Color(teal))
 
-        Icon(
-            modifier = Modifier
-                .clickable { uriHandler.openUri("https://www.tiktok.com/@theperiodpurse") }
-                .padding(horizontal = 8.dp)
-                .size(24.dp),
+        Icon(modifier = Modifier
+            .clickable { uriHandler.openUri("https://www.tiktok.com/@theperiodpurse") }
+            .padding(horizontal = 8.dp)
+            .size(24.dp),
             painter = painterResource(R.drawable.tiktok),
-            contentDescription = "Tik Tok",
-            tint = Color(teal)
-        )
+            contentDescription = stringResource(R.string.tiktok),
+            tint = Color(teal))
 
-        Icon(
-            modifier = Modifier
-                .clickable {
-                    uriHandler.openUri(
-                        "https://www.youtube.com/channel/" +
-                                "UC2YgDU_9XxbjJsGGvXwxwyA"
-                    )
-                }
-                .padding(horizontal = 8.dp)
-                .size(24.dp),
+        Icon(modifier = Modifier
+            .clickable {
+                uriHandler.openUri(
+                    "https://www.youtube.com/channel/" + "UC2YgDU_9XxbjJsGGvXwxwyA"
+                )
+            }
+            .padding(horizontal = 8.dp)
+            .size(24.dp),
             painter = painterResource(R.drawable.youtube),
-            contentDescription = "YouTube",
-            tint = Color(teal)
-        )
+            contentDescription = stringResource(R.string.youtube),
+            tint = Color(teal))
 
-        Icon(
-            modifier = Modifier
-                .clickable { uriHandler.openUri("https://twitter.com/ThePeriodPurse") }
-                .padding(horizontal = 8.dp)
-                .size(24.dp),
+        Icon(modifier = Modifier
+            .clickable { uriHandler.openUri("https://twitter.com/ThePeriodPurse") }
+            .padding(horizontal = 8.dp)
+            .size(24.dp),
             painter = painterResource(R.drawable.twitter),
-            contentDescription = "Twitter",
-            tint = Color(teal)
-        )
+            contentDescription = stringResource(R.string.twitter),
+            tint = Color(teal))
 
-        Icon(
-            modifier = Modifier
-                .clickable { uriHandler.openUri("https://www.facebook.com/theperiodpurse") }
-                .padding(horizontal = 8.dp)
-                .size(24.dp),
+        Icon(modifier = Modifier
+            .clickable { uriHandler.openUri("https://www.facebook.com/theperiodpurse") }
+            .padding(horizontal = 8.dp)
+            .size(24.dp),
             painter = painterResource(R.drawable.facebook),
-            contentDescription = "Facebook",
-            tint = Color(teal)
-        )
+            contentDescription = stringResource(R.string.facebook),
+            tint = Color(teal))
     }
 }
 
-
-/**
- * Preview for Education Home Page
- */
 @Preview
 @Composable
 fun EducationScreenPreview() {

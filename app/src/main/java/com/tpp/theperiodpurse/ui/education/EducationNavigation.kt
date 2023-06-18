@@ -1,6 +1,5 @@
 package com.tpp.theperiodpurse.ui.education
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -15,9 +14,7 @@ import androidx.navigation.navArgument
 import com.tpp.theperiodpurse.R
 
 enum class EducationNavigation {
-    Learn,
-    DYK,
-    ProductInfo
+    Learn, DYK, ProductInfo
 }
 
 @Composable
@@ -26,8 +23,7 @@ fun EducationScreen(
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(
-        navController = navController,
-        startDestination = EducationNavigation.Learn.name
+        navController = navController, startDestination = EducationNavigation.Learn.name
     ) {
         composable(route = EducationNavigation.Learn.name) {
             EducationScreenLayout(outController, navController)
@@ -40,22 +36,23 @@ fun EducationScreen(
         composable(
             route = EducationNavigation.ProductInfo.name,
             arguments = listOf(navArgument("elementId") { nullable = true })
-            ) {
-                val elementId =
-                    navController.previousBackStackEntry?.savedStateHandle?.get<String>("elementId")
+        ) {
+            val elementId =
+                navController.previousBackStackEntry?.savedStateHandle?.get<String>("elementId")
 
-                if (elementId != null) {
-                    EducationInfoScreen(navController, elementId)
-                }
+            if (elementId != null) {
+                EducationInfoScreen(navController, elementId)
             }
+        }
     }
 }
 
 @Composable
 fun EducationBackground() {
-    Image(painter = painterResource(R.drawable.colourwatercolour),
+    Image(
+        painter = painterResource(R.drawable.colourwatercolour),
         contentDescription = null,
-        modifier = Modifier
-            .fillMaxSize(),
-        contentScale = ContentScale.FillBounds)
+        modifier = Modifier.fillMaxSize(),
+        contentScale = ContentScale.FillBounds
+    )
 }
