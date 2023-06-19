@@ -42,6 +42,17 @@ import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 
+/**
+ * Displays the layout for the settings screen.
+ *
+ * @param modifier The modifier for the layout.
+ * @param outController The navigation controller.
+ * @param onNotificationClicked The callback function for notification button click.
+ * @param onBackUpClicked The callback function for backup button click.
+ * @param onDeleteClicked The callback function for delete button click.
+ * @param appViewModel The view model for the app.
+ * @param context The Android context.
+ */
 @Composable
 fun SettingScreenLayout(
     modifier: Modifier = Modifier,
@@ -176,6 +187,13 @@ fun SettingScreenLayout(
    }
 }
 
+/**
+ * Displays the row for tracking preferences.
+ *
+ * @param symptoms The list of tracked symptoms.
+ * @param modifier The modifier for the row.
+ * @param appViewModel The view model for the app.
+ */
 @Composable
 fun TrackingPreferencesRow(symptoms: List<Symptom>, modifier: Modifier = Modifier, appViewModel: AppViewModel){
 
@@ -223,6 +241,17 @@ fun TrackingPreferencesRow(symptoms: List<Symptom>, modifier: Modifier = Modifie
     }
 }
 
+/**
+ * Displays a tracking option button.
+ *
+ * @param modifier The modifier for the button.
+ * @param label The label text for the button.
+ * @param icon The icon for the button.
+ * @param contentDescription The content description for the icon.
+ * @param ischecked The checked state of the button.
+ * @param symptom The associated symptom for the button.
+ * @param appViewModel The view model for the app.
+ */
 @Composable
 fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter,
                          contentDescription: String, ischecked: Boolean,
@@ -260,6 +289,12 @@ fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter,
     }
 }
 
+/**
+ * Displays a navigate button.
+ *
+ * @param text The button text.
+ * @param onClicked The callback function for button click.
+ */
 @Composable
 fun NavigateButton(text: String, onClicked: () -> Unit ){
     Button(onClick = onClicked, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(

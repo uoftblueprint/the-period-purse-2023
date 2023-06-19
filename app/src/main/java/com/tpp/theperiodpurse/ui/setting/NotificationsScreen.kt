@@ -46,13 +46,20 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 
-
+/**
+ * Represents the notifications screen of the application.
+ *
+ * @property appViewModel The view model for the app.
+ */
 class NotificationsScreen(private val appViewModel: AppViewModel) : ComponentActivity() {
+
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val context = LocalContext.current
+
+            // Check if the app has notification permission
             val hasNotificationPermission by remember {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     mutableStateOf(
@@ -61,7 +68,9 @@ class NotificationsScreen(private val appViewModel: AppViewModel) : ComponentAct
                             Manifest.permission.POST_NOTIFICATIONS
                         ) == PackageManager.PERMISSION_GRANTED
                     )
-                } else mutableStateOf(true)
+                } else {
+                    mutableStateOf(true)
+                }
             }
 
             NotificationsLayout(
@@ -71,10 +80,18 @@ class NotificationsScreen(private val appViewModel: AppViewModel) : ComponentAct
     }
 }
 
-fun temp(){
-
+fun temp() {
+    // Placeholder function
 }
 
+/**
+ * Composable function for displaying the notifications layout.
+ *
+ * @param context The Android application context.
+ * @param hasNotificationsPermission Indicates whether the app has notifications permission.
+ * @param appBar The app bar component.
+ * @param appViewModel The view model for the app.
+ */
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, appBar: Unit, appViewModel: AppViewModel){
@@ -138,39 +155,43 @@ fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, a
 
 }
 
+/**
+ * Sets the alarm for the specified time.
+ *
+ * @param context The Android application context.
+ * @param pickedTime The time at which the alarm should be set.
+ * @param appViewModel The view model for the app.
+ */
 @RequiresApi(Build.VERSION_CODES.S)
-fun setAlarm(context: Context, pickedTime: LocalTime, appViewModel: AppViewModel){
-//    Alarm(appViewModel)
-
-    val calendar=Calendar.getInstance().apply {
+fun setAlarm(context: Context, pickedTime: LocalTime, appViewModel: AppViewModel) {
+    val calendar = Calendar.getInstance().apply {
         timeInMillis = System.currentTimeMillis()
     }
     calendar.apply {
-        set(Calendar.HOUR_OF_DAY,pickedTime.hour)
-        set(Calendar.MINUTE,pickedTime.minute)
+        set(Calendar.HOUR_OF_DAY, pickedTime.hour)
+        set(Calendar.MINUTE, pickedTime.minute)
         set(Calendar.SECOND, pickedTime.second)
     }
 
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//    val intent = Intent(context, Alarm::class.java)
 
     val freq = appViewModel.getReminderFreq()
     lateinit var intent: Intent
-    if (freq == "Every day"){
+    if (freq == "Every day") {
         intent = Intent(context, Alarm::class.java)
-    } else if(freq == "Every week"){
+    } else if (freq == "Every week") {
         intent = Intent(context, WeeklyAlarm::class.java)
-    } else if (freq == "Every month"){
+    } else if (freq == "Every month") {
         intent = Intent(context, MonthlyAlarm::class.java)
     }
     val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
     val hasAlarmPermission: Boolean = alarmManager.canScheduleExactAlarms()
 
-    if(hasAlarmPermission){
+    if (hasAlarmPermission) {
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
     }
-
 }
+
 
 
 @Composable

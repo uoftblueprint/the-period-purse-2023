@@ -2,8 +2,6 @@ package com.tpp.theperiodpurse.ui.onboarding
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -18,21 +16,15 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.tpp.theperiodpurse.ui.state.OnboardUIState
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
-import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.time.format.TextStyle
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,8 +33,7 @@ fun DateRangePicker(
     onSendButtonClicked: () -> Unit, viewModel: OnboardViewModel, uiState: OnboardUIState
 ) {
     val configuration = LocalConfiguration.current
-    val screenwidth = configuration.screenWidthDp;
-    val screenheight = configuration.screenHeightDp;
+    val screenwidth = configuration.screenWidthDp
     val calendar = Calendar.getInstance()
     val snackState = remember { SnackbarHostState() }
     val dayRange = (uiState.days - 1).toLong()
@@ -89,11 +80,13 @@ fun DateRangePicker(
                 TextButton(
                     onClick = {
                         uiState.dateOptions = getDatesBetween(
-                            state.selectedStartDateMillis!!, state.selectedEndDateMillis!!
+                            state.selectedStartDateMillis!!,
+                            state.selectedEndDateMillis!!,
                         )
                         viewModel.setDate(
                             formatEpochMilliseconds(
-                                state.selectedStartDateMillis!!, state.selectedEndDateMillis!!
+                                state.selectedStartDateMillis!!,
+                                (state.selectedStartDateMillis!! + ((uiState.dateOptions.size - 1) * 24 * 60 * 60 * 1000))
                             )
                         )
                         onSendButtonClicked()
@@ -140,7 +133,7 @@ fun DateRangePicker(
                         Text(text = "To - From", fontSize = (screenwidth * 0.07).scaledSp())
                     }
                 }
-            }, colors = androidx.compose.material3.DatePickerDefaults.colors(
+            }, colors = DatePickerDefaults.colors(
                 dayInSelectionRangeContainerColor = Color(97, 153, 154).copy(alpha = 0.3f),
                 selectedDayContainerColor = Color(97, 153, 154),
                 todayContentColor = Color.Black,
@@ -198,13 +191,19 @@ fun convertDateToEpochMillis(dateString: String): Long {
 }
 
 fun getDatesBetween(startEpochMilliseconds: Long, endEpochMilliseconds: Long): List<LocalDate> {
-    val startDate =
-        Instant.ofEpochMilli(startEpochMilliseconds).atZone(ZoneOffset.UTC).toLocalDate()
-    val endDate = Instant.ofEpochMilli(endEpochMilliseconds).atZone(ZoneOffset.UTC).toLocalDate()
+    val startDate = Instant.ofEpochMilli(startEpochMilliseconds)
+        .atZone(ZoneOffset.UTC)
+        .toLocalDate()
+    val endDate = Instant.ofEpochMilli(endEpochMilliseconds)
+        .atZone(ZoneOffset.UTC)
+        .toLocalDate()
+    val today = LocalDate.now()
     val dates = mutableListOf<LocalDate>()
     var currentDate = startDate
     while (!currentDate.isAfter(endDate)) {
-        dates.add(currentDate)
+        if (currentDate.isBefore(today) || currentDate == today) {
+            dates.add(currentDate)
+        }
         currentDate = currentDate.plusDays(1)
     }
     return dates

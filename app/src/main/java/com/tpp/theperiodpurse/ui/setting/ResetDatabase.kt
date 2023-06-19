@@ -18,6 +18,18 @@ import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+/**
+ * A composable function for resetting the database and performing necessary cleanup.
+ *
+ * @param context The Android context.
+ * @param viewModel The OnboardViewModel instance.
+ * @param outController The NavHostController instance for the outer navigation graph.
+ * @param navController The NavHostController instance for the current navigation graph.
+ * @param onboardUiState The OnboardUIState object.
+ * @param appUiState The AppUiState object.
+ * @param calUiState The CalendarUIState object.
+ * @param signout The sign out function to be called if the user is logged in with Google.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ResetDatabase(
@@ -30,18 +42,21 @@ fun ResetDatabase(
     calUiState: CalendarUIState,
     signout: () -> Unit = {}
 ) {
-
+    // Observe the state of whether the database is deleted or not
     val isDeleted by viewModel.isOnboarded.observeAsState(initial = null)
 
+    // Check the deleted status in the background
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
             viewModel.checkDeletedStatus(context)
         }
     }
-    if (isDeleted == null){
+
+    // If the deletion status is not known, show a loading screen
+    if (isDeleted == null) {
         LoadingScreen()
-    }
-    else {
+    } else {
+        // Reset necessary states and data
         calUiState.days = LinkedHashMap()
         appUiState.trackedSymptoms = listOf()
         appUiState.dates = emptyList()
@@ -50,16 +65,16 @@ fun ResetDatabase(
         onboardUiState.date = ""
         onboardUiState.googleAccount = null
 
-        if (viewModel.checkGoogleLogin(context)){
+        // If the user is logged in with Google, sign out
+        if (viewModel.checkGoogleLogin(context)) {
             signout()
         }
 
+        // Navigate to the Welcome screen after resetting the database
         LaunchedEffect(Unit) {
             navController.popBackStack()
             outController.navigate(OnboardingScreen.Welcome.name)
         }
-
-
     }
 
 }

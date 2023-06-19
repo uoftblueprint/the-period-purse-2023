@@ -20,12 +20,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.model.FlowSeverity
 import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
 import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
-import com.tpp.theperiodpurse.ui.calendar.MonthHeader
 import com.tpp.theperiodpurse.ui.calendar.components.Day
 import com.tpp.theperiodpurse.ui.component.PopupTopBar
 import com.tpp.theperiodpurse.ui.theme.Red
@@ -36,6 +34,7 @@ import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.data.entity.Date
+import com.tpp.theperiodpurse.ui.calendar.components.MonthHeader
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import java.time.LocalDate
 import java.time.YearMonth

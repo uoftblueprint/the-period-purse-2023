@@ -39,7 +39,7 @@ enum class Screen {
     Settings,
     Learn,
     LogMultipleDates,
-    CycleFullHisotry
+    CycleFullHistory
 }
 
 enum class LegalScreen {
@@ -49,7 +49,7 @@ enum class LegalScreen {
 
 val screensWithNavigationBar = arrayOf(
     Screen.Calendar.name, Screen.Log.name, Screen.Cycle.name,
-    Screen.Settings.name, Screen.Learn.name, Screen.CycleFullHisotry.name
+    Screen.Settings.name, Screen.Learn.name, Screen.CycleFullHistory.name
 )
 
 enum class OnboardingScreen {
@@ -139,7 +139,7 @@ fun NavigationGraph(
             )
         }
 
-        composable(route = Screen.CycleFullHisotry.name) {
+        composable(route = Screen.CycleFullHistory.name) {
             PeriodHistoryLayout(
                 appViewModel = appViewModel,
                 navController = navController
