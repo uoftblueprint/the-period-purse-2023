@@ -37,7 +37,6 @@ import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 fun QuestionOneScreen(
     modifier: Modifier = Modifier,
     onSelectionChanged: (String) -> Unit = {},
-    navigateUp: () -> Unit,
     canNavigateBack: Boolean,
     onboardUiState: OnboardUIState,
     navController: NavHostController,
@@ -120,20 +119,18 @@ fun QuestionOneScreen(
             )
             Spacer(Modifier.height((screenheight * (0.02)).dp))
             EditDaysField(
-                label = R.string.tap_to_input,
                 value = periodCycle,
-                onValueChange = { periodCycle = it },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
                 ),
+                onValueChange = { periodCycle = it },
                 keyboardActions = KeyboardActions(
                     onDone = {
                         entered = periodCycle != ""
                         focusManager.clearFocus();
                     },
                 ),
-                entered = entered,
-                onboardUiState = onboardUiState
+                entered = entered
             )
             Spacer(Modifier.height((screenheight * (0.01)).dp))
         }
@@ -217,13 +214,11 @@ fun EditNumberField(
 
 @Composable
 fun EditDaysField(
-    @StringRes label: Int,
     value: String,
     keyboardOptions: KeyboardOptions,
     onValueChange: (String) -> Unit,
     keyboardActions: KeyboardActions,
-    entered: Boolean,
-    onboardUiState: OnboardUIState
+    entered: Boolean
 ) {
     TextField(
         shape = RoundedCornerShape(20),

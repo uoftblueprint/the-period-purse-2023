@@ -194,17 +194,18 @@ fun QuestionThreeScreen(
                         fontSize = 13.scaledSp(),
                     )
                 }
-                Column(modifier = Modifier
-                    .selectable(selected = selectedValue.contains("Exercise"), onClick = {
-                        val item = "Exercise"
-                        if (selectedValue.contains(item)) {
-                            selectedValue = selectedValue.replace(item, "")
-                        } else if (!selectedValue.contains(item)) {
-                            selectedValue = selectedValue + "|" + item
-                        }
-                    })
-                    .padding(horizontal = 13.dp)
-                    .semantics { contentDescription = "fitness" },
+                Column(
+                    modifier = Modifier
+                        .selectable(selected = selectedValue.contains("Exercise"), onClick = {
+                            val item = "Exercise"
+                            if (selectedValue.contains(item)) {
+                                selectedValue = selectedValue.replace(item, "")
+                            } else if (!selectedValue.contains(item)) {
+                                selectedValue = selectedValue + "|" + item
+                            }
+                        })
+                        .padding(horizontal = 13.dp)
+                        .semantics { contentDescription = "fitness" },
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -232,17 +233,18 @@ fun QuestionThreeScreen(
                         fontSize = 13.scaledSp(),
                     )
                 }
-                Column(modifier = Modifier
-                    .selectable(selected = selectedValue.contains("Cramps"), onClick = {
-                        val item = "Cramps"
-                        if (selectedValue.contains(item)) {
-                            selectedValue = selectedValue.replace(item, "")
-                        } else if (!selectedValue.contains(item)) {
-                            selectedValue = selectedValue + "|" + item
-                        }
-                    })
-                    .padding(horizontal = 13.dp)
-                    .semantics { contentDescription = "Cramps" },
+                Column(
+                    modifier = Modifier
+                        .selectable(selected = selectedValue.contains("Cramps"), onClick = {
+                            val item = "Cramps"
+                            if (selectedValue.contains(item)) {
+                                selectedValue = selectedValue.replace(item, "")
+                            } else if (!selectedValue.contains(item)) {
+                                selectedValue = selectedValue + "|" + item
+                            }
+                        })
+                        .padding(horizontal = 13.dp)
+                        .semantics { contentDescription = "Cramps" },
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -268,20 +270,20 @@ fun QuestionThreeScreen(
                     Text(
                         text = stringResource(R.string.cramps),
                         fontSize = 13.scaledSp(),
-
-                        )
+                    )
                 }
-                Column(modifier = Modifier
-                    .selectable(selected = selectedValue.contains("Sleep"), onClick = {
-                        val item = "Sleep"
-                        if (selectedValue.contains(item)) {
-                            selectedValue = selectedValue.replace(item, "")
-                        } else if (!selectedValue.contains(item)) {
-                            selectedValue = selectedValue + "|" + item
-                        }
-                    })
-                    .padding(horizontal = 13.dp)
-                    .semantics { contentDescription = "Exercise" },
+                Column(
+                    modifier = Modifier
+                        .selectable(selected = selectedValue.contains("Sleep"), onClick = {
+                            val item = "Sleep"
+                            if (selectedValue.contains(item)) {
+                                selectedValue = selectedValue.replace(item, "")
+                            } else if (!selectedValue.contains(item)) {
+                                selectedValue = selectedValue + "|" + item
+                            }
+                        })
+                        .padding(horizontal = 13.dp)
+                        .semantics { contentDescription = "Exercise" },
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
