@@ -25,7 +25,6 @@ import com.tpp.theperiodpurse.ui.education.*
 import com.tpp.theperiodpurse.ui.legal.PrivacyScreen
 import com.tpp.theperiodpurse.ui.legal.TermsScreen
 import com.tpp.theperiodpurse.ui.onboarding.*
-import com.tpp.theperiodpurse.ui.setting.LoadDatabase
 import com.tpp.theperiodpurse.ui.setting.SettingsScreen
 import com.tpp.theperiodpurse.ui.symptomlog.LogScreen
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
