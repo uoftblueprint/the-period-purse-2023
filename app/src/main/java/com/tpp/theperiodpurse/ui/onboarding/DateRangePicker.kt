@@ -191,12 +191,9 @@ fun convertDateToEpochMillis(dateString: String): Long {
 }
 
 fun getDatesBetween(startEpochMilliseconds: Long, endEpochMilliseconds: Long): List<LocalDate> {
-    val startDate = Instant.ofEpochMilli(startEpochMilliseconds)
-        .atZone(ZoneOffset.UTC)
-        .toLocalDate()
-    val endDate = Instant.ofEpochMilli(endEpochMilliseconds)
-        .atZone(ZoneOffset.UTC)
-        .toLocalDate()
+    val startDate =
+        Instant.ofEpochMilli(startEpochMilliseconds).atZone(ZoneOffset.UTC).toLocalDate()
+    val endDate = Instant.ofEpochMilli(endEpochMilliseconds).atZone(ZoneOffset.UTC).toLocalDate()
     val today = LocalDate.now()
     val dates = mutableListOf<LocalDate>()
     var currentDate = startDate

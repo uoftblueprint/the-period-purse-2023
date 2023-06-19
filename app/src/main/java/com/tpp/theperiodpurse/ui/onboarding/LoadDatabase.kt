@@ -12,7 +12,6 @@ import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.Screen
 import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
-import com.tpp.theperiodpurse.ui.onboarding.LoadingScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
