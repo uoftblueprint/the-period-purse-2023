@@ -38,10 +38,9 @@ fun ResetDatabase(
             viewModel.checkDeletedStatus(context)
         }
     }
-    if (isDeleted == null){
+    if (isDeleted == null) {
         LoadingScreen()
-    }
-    else {
+    } else {
         calUiState.days = LinkedHashMap()
         appUiState.trackedSymptoms = listOf()
         appUiState.dates = emptyList()
@@ -50,7 +49,7 @@ fun ResetDatabase(
         onboardUiState.date = ""
         onboardUiState.googleAccount = null
 
-        if (viewModel.checkGoogleLogin(context)){
+        if (viewModel.checkGoogleLogin(context)) {
             signout()
         }
 

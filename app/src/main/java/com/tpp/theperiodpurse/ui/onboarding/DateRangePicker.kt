@@ -97,12 +97,12 @@ fun DateRangePicker(
                     onClick = {
                         uiState.dateOptions = getDatesBetween(
                             state.selectedStartDateMillis!!,
-                            state.selectedEndDateMillis!!
+                            state.selectedEndDateMillis!!,
                         )
                         viewModel.setDate(
                             formatEpochMilliseconds(
                                 state.selectedStartDateMillis!!,
-                                state.selectedEndDateMillis!!
+                                (state.selectedStartDateMillis!! + ((uiState.dateOptions.size - 1) * 24 * 60 * 60 * 1000))
                             )
                         )
                         onSendButtonClicked()
@@ -204,14 +204,17 @@ fun getDatesBetween(startEpochMilliseconds: Long, endEpochMilliseconds: Long): L
         .atZone(ZoneOffset.UTC)
         .toLocalDate()
 
+    val today = LocalDate.now()
+
     val dates = mutableListOf<LocalDate>()
     var currentDate = startDate
 
     while (!currentDate.isAfter(endDate)) {
-        dates.add(currentDate)
+        if (currentDate.isBefore(today) || currentDate == today) {
+            dates.add(currentDate)
+        }
         currentDate = currentDate.plusDays(1)
     }
-
 
     return dates
 }
