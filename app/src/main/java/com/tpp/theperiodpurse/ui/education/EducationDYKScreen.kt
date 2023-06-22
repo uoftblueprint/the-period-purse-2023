@@ -21,6 +21,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.theme.Teal
 
 @Composable
 fun EducationDYKScreen(navController: NavHostController) {
@@ -43,7 +44,7 @@ fun EducationDYKScreen(navController: NavHostController) {
                 .align(Alignment.Start),
             painter = painterResource(R.drawable.arrow),
             contentDescription = "Back Button",
-            tint = Color(teal)
+            tint = Teal
         )
 
         Spacer(modifier = Modifier.weight(1f))

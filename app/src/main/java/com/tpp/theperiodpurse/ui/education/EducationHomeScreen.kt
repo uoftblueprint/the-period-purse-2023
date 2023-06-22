@@ -18,7 +18,6 @@ import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
@@ -26,7 +25,8 @@ import com.tpp.theperiodpurse.ui.datasource.Product
 import com.tpp.theperiodpurse.ui.datasource.ProductsList
 import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
-
+import com.tpp.theperiodpurse.ui.theme.MainFontColor
+import com.tpp.theperiodpurse.ui.theme.Teal
 const val gray = 0xFF6D6E71
 const val teal = 0xFF72C6B7
 const val pink = 0xFFFFA3A4
@@ -108,7 +108,7 @@ fun EducationScreenLayout(
                     Terms & Conditions, and Privacy Policy
                      */
                     Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                        TermsAndPrivacyFooter(outController)
+                        TermsAndPrivacyFooter(outController, MainFontColor)
                     }
 
                     Spacer(modifier = Modifier.size(64.dp))
@@ -128,7 +128,7 @@ fun DYKCard(navController: NavHostController) {
 
         shape = RoundedCornerShape(12.dp),
         elevation = 10.dp,
-        backgroundColor = Color(teal),
+        backgroundColor = Teal,
         onClick = { navController.navigate(EducationNavigation.DYK.name) },
     ) {
         Row {
@@ -250,7 +250,7 @@ fun TPPCard(uriHandler: UriHandler) {
                 .align(Alignment.CenterHorizontally),
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(teal),
+                    backgroundColor = Teal,
                     contentColor = Color.Black
                 ),
                 onClick = { uriHandler.openUri("https://www.theperiodpurse.com/") }) {
@@ -277,7 +277,7 @@ fun SocialMedia(uriHandler: UriHandler) {
                 .size(24.dp),
             painter = painterResource(R.drawable.instagram),
             contentDescription = "Instagram",
-            tint = Color(teal)
+            tint = Teal
         )
 
         Icon(
@@ -287,7 +287,7 @@ fun SocialMedia(uriHandler: UriHandler) {
                 .size(24.dp),
             painter = painterResource(R.drawable.tiktok),
             contentDescription = "Tik Tok",
-            tint = Color(teal)
+            tint = Teal
         )
 
         Icon(
@@ -302,7 +302,7 @@ fun SocialMedia(uriHandler: UriHandler) {
                 .size(24.dp),
             painter = painterResource(R.drawable.youtube),
             contentDescription = "YouTube",
-            tint = Color(teal)
+            tint = Teal
         )
 
         Icon(
@@ -312,7 +312,7 @@ fun SocialMedia(uriHandler: UriHandler) {
                 .size(24.dp),
             painter = painterResource(R.drawable.twitter),
             contentDescription = "Twitter",
-            tint = Color(teal)
+            tint = Teal
         )
 
         Icon(
@@ -322,7 +322,7 @@ fun SocialMedia(uriHandler: UriHandler) {
                 .size(24.dp),
             painter = painterResource(R.drawable.facebook),
             contentDescription = "Facebook",
-            tint = Color(teal)
+            tint = Teal
         )
     }
 }

@@ -39,6 +39,7 @@ import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.state.OnboardUIState
 import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
+import com.tpp.theperiodpurse.ui.theme.MainFontColor
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -120,7 +121,7 @@ fun WelcomeScreen(
 
 
             Text("By continuing, you accept the", textAlign = TextAlign.Center, fontSize = (screenwidth*0.04).scaledSp())
-            TermsAndPrivacyFooter(navController)
+            TermsAndPrivacyFooter(navController, MainFontColor)
         }
 
 
@@ -140,7 +141,7 @@ fun GoogleSignInButton(
             .widthIn(min = 350.dp)
             .height(50.dp),
         shape= RoundedCornerShape(15),
-        border = BorderStroke(width = 1.dp, color=Color.LightGray),
+        border = BorderStroke(width = 1.dp, color=Color.Black),
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
     ) {
         Icon(
@@ -172,7 +173,7 @@ fun QuickStartButton(
 //        color = Color(52, 235, 161)
         colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
     ) {
-        Text("Quick Start", color = Color.White, fontSize = 20.scaledSp())
+        Text("Quick Start", color = MainFontColor, fontSize = 20.scaledSp())
     }
 }
 

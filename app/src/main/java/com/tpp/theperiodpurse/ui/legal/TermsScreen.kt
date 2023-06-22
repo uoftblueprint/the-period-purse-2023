@@ -23,6 +23,7 @@ import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.education.EducationBackground
 import com.tpp.theperiodpurse.ui.education.teal
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.theme.Teal
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -53,7 +54,7 @@ fun TermsScreen(navController: NavHostController) {
                             .size(20.dp),
                         painter = painterResource(R.drawable.arrow),
                         contentDescription = "Back Button",
-                        tint = Color(teal)
+                        tint = Teal
                     )
 
                     Spacer(modifier = Modifier.weight(1f))
