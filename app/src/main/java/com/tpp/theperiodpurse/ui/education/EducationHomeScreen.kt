@@ -230,7 +230,7 @@ fun TPPCard(uriHandler: UriHandler) {
             Text(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 0.dp),
                 textAlign = TextAlign.Center,
-                text = stringResource(R.string.strives_to_achieve),
+                text = stringResource(R.string.strives_to_achieve_short),
                 fontSize = 13.scaledSp()
             )
             Button(modifier = Modifier
