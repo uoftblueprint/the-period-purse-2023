@@ -39,6 +39,8 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.theme.MainFontColor
+import com.tpp.theperiodpurse.ui.theme.Teal
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 
@@ -169,7 +171,7 @@ fun SettingScreenLayout(
        Terms & Conditions, and Privacy Policy
         */
        Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-           TermsAndPrivacyFooter(outController)
+           TermsAndPrivacyFooter(outController, MainFontColor)
            Spacer(modifier = Modifier.size(80.dp))
        }
        Spacer(modifier = Modifier.size(80.dp).padding(bottom = 5.dp))
@@ -231,7 +233,7 @@ fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter,
 
     val configuration = LocalConfiguration.current
     val screenwidth = configuration.screenWidthDp;
-    val color = if (appViewModel.isSymptomChecked(symptom)) Color(teal) else Color.White
+    val color = if (appViewModel.isSymptomChecked(symptom)) Teal else Color.White
     Column(
         modifier = modifier
             .padding((screenwidth *0.02).dp),

@@ -30,6 +30,8 @@ import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.state.OnboardUIState
+import com.tpp.theperiodpurse.ui.theme.ButtonDisabledColor
+import com.tpp.theperiodpurse.ui.theme.Teal
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -173,7 +175,7 @@ fun QuestionTwoScreen(
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
 
             ) {
-                Text(stringResource(R.string.skip), color = Color(97, 153, 154), fontSize = 20.scaledSp())
+                Text(stringResource(R.string.skip), color = Color.Black, fontSize = 20.scaledSp())
             }
             Button(
                 onClick = {
@@ -185,7 +187,10 @@ fun QuestionTwoScreen(
                     .padding(end = (screenwidth * (0.1)).dp)
                     .weight(1f)
                     .semantics { contentDescription = "Next" },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Teal,
+                    disabledBackgroundColor = ButtonDisabledColor
+                ),
             ) {
                 Text(stringResource(R.string.next), color = Color.White, fontSize = 20.scaledSp())
             }

@@ -36,6 +36,7 @@ import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.ui.education.teal
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.theme.Teal
 import kotlin.collections.ArrayList
 
 private var periodLength = (-1).toFloat()
@@ -203,7 +204,7 @@ fun CycleHistoryBox(modifier: Modifier = Modifier, dates: ArrayList<Date>?, onCl
                 ClickableText(
                     onClick = onClickShowFull,
                     style = TextStyle(
-                        color = Color(teal),
+                        color = Teal,
                         fontWeight = FontWeight(700),
                         fontSize = 15.scaledSp()
                     ),

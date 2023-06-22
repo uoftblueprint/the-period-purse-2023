@@ -67,7 +67,7 @@ fun Day(
                 fontSize = 12.scaledSp(),
                 fontWeight = FontWeight.Bold,
                 text = date.dayOfMonth.toString(),
-                color = if (dayDisabled(date)) Color(190, 190, 190) else Color.Black
+                color = Color.Black
             )
 
             Box(
