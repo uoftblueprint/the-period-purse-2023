@@ -485,7 +485,7 @@ fun SaveButton(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .semantics { contentDescription = "Save Button" },
-                color = Color.White
+                color = Color.Black
             )
         }
     }
