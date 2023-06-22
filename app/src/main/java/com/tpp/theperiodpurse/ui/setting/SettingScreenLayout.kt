@@ -29,11 +29,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.model.Symptom
-import com.tpp.theperiodpurse.ui.education.SocialMedia
+import com.tpp.theperiodpurse.ui.component.SocialMedia
 import com.tpp.theperiodpurse.ui.education.teal
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
@@ -62,7 +61,7 @@ fun SettingScreenLayout(
     onDeleteClicked: () -> Unit,
     appViewModel: AppViewModel = viewModel(),
     context: Context
-){
+) {
     val symptoms = appViewModel.getTrackedSymptoms()
     var hasAlarmPermission by remember {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -93,98 +92,110 @@ fun SettingScreenLayout(
     }
     val time = appViewModel.getReminderFreq() + " at " + appViewModel.getReminderTime()
 
-   Column(modifier = modifier
-       .fillMaxSize()
-       .padding(10.dp)
-       .verticalScroll(rememberScrollState())) {
-       Text(
-           text = stringResource(R.string.tracking_preferences),
-           modifier = modifier.padding(top = 30.dp, start = 10.dp),
-           color = Color.DarkGray,
-           fontWeight = FontWeight.Bold,
-           fontSize = 20.scaledSp()
-       )
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(10.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+        Text(
+            text = stringResource(R.string.tracking_preferences),
+            modifier = modifier.padding(top = 30.dp, start = 10.dp),
+            color = Color.DarkGray,
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.scaledSp()
+        )
 
-       TrackingPreferencesRow(symptoms, appViewModel = appViewModel)
-       Text(
-           text = stringResource(R.string.notifications_heading),
-           modifier = modifier.padding(top = 5.dp, start = 10.dp),
-           color = Color.DarkGray,
-           fontWeight = FontWeight.Bold,
-           fontSize = 20.scaledSp()
-       )
-       Row(modifier = modifier.padding(20.dp)) {
-           Column (modifier = Modifier) {
-               Text(text = stringResource(
-                   R.string.remind_me_to_log_symptoms),
-                   fontWeight = FontWeight.Bold,
-                   fontSize = 15.scaledSp(),)
-               Spacer(modifier = modifier.padding(3.dp))
-               Text(text = time,
-                   modifier = Modifier.padding(start = 5.dp),
-                   color = Color.Gray,
-                   fontSize = 15.scaledSp(),
-               )
-           }
-           Switch(
-               enabled = false,
-               checked = appViewModel.getAllowReminders(),
-               onCheckedChange = {appViewModel.toggleAllowReminders()},
-               modifier = modifier
-                   .fillMaxWidth()
-                   .wrapContentWidth(Alignment.End),
-               colors = SwitchDefaults.colors(
-                   uncheckedThumbColor = Color.DarkGray
-               )
-           )
-       }
-       Divider(modifier = Modifier.padding(start= 10.dp, end = 10.dp))
+        TrackingPreferencesRow(symptoms, appViewModel = appViewModel)
+        Text(
+            text = stringResource(R.string.notifications_heading),
+            modifier = modifier.padding(top = 5.dp, start = 10.dp),
+            color = Color.DarkGray,
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.scaledSp()
+        )
+        Row(modifier = modifier.padding(20.dp)) {
+            Column(modifier = Modifier) {
+                Text(
+                    text = stringResource(
+                        R.string.remind_me_to_log_symptoms
+                    ),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.scaledSp(),
+                )
+                Spacer(modifier = modifier.padding(3.dp))
+                Text(
+                    text = time,
+                    modifier = Modifier.padding(start = 5.dp),
+                    color = Color.Gray,
+                    fontSize = 15.scaledSp(),
+                )
+            }
+            Switch(
+                enabled = false,
+                checked = appViewModel.getAllowReminders(),
+                onCheckedChange = { appViewModel.toggleAllowReminders() },
+                modifier = modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth(Alignment.End),
+                colors = SwitchDefaults.colors(
+                    uncheckedThumbColor = Color.DarkGray
+                )
+            )
+        }
+        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
 
-       NavigateButton(stringResource(id = R.string.customize_notifications),
-           onClicked = onNotificationClicked
-           )
+        NavigateButton(
+            stringResource(id = R.string.customize_notifications),
+            onClicked = onNotificationClicked
+        )
 
-       Divider(modifier = Modifier.padding(start= 10.dp, end = 10.dp))
+        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
 
-       Text(
-           text = stringResource(R.string.account_settings_heading),
-           modifier = Modifier.padding(start= 10.dp, top = 30.dp),
-           color = Color.DarkGray,
-           fontWeight = FontWeight.Bold,
-           fontSize = 20.scaledSp()
-       )
-       NavigateButton( text = stringResource(R.string.back_up_account),
-           onClicked = onBackUpClicked
-       )
-       Divider(modifier = Modifier.padding(start= 10.dp, end = 10.dp))
-       NavigateButton(text = stringResource(id = R.string.delete_account),
-           onClicked = onDeleteClicked
-       )
-       Divider(modifier = Modifier.padding(start= 10.dp, end = 10.dp))
-       Spacer(modifier = Modifier.padding(20.dp))
-       val uriHandler = LocalUriHandler.current
-       Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-           SocialMedia(uriHandler)
-       }
+        Text(
+            text = stringResource(R.string.account_settings_heading),
+            modifier = Modifier.padding(start = 10.dp, top = 30.dp),
+            color = Color.DarkGray,
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.scaledSp()
+        )
+        NavigateButton(
+            text = stringResource(R.string.back_up_account),
+            onClicked = onBackUpClicked
+        )
+        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
+        NavigateButton(
+            text = stringResource(id = R.string.delete_account),
+            onClicked = onDeleteClicked
+        )
+        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
+        Spacer(modifier = Modifier.padding(20.dp))
+        val uriHandler = LocalUriHandler.current
+        Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            SocialMedia(uriHandler)
+        }
 
-       Text(modifier = Modifier
-           .padding(horizontal = 8.dp, vertical = 12.dp)
-           .align(Alignment.CenterHorizontally),
-           text = "© 2023 The Period Purse. All rights reserved.",
-           textAlign = TextAlign.Center,
-           color = Color.DarkGray,
-           fontSize = 15.scaledSp()
-       )
+        Text(
+            modifier = Modifier
+                .padding(horizontal = 8.dp, vertical = 12.dp)
+                .align(Alignment.CenterHorizontally),
+            text = "© 2023 The Period Purse. All rights reserved.",
+            textAlign = TextAlign.Center,
+            color = Color.DarkGray,
+            fontSize = 15.scaledSp()
+        )
 
-       /*
-       Terms & Conditions, and Privacy Policy
-        */
-       Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-           TermsAndPrivacyFooter(outController)
-           Spacer(modifier = Modifier.size(80.dp))
-       }
-       Spacer(modifier = Modifier.size(80.dp).padding(bottom = 5.dp))
-   }
+        /*
+        Terms & Conditions, and Privacy Policy
+         */
+        Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            TermsAndPrivacyFooter(outController)
+            Spacer(modifier = Modifier.size(80.dp))
+        }
+        Spacer(modifier = Modifier
+            .size(80.dp)
+            .padding(bottom = 5.dp))
+    }
 }
 
 /**
@@ -195,13 +206,19 @@ fun SettingScreenLayout(
  * @param appViewModel The view model for the app.
  */
 @Composable
-fun TrackingPreferencesRow(symptoms: List<Symptom>, modifier: Modifier = Modifier, appViewModel: AppViewModel){
+fun TrackingPreferencesRow(
+    symptoms: List<Symptom>,
+    modifier: Modifier = Modifier,
+    appViewModel: AppViewModel
+) {
 
-    Row(modifier = modifier
-        .fillMaxWidth()
-        .padding(10.dp),
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center) {
+        horizontalArrangement = Arrangement.Center
+    ) {
         TrackingOptionButton(
             modifier = modifier,
             label = stringResource(R.string.mood),
@@ -253,9 +270,10 @@ fun TrackingPreferencesRow(symptoms: List<Symptom>, modifier: Modifier = Modifie
  * @param appViewModel The view model for the app.
  */
 @Composable
-fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter,
-                         contentDescription: String, ischecked: Boolean,
-                         symptom: Symptom, appViewModel: AppViewModel
+fun TrackingOptionButton(
+    modifier: Modifier, label: String, icon: Painter,
+    contentDescription: String, ischecked: Boolean,
+    symptom: Symptom, appViewModel: AppViewModel
 ) {
 
     val configuration = LocalConfiguration.current
@@ -263,12 +281,13 @@ fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter,
     val color = if (appViewModel.isSymptomChecked(symptom)) Color(teal) else Color.White
     Column(
         modifier = modifier
-            .padding((screenwidth *0.02).dp),
+            .padding((screenwidth * 0.02).dp),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,) {
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
         IconToggleButton(
             checked = ischecked,
-            onCheckedChange = {appViewModel.updateSymptoms(symptom)},
+            onCheckedChange = { appViewModel.updateSymptoms(symptom) },
             modifier = Modifier.clip(RoundedCornerShape(10.dp))
         ) {
             Icon(
@@ -277,15 +296,17 @@ fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter,
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
                     .background(color)
-                    .height((screenwidth *0.12).dp)
-                    .width((screenwidth *0.12).dp)
-                    .padding((screenwidth *0.02).dp)
+                    .height((screenwidth * 0.12).dp)
+                    .width((screenwidth * 0.12).dp)
+                    .padding((screenwidth * 0.02).dp)
             )
 
         }
-        Text(modifier = Modifier.padding(5.dp),
+        Text(
+            modifier = Modifier.padding(5.dp),
             text = label,
-            fontSize = 12.scaledSp())
+            fontSize = 12.scaledSp()
+        )
     }
 }
 
@@ -296,9 +317,15 @@ fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter,
  * @param onClicked The callback function for button click.
  */
 @Composable
-fun NavigateButton(text: String, onClicked: () -> Unit ){
-    Button(onClick = onClicked, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(
-        Color.Transparent), elevation = ButtonDefaults.elevation(0.dp)) {
+fun NavigateButton(text: String, onClicked: () -> Unit) {
+    Button(
+        onClick = onClicked,
+        modifier = Modifier.fillMaxWidth(),
+        colors = ButtonDefaults.buttonColors(
+            Color.Transparent
+        ),
+        elevation = ButtonDefaults.elevation(0.dp)
+    ) {
         Text(
             modifier = Modifier.weight(1f),
             text = text,
