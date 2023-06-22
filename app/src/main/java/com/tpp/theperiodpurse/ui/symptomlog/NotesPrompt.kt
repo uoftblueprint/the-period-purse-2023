@@ -22,6 +22,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
 import com.tpp.theperiodpurse.data.model.LogPrompt
+import com.tpp.theperiodpurse.ui.theme.LogSelectedTextColor
+import com.tpp.theperiodpurse.ui.theme.MainFontColor
 import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -70,7 +72,13 @@ fun NotesPrompt(logViewModel: LogViewModel) {
                         focusManager.clearFocus()
                     }
                 ),
-                minLines = 3
+                minLines = 3,
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    unfocusedBorderColor = LogSelectedTextColor,
+                    focusedBorderColor = MainFontColor,
+                    focusedLabelColor = MainFontColor,
+                    cursorColor = MainFontColor
+                )
             )
         }
     }

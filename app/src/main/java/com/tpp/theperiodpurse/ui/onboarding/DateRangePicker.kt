@@ -140,6 +140,7 @@ fun DateRangePicker(
                 colors = androidx.compose.material3.DatePickerDefaults.colors(
                     dayInSelectionRangeContainerColor = Color(97, 153, 154).copy(alpha = 0.3f),
                     selectedDayContainerColor = Color(97, 153, 154),
+                    selectedDayContentColor = Color.Black,
                     todayContentColor = Color.Black,
                     todayDateBorderColor = Color.Black,
                     dividerColor = Color(97, 153, 154)
