@@ -113,7 +113,10 @@ fun QuestionTwoScreen(
                 modifier = modifier
                     .width(175.dp)
                     .semantics { contentDescription = "datepick" },
-                shape = RoundedCornerShape(20)
+                shape = RoundedCornerShape(20),
+                elevation = ButtonDefaults.elevation(
+                    defaultElevation = 0.dp,
+                    pressedElevation = 0.dp)
             ) {
                 if (mDate.value.contains("Choose date")){
                     Row(

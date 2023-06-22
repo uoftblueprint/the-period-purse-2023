@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material3.ButtonElevation
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -263,7 +264,12 @@ fun EditDaysField(
 ){
     TextField(
         shape = RoundedCornerShape(20),
-        colors = TextFieldDefaults.textFieldColors(backgroundColor=Color.White),
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = Color.White,
+            cursorColor = Color.Black,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+        ),
         value = value,
         onValueChange = onValueChange,
         placeholder = {Text("Tap to input", fontSize = 17.scaledSp(), modifier = Modifier.padding(start=10.dp))},
