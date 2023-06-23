@@ -14,10 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import java.time.LocalDate
 
@@ -58,30 +60,43 @@ fun Day(
                     onClick = onClick
                 ),
         ) {
-            Text(
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
-                fontSize = 12.scaledSp(),
-                fontWeight = FontWeight.Bold,
-                text = date.dayOfMonth.toString(),
-                color = if (dayDisabled(date)) Color(190, 190, 190) else Color.Black
-            )
-
-            Box(
-                modifier = Modifier
-                    .padding(12.dp)
-                    .align(Alignment.Center)
-            ) {
-                if (iconId != null && !dayDisabled(date)) {
-                    Image(
-                        painterResource(id = iconId),
-                        modifier = Modifier
-                            .size(20.dp)
-                            .offset(y = 2.dp),
-                        contentDescription = "DateFlowIcon"
-                    )
-                }
-            }
+            val boxModifier = Modifier
+                .padding(12.dp)
+                .align(Alignment.Center)
+            DayInteriorStyling(date = date, boxModifier = boxModifier , iconId = iconId)
         }
     }
+}
+
+
+@Composable
+fun DayInteriorStyling(date: LocalDate, boxModifier: Modifier, iconId: Int?){
+    Text(
+        modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+        fontSize = 12.scaledSp(),
+        fontWeight = FontWeight.Bold,
+        text = date.dayOfMonth.toString(),
+        color = if (dayDisabled(date)) Color(190, 190, 190) else Color.Black
+    )
+    DayImage(boxModifier = boxModifier, iconId = iconId, date = date)
+}
+
+
+@Composable
+fun DayImage(boxModifier: Modifier, iconId: Int?, date: LocalDate){
+    Box(
+        modifier = boxModifier
+    ) {
+        if (iconId != null && !dayDisabled(date)) {
+            Image(
+                painterResource(id = iconId),
+                modifier = Modifier
+                    .size(20.dp)
+                    .offset(y = 2.dp),
+                contentDescription = stringResource(R.string.day_flow_icon_content_decription)
+            )
+        }
+    }
+
 }
 
