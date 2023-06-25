@@ -55,10 +55,7 @@ fun ResetDatabase(
         }
 
         LaunchedEffect(Unit) {
-            outController.navigate(OnboardingScreen.Welcome.name,
-                NavOptions.Builder()
-                    .setPopUpTo(OnboardingScreen.Welcome.name, true)
-                    .build())
+            outController.navigate(OnboardingScreen.Welcome.name)
         }
 
 
