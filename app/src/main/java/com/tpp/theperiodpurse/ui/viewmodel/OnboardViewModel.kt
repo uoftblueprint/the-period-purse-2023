@@ -47,10 +47,10 @@ class OnboardViewModel @Inject constructor (
         return (account!=null)
     }
 
-    fun checkOnboardedStatus() {
+    fun checkOnboardedStatus(context: Context) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                userRepository.isOnboarded()
+                userRepository.isOnboarded(context)
                 isOnboarded = userRepository.isOnboarded
             }
         }
@@ -244,14 +244,14 @@ class OnboardViewModel @Inject constructor (
         )
     }
 
-    private fun saveUser(user: User) {
-        userRepository.addUser(user)
+    private fun saveUser(user: User, context: Context) {
+        userRepository.addUser(user, context)
     }
 
     fun addNewUser(symptomsToTrack: ArrayList<Symptom>, periodHistory: ArrayList<Date>,
                    averagePeriodLength: Int, averageCycleLength: Int, daysSinceLastPeriod: Int, context: Context) {
         saveUser(createUser(symptomsToTrack, periodHistory, averagePeriodLength, averageCycleLength,
-            daysSinceLastPeriod))
+            daysSinceLastPeriod), context)
         viewModelScope.launch {
             val user = withContext(Dispatchers.Main) { userRepository.getUser(1, context) }
             _uiState.value = _uiState.value.copy(user = user)

@@ -28,10 +28,10 @@ class DateRepository(private val dateDAO: DateDAO) {
         return ApplicationRoomDatabase.getDatabase(context).dateDAO().getDates()
     }
 
-    fun deleteDate(date: Date) {
+    fun deleteDate(date: Date, context: Context) {
         coroutineScope.launch (Dispatchers.IO) {
             withContext(Dispatchers.IO) {
-                dateDAO.delete(date)
+                ApplicationRoomDatabase.getDatabase(context).dateDAO().delete(date)
             }
         }
     }
