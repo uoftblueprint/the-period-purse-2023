@@ -178,7 +178,6 @@ fun NavigationGraph(
             QuestionOneScreen(
                 navController = navController,
                 onSelectionChanged = { onboardViewModel.setQuantity(it.toInt()) },
-                navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null,
                 onboardUiState = onboardUIState,
                 viewModel = onboardViewModel,
