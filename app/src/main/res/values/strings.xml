@@ -144,4 +144,6 @@
     </string>
     <string name="terms_conditions_effective_date">Effective Date: 14th day of April, 2022</string>
     <string name="day_flow_icon_content_decription">DateFlowIcon</string>
+    <string name="cycle_page">Cycle Page</string>
+    <string name="days_since">Days since</string>
 </resources>

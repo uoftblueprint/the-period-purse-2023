@@ -41,65 +41,74 @@ fun CurrentCycleBox(modifier: Modifier = Modifier, dates: ArrayList<Date>) {
         Spacer(
             modifier = Modifier.height(16.dp)
         )
-        Box(
-            modifier = Modifier
-                .padding(20.dp)
-                .fillMaxWidth()
+        CycleInfo(dates = dates, modifier = modifier)
+    }
+}
+
+@Composable
+private fun CycleInfo(
+    dates: ArrayList<Date>,
+    modifier: Modifier
+) {
+    Box(
+        modifier = Modifier
+            .padding(20.dp)
+            .fillMaxWidth()
+    ) {
+
+    Box(
+        modifier = Modifier.Companion
+            .align(Alignment.Center)
+            .size(200.dp)
+    ) {
+        Canvas(modifier = Modifier.matchParentSize()) {
+            val strokeWidth = 25.dp.toPx()
+            val ringColor = Color(0xFFB12126)
+            val radius = (size.minDimension - strokeWidth) / 2
+
+            drawArc(
+                color = ringColor.copy(alpha = 0.2f),
+                startAngle = 0f,
+                sweepAngle = 360f,
+                useCenter = false,
+                topLeft = center - Offset(radius, radius),
+                size = Size(radius * 2, radius * 2),
+                style = Stroke(width = strokeWidth)
+            )
+
+            // Draw the progress ring
+            drawArc(
+                color = ringColor,
+                startAngle = -90f,
+                sweepAngle = calculateArcAngle(dates),
+                useCenter = false,
+                topLeft = center - Offset(radius, radius),
+                size = Size(radius * 2, radius * 2),
+                style = Stroke(width = strokeWidth, cap = StrokeCap.Round)
+            )
+        }
+        Column(
+            modifier = modifier.align(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Box(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(200.dp)
-            ) {
-                Canvas(modifier = Modifier.matchParentSize()) {
-                    val strokeWidth = 25.dp.toPx()
-                    val ringColor = Color(0xFFB12126)
-                    val radius = (size.minDimension - strokeWidth) / 2
-
-                    drawArc(
-                        color = ringColor.copy(alpha = 0.2f),
-                        startAngle = 0f,
-                        sweepAngle = 360f,
-                        useCenter = false,
-                        topLeft = center - Offset(radius, radius),
-                        size = Size(radius * 2, radius * 2),
-                        style = Stroke(width = strokeWidth)
-                    )
-
-                    // Draw the progress ring
-                    drawArc(
-                        color = ringColor,
-                        startAngle = -90f,
-                        sweepAngle = calculateArcAngle(dates),
-                        useCenter = false,
-                        topLeft = center - Offset(radius, radius),
-                        size = Size(radius * 2, radius * 2),
-                        style = Stroke(width = strokeWidth, cap = StrokeCap.Round)
-                    )
-                }
-                Column(
-                    modifier = modifier.align(Alignment.Center),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(
-                        text = calculateDaysSinceLastPeriod(dates).toString(),
-                        fontSize = 50.scaledSp(),
-                        fontWeight = FontWeight(900),
-                        color = Color(0xFFB12126)
-                    )
-                    Text(
-                        text = "Days since",
-                        fontSize = 16.scaledSp(),
-                        fontWeight = FontWeight(500),
-                        color = Color(0xFF868083),
-                    )
-                    Text(
-                        text = "last period",
-                        fontSize = 16.scaledSp(),
-                        fontWeight = FontWeight(500),
-                        color = Color(0xFF868083),
-                    )
-                }
+                Text(
+                    text = calculateDaysSinceLastPeriod(dates).toString(),
+                    fontSize = 50.scaledSp(),
+                    fontWeight = FontWeight(900),
+                    color = Color(0xFFB12126)
+                )
+                Text(
+                    text = stringResource(R.string.days_since),
+                    fontSize = 16.scaledSp(),
+                    fontWeight = FontWeight(500),
+                    color = Color(0xFF868083),
+                )
+                Text(
+                    text = stringResource(R.string.last_period),
+                    fontSize = 16.scaledSp(),
+                    fontWeight = FontWeight(500),
+                    color = Color(0xFF868083),
+                )
             }
         }
     }
