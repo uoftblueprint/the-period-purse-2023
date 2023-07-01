@@ -25,6 +25,7 @@ import com.tpp.theperiodpurse.ui.datasource.Product
 import com.tpp.theperiodpurse.ui.datasource.ProductsList
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.theme.Teal
 
 @Composable
 fun EducationInfoScreen(
@@ -54,7 +55,8 @@ fun EducationInfoScreen(
             .align(Alignment.Start),
             painter = painterResource(R.drawable.arrow),
             contentDescription = stringResource(R.string.back_button_label),
-            tint = Color(teal))
+            tint = Teal
+        )
         Spacer(modifier = Modifier.weight(1f))
         Image(
             modifier = Modifier

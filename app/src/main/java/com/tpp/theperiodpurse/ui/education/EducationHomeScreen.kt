@@ -27,6 +27,8 @@ import com.tpp.theperiodpurse.ui.datasource.ProductsList
 import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.component.SocialMedia
+import com.tpp.theperiodpurse.ui.theme.MainFontColor
+import com.tpp.theperiodpurse.ui.theme.Teal
 
 const val gray = 0xFF6D6E71
 const val teal = 0xFF72C6B7
@@ -108,7 +110,7 @@ fun BottomSection(uriHandler: UriHandler, outController: NavHostController) {
             color = Color.DarkGray
         )
         Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            TermsAndPrivacyFooter(outController)
+            TermsAndPrivacyFooter(outController, MainFontColor)
         }
         Spacer(modifier = Modifier.size(64.dp))
     }
@@ -121,7 +123,7 @@ fun DYKCard(navController: NavHostController) {
         modifier = Modifier.padding(12.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = 10.dp,
-        backgroundColor = Color(teal),
+        backgroundColor = Teal,
         onClick = { navController.navigate(EducationNavigation.DYK.name) },
     ) {
         Row {
@@ -238,7 +240,8 @@ fun TPPCard(uriHandler: UriHandler) {
                 .align(Alignment.CenterHorizontally),
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(teal), contentColor = Color.Black
+                    backgroundColor = Teal,
+                    contentColor = Color.Black
                 ),
                 onClick = { uriHandler.openUri("https://www.theperiodpurse.com/") }) {
                 Text(text = "Visit the website", fontSize = 15.scaledSp())

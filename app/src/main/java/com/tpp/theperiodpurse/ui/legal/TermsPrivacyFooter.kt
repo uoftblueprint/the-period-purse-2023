@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -20,9 +21,10 @@ import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.LegalScreen
 import com.tpp.theperiodpurse.ui.education.teal
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.theme.Teal
 
 @Composable
-fun TermsAndPrivacyFooter(navController: NavHostController) {
+fun TermsAndPrivacyFooter(navController: NavHostController, textColor: Color) {
     val configuration = LocalConfiguration.current
 
     val screenwidth = configuration.screenWidthDp
@@ -38,9 +40,10 @@ fun TermsAndPrivacyFooter(navController: NavHostController) {
             onClick = { navController.navigate(LegalScreen.Terms.name) },
             style = TextStyle(
                 textDecoration = TextDecoration.Underline,
-                color = Color(teal),
+                color = textColor,
                 textAlign = TextAlign.Center,
-                fontSize = (screenwidth*0.04).scaledSp()
+                fontSize = (screenwidth*0.04).scaledSp(),
+                fontWeight = FontWeight.Bold
             ),
             text = AnnotatedString("Terms and Conditions")
         )
@@ -55,9 +58,10 @@ fun TermsAndPrivacyFooter(navController: NavHostController) {
             onClick = { navController.navigate(LegalScreen.Privacy.name) },
             style = TextStyle(
                 textDecoration = TextDecoration.Underline,
-                color = Color(teal),
+                color = textColor,
                 textAlign = TextAlign.Center,
-                fontSize = (screenwidth*0.04).scaledSp()
+                fontSize = (screenwidth*0.04).scaledSp(),
+                fontWeight = FontWeight.Bold
             ),
             text = AnnotatedString("Privacy Policy"),
         )

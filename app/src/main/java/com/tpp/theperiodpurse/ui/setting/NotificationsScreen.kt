@@ -131,7 +131,7 @@ fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, a
         buttons = {
             positiveButton(text = "Ok") {
                 formattedTime = pickedTime.format(DateTimeFormatter.ofPattern("h:mm a"))
-                appViewModel.setReminderTime(formattedTime)
+                appViewModel.setReminderTime(formattedTime, context)
                 if(hasNotificationsPermission){
                     if(appViewModel.getAllowReminders()){
                         setAlarm(context, pickedTime, appViewModel)

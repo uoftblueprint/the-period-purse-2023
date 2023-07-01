@@ -38,6 +38,8 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.theme.MainFontColor
+import com.tpp.theperiodpurse.ui.theme.Teal
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 
@@ -106,44 +108,40 @@ fun SettingScreenLayout(
             fontSize = 20.scaledSp()
         )
 
-        TrackingPreferencesRow(symptoms, appViewModel = appViewModel)
-        Text(
-            text = stringResource(R.string.notifications_heading),
-            modifier = modifier.padding(top = 5.dp, start = 10.dp),
-            color = Color.DarkGray,
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.scaledSp()
-        )
-        Row(modifier = modifier.padding(20.dp)) {
-            Column(modifier = Modifier) {
-                Text(
-                    text = stringResource(
-                        R.string.remind_me_to_log_symptoms
-                    ),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 15.scaledSp(),
-                )
-                Spacer(modifier = modifier.padding(3.dp))
-                Text(
-                    text = time,
-                    modifier = Modifier.padding(start = 5.dp),
-                    color = Color.Gray,
-                    fontSize = 15.scaledSp(),
-                )
-            }
-            Switch(
-                enabled = false,
-                checked = appViewModel.getAllowReminders(),
-                onCheckedChange = { appViewModel.toggleAllowReminders() },
-                modifier = modifier
-                    .fillMaxWidth()
-                    .wrapContentWidth(Alignment.End),
-                colors = SwitchDefaults.colors(
-                    uncheckedThumbColor = Color.DarkGray
-                )
-            )
-        }
-        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
+       TrackingPreferencesRow(symptoms, appViewModel = appViewModel, context = context)
+       Text(
+           text = stringResource(R.string.notifications_heading),
+           modifier = modifier.padding(top = 5.dp, start = 10.dp),
+           color = Color.DarkGray,
+           fontWeight = FontWeight.Bold,
+           fontSize = 20.scaledSp()
+       )
+       Row(modifier = modifier.padding(20.dp)) {
+           Column (modifier = Modifier) {
+               Text(text = stringResource(
+                   R.string.remind_me_to_log_symptoms),
+                   fontWeight = FontWeight.Bold,
+                   fontSize = 15.scaledSp(),)
+               Spacer(modifier = modifier.padding(3.dp))
+               Text(text = time,
+                   modifier = Modifier.padding(start = 5.dp),
+                   color = Color.Gray,
+                   fontSize = 15.scaledSp(),
+               )
+           }
+           Switch(
+               enabled = false,
+               checked = appViewModel.getAllowReminders(),
+               onCheckedChange = {appViewModel.toggleAllowReminders(context)},
+               modifier = modifier
+                   .fillMaxWidth()
+                   .wrapContentWidth(Alignment.End),
+               colors = SwitchDefaults.colors(
+                   uncheckedThumbColor = Color.DarkGray
+               )
+           )
+       }
+       Divider(modifier = Modifier.padding(start= 10.dp, end = 10.dp))
 
         NavigateButton(
             stringResource(id = R.string.customize_notifications),
@@ -185,17 +183,15 @@ fun SettingScreenLayout(
             fontSize = 15.scaledSp()
         )
 
-        /*
-        Terms & Conditions, and Privacy Policy
-         */
-        Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            TermsAndPrivacyFooter(outController)
-            Spacer(modifier = Modifier.size(80.dp))
-        }
-        Spacer(modifier = Modifier
-            .size(80.dp)
-            .padding(bottom = 5.dp))
-    }
+       /*
+       Terms & Conditions, and Privacy Policy
+        */
+       Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+           TermsAndPrivacyFooter(outController, MainFontColor)
+           Spacer(modifier = Modifier.size(80.dp))
+       }
+       Spacer(modifier = Modifier.size(80.dp).padding(bottom = 5.dp))
+   }
 }
 
 /**
@@ -206,11 +202,7 @@ fun SettingScreenLayout(
  * @param appViewModel The view model for the app.
  */
 @Composable
-fun TrackingPreferencesRow(
-    symptoms: List<Symptom>,
-    modifier: Modifier = Modifier,
-    appViewModel: AppViewModel
-) {
+fun TrackingPreferencesRow(symptoms: List<Symptom>, modifier: Modifier = Modifier, appViewModel: AppViewModel, context: Context){
 
     Row(
         modifier = modifier
@@ -226,7 +218,8 @@ fun TrackingPreferencesRow(
             contentDescription = stringResource(R.string.mood),
             ischecked = symptoms.contains(Symptom.MOOD),
             symptom = Symptom.MOOD,
-            appViewModel = appViewModel
+            appViewModel = appViewModel,
+            context = context
         )
         TrackingOptionButton(
             modifier = modifier,
@@ -235,7 +228,8 @@ fun TrackingPreferencesRow(
             contentDescription = stringResource(R.string.exercise),
             ischecked = symptoms.contains(Symptom.EXERCISE),
             symptom = Symptom.EXERCISE,
-            appViewModel = appViewModel
+            appViewModel = appViewModel,
+            context = context
         )
         TrackingOptionButton(
             modifier = modifier,
@@ -244,7 +238,8 @@ fun TrackingPreferencesRow(
             contentDescription = stringResource(R.string.cramps),
             ischecked = symptoms.contains(Symptom.CRAMPS),
             symptom = Symptom.CRAMPS,
-            appViewModel = appViewModel
+            appViewModel = appViewModel,
+            context = context
         )
         TrackingOptionButton(
             modifier = modifier,
@@ -253,7 +248,8 @@ fun TrackingPreferencesRow(
             contentDescription = stringResource(R.string.sleep),
             ischecked = symptoms.contains(Symptom.SLEEP),
             symptom = Symptom.SLEEP,
-            appViewModel = appViewModel
+            appViewModel = appViewModel,
+            context = context
         )
     }
 }
@@ -270,15 +266,15 @@ fun TrackingPreferencesRow(
  * @param appViewModel The view model for the app.
  */
 @Composable
-fun TrackingOptionButton(
-    modifier: Modifier, label: String, icon: Painter,
-    contentDescription: String, ischecked: Boolean,
-    symptom: Symptom, appViewModel: AppViewModel
+fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter,
+                         contentDescription: String, ischecked: Boolean,
+                         symptom: Symptom, appViewModel: AppViewModel,
+                         context: Context
 ) {
 
     val configuration = LocalConfiguration.current
     val screenwidth = configuration.screenWidthDp;
-    val color = if (appViewModel.isSymptomChecked(symptom)) Color(teal) else Color.White
+    val color = if (appViewModel.isSymptomChecked(symptom)) Teal else Color.White
     Column(
         modifier = modifier
             .padding((screenwidth * 0.02).dp),
@@ -287,7 +283,7 @@ fun TrackingOptionButton(
     ) {
         IconToggleButton(
             checked = ischecked,
-            onCheckedChange = { appViewModel.updateSymptoms(symptom) },
+            onCheckedChange = {appViewModel.updateSymptoms(symptom, context)},
             modifier = Modifier.clip(RoundedCornerShape(10.dp))
         ) {
             Icon(

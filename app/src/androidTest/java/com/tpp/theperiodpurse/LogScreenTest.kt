@@ -73,7 +73,7 @@ class LogScreenTest {
         }
     }
 
-    private fun insertUser() {
+    private fun insertUser(context: Context) {
         val user = User(
             symptomsToTrack = symptomList,
             periodHistory = dateList,
@@ -82,7 +82,7 @@ class LogScreenTest {
             daysSinceLastPeriod = 0
         )
         runBlocking {
-            userRepository.addUser(user)
+            userRepository.addUser(user, context)
         }
     }
 
@@ -93,8 +93,9 @@ class LogScreenTest {
     @Before
     fun setupNavHost() {
         hiltRule.inject()
-        insertUser()
+
         composeTestRule.setContent {
+            insertUser(LocalContext.current)
             insertDate(LocalContext.current)
             navController = TestNavHostController(LocalContext.current)
             navController.navigatorProvider.addNavigator(
