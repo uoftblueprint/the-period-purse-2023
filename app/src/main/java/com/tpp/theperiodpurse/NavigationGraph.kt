@@ -25,7 +25,6 @@ import com.tpp.theperiodpurse.ui.education.*
 import com.tpp.theperiodpurse.ui.legal.PrivacyScreen
 import com.tpp.theperiodpurse.ui.legal.TermsScreen
 import com.tpp.theperiodpurse.ui.onboarding.*
-import com.tpp.theperiodpurse.ui.setting.LoadDatabase
 import com.tpp.theperiodpurse.ui.setting.SettingsScreen
 import com.tpp.theperiodpurse.ui.symptomlog.LogScreen
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
@@ -39,7 +38,7 @@ enum class Screen {
     Settings,
     Learn,
     LogMultipleDates,
-    CycleFullHisotry
+    CycleFullHistory
 }
 
 enum class LegalScreen {
@@ -49,7 +48,7 @@ enum class LegalScreen {
 
 val screensWithNavigationBar = arrayOf(
     Screen.Calendar.name, Screen.Log.name, Screen.Cycle.name,
-    Screen.Settings.name, Screen.Learn.name, Screen.CycleFullHisotry.name
+    Screen.Settings.name, Screen.Learn.name, Screen.CycleFullHistory.name
 )
 
 enum class OnboardingScreen {
@@ -139,7 +138,7 @@ fun NavigationGraph(
             )
         }
 
-        composable(route = Screen.CycleFullHisotry.name) {
+        composable(route = Screen.CycleFullHistory.name) {
             PeriodHistoryLayout(
                 appViewModel = appViewModel,
                 navController = navController
@@ -179,7 +178,6 @@ fun NavigationGraph(
             QuestionOneScreen(
                 navController = navController,
                 onSelectionChanged = { onboardViewModel.setQuantity(it.toInt()) },
-                navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null,
                 onboardUiState = onboardUIState,
                 viewModel = onboardViewModel,

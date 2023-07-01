@@ -17,7 +17,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.LegalScreen
 import com.tpp.theperiodpurse.ui.education.teal
@@ -28,7 +27,7 @@ import com.tpp.theperiodpurse.ui.theme.Teal
 fun TermsAndPrivacyFooter(navController: NavHostController, textColor: Color) {
     val configuration = LocalConfiguration.current
 
-    val screenwidth = configuration.screenWidthDp;
+    val screenwidth = configuration.screenWidthDp
 
     Row(
         modifier = Modifier

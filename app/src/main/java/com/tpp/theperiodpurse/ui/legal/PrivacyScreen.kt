@@ -1,47 +1,35 @@
 package com.tpp.theperiodpurse.ui.legal
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight.Companion.Bold
-import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.ui.component.TopNavBar
 import com.tpp.theperiodpurse.ui.education.EducationBackground
-import com.tpp.theperiodpurse.ui.education.teal
-import com.tpp.theperiodpurse.ui.onboarding.scaledSp
-import com.tpp.theperiodpurse.ui.theme.Teal
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun PrivacyScreen(navController: NavHostController) {
     val interactionSource = remember { MutableInteractionSource() }
-    val scaffoldState = rememberScaffoldState()
+    val screenName = stringResource(R.string.privacy_policy)
+
     EducationBackground()
 
     Scaffold(
         backgroundColor = Color.Transparent,
-        scaffoldState = scaffoldState,
+        topBar = { TopNavBar(screenName, navController, interactionSource) },
         content = {
             Column(
                 modifier = Modifier
@@ -49,11 +37,7 @@ fun PrivacyScreen(navController: NavHostController) {
                     .padding(vertical = 12.dp, horizontal = 24.dp)
                     .verticalScroll(rememberScrollState())
             ) {
-                Text(
-                    fontSize = 32.scaledSp(),
-                    fontWeight = Bold,
-                    text = "Privacy Policy"
-                )
+                Title(str = screenName)
 
                 Divider(
                     modifier = Modifier.padding(vertical = 8.dp),
@@ -61,217 +45,41 @@ fun PrivacyScreen(navController: NavHostController) {
                     thickness = 2.dp
                 )
 
-                Header("Privacy Statement")
+                Header(stringResource(R.string.privacy_statement))
+                Body(stringResource(R.string.strives_to_achieve))
 
-                Body(
-                    "The Period Purse strives to achieve menstrual equity by providing " +
-                            "people who menstruate with access to free menstrual products, and " +
-                            "to reduce the stigma surrounding periods through public education " +
-                            "and advocacy.\n\n" + "With the help of UofT Blueprint from the " +
-                            "University of Toronto, we have developed this app to enable you to " +
-                            "keep track of your periods and provide you with useful information. " +
-                            "\n\n" + "We understand that recording intimate information about " +
-                            "your body in an app can be scary. Who can access this information?" +
-                            " How will it be used? Is it well protected?\n\n" + "This is why we " +
-                            "build this app with your privacy first in mind. Contrary to other " +
-                            "period tracking apps, with your Period Purse app, no one but you " +
-                            "can access any " + "of the information you provide. This document " +
-                            "provides you with more information " + "about how this works, " +
-                            "and answers some commonly asked questions."
-                )
-                ReachOut(
-                    "You can also always reach out at hello@periodpurse.com " +
-                            "if you cannot find what you are looking for."
-                )
+                Header(stringResource(R.string.what_do_we_do_with_your_information))
+                Body(stringResource(R.string.no_personal_info_access))
+
+                Header(stringResource(R.string.did_you_get_my_consent))
+                Body(stringResource(R.string.consent_response))
+
+                Header(stringResource(R.string.did_you_collect_my_data))
+                Body(stringResource(R.string.data_collection_response))
 
 
-                Header("What do we do with your information?")
-
-                Body(
-                    "Nothing! Nor the Period Purse, nor any other organization, can access " +
-                            "your personal information. "
-                )
+                Header(stringResource(R.string.do_you_share_my_information_with_anyone))
+                Body(stringResource(R.string.information_sharing_response))
 
 
-                Header("Did you get my consent?")
-
-                Body(
-                    "We did not ask for your consent, because we do not want your data. " +
-                            "Your data is yours and yours only."
-                )
-
-                Header("Did you collect my data?")
-
-                Body(
-                    "We do not collect your data in any way. Your data is either stored locally " +
-                            "on-device or backed up to Google Drive. \n\nIn the case of " +
-                            "on-device storage," +
-                            " the data is only processed locally and not transmitted off-device. \n" +
-                            "\nIn" +
-                            " the case of storing in Google Drive, we will use Google Drive API and" +
-                            " OAuth to achieve end-to-end encryption, and store your data in a hidden," +
-                            " application specific folder such that no parties, including you or any" +
-                            " other application can access it. The only way you can access this data" +
-                            " is when you sign into Menstruation Nation with your Google Account. At" +
-                            " any time, you can uninstall Menstruation Nation to delete the backed-up " +
-                            "data in Google Drive."
-                )
+                Header(stringResource(R.string.is_my_information_protected))
+                Body(stringResource(R.string.information_protected_response))
 
 
-                Header("Do you share my information with anyone?")
+                Header(stringResource(R.string.i_am_underage_can_i_use_this_app))
+                Body(stringResource(R.string.under_age_response))
 
-                Body(
-                    "We do not disclose your data to any third party. We could not if we " +
-                        "wanted to since we do not have it! All the data that you add to the app" +
-                         "to keep track of your periods and your health is stored locally, on " +
-                            "your phone, with one exception. We wanted you to be able to " +
-                            "transfer your data from one device to the other in case you change" +
-                            " phone, so that you do not lose your history. To make sure this " +
-                            "would not jeopardize your privacy, we created an optional feature " +
-                            "that enables you to connect your Google account to your app and download" +
-                            " all your data on your Google Drive. Upon request, data goes straight " +
-                            "from the app to your Google account. You can then access it by logging into " +
-                            "Menstruation Nation on your new device.Once your data is in your Google Drive, " +
-                            "the Google privacy policy applies. We invite you to read it if you have any " +
-                            "questions on how Google protects your information. The app also includes " +
-                            "some links to social media pages. If you click those links, these pages’ " +
-                            "privacy policy applies."
-                )
+                Header(stringResource(R.string.changes_to_this_privacy_policy))
+                Body(stringResource(R.string.policy_update_response))
 
-
-                Header("Is my information protected?")
-
-                Body(
-                    "We built this app so that you would feel comfortable tracking your " +
-                            "periods on your phone. Not accessing it is the best way for us " +
-                            "to protect it. "
-                )
-
-
-                Header("I am underage. Can I use this app?")
-
-                Body(
-                    "From a privacy standpoint, you can use this app whichever your age is, " +
-                            "because your data stays with you."
-                )
-
-                Header("Changes to this privacy policy.")
-
-                Body(
-                    "If any of the above were to change, we will update this document to " +
-                            "inform you."
-                )
-
-                Header("Questions and contact information")
-                ReachOut("Any question? Just email us: hello@periodpurse.com.")
+                Header(stringResource(R.string.questions_and_contact_information))
+                Body(stringResource(R.string.contact))
 
                 Spacer(modifier = Modifier.size(36.dp))
             }
-        },
-        topBar = {
-            TopAppBar(
-                backgroundColor = Color.White
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .clickable(
-                                interactionSource = interactionSource, indication = null
-                            ) { navController.popBackStack() }
-                            .size(20.dp),
-                        painter = painterResource(R.drawable.arrow),
-                        contentDescription = "Back Button",
-                        tint = Teal
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Text(
-                        fontSize = 20.scaledSp(),
-                        fontWeight = Bold,
-                        color = Color.Black,
-                        text = "Privacy Policy"
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                }
-            }
         }
     )
 }
-
-@Composable
-fun Body(str: String) {
-    Text(
-        fontSize = 14.scaledSp(),
-        lineHeight = 16.scaledSp(),
-        text = str
-    )
-}
-
-
-@Composable
-fun Header(str: String) {
-    Column {
-        Spacer(modifier = Modifier.size(12.dp))
-
-        Text(
-            modifier = Modifier.padding(vertical = 2.dp),
-            fontSize = 14.scaledSp(),
-            fontWeight = Bold,
-            lineHeight = 24.scaledSp(),
-            text = str
-        )
-    }
-
-}
-
-/**
- * Annotated Text String for including link to email for contacting TPP.
- */
-@Composable
-fun ReachOut(string: String) {
-    val uriHandler = LocalUriHandler.current
-    val startIndex = string.indexOf("hello@periodpurse.com")
-    val endIndex = startIndex + 21
-
-    val annotatedString: AnnotatedString = buildAnnotatedString {
-        append(string)
-
-        addStyle(
-            style = SpanStyle(
-                color = Color.Blue,
-                textDecoration = TextDecoration.Underline
-            ), start = startIndex, end = endIndex
-        )
-
-        addStringAnnotation(
-            tag = "email",
-            annotation = "mailto:hello@periodpurse.com",
-            start = startIndex,
-            end = endIndex
-        )
-    }
-
-    ClickableText(
-        style = TextStyle(fontSize = 14.scaledSp()),
-        text = annotatedString,
-        onClick = {
-            annotatedString
-                .getStringAnnotations(tag = "email", it, it).firstOrNull()
-                ?.let { stringAnnotation ->
-                    uriHandler.openUri(stringAnnotation.item)
-                }
-        }
-    )
-}
-
 
 @Preview
 @Composable

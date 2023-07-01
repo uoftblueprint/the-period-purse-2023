@@ -14,23 +14,31 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
+/**
+ * A composable function for displaying a confirmation dialog after a backup operation.
+ *
+ * @param navController The NavHostController instance for navigation.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ConfirmBackUp(navController: NavHostController) {
-    var confirmBackUp = remember { mutableStateOf(false)  }
+    var confirmBackUp = remember { mutableStateOf(false) }
 
+    // Display the confirmation dialog
     AlertDialog(
         modifier = Modifier.padding(16.dp),
         shape = RoundedCornerShape(10.dp),
         backgroundColor = Color.White,
         contentColor = Color.Black,
-        onDismissRequest = { confirmBackUp.value = false
-            navController.navigate(SettingScreenNavigation.Start.name)},
+        onDismissRequest = {
+            confirmBackUp.value = false
+            navController.navigate(SettingScreenNavigation.Start.name)
+        },
         title = {
             Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Backup Succesful",
+                    text = "Backup Successful",
                     style = MaterialTheme.typography.h6
                 )
             }
@@ -43,6 +51,7 @@ fun ConfirmBackUp(navController: NavHostController) {
             )
         },
         confirmButton = {
+            // Display the "OK" button
             OutlinedButton(
                 onClick = {
                     confirmBackUp.value = false
@@ -62,5 +71,4 @@ fun ConfirmBackUp(navController: NavHostController) {
             }
         },
     )
-
 }

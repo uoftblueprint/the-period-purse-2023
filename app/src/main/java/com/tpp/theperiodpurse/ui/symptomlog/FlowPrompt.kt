@@ -15,7 +15,7 @@ import com.tpp.theperiodpurse.data.model.LogSquare
 import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
 
 @Composable
-fun FlowPrompt (logViewModel: LogViewModel) {
+fun FlowPrompt(logViewModel: LogViewModel) {
     var selected by remember {
         mutableStateOf(logViewModel.getSquareSelected(logPrompt = LogPrompt.Flow))
     }
@@ -34,7 +34,8 @@ fun FlowPrompt (logViewModel: LogViewModel) {
                 start = 0.dp,
                 top = 0.dp,
                 end = 0.dp,
-                bottom = 16.dp),
+                bottom = 16.dp
+            ),
             modifier = Modifier
                 .height(270.dp),
             content = {
@@ -52,8 +53,7 @@ fun FlowPrompt (logViewModel: LogViewModel) {
                         }
                     }
                 }
-        })
-
+            })
     }
 }
 
