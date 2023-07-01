@@ -41,40 +41,49 @@ fun AverageLengthBox(
                 color = Color(0xFF868083),
             )
             Spacer(modifier.height(20.dp))
-            Row {
-                Text(
-                    text = when (length) {
-                        (-1).toFloat() -> stringResource(R.string.log_to_learn)
-                        (-2).toFloat() -> stringResource(R.string.log_to_learn)
-                        else -> "%.2f Days".format(length)
-                    },
-                    fontSize = when (length) {
-                        (-1).toFloat() -> 10.scaledSp()
-                        (-2).toFloat() -> 10.scaledSp()
-                        else -> 20.scaledSp()
-                    },
-                    fontWeight = FontWeight(500),
-                    modifier = modifier.width(55.dp)
-                )
-                Spacer(modifier.width(29.dp))
-                Box(
-                    modifier
-                        .size(50.dp)
-                        .clip(RoundedCornerShape(50))
-                        .background(Color.White)
-                ) {
-                    Image(
-                        painter = image,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .matchParentSize()
-                            .aspectRatio(1f) // Maintain a 1:1 aspect ratio
-                            .padding(8.dp), // Add padding to shrink the image inside the box
-                        contentScale = ContentScale.Fit,
-                        alignment = Alignment.Center
-                    )
-                }
-            }
+            AverageLengthRow(length, modifier, image)
+        }
+    }
+}
+
+@Composable
+private fun AverageLengthRow(
+    length: Float,
+    modifier: Modifier,
+    image: Painter
+) {
+    Row {
+        Text(
+            text = when (length) {
+                (-1).toFloat() -> stringResource(R.string.log_to_learn)
+                (-2).toFloat() -> stringResource(R.string.log_to_learn)
+                else -> "%.2f Days".format(length)
+            },
+            fontSize = when (length) {
+                (-1).toFloat() -> 10.scaledSp()
+                (-2).toFloat() -> 10.scaledSp()
+                else -> 20.scaledSp()
+            },
+            fontWeight = FontWeight(500),
+            modifier = modifier.width(55.dp)
+        )
+        Spacer(modifier.width(29.dp))
+        Box(
+            modifier
+                .size(50.dp)
+                .clip(RoundedCornerShape(50))
+                .background(Color.White)
+        ) {
+            Image(
+                painter = image,
+                contentDescription = null,
+                modifier = Modifier
+                    .matchParentSize()
+                    .aspectRatio(1f) // Maintain a 1:1 aspect ratio
+                    .padding(8.dp), // Add padding to shrink the image inside the box
+                contentScale = ContentScale.Fit,
+                alignment = Alignment.Center
+            )
         }
     }
 }

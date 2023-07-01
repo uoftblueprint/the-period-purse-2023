@@ -29,6 +29,7 @@ import com.tpp.theperiodpurse.ui.component.SocialMedia
 import com.tpp.theperiodpurse.ui.theme.Gray
 import com.tpp.theperiodpurse.ui.theme.Pink
 import com.tpp.theperiodpurse.ui.theme.Teal
+import com.tpp.theperiodpurse.ui.theme.MainFontColor
 
 @Composable
 fun EducationScreenLayout(
@@ -106,7 +107,7 @@ fun BottomSection(outController: NavHostController) {
             color = Color.DarkGray
         )
         Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            TermsAndPrivacyFooter(outController)
+            TermsAndPrivacyFooter(outController, MainFontColor)
         }
         Spacer(modifier = Modifier.size(64.dp))
     }

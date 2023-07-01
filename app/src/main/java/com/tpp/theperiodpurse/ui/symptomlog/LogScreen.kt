@@ -54,6 +54,7 @@ import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
 import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import com.tpp.theperiodpurse.ui.component.PopupTopBar
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.theme.LogSelectedTextColor
 import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
 import java.time.LocalDate
 import java.time.YearMonth
@@ -163,7 +164,7 @@ fun LogScreen(
                             ?.toLocalDate()
                         if (thisDate != null) {
                             if (thisDate == day) {
-                                appViewModel.deleteDate(d)
+                                appViewModel.deleteDate(d, context)
                             }
                         }
                     }
@@ -344,11 +345,14 @@ fun LogPromptCards(logPrompts: List<LogPrompt>, logViewModel: LogViewModel) {
 fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
     var expanded by remember { mutableStateOf(false) }
 
+    val hasInput = (logViewModel.getSquareSelected(logPrompt) != null ||
+            logViewModel.getText(logPrompt) != "")
+    val iconColor = animateColorAsState(
+        targetValue = if (hasInput) SelectedColor1 else SecondaryFontColor ,
+        animationSpec = tween(500, 0, LinearEasing)
+    )
     val tabColor =  animateColorAsState(
-        targetValue =
-        if (logViewModel.getSquareSelected(logPrompt) != null ||
-            logViewModel.getText(logPrompt) != "") SelectedColor1
-        else SecondaryFontColor,
+        targetValue = if (hasInput) LogSelectedTextColor else SecondaryFontColor ,
         animationSpec = tween(500, 0, LinearEasing)
     )
 
@@ -371,11 +375,11 @@ fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
                     .fillMaxWidth()
                     .padding(top = 10.dp, bottom = 10.dp, start = 30.dp, end = 15.dp)
             ) {
-                logPrompt.icon(tabColor.value)
+                logPrompt.icon(iconColor.value)
                 Spacer(Modifier.size(10.dp))
                 Text(
                     text = stringResource(logPrompt.title),
-                    fontWeight = FontWeight.Bold,
+                    fontWeight =  if (hasInput) FontWeight.ExtraBold else null,
                     color = tabColor.value,
                     fontSize = 16.scaledSp()
                 )
@@ -481,7 +485,7 @@ fun SaveButton(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .semantics { contentDescription = "Save Button" },
-                color = Color.White
+                color = Color.Black
             )
         }
     }

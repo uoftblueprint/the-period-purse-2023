@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material3.ButtonElevation
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -30,6 +31,8 @@ import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.state.OnboardUIState
+import com.tpp.theperiodpurse.ui.theme.ButtonDisabledColor
+import com.tpp.theperiodpurse.ui.theme.Teal
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -157,7 +160,7 @@ fun QuestionOneScreen(
             ) {
                 Text(
                     stringResource(R.string.skip),
-                    color = Color(97, 153, 150),
+                    color = Color.Black,
                     fontSize = 20.scaledSp()
                 )
             }
@@ -171,7 +174,9 @@ fun QuestionOneScreen(
                     .padding(end = (screenwidth * (0.1)).dp)
                     .weight(1f)
                     .semantics { contentDescription = "Next" },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 150)),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Teal,
+                    disabledBackgroundColor = ButtonDisabledColor),
             ) {
                 Text(stringResource(R.string.next), color = Color.White, fontSize = 20.scaledSp())
             }
@@ -222,7 +227,12 @@ fun EditDaysField(
 ) {
     TextField(
         shape = RoundedCornerShape(20),
-        colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = Color.White,
+            cursorColor = Color.Black,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+        ),
         value = value,
         onValueChange = onValueChange,
         placeholder = {

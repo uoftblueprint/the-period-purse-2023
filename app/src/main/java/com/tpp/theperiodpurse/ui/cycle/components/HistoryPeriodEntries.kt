@@ -29,27 +29,37 @@ fun PeriodEntries(periods: ArrayList<ArrayList<Date>>, upperbound: Int?) {
                 val converted = date.toInstant()?.atZone(ZoneId.systemDefault())
                     ?.toLocalDate()?.year
                 val current = LocalDate.now().year
-                if (i == 0 && converted == current) {
-                    val formattedDate = formatter.format(date)
-                    // Only if same year
-                    Text(text = "Most Recent Period: Started $formattedDate")
-                } else {
-                    val period = periods[i]
-                    val startDate = period[0].date
-                    val endDate = addOneDay(period[period.size - 1].date)
-                    if (startDate != null && endDate != null) {
-                        val startString = formatter.format(startDate)
-                        val endString = formatter.format(endDate)
-                        val periodLength =
-                            (endDate.time - startDate.time) / 86400000
-                        Text(text = "$startString - $endString")
-                        Text(
-                            text = "$periodLength-day period",
-                            fontSize = 13.scaledSp()
-                        )
-                    }
-                }
+                PeriodEntry(i, converted, current, formatter, date, periods)
             }
         }
+    }
+}
+
+@Composable
+private fun PeriodEntry(
+    i: Int,
+    converted: Int?,
+    current: Int,
+    formatter: SimpleDateFormat,
+    date: java.util.Date,
+    periods: ArrayList<ArrayList<Date>>
+) {
+    if (i == 0 && converted == current) {
+        val formattedDate = formatter.format(date)
+        // Only if same year
+        Text(text = "Most Recent Period: Started $formattedDate")
+    } else {
+        val period = periods[i]
+        val startDate = period[0].date
+        val endDate = addOneDay(period[period.size - 1].date)
+        val startString = formatter.format(startDate)
+        val endString = formatter.format(endDate)
+        val periodLength =
+            (endDate.time - startDate.time) / 86400000
+        Text(text = "$startString - $endString")
+        Text(
+            text = "$periodLength-day period",
+            fontSize = 13.scaledSp()
+        )
     }
 }

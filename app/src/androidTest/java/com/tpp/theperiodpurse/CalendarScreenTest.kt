@@ -75,7 +75,7 @@ class CalendarScreenTest {
         }
     }
 
-    private fun insertUser() {
+    private fun insertUser(context: Context) {
         val user = User(
             symptomsToTrack = symptomList,
             periodHistory = dateList,
@@ -84,7 +84,7 @@ class CalendarScreenTest {
             daysSinceLastPeriod = 0
         )
         runBlocking {
-            userRepository.addUser(user)
+            userRepository.addUser(user, context)
         }
     }
 
@@ -95,8 +95,9 @@ class CalendarScreenTest {
     @Before
     fun setupNavHost() {
         hiltRule.inject()
-        insertUser()
+
         composeTestRule.setContent {
+            insertUser(LocalContext.current)
             insertDate(LocalContext.current)
             navController =
                 TestNavHostController(LocalContext.current)

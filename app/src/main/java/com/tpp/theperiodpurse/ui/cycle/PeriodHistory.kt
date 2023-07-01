@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.data.findYears
 import com.tpp.theperiodpurse.data.parseDatesIntoPeriods
 import com.tpp.theperiodpurse.ui.cycle.components.PeriodEntries
@@ -43,33 +44,9 @@ fun PeriodHistoryLayout(
         years[LocalDate.now().year] = ArrayList()
     }
     var yearSelected by remember { mutableStateOf(years.keys.last()) }
+    val cyclePage = stringResource(R.string.cycle_page)
     // Iterate over years and create horizontally scrollable buttons
-    Scaffold(
-        topBar = {
-            TopAppBar (
-                {
-                    Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
-                    text = "Period History",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.scaledSp()
-                    )
-                },
-                backgroundColor = Color.White,
-                elevation = 0.dp,
-                navigationIcon = {
-                    IconButton(onClick = {navController.navigateUp()}) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.back_button)
-                        )
-                    }
-                },
-            )
-        },
-    )
+    Scaffold(topBar = { AppBar(navController = navController) },)
     {
         Box(
             modifier = Modifier.padding(it)
@@ -79,14 +56,12 @@ fun PeriodHistoryLayout(
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxSize()
-                    .semantics { contentDescription = "Cycle Page" },
+                    .semantics { contentDescription = cyclePage },
                 contentScale = ContentScale.FillBounds,
             )
             Column(
                 modifier
                     .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
-                    .fillMaxHeight()
                     .padding(horizontal = 20.dp, vertical = 25.dp)
             ) {
                 LazyRow {
@@ -94,42 +69,79 @@ fun PeriodHistoryLayout(
                     val reversedKeys = years.keys.reversed()
                     for (key in reversedKeys) {
                         item {
-                            YearTab(key,
-                                yearSelected == key,
-                                onClick = { yearSelected = key }
-                            )
+                            YearTab(key, yearSelected == key, onClick = {
+                                yearSelected = key
+                            })
                         }
                     }
                 }
-                Card(
-                    modifier.fillMaxWidth(),
-                    elevation = 2.dp,
-                    shape = RoundedCornerShape(10)
-                ) {
-                    Column(modifier.padding(horizontal = 15.dp, vertical = 15.dp)) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                // Replace the year
-                                text = yearSelected.toString(),
-                                fontSize = 15.scaledSp(),
-                                fontWeight = FontWeight(700),
-                                color = Color(0xFF868083),
-                            )
-                        }
-                        Divider(
-                            color = Color(0xFF868083),
-                            modifier = modifier
-                                .padding(top = 5.dp, bottom = 10.dp)
-                                .fillMaxWidth()
-                        )
-                        // Show last three most recent periods
-                        years[yearSelected]?.let { it1 -> PeriodEntries(it1, null) }
-                    }
-                }
+                PeriodCard(modifier, yearSelected, years)
             }
         }
+    }
+}
+
+@Composable
+private fun PeriodCard(
+    modifier: Modifier,
+    yearSelected: Int,
+    years: MutableMap<Int, ArrayList<ArrayList<Date>>>
+) {
+    Card(
+        modifier.fillMaxWidth(),
+        elevation = 2.dp,
+        shape = RoundedCornerShape(50.0f)
+    ) {
+        Column(modifier.padding(horizontal = 15.dp, vertical = 15.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    // Replace the year
+                    text = yearSelected.toString(),
+                    fontSize = 15.scaledSp(),
+                    fontWeight = FontWeight(700),
+                    color = Color(0xFF868083),
+                )
+            }
+            Divider(
+                color = Color(0xFF868083),
+                modifier = modifier
+                    .padding(top = 5.dp, bottom = 10.dp)
+                    .fillMaxWidth()
+            )
+            // Show last three most recent periods
+            years[yearSelected]?.let { it1 -> PeriodEntries(it1, null) }
+        }
+    }
+}
+
+@Composable
+fun AppBar(navController: NavController) {
+    TopAppBar (
+        {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                text = stringResource(id = R.string.period_history),
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.scaledSp()
+            )
+        },
+        backgroundColor = Color.White,
+        elevation = 0.dp,
+        navigationIcon = { BackIcon(navController = navController) },
+    )
+}
+
+@Composable
+fun BackIcon(navController: NavController) {
+    IconButton(onClick = {navController.navigateUp()}) {
+        Icon(
+            imageVector = Icons.Filled.ArrowBack,
+            contentDescription = stringResource(R.string.back_button)
+        )
     }
 }
