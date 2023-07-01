@@ -120,7 +120,8 @@ fun NavigationGraph(
         }
 
         composable(route = Screen.Settings.name) {
-            SettingsScreen(appViewModel = appViewModel,
+            SettingsScreen(
+                appViewModel = appViewModel,
                 outController = navController,
                 context = context,
                 onboardUiState = onboardUIState,
@@ -128,7 +129,8 @@ fun NavigationGraph(
                 appUiState = appUiState,
                 calUiState = calUiState,
                 signIn = signIn,
-                signout = signout)
+                signout = signout
+            )
         }
 
         composable(route = Screen.Cycle.name) {
@@ -176,11 +178,10 @@ fun NavigationGraph(
         // Onboard Screens
         composable(route = OnboardingScreen.QuestionOne.name) {
             QuestionOneScreen(
-                navController = navController,
                 onSelectionChanged = { onboardViewModel.setQuantity(it.toInt()) },
-                navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null,
                 onboardUiState = onboardUIState,
+                navController = navController,
                 viewModel = onboardViewModel,
                 signOut = signout,
                 context = context
@@ -231,25 +232,29 @@ fun NavigationGraph(
             )
         }
         composable(route = OnboardingScreen.LoadGoogleDrive.name) {
-                LoadGoogleDrive(
-                    viewModel = onboardViewModel,
-                    navHostController = navController,
-                    context = context,
-                    googleAccount = onboardUIState.googleAccount)
+            LoadGoogleDrive(
+                viewModel = onboardViewModel,
+                navHostController = navController,
+                context = context,
+                googleAccount = onboardUIState.googleAccount
+            )
         }
 
         composable(route = OnboardingScreen.DownloadBackup.name) {
-            DownloadBackup(googleAccount = onboardUIState.googleAccount,
+            DownloadBackup(
+                googleAccount = onboardUIState.googleAccount,
                 viewModel = onboardViewModel,
                 navHostController = navController,
-                context = context)
+                context = context
+            )
         }
 
         composable(route = OnboardingScreen.DateRangePicker.name) {
             DateRangePicker(
                 { navController.navigate(OnboardingScreen.QuestionTwo.name) },
                 onboardViewModel,
-                onboardUIState)
+                onboardUIState
+            )
         }
 
     }
@@ -262,6 +267,8 @@ fun currentRoute(navController: NavController): String? {
 }
 
 fun navigateToLogScreenWithDate(date: LocalDate, navController: NavController) {
-    navController.navigate(route = "%s/%s/%s"
-        .format(Screen.Calendar, Screen.Log, date.toString()))
+    navController.navigate(
+        route = "%s/%s/%s"
+            .format(Screen.Calendar, Screen.Log, date.toString())
+    )
 }
