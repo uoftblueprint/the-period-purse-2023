@@ -10,13 +10,12 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.ui.education.teal
+import com.tpp.theperiodpurse.ui.theme.Teal
 
 @Composable
 fun SocialMedia(uriHandler: UriHandler) {
@@ -33,14 +32,14 @@ fun SocialMedia(uriHandler: UriHandler) {
             .size(24.dp),
             painter = painterResource(R.drawable.instagram),
             contentDescription = stringResource(R.string.instagram),
-            tint = Color(teal))
+            tint = Teal)
         Icon(modifier = Modifier
             .clickable { uriHandler.openUri("https://www.tiktok.com/@theperiodpurse") }
             .padding(horizontal = 8.dp)
             .size(24.dp),
             painter = painterResource(R.drawable.tiktok),
             contentDescription = stringResource(R.string.tiktok),
-            tint = Color(teal))
+            tint = Teal)
         Icon(modifier = Modifier
             .clickable {
                 uriHandler.openUri(
@@ -51,20 +50,20 @@ fun SocialMedia(uriHandler: UriHandler) {
             .size(24.dp),
             painter = painterResource(R.drawable.youtube),
             contentDescription = stringResource(R.string.youtube),
-            tint = Color(teal))
+            tint = Teal)
         Icon(modifier = Modifier
             .clickable { uriHandler.openUri("https://twitter.com/ThePeriodPurse") }
             .padding(horizontal = 8.dp)
             .size(24.dp),
             painter = painterResource(R.drawable.twitter),
             contentDescription = stringResource(R.string.twitter),
-            tint = Color(teal))
+            tint = Teal)
         Icon(modifier = Modifier
             .clickable { uriHandler.openUri("https://www.facebook.com/theperiodpurse") }
             .padding(horizontal = 8.dp)
             .size(24.dp),
             painter = painterResource(R.drawable.facebook),
             contentDescription = stringResource(R.string.facebook),
-            tint = Color(teal))
+            tint = Teal)
     }
 }
