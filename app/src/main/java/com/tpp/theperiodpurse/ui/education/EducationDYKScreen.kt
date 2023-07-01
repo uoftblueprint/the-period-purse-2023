@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -21,6 +20,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.theme.Teal
 
 @Composable
 fun EducationDYKScreen(navController: NavHostController) {
@@ -41,7 +41,7 @@ fun EducationDYKScreen(navController: NavHostController) {
             .align(Alignment.Start),
             painter = painterResource(R.drawable.arrow),
             contentDescription = stringResource(R.string.back_button_label),
-            tint = Color(teal))
+            tint = Teal)
         Spacer(modifier = Modifier.weight(1f))
         Image(
             modifier = Modifier.height(150.dp),
