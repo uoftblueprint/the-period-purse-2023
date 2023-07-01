@@ -124,12 +124,16 @@ fun QuestionOneScreen(
             EditDaysField(
                 value = periodCycle,
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
                 ),
-                onValueChange = { periodCycle = it },
+                onValueChange = { newValue ->
+                    val filteredValue = newValue.filter { it.isDigit() }
+                    periodCycle = filteredValue
+                },
                 keyboardActions = KeyboardActions(
                     onDone = {
-                        entered = periodCycle != ""
+                        entered = periodCycle.isNotEmpty()
                         focusManager.clearFocus();
                     },
                 ),
