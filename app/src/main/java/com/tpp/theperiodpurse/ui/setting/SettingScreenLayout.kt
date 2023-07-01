@@ -33,11 +33,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.model.Symptom
 import com.tpp.theperiodpurse.ui.component.SocialMedia
-import com.tpp.theperiodpurse.ui.education.teal
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.theme.Teal
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 
@@ -277,8 +277,8 @@ fun TrackingOptionButton(
 ) {
 
     val configuration = LocalConfiguration.current
-    val screenwidth = configuration.screenWidthDp;
-    val color = if (appViewModel.isSymptomChecked(symptom)) Color(teal) else Color.White
+    val screenwidth = configuration.screenWidthDp
+    val color = if (appViewModel.isSymptomChecked(symptom)) Teal else Color.White
     Column(
         modifier = modifier
             .padding((screenwidth * 0.02).dp),
