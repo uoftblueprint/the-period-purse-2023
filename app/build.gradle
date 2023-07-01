@@ -16,8 +16,8 @@ android {
         applicationId "com.tpp.theperiodpurse"
         minSdk 21
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 7
+        versionName "2.3.0"
         testInstrumentationRunner "com.tpp.theperiodpurse.CustomTestRunner"
 
         vectorDrawables {
