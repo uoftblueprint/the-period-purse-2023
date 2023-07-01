@@ -9,6 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import com.tpp.theperiodpurse.ui.state.AppUiState
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.ui.state.OnboardUIState
@@ -54,7 +55,6 @@ fun ResetDatabase(
         }
 
         LaunchedEffect(Unit) {
-            navController.popBackStack()
             outController.navigate(OnboardingScreen.Welcome.name)
         }
 
