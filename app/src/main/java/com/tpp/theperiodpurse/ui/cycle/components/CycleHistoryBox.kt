@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.data.parseDatesIntoPeriods
-import com.tpp.theperiodpurse.ui.education.teal
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.theme.Teal
 
 @Composable
 fun CycleHistoryBox(
@@ -48,7 +48,7 @@ fun CycleHistoryBox(
                 ClickableText(
                     onClick = onClickShowFull,
                     style = TextStyle(
-                        color = Color(teal),
+                        color = Teal,
                         fontWeight = FontWeight(700),
                         fontSize = 15.scaledSp()
                     ),
