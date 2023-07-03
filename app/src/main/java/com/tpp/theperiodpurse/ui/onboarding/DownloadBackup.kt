@@ -19,6 +19,7 @@ fun DownloadBackup(
     googleAccount: Account?,
     viewModel: OnboardViewModel,
     navHostController: NavHostController,
+    signout: () -> Unit = {},
     context: Context
 ) {
     val isDownloaded by viewModel.isDownloaded.observeAsState(initial = null)
@@ -39,10 +40,14 @@ fun DownloadBackup(
             }
         }
         else if (isDownloaded == false) {
-            LaunchedEffect(Unit) {
-                viewModel.isDownloaded.postValue(null)
-                navHostController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
-                navHostController.navigate(OnboardingScreen.Welcome.name)
+            if (!confirmLoad.value) {
+                Toast.makeText(context, "ERROR - Please grant all the required permissions", Toast.LENGTH_SHORT).show()
+                signout()
+                LaunchedEffect(Unit) {
+                    viewModel.isDownloaded.postValue(null)
+                    navHostController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
+                    navHostController.navigate(OnboardingScreen.Welcome.name)
+                }
             }
         }
 

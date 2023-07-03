@@ -25,6 +25,7 @@ fun LoadGoogleDrive(
     googleAccount: Account?,
     viewModel: OnboardViewModel,
     navHostController: NavHostController,
+    signout: () -> Unit = {},
     context: Context
 ) {
     val isDrive by viewModel.isDrive.observeAsState(initial = null)
@@ -42,16 +43,7 @@ fun LoadGoogleDrive(
     if (isDrive == null && isDriveSafe == null) {
         LoadingScreen()
     } else {
-        if (isDriveSafe != null){
-            if (!confirmLoad.value) {
-                confirmLoad.value = true
-                LaunchedEffect(Unit) {
-                    navHostController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
-                    navHostController.navigate(OnboardingScreen.QuestionOne.name)
-                }
-            }
-        }
-        else if (isDrive != null) {
+        if (isDrive != null) {
             if (!confirmLoad.value) {
                 AlertDialog(modifier = Modifier.padding(16.dp),
                     shape = RoundedCornerShape(10.dp),
@@ -123,6 +115,16 @@ fun LoadGoogleDrive(
                 LaunchedEffect(Unit) {
                     navHostController.navigate(OnboardingScreen.QuestionOne.name)
                 }
+            }
+        } else if (isDriveSafe != null){
+            Toast.makeText(context, "ERROR - Please grant all the required permissions", Toast.LENGTH_SHORT).show()
+            signout()
+            if (!confirmLoad.value) {
+                LaunchedEffect(Unit) {
+                    navHostController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
+                    navHostController.navigate(OnboardingScreen.Welcome.name)
+                }
+                confirmLoad.value = true
             }
         }
     }

@@ -236,6 +236,7 @@ fun NavigationGraph(
                     viewModel = onboardViewModel,
                     navHostController = navController,
                     context = context,
+                    signout = signout,
                     googleAccount = onboardUIState.googleAccount)
         }
 
@@ -243,6 +244,7 @@ fun NavigationGraph(
             DownloadBackup(googleAccount = onboardUIState.googleAccount,
                 viewModel = onboardViewModel,
                 navHostController = navController,
+                signout = signout,
                 context = context)
         }
 

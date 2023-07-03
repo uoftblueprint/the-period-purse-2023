@@ -92,7 +92,9 @@ class OnboardViewModel @Inject constructor (
 
 
                     isDrive.postValue(googleDriveFolder)
+                    isDriveSafe.postValue(null)
                 } catch (e: Exception) {
+                    isDrive.postValue(null)
                     isDriveSafe.postValue(true)
                 }
 
