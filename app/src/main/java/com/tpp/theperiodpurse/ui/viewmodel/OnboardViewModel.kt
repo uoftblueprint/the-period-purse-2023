@@ -39,6 +39,7 @@ class OnboardViewModel @Inject constructor (
     var isOnboarded: LiveData<Boolean?> = userRepository.isOnboarded
     var isDeleted: MutableLiveData<Boolean?> = MutableLiveData(null)
     var isDrive: MutableLiveData<FileList?> = MutableLiveData(null)
+    var isDriveSafe: MutableLiveData<Boolean?> = MutableLiveData(null)
     var isDownloaded: MutableLiveData<Boolean?> = MutableLiveData(null)
     var isBackedUp: MutableLiveData<Boolean?> = MutableLiveData(null)
 
@@ -69,42 +70,13 @@ class OnboardViewModel @Inject constructor (
     fun checkGoogleDrive(account: Account, context: Context, ) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val credential = GoogleAccountCredential.usingOAuth2(
-                    context, listOf(DriveScopes.DRIVE_FILE,
-                        DriveScopes.DRIVE_APPDATA)
-                )
-                credential.selectedAccount = account
-                val drive = Drive
-                    .Builder(
-                        AndroidHttp.newCompatibleTransport(),
-                        JacksonFactory.getDefaultInstance(),
-                        credential
-                    )
-                    .setApplicationName(context.getString(R.string.app_name))
-                    .build()
-
-
-                isDrive.postValue(drive.files().list()
-                    .setQ("name = 'user_database.db' and trashed = false")
-                    .setSpaces("appDataFolder").execute())
-            }
-        }
-    }
-
-    fun downloadBackup(account: Account, context: Context){
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    val instance = ApplicationRoomDatabase.getDatabase(context)
-                    instance.close()
-
+                try {
                     val credential = GoogleAccountCredential.usingOAuth2(
-                        context,
-                        listOf(
-                            DriveScopes.DRIVE_FILE,
-                            DriveScopes.DRIVE_APPDATA
-                        )
+                        context, listOf(DriveScopes.DRIVE_FILE,
+                            DriveScopes.DRIVE_APPDATA)
                     )
                     credential.selectedAccount = account
+
                     val drive = Drive
                         .Builder(
                             AndroidHttp.newCompatibleTransport(),
@@ -113,27 +85,69 @@ class OnboardViewModel @Inject constructor (
                         )
                         .setApplicationName(context.getString(R.string.app_name))
                         .build()
-                    val fileList = drive.files().list()
+
+                    val googleDriveFolder = drive.files().list()
                         .setQ("name = 'user_database.db' and trashed = false")
                         .setSpaces("appDataFolder").execute()
 
-                    val fileId = fileList.files[0].id
 
-                    val outputStream = ByteArrayOutputStream()
+                    isDrive.postValue(googleDriveFolder)
+                } catch (e: Exception) {
+                    isDriveSafe.postValue(true)
+                }
 
-                    drive.files().get(fileId).executeMediaAndDownloadTo(outputStream)
+            }
+        }
+    }
 
-                    val data = outputStream.toByteArray()
+    fun downloadBackup(account: Account, context: Context){
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    try {
+                        val instance = ApplicationRoomDatabase.getDatabase(context)
+                        instance.close()
 
-                    val dbFilePath = context.getDatabasePath("user_database.db").path
+                        val credential = GoogleAccountCredential.usingOAuth2(
+                            context,
+                            listOf(
+                                DriveScopes.DRIVE_FILE,
+                                DriveScopes.DRIVE_APPDATA
+                            )
+                        )
+                        credential.selectedAccount = account
+                        val drive = Drive
+                            .Builder(
+                                AndroidHttp.newCompatibleTransport(),
+                                JacksonFactory.getDefaultInstance(),
+                                credential
+                            )
+                            .setApplicationName(context.getString(R.string.app_name))
+                            .build()
+                        val fileList = drive.files().list()
+                            .setQ("name = 'user_database.db' and trashed = false")
+                            .setSpaces("appDataFolder").execute()
 
-                    FileOutputStream(dbFilePath).apply {
-                        write(data)
-                        flush()
-                        close()
+                        val fileId = fileList.files[0].id
+
+                        val outputStream = ByteArrayOutputStream()
+
+                        drive.files().get(fileId).executeMediaAndDownloadTo(outputStream)
+
+                        val data = outputStream.toByteArray()
+
+                        val dbFilePath = context.getDatabasePath("user_database.db").path
+
+                        FileOutputStream(dbFilePath).apply {
+                            write(data)
+                            flush()
+                            close()
+                        }
+
+                        isDownloaded.postValue(true)
+                    } catch (e: java.lang.Exception) {
+                        isDownloaded.postValue(false)
                     }
 
-                    isDownloaded.postValue(true)
                 }
             }
     }
@@ -141,47 +155,53 @@ class OnboardViewModel @Inject constructor (
     fun backupDatabase(account: Account, context: Context) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val credential = GoogleAccountCredential.usingOAuth2(
-                    context,
-                    listOf(DriveScopes.DRIVE_APPDATA,
-                        DriveScopes.DRIVE_FILE)
-                )
-                credential.selectedAccount = account
-                val drive = Drive.Builder(
-                    AndroidHttp.newCompatibleTransport(),
-                    JacksonFactory.getDefaultInstance(),
-                    credential
-                ).setApplicationName(context.getString(R.string.app_name)).build()
+                try {
+                    val credential = GoogleAccountCredential.usingOAuth2(
+                        context,
+                        listOf(DriveScopes.DRIVE_APPDATA,
+                            DriveScopes.DRIVE_FILE)
+                    )
+                    credential.selectedAccount = account
+                    val drive = Drive.Builder(
+                        AndroidHttp.newCompatibleTransport(),
+                        JacksonFactory.getDefaultInstance(),
+                        credential
+                    ).setApplicationName(context.getString(R.string.app_name)).build()
 
-               val fileList = drive.files().list()
-                   .setQ("name = 'user_database.db' and trashed = false")
-                   .setSpaces("appDataFolder").execute()
-                if (fileList.files.isNotEmpty()) {
-                    val fileId = fileList.files[0].id
-                    drive.files().delete(fileId).execute()
-                } else {
-                    null
-                }
-                var instance = ApplicationRoomDatabase.getDatabase(context)
-                instance.close()
+                    val fileList = drive.files().list()
+                        .setQ("name = 'user_database.db' and trashed = false")
+                        .setSpaces("appDataFolder").execute()
+                    if (fileList.files.isNotEmpty()) {
+                        val fileId = fileList.files[0].id
+                        drive.files().delete(fileId).execute()
+                    } else {
+                        null
+                    }
+                    var instance = ApplicationRoomDatabase.getDatabase(context)
+                    instance.close()
 
 
-                val dbFile = java.io.File(context.getDatabasePath("user_database.db").absolutePath)
-                val outputStream = ByteArrayOutputStream()
-                val inputStream = FileInputStream(dbFile)
-                inputStream.copyTo(outputStream)
-                val metadata = File()
+                    val dbFile = java.io.File(context.getDatabasePath("user_database.db").absolutePath)
+                    val outputStream = ByteArrayOutputStream()
+                    val inputStream = FileInputStream(dbFile)
+                    inputStream.copyTo(outputStream)
+                    val metadata = File()
                         .setParents(listOf("appDataFolder"))
                         .setMimeType("application/x-sqlite3")
                         .setName("user_database.db")
-                drive.files().create(metadata, ByteArrayContent(null, outputStream.toByteArray()))
+                    drive.files().create(metadata, ByteArrayContent(null, outputStream.toByteArray()))
                         .setFields("id")
                         .execute()
 
-                inputStream.close()
-                outputStream.close()
+                    inputStream.close()
+                    outputStream.close()
 
-                isBackedUp.postValue(true)
+                    isBackedUp.postValue(true)
+
+                } catch (e: Exception) {
+                    isBackedUp.postValue(false)
+                }
+
             }
         }
     }

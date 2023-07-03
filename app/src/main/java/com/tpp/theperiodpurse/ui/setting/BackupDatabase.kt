@@ -4,6 +4,7 @@ package com.tpp.theperiodpurse.ui.setting
 import android.accounts.Account
 import android.content.Context
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -18,9 +19,11 @@ import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 fun BackupDatabase(viewModel: OnboardViewModel,
                    navController: NavHostController,
                    account: Account?,
+                   signout: () -> Unit = {},
                    context: Context) {
 
     val isBackedUp by viewModel.isBackedUp.observeAsState(initial = null)
+    val confirmLoad = remember { mutableStateOf(false) }
 
 
     LaunchedEffect(Unit){
@@ -34,12 +37,23 @@ fun BackupDatabase(viewModel: OnboardViewModel,
 
     }
     else {
-        LaunchedEffect(Unit){
-
-            viewModel.isBackedUp.postValue(null)
-            navController.navigate(SettingScreenNavigation.ConfirmBackup.name)
-
+        if (isBackedUp == true) {
+            LaunchedEffect(Unit){
+                viewModel.isBackedUp.postValue(null)
+                navController.navigate(SettingScreenNavigation.ConfirmBackup.name)
+            }
+        } else {
+            if (!confirmLoad.value){
+                Toast.makeText(context, "ERROR - Please grant all the required permissions", Toast.LENGTH_SHORT).show()
+                signout()
+                LaunchedEffect(Unit){
+                    viewModel.isBackedUp.postValue(null)
+                    navController.navigate(SettingScreenNavigation.Start.name)
+                }
+                confirmLoad.value = true
+            }
         }
+
 
     }
 

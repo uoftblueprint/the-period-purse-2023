@@ -180,7 +180,7 @@ fun SettingsScreen(
             }
             composable(route = SettingScreenNavigation.ResetDatabase.name) {
                 if (onboardViewModel != null && onboardUiState != null && appUiState != null && calUiState != null) {
-                    ResetDatabase(context = context, viewModel = onboardViewModel, navController = navController, outController = outController, onboardUiState = onboardUiState,
+                    ResetDatabase(context = context, viewModel = onboardViewModel, outController = outController, onboardUiState = onboardUiState,
                     appUiState = appUiState, calUiState = calUiState, signout = signout)
                 }
             }
@@ -189,6 +189,7 @@ fun SettingsScreen(
                     BackupDatabase(viewModel = onboardViewModel,
                         navController = navController,
                         account = onboardUiState.googleAccount,
+                        signout = signout,
                         context = context)
                 }
             }

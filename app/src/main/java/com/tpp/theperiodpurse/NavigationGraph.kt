@@ -25,6 +25,7 @@ import com.tpp.theperiodpurse.ui.education.*
 import com.tpp.theperiodpurse.ui.legal.PrivacyScreen
 import com.tpp.theperiodpurse.ui.legal.TermsScreen
 import com.tpp.theperiodpurse.ui.onboarding.*
+import com.tpp.theperiodpurse.ui.setting.ResetDatabase
 import com.tpp.theperiodpurse.ui.setting.SettingsScreen
 import com.tpp.theperiodpurse.ui.symptomlog.LogScreen
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
@@ -60,7 +61,8 @@ enum class OnboardingScreen {
     LoadGoogleDrive,
     LoadDatabase,
     DownloadBackup,
-    DateRangePicker
+    DateRangePicker,
+    ResetDatabase
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -250,6 +252,13 @@ fun NavigationGraph(
                 onboardViewModel,
                 onboardUIState)
         }
+
+        composable(route = OnboardingScreen.ResetDatabase.name) {
+            ResetDatabase(context = context, viewModel = onboardViewModel, outController = navController, onboardUiState = onboardUIState,
+                appUiState = appUiState, calUiState = calUiState, signout = signout)
+        }
+
+
 
     }
 }

@@ -8,6 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import com.tpp.theperiodpurse.ui.state.AppUiState
@@ -37,7 +39,6 @@ fun ResetDatabase(
     context: Context,
     viewModel: OnboardViewModel,
     outController: NavHostController,
-    navController: NavHostController,
     onboardUiState: OnboardUIState,
     appUiState: AppUiState,
     calUiState: CalendarUIState,
@@ -45,6 +46,7 @@ fun ResetDatabase(
 ) {
     // Observe the state of whether the database is deleted or not
     val isDeleted by viewModel.isOnboarded.observeAsState(initial = null)
+    val confirmLoad = remember { mutableStateOf(false) }
 
     // Check the deleted status in the background
     LaunchedEffect(Unit) {
@@ -57,23 +59,26 @@ fun ResetDatabase(
     if (isDeleted == null) {
         LoadingScreen()
     } else {
-        // Reset necessary states and data
-        calUiState.days = LinkedHashMap()
-        appUiState.trackedSymptoms = listOf()
-        appUiState.dates = emptyList()
-        onboardUiState.days = 0
-        onboardUiState.symptomsOptions = listOf()
-        onboardUiState.date = ""
-        onboardUiState.googleAccount = null
+        if (!confirmLoad.value) {
+            // Reset necessary states and data
+            calUiState.days = LinkedHashMap()
+            appUiState.trackedSymptoms = listOf()
+            appUiState.dates = emptyList()
+            onboardUiState.days = 0
+            onboardUiState.symptomsOptions = listOf()
+            onboardUiState.date = ""
+            onboardUiState.googleAccount = null
 
-        // If the user is logged in with Google, sign out
-        if (viewModel.checkGoogleLogin(context)) {
-            signout()
-        }
+            // If the user is logged in with Google, sign out
+            if (viewModel.checkGoogleLogin(context)) {
+                signout()
+            }
 
-        // Navigate to the Welcome screen after resetting the database
-        LaunchedEffect(Unit) {
-            outController.navigate(OnboardingScreen.Welcome.name)
+            // Navigate to the Welcome screen after resetting the database
+            LaunchedEffect(Unit) {
+                outController.navigate(OnboardingScreen.Welcome.name)
+                confirmLoad.value = true
+            }
         }
     }
 

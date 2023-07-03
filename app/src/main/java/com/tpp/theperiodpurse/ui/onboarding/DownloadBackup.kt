@@ -3,6 +3,7 @@ package com.tpp.theperiodpurse.ui.onboarding
 import android.accounts.Account
 import android.content.Context
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -21,6 +22,7 @@ fun DownloadBackup(
     context: Context
 ) {
     val isDownloaded by viewModel.isDownloaded.observeAsState(initial = null)
+    val confirmLoad = remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         if (googleAccount != null) {
             viewModel.downloadBackup(googleAccount, context)
@@ -29,9 +31,20 @@ fun DownloadBackup(
     if (isDownloaded == null) {
         LoadingScreen()
     } else {
-        LaunchedEffect(Unit) {
-            viewModel.isDownloaded.postValue(null)
-            navHostController.navigate(OnboardingScreen.LoadDatabase.name)
+        if (isDownloaded == true) {
+            LaunchedEffect(Unit) {
+                viewModel.isDownloaded.postValue(null)
+                navHostController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
+                navHostController.navigate(OnboardingScreen.LoadDatabase.name)
+            }
         }
+        else if (isDownloaded == false) {
+            LaunchedEffect(Unit) {
+                viewModel.isDownloaded.postValue(null)
+                navHostController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
+                navHostController.navigate(OnboardingScreen.Welcome.name)
+            }
+        }
+
     }
 }
