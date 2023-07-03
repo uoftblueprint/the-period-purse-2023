@@ -46,11 +46,12 @@ fun BackupDatabase(viewModel: OnboardViewModel,
             if (!confirmLoad.value){
                 Toast.makeText(context, "ERROR - Please grant all the required permissions", Toast.LENGTH_SHORT).show()
                 signout()
+                confirmLoad.value = true
                 LaunchedEffect(Unit){
                     viewModel.isBackedUp.postValue(null)
                     navController.navigate(SettingScreenNavigation.Start.name)
                 }
-                confirmLoad.value = true
+
             }
         }
 

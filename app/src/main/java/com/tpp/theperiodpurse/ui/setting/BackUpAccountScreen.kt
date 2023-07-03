@@ -61,7 +61,7 @@ fun BackUpAccountScreen(
 
     appbar
 
-    if (onboardUIState?.googleAccount != null) {
+    if (onboardUIState?.googleAccount != null && GoogleSignIn.getLastSignedInAccount(context) != null) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
