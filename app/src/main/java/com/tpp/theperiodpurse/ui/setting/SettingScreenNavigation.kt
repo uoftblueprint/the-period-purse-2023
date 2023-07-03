@@ -163,6 +163,7 @@ fun SettingsScreen(
                     color = Color.White),
                     navController = navController,
                     signIn = signIn,
+                    signOut = signout,
                     onboardUIState = onboardUiState,
                     context = context
                 )

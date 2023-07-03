@@ -1,6 +1,7 @@
 package com.tpp.theperiodpurse.ui.setting
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -19,7 +20,10 @@ import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInResult
+import com.google.android.gms.common.api.Scope
 import com.google.android.gms.common.api.Status
+import com.google.api.services.drive.DriveScopes
+import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.ui.state.OnboardUIState
 import com.tpp.theperiodpurse.ui.onboarding.GoogleSignInButton
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
@@ -39,6 +43,7 @@ fun BackUpAccountScreen(
     navController: NavHostController = rememberNavController(),
     signIn: () -> Unit,
     onboardUIState: OnboardUIState?,
+    signOut: () -> Unit = {},
     context: Context
 ) {
     val configuration = LocalConfiguration.current
@@ -50,18 +55,31 @@ fun BackUpAccountScreen(
     var firstCheck = remember {
         mutableStateOf(true)
     }
+    val requiredScopes = setOf(
+        Scope(DriveScopes.DRIVE_FILE),
+        Scope(DriveScopes.DRIVE_APPDATA)
+    )
 
     if (firstCheck.value) {
         val account = GoogleSignIn.getLastSignedInAccount(context)
         if (account != null && onboardUIState?.googleAccount == null) {
-            onboardUIState?.googleAccount = account.account
+            if (account.getGrantedScopes().containsAll(requiredScopes)) {
+                onboardUIState?.googleAccount = account.account
+            }
+            else {
+                Toast.makeText(context, "ERROR - Please grant all the required permissions", Toast.LENGTH_SHORT).show()
+                signOut()
+                onboardUIState?.googleAccount = null
+                LaunchedEffect(Unit) {
+                    navController.navigate(SettingScreenNavigation.Start.name)
+                }
+            }
         }
-        firstCheck.value = false
     }
 
     appbar
 
-    if (onboardUIState?.googleAccount != null && GoogleSignIn.getLastSignedInAccount(context) != null) {
+    if (onboardUIState?.googleAccount != null) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -108,8 +126,17 @@ fun BackUpAccountScreen(
 
         if (account != null) {
             if (onboardUIState != null) {
-                onboardUIState.googleAccount = account.account
-                confirmBackUp.value = true
+                if (account.getGrantedScopes().containsAll(requiredScopes)) {
+                    onboardUIState.googleAccount = account.account
+                    confirmBackUp.value = true
+                } else {
+                    onboardUIState.googleAccount = null
+                    Toast.makeText(context, "ERROR - Please grant all the required permissions", Toast.LENGTH_SHORT).show()
+                    signOut()
+                    LaunchedEffect(Unit) {
+                        navController.navigate(SettingScreenNavigation.Start.name)
+                    }
+                }
             }
         } else {
             val signInResult = remember { mutableStateOf(GoogleSignInResult(GoogleSignInAccount.createDefault(), Status.RESULT_CANCELED)) }

@@ -30,7 +30,8 @@ fun LoadGoogleDrive(
 ) {
     val isDrive by viewModel.isDrive.observeAsState(initial = null)
     val isDriveSafe by viewModel.isDriveSafe.observeAsState(initial = null)
-    val confirmLoad = remember { mutableStateOf(false) }
+    val confirmLoad = remember { mutableStateOf(false) } // ensures that launched event only happens once
+    // (prevents multiple threads/runs from happening)
     val decision = remember { mutableStateOf(false) }
     if (googleAccount == null) {
         navHostController.navigate(OnboardingScreen.QuestionOne.name)

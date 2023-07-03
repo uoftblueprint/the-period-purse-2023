@@ -23,7 +23,8 @@ fun BackupDatabase(viewModel: OnboardViewModel,
                    context: Context) {
 
     val isBackedUp by viewModel.isBackedUp.observeAsState(initial = null)
-    val confirmLoad = remember { mutableStateOf(false) }
+    val confirmLoad = remember { mutableStateOf(false) } // ensures that launched event only happens once
+    // (prevents multiple threads/runs from happening)
 
 
     LaunchedEffect(Unit){

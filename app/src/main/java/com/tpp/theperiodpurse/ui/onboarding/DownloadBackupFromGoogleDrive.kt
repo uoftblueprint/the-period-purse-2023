@@ -23,7 +23,8 @@ fun DownloadBackup(
     context: Context
 ) {
     val isDownloaded by viewModel.isDownloaded.observeAsState(initial = null)
-    val confirmLoad = remember { mutableStateOf(false) }
+    val confirmLoad = remember { mutableStateOf(false) } // ensures that launched event only happens once
+    // (prevents multiple threads/runs from happening)
     LaunchedEffect(Unit) {
         if (googleAccount != null) {
             viewModel.downloadBackup(googleAccount, context)
