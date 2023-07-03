@@ -133,7 +133,9 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
+
             if (completedTask.isSuccessful){
+
                 val account = completedTask.getResult(ApiException::class.java)!!.account
                 Toast.makeText(this, "SignIn Successful", Toast.LENGTH_SHORT).show()
 

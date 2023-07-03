@@ -168,6 +168,7 @@ fun NavigationGraph(
                 onNextButtonClicked =
                 { navController.navigate(OnboardingScreen.QuestionOne.name) },
                 signIn = signIn,
+                signOut = signout,
                 navController = navController,
                 context = context,
                 onboardUIState = onboardUIState,
