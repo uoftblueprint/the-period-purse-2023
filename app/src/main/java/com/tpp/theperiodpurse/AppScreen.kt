@@ -204,7 +204,6 @@ fun ScreenApp(
     hasNotificationsPermissions: Boolean = false,
 
     ) {
-    signout()
     var loggingOptionsVisible by remember { mutableStateOf(false) }
     var skipOnboarding = skipOnboarding
     val isOnboarded by onboardViewModel.isOnboarded.observeAsState(initial = null)
