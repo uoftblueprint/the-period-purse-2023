@@ -2,6 +2,7 @@ package com.tpp.theperiodpurse
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,7 +26,6 @@ import com.tpp.theperiodpurse.ui.education.*
 import com.tpp.theperiodpurse.ui.legal.PrivacyScreen
 import com.tpp.theperiodpurse.ui.legal.TermsScreen
 import com.tpp.theperiodpurse.ui.onboarding.*
-import com.tpp.theperiodpurse.ui.setting.ResetDatabase
 import com.tpp.theperiodpurse.ui.setting.SettingsScreen
 import com.tpp.theperiodpurse.ui.symptomlog.LogScreen
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
@@ -58,11 +58,10 @@ enum class OnboardingScreen {
     QuestionTwo,
     QuestionThree,
     Summary,
-    LoadGoogleDrive,
+    RestoreFromGoogleDrivePrompt,
     LoadDatabase,
-    DownloadBackup,
+    DownloadBackupFromGoogleDrive,
     DateRangePicker,
-    ResetDatabase
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -87,6 +86,7 @@ fun NavigationGraph(
         modifier = modifier
     ) {
         composable(route = Screen.Calendar.name) {
+            Log.d("NavGraph", "Someone navigated to Screen Calendar")
             CalendarScreen(
                 navController = navController,
                 appViewModel = appViewModel,
@@ -168,7 +168,7 @@ fun NavigationGraph(
                 onNextButtonClicked =
                 { navController.navigate(OnboardingScreen.QuestionOne.name) },
                 signIn = signIn,
-                signOut = signout,
+                signout = signout,
                 navController = navController,
                 context = context,
                 onboardUIState = onboardUIState,
@@ -210,6 +210,7 @@ fun NavigationGraph(
             SummaryScreen(
                 onboardUiState = onboardUIState,
                 onSendButtonClicked = {
+                    Log.d("Summary Screen", "Navigating to Load database")
                     navController.navigate(OnboardingScreen.LoadDatabase.name)
 
                 },
@@ -232,8 +233,8 @@ fun NavigationGraph(
                 context = context
             )
         }
-        composable(route = OnboardingScreen.LoadGoogleDrive.name) {
-                LoadGoogleDrive(
+        composable(route = OnboardingScreen.RestoreFromGoogleDrivePrompt.name) {
+                RestoreFromGoogleDrivePrompt(
                     viewModel = onboardViewModel,
                     navHostController = navController,
                     context = context,
@@ -241,8 +242,8 @@ fun NavigationGraph(
                     googleAccount = onboardUIState.googleAccount)
         }
 
-        composable(route = OnboardingScreen.DownloadBackup.name) {
-            DownloadBackup(googleAccount = onboardUIState.googleAccount,
+        composable(route = OnboardingScreen.DownloadBackupFromGoogleDrive.name) {
+            DownloadBackupFromGoogleDrive(
                 viewModel = onboardViewModel,
                 navHostController = navController,
                 signout = signout,
@@ -255,14 +256,6 @@ fun NavigationGraph(
                 onboardViewModel,
                 onboardUIState)
         }
-
-        composable(route = OnboardingScreen.ResetDatabase.name) {
-            ResetDatabase(context = context, viewModel = onboardViewModel, outController = navController, onboardUiState = onboardUIState,
-                appUiState = appUiState, calUiState = calUiState, signout = signout)
-        }
-
-
-
     }
 }
 
