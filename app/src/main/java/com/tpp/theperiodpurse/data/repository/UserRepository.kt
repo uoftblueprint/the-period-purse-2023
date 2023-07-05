@@ -10,6 +10,7 @@ import com.tpp.theperiodpurse.data.UserDAO
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class UserRepository(private val userDAO: UserDAO) {
     val isOnboarded: MutableLiveData<Boolean?> = MutableLiveData(null)
@@ -52,7 +53,11 @@ class UserRepository(private val userDAO: UserDAO) {
         return ApplicationRoomDatabase.getDatabase(context).userDAO().get(id)
     }
     suspend fun isEmpty(context: Context): Boolean {
-        return ApplicationRoomDatabase.getDatabase(context).userDAO().getUsers().isEmpty()
+        return withContext(Dispatchers.IO) {
+            ApplicationRoomDatabase.getDatabase(context).userDAO()
+                .getUsers()
+                .isEmpty()
+        }
     }
 
     suspend fun isOnboarded(context: Context) {

@@ -1,8 +1,6 @@
 package com.tpp.theperiodpurse.data.repository
 
 import android.content.Context
-import androidx.compose.ui.platform.LocalContext
-import com.tpp.theperiodpurse.Application
 import com.tpp.theperiodpurse.data.ApplicationRoomDatabase
 import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.data.DateDAO
@@ -24,8 +22,10 @@ class DateRepository(private val dateDAO: DateDAO) {
         }
     }
 
-    fun getAllDates(context: Context): Flow<List<Date>> {
-        return ApplicationRoomDatabase.getDatabase(context).dateDAO().getDates()
+    suspend fun getAllDates(context: Context): Flow<List<Date>> {
+        return withContext(Dispatchers.IO) {
+            ApplicationRoomDatabase.getDatabase(context).dateDAO().getDates()
+        }
     }
 
     fun deleteDate(date: Date, context: Context) {
