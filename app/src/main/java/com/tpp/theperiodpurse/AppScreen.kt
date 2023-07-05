@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -41,6 +42,7 @@ import com.google.api.services.drive.DriveScopes
 import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import com.tpp.theperiodpurse.ui.component.BottomNavigation
 import com.tpp.theperiodpurse.ui.component.FloatingActionButton
+import com.tpp.theperiodpurse.ui.component.LoadingScreen
 import com.tpp.theperiodpurse.ui.onboarding.*
 import com.tpp.theperiodpurse.ui.symptomlog.LoggingOptionsPopup
 import com.tpp.theperiodpurse.ui.theme.ThePeriodPurseTheme
@@ -52,10 +54,6 @@ import java.time.LocalDate
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    companion object {
-        const val RC_SIGN_IN = 100
-    }
 
     private lateinit var googleSignInClient: GoogleSignInClient
 
@@ -101,14 +99,34 @@ class MainActivity : ComponentActivity() {
                     }
                 }
                 Application(context = context, signIn = { signIn() }, signout = { signOut() })
-
             }
         }
     }
-
+    private val signInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = result.data
+            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleSignInResult(task)
+        }
+    }
     private fun signIn() {
         val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
+        signInLauncher.launch(signInIntent)
+    }
+    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        try {
+            if (completedTask.isSuccessful){
+                Toast.makeText(this, "SignIn Successful", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                Toast.makeText(this, "SignIn Failed", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: ApiException) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.d("Sign In", e.toString())
+            Toast.makeText(this, "SignIn Failed", Toast.LENGTH_SHORT).show()
+        }
     }
     private fun signOut() {
         googleSignInClient.revokeAccess().addOnCompleteListener {
@@ -117,56 +135,15 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode === RC_SIGN_IN && resultCode == Activity.RESULT_OK) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
-            val task: Task<GoogleSignInAccount> =
-                GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleSignInResult(task)
-        }
-
-    }
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
-        try {
-
-            if (completedTask.isSuccessful){
-
-                val account = completedTask.getResult(ApiException::class.java)!!.account
-                Toast.makeText(this, "SignIn Successful", Toast.LENGTH_SHORT).show()
-
-            }
-            else {
-                Toast.makeText(this, "SignIn Failed", Toast.LENGTH_SHORT).show()
-            }
-
-        } catch (e: ApiException) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Toast.makeText(this, "SignIn Failed", Toast.LENGTH_SHORT).show()
-
-        }
-
-    }
 }
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun Application(context: Context,
                 signIn: () -> Unit,
-                skipWelcome: Boolean = false,
-                skipDatabase: Boolean = false,
                 signout: () -> Unit = {},
-                skipOnboarding: Boolean = false,
                 hasNotificationsPermission: Boolean = false) {
-    ScreenApp(signIn = signIn,
-        skipOnboarding = skipOnboarding,
-        skipWelcome = skipDatabase,
-        skipDatabase = skipWelcome,
+    AppScreen(signIn = signIn,
         context = context,
         signout = signout,
     hasNotificationsPermissions = hasNotificationsPermission)
@@ -191,7 +168,7 @@ fun createNotificationChannel(context: Context) {
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
-fun ScreenApp(
+fun AppScreen(
     modifier: Modifier = Modifier,
     appViewModel: AppViewModel = viewModel(),
     onboardViewModel: OnboardViewModel = viewModel(),
