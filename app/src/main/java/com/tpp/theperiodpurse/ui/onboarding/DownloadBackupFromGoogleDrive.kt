@@ -1,56 +1,59 @@
 package com.tpp.theperiodpurse.ui.onboarding
 
-import android.accounts.Account
 import android.content.Context
-import android.os.Build
+import android.util.Log
 import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavHostController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.tpp.theperiodpurse.OnboardingScreen
+import com.tpp.theperiodpurse.ui.component.LoadingScreen
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
+import com.tpp.theperiodpurse.utility.validateUserAuthenticationAndAuthorization
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DownloadBackup(
-    googleAccount: Account?,
+fun DownloadBackupFromGoogleDrive(
     viewModel: OnboardViewModel,
     navHostController: NavHostController,
     signout: () -> Unit = {},
     context: Context
 ) {
-    val isDownloaded by viewModel.isDownloaded.observeAsState(initial = null)
-    val confirmLoad = remember { mutableStateOf(false) } // ensures that launched event only happens once
-    // (prevents multiple threads/runs from happening)
+    Log.d("DownloadBackupFromGD", "Rendering download backup")
+    val googleDriveLoadSuccess by viewModel.googleDriveLoadSuccess.observeAsState(initial = null)
+    val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(context)
+    val googleAccount = googleSignInAccount?.account
+    val hasGoogleDrivePermission = validateUserAuthenticationAndAuthorization(googleSignInAccount)
+    if (!hasGoogleDrivePermission) {
+        Toast.makeText(
+            context,
+            "ERROR - Please grant all the required permissions",
+            Toast.LENGTH_SHORT
+        ).show()
+        signout()
+        navHostController.navigate(OnboardingScreen.Welcome.name)
+    }
     LaunchedEffect(Unit) {
         if (googleAccount != null) {
+            Log.d("DownloadBackupFromGD" ,"Downloading backup")
             viewModel.downloadBackup(googleAccount, context)
         }
     }
-    if (isDownloaded == null) {
-        LoadingScreen()
-    } else {
-        if (isDownloaded == true) {
+    Log.d("DownloadBackupFromGD", googleDriveLoadSuccess.toString())
+    when (googleDriveLoadSuccess) {
+        true -> {
             LaunchedEffect(Unit) {
-                viewModel.isDownloaded.postValue(null)
+                viewModel.googleDriveLoadSuccess.postValue(null)
                 navHostController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
+                Log.d("DownloadBackupFromGD", "Navigating to load database from storage")
                 navHostController.navigate(OnboardingScreen.LoadDatabase.name)
             }
         }
-        else if (isDownloaded == false) {
-            if (!confirmLoad.value) {
-                Toast.makeText(context, "ERROR - Please grant all the required permissions", Toast.LENGTH_SHORT).show()
-                signout()
-                LaunchedEffect(Unit) {
-                    viewModel.isDownloaded.postValue(null)
-                    navHostController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
-                    navHostController.navigate(OnboardingScreen.Welcome.name)
-                }
-            }
+        false -> {
+            viewModel.googleDriveLoadSuccess.postValue(null)
+            Toast.makeText(context, "ERROR - Something went wrong", Toast.LENGTH_SHORT).show()
+            navHostController.popBackStack()
         }
-
+        else -> LoadingScreen()
     }
 }
