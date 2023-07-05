@@ -2,7 +2,6 @@ package com.tpp.theperiodpurse.ui.onboarding
 
 import android.content.Context
 import android.os.Build
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -28,27 +27,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.navigation.NavHostController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInResult
-import com.google.android.gms.common.api.Scope
 import com.google.android.gms.common.api.Status
-import com.google.api.services.drive.DriveScopes
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.ui.component.handleError
 import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
 import com.tpp.theperiodpurse.ui.state.OnboardUIState
 import com.tpp.theperiodpurse.ui.theme.MainFontColor
+import com.tpp.theperiodpurse.utility.validateUserAuthenticationAndAuthorization
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WelcomeScreen(
     signIn: () -> Unit,
-    signOut: () -> Unit = {},
+    signout: () -> Unit = {},
     onNextButtonClicked: () -> Unit,
     navController: NavHostController,
     context: Context,
@@ -58,32 +55,34 @@ fun WelcomeScreen(
     val screenheight = configuration.screenHeightDp
     val screenwidth = configuration.screenWidthDp
     val account = GoogleSignIn.getLastSignedInAccount(context)
-    if (account != null) {
-        onboardUIState.googleAccount = account.account
-        val requiredScopes = setOf(
-            Scope(DriveScopes.DRIVE_FILE),
-            Scope(DriveScopes.DRIVE_APPDATA)
-        )
-        if (!account.getGrantedScopes().containsAll(requiredScopes) ) {
-            Toast.makeText(context, "ERROR - Please grant all the required permissions", Toast.LENGTH_SHORT).show()
-            signOut()
-            LaunchedEffect(Unit) {
-                navController.navigate(OnboardingScreen.Welcome.name)
-            }
-        } else {
-            LaunchedEffect(Unit) {
-                navController.navigate(OnboardingScreen.LoadGoogleDrive.name)
-            }
-        }
+    // use a value through view model which appscreen can post to
 
-    } else {
-        val signInResult = remember {
-            mutableStateOf(
-                GoogleSignInResult(
-                    GoogleSignInAccount.createDefault(), Status.RESULT_CANCELED
-                )
+    val signInResult = remember {
+        mutableStateOf(
+            GoogleSignInResult(
+                GoogleSignInAccount.createDefault(), Status.RESULT_CANCELED
+            )
+        )
+    }
+    LaunchedEffect(signInResult.value) {
+        if (!signInResult.value.isSuccess) {
+            signInResult.value = GoogleSignInResult(
+                GoogleSignInAccount.createDefault(), Status.RESULT_CANCELED
             )
         }
+    }
+    if (account != null) {
+        onboardUIState.googleAccount = account.account
+        val hasGoogleDrivePermission = validateUserAuthenticationAndAuthorization(account)
+        if (!hasGoogleDrivePermission) {
+            handleSecurityError(context, signout, "ERROR - Please grant all the required " +
+                    "permissions", navController)
+        } else {
+            LaunchedEffect(Unit) {
+                navController.navigate(OnboardingScreen.RestoreFromGoogleDrivePrompt.name)
+            }
+        }
+    } else {
         Image(
             painter = painterResource(id = R.drawable.background),
             contentDescription = null,
@@ -121,15 +120,6 @@ fun WelcomeScreen(
             // Sign in with Google Button
             GoogleSignInButton {
                 signIn()
-            }
-            LaunchedEffect(signInResult.value) {
-                if (signInResult.value.isSuccess) {
-                    navController.navigate(OnboardingScreen.QuestionTwo.name)
-                } else {
-                    signInResult.value = GoogleSignInResult(
-                        GoogleSignInAccount.createDefault(), Status.RESULT_CANCELED
-                    )
-                }
             }
 
             Spacer(modifier = Modifier.height((screenheight*0.006).dp))
@@ -211,3 +201,11 @@ fun Int.scaledSp(): TextUnit {
 
 val Int.scaledSp: TextUnit
     @Composable get() = scaledSp()
+
+fun handleSecurityError(context: Context, signout: () -> Unit, msg: String, navController:
+NavHostController) {
+    handleError(context, msg) {
+        signout()
+        navController.navigate(OnboardingScreen.Welcome.name)
+    }
+}
