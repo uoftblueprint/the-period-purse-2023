@@ -164,7 +164,6 @@ fun SettingsScreen(
                     navController = navController,
                     signIn = signIn,
                     signOut = signout,
-                    onboardUIState = onboardUiState,
                     context = context
                 )
             }
@@ -189,7 +188,6 @@ fun SettingsScreen(
                 if (onboardViewModel != null && onboardUiState != null) {
                     BackupDatabase(viewModel = onboardViewModel,
                         navController = navController,
-                        account = onboardUiState.googleAccount,
                         signout = signout,
                         context = context)
                 }

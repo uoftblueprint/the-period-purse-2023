@@ -11,12 +11,11 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
-import androidx.navigation.NavOptions
 import com.tpp.theperiodpurse.ui.state.AppUiState
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.ui.state.OnboardUIState
 import com.tpp.theperiodpurse.ui.state.CalendarUIState
-import com.tpp.theperiodpurse.ui.onboarding.LoadingScreen
+import com.tpp.theperiodpurse.ui.component.LoadingScreen
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

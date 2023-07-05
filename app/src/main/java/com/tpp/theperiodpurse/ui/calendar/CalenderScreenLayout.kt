@@ -1,6 +1,7 @@
 package com.tpp.theperiodpurse.ui.calendar
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -39,6 +40,7 @@ fun CalendarScreenLayout(
     val calendarUIState by calendarViewModel.uiState.collectAsState()
     // Contains the swappable content
     ThePeriodPurseTheme {
+        Log.d("Calendar Screen", "Renderng calendar screen")
         val bg = painterResource(R.drawable.colourwatercolour)
         val appUiState by appViewModel.uiState.collectAsState()
 
