@@ -2,7 +2,6 @@ package com.tpp.theperiodpurse
 
 import android.content.Context
 import androidx.activity.ComponentActivity
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
@@ -104,7 +103,7 @@ class CalendarScreenTest {
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
-            ScreenApp(
+            AppScreen(
                 onboardViewModel = onboardViewModel,
                 appViewModel = appViewModel,
                 navController = navController,

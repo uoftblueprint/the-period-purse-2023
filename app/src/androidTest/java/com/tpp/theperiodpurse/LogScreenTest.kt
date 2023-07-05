@@ -101,7 +101,7 @@ class LogScreenTest {
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
-            ScreenApp(
+            AppScreen(
                 navController = navController,
                 skipOnboarding = true,
                 skipDatabase = true,
