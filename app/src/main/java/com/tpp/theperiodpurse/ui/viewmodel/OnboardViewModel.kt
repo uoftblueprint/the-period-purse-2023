@@ -1,6 +1,7 @@
 package com.tpp.theperiodpurse.ui.viewmodel
 import android.accounts.Account
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.api.client.extensions.android.http.AndroidHttp
@@ -11,7 +12,6 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
-import com.tpp.theperiodpurse.Application
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.data.entity.Date
@@ -38,10 +38,10 @@ class OnboardViewModel @Inject constructor (
 
     var isOnboarded: LiveData<Boolean?> = userRepository.isOnboarded
     var isDeleted: MutableLiveData<Boolean?> = MutableLiveData(null)
-    var isDrive: MutableLiveData<FileList?> = MutableLiveData(null)
-    var isDriveSafe: MutableLiveData<Boolean?> = MutableLiveData(null)
-    var isDownloaded: MutableLiveData<Boolean?> = MutableLiveData(null)
-    var isBackedUp: MutableLiveData<Boolean?> = MutableLiveData(null)
+    var googleDriveFolder: MutableLiveData<FileList?> = MutableLiveData(null)
+    var drivePermissionHasError: MutableLiveData<Boolean?> = MutableLiveData(null)
+    var googleDriveLoadSuccess: MutableLiveData<Boolean?> = MutableLiveData(null)
+    var hasBackedUpToGoogleDrive: MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun checkGoogleLogin(context: Context): Boolean{
         val account = GoogleSignIn.getLastSignedInAccount(context)
@@ -50,8 +50,8 @@ class OnboardViewModel @Inject constructor (
 
     fun checkOnboardedStatus(context: Context) {
         viewModelScope.launch {
+            userRepository.isOnboarded(context)
             withContext(Dispatchers.IO) {
-                userRepository.isOnboarded(context)
                 isOnboarded = userRepository.isOnboarded
             }
         }
@@ -67,6 +67,8 @@ class OnboardViewModel @Inject constructor (
     }
 
 
+    // TODO: go through all google drive opeartions and make sure usage of coroutine scope is
+    //  correct
     fun checkGoogleDrive(account: Account, context: Context, ) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -91,13 +93,13 @@ class OnboardViewModel @Inject constructor (
                         .setSpaces("appDataFolder").execute()
 
 
-                    isDrive.postValue(googleDriveFolder)
-                    isDriveSafe.postValue(null)
+                    this@OnboardViewModel.googleDriveFolder.postValue(googleDriveFolder)
+                    drivePermissionHasError.postValue(null)
                 } catch (e: Exception) {
-                    isDrive.postValue(null)
-                    isDriveSafe.postValue(true)
+                    Log.d("OnboardViewModel", e.toString())
+                    googleDriveFolder.postValue(null)
+                    drivePermissionHasError.postValue(true)
                 }
-
             }
         }
     }
@@ -145,9 +147,10 @@ class OnboardViewModel @Inject constructor (
                             close()
                         }
 
-                        isDownloaded.postValue(true)
+                        googleDriveLoadSuccess.postValue(true)
                     } catch (e: java.lang.Exception) {
-                        isDownloaded.postValue(false)
+                        Log.d("OnboardViewModel", e.toString())
+                        googleDriveLoadSuccess.postValue(false)
                     }
 
                 }
@@ -198,10 +201,11 @@ class OnboardViewModel @Inject constructor (
                     inputStream.close()
                     outputStream.close()
 
-                    isBackedUp.postValue(true)
+                    hasBackedUpToGoogleDrive.postValue(true)
 
                 } catch (e: Exception) {
-                    isBackedUp.postValue(false)
+                    Log.d("OnboardViewModel", e.toString())
+                    hasBackedUpToGoogleDrive.postValue(false)
                 }
 
             }
