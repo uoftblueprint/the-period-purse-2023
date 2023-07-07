@@ -1,6 +1,7 @@
 package com.tpp.theperiodpurse.data
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -13,8 +14,10 @@ import com.tpp.theperiodpurse.data.helper.DaysConverter
 import com.tpp.theperiodpurse.data.helper.DurationConverter
 import com.tpp.theperiodpurse.data.helper.SymptomConverter
 import java.io.File
+import javax.inject.Singleton
 
 @Database(entities=[User::class, Date::class], version = 7, exportSchema = true)
+@Singleton
 @TypeConverters(
     SymptomConverter::class,
     DateConverter::class,
@@ -28,8 +31,11 @@ abstract class ApplicationRoomDatabase: RoomDatabase() {
         @Volatile
         private var INSTANCE: ApplicationRoomDatabase? = null
         fun getDatabase(context: Context): ApplicationRoomDatabase {
-            if (INSTANCE?.isOpen == false) {
+            // don't use isOpen because the value may be out dated
+            if (INSTANCE == null) {
                 synchronized(this) {
+                    val reason = if (INSTANCE == null) "DB does not exist" else "DB is closed"
+                    Log.d("RoomDatabase", "Constructing new database because $reason" )
                     val path = context.getDatabasePath("user_database.db").path
                     val databaseFile = File(path)
                     val instance = Room.databaseBuilder(
@@ -41,49 +47,23 @@ abstract class ApplicationRoomDatabase: RoomDatabase() {
                         .fallbackToDestructiveMigration()
                         .build()
                     INSTANCE = instance
+                    Log.d("RoomDatabase", "Opening a new database $INSTANCE" )
                     return instance
                 }
             }
-            return INSTANCE ?: synchronized(this) {
-                val path = context.getDatabasePath("user_database.db").path
-                val databaseFile = File(path)
-                val instance = Room.databaseBuilder(
-                    context,
-                    ApplicationRoomDatabase::class.java,
-                    databaseFile.absolutePath
-                )
-                    .addCallback(getCallback())
-                    .fallbackToDestructiveMigration()
-                    .build()
-                INSTANCE = instance
-                return instance
-            }
-//            var instance = INSTANCE
-//            if (instance != null && instance.isOpen) {
-//                return instance // Return the existing open instance
-//            }
-//            synchronized(this) {
-//                instance = INSTANCE
-//                if (instance != null && instance!!.isOpen) {
-//                    return instance as ApplicationRoomDatabase // Return the existing open instance
-//                }
-//                val path = context.getDatabasePath("user_database.db").path
-//                val databaseFile = File(path)
-//                instance = Room.databaseBuilder(
-//                    context.applicationContext,
-//                    ApplicationRoomDatabase::class.java,
-//                    databaseFile.absolutePath
-//                )
-//                    .addCallback(getCallback())
-//                    .fallbackToDestructiveMigration()
-//                    .build()
-//                instance!!.openHelper.readableDatabase
-//                instance!!.openHelper.writableDatabase
-//                INSTANCE = instance
-//                return instance!!
-//            }
+            Log.d("RoomDatabase", "Return existing database $INSTANCE")
+            return INSTANCE as ApplicationRoomDatabase
         }
 
+        fun closeDatabase() {
+            Log.d("RoomDatabase", "Closing database instance $INSTANCE")
+            if(INSTANCE != null){
+                if(INSTANCE!!.isOpen) {
+                    INSTANCE!!.close()
+                }
+                INSTANCE = null
+            }
+        }
 
         fun getCallback(): Callback {
             return object : Callback() {
