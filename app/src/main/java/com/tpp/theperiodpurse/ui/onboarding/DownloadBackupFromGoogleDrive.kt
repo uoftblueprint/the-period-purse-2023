@@ -1,10 +1,10 @@
 package com.tpp.theperiodpurse.ui.onboarding
 
-import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.tpp.theperiodpurse.OnboardingScreen
@@ -17,9 +17,9 @@ fun DownloadBackupFromGoogleDrive(
     viewModel: OnboardViewModel,
     navHostController: NavHostController,
     signout: () -> Unit = {},
-    context: Context
 ) {
     Log.d("DownloadBackupFromGD", "Rendering download backup")
+    val context = LocalContext.current.applicationContext
     val googleDriveLoadSuccess by viewModel.googleDriveLoadSuccess.observeAsState(initial = null)
     val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(context)
     val googleAccount = googleSignInAccount?.account
