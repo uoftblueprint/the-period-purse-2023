@@ -5,10 +5,9 @@ import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.model.*
 import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
 
-
 fun getDayColorAndIcon(
     activeSymptom: Symptom,
-    calendarDayUIState: CalendarDayUIState?
+    calendarDayUIState: CalendarDayUIState?,
 ): Pair<Color, Int> {
     val defaultColor = Color.White
     val defaultImage = R.drawable.blank
@@ -30,7 +29,7 @@ fun getDayColorAndIcon(
 
 private fun flowOptions(calendarDayUIState: CalendarDayUIState, default: Pair<Color, Int>): Pair<Color, Int> {
     return when (calendarDayUIState.flow) {
-        FlowSeverity.Light ->Pair(Color(0xFFD77D7D), R.drawable.water_drop_black_24dp)
+        FlowSeverity.Light -> Pair(Color(0xFFD77D7D), R.drawable.water_drop_black_24dp)
         FlowSeverity.Medium -> Pair(Color(0xFFD2504B), R.drawable.opacity_black_24dp)
         FlowSeverity.Heavy -> Pair(Color(0xFFC33232), R.drawable.flow_heavy)
         FlowSeverity.Spotting -> Pair(Color(0xFFF5C0C0), R.drawable.spotting)
@@ -38,23 +37,23 @@ private fun flowOptions(calendarDayUIState: CalendarDayUIState, default: Pair<Co
     }
 }
 
-private fun crampOptions(calendarDayUIState: CalendarDayUIState, default: Pair<Color, Int>): Pair<Color, Int>{
+private fun crampOptions(calendarDayUIState: CalendarDayUIState, default: Pair<Color, Int>): Pair<Color, Int> {
     return when (calendarDayUIState.crampSeverity) {
         CrampSeverity.Bad -> Pair(
             Color(0xFFDD8502),
-            R.drawable.sentiment_dissatisfied_black_24dp
+            R.drawable.sentiment_dissatisfied_black_24dp,
         )
         CrampSeverity.Good -> Pair(
             Color(0xFFFFD363),
-            R.drawable.sentiment_satisfied_black_24dp
+            R.drawable.sentiment_satisfied_black_24dp,
         )
         CrampSeverity.Neutral -> Pair(
             Color(0xFFE3797A),
-            R.drawable.sentiment_neutral_black_24dp
+            R.drawable.sentiment_neutral_black_24dp,
         )
         CrampSeverity.Terrible -> Pair(
             Color(0xFFB85A04),
-            R.drawable.sentiment_very_dissatisfied_black_24dp
+            R.drawable.sentiment_very_dissatisfied_black_24dp,
         )
         CrampSeverity.None, null -> default
     }
@@ -85,7 +84,7 @@ private fun exerciseTypeOptions(calendarDayUIState: CalendarDayUIState): Int {
     }
 }
 
-private fun moodOptions(calendarDayUIState: CalendarDayUIState): Int{
+private fun moodOptions(calendarDayUIState: CalendarDayUIState): Int {
     return when (calendarDayUIState.mood) {
         Mood.HAPPY -> R.drawable.sentiment_satisfied_black_24dp
         Mood.NEUTRAL -> R.drawable.sentiment_neutral_black_24dp

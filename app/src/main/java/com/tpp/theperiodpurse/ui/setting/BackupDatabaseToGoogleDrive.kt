@@ -1,6 +1,5 @@
 package com.tpp.theperiodpurse.ui.setting
 
-
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -10,19 +9,20 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavHostController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.tpp.theperiodpurse.ui.component.handleError
 import com.tpp.theperiodpurse.ui.component.LoadingScreen
+import com.tpp.theperiodpurse.ui.component.handleError
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 import com.tpp.theperiodpurse.utility.validateUserAuthenticationAndAuthorization
 
+// TODO Figure out why sometimes database is not backed up
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-// TODO Figure out why sometimes database is not backed up
-fun BackupDatabase(viewModel: OnboardViewModel,
-                   navController: NavHostController,
-                   signout: () -> Unit = {},
-                   context: Context) {
-
+fun BackupDatabase(
+    viewModel: OnboardViewModel,
+    navController: NavHostController,
+    signout: () -> Unit = {},
+    context: Context,
+) {
     val hasBackedUpToGoogleDrive by viewModel.hasBackedUpToGoogleDrive.observeAsState()
     val googleSignedInAccount = GoogleSignIn.getLastSignedInAccount(context)
     val account = googleSignedInAccount?.account
@@ -45,8 +45,13 @@ fun BackupDatabase(viewModel: OnboardViewModel,
     LoadingScreen()
 }
 
-fun handleSecurityError(context: Context, signout: () -> Unit, msg: String, navController:
-NavHostController) {
+fun handleSecurityError(
+    context: Context,
+    signout: () -> Unit,
+    msg: String,
+    navController:
+    NavHostController,
+) {
     handleError(context, msg) {
         signout()
         navController.navigate(SettingScreenNavigation.Start.name)

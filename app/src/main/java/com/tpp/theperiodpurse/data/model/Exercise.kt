@@ -9,10 +9,11 @@ enum class Exercise(val displayName: String) {
     WATER_SPORTS("Water Sports"),
     CYCLING("Cycling"),
     RACKET_SPORTS("Racquet Sports"),
-    WINTER_SPORTS("Winter Sports");
+    WINTER_SPORTS("Winter Sports"),
+    ;
     companion object {
         fun getExerciseByDisplayName(displayName: String): Exercise? {
-            return Exercise.values().find{ it.displayName == displayName }
+            return Exercise.values().find { it.displayName == displayName }
         }
     }
 }

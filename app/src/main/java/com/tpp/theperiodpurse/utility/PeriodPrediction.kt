@@ -41,7 +41,7 @@ fun parseDatesIntoPeriods(periodHistory: ArrayList<Date>): ArrayList<ArrayList<D
         } else {
             val date1 = periodHistory[i].date
             val date2 = periodHistory[i - 1].date
-            if (date1 != null && date2 != null ) {
+            if (date1 != null && date2 != null) {
                 val diff = date1.time - date2.time
                 if (diff <= 86400000) {
                     currPeriod.add(periodHistory[i])
@@ -63,7 +63,7 @@ fun parseDatesIntoPeriods(periodHistory: ArrayList<Date>): ArrayList<ArrayList<D
  */
 fun sortPeriodHistory(periodHistory: ArrayList<Date>) {
     // Removes all dates with no flow or spotting.
-    periodHistory.removeAll{ it.flow == FlowSeverity.None || it.flow == FlowSeverity.Spotting }
+    periodHistory.removeAll { it.flow == FlowSeverity.None || it.flow == FlowSeverity.Spotting }
 
     // Sorts dates in ascending order.
     periodHistory.sortWith {
@@ -71,7 +71,6 @@ fun sortPeriodHistory(periodHistory: ArrayList<Date>) {
         date1.date?.compareTo(date2.date) ?: 0
     }
 }
-
 
 /**
 * Calculates the average period length given the user's period history. Refer to Date.kt for each
@@ -112,7 +111,6 @@ fun calculateAveragePeriodLength(periodHistory: ArrayList<Date>): Float {
     return (periodLengths.sum().toFloat() / periodLengths.size)
 }
 
-
 /**
 * Calculates the average cycle length given the user's period history. Refer to date.kt for each
 * date's parameters.
@@ -145,14 +143,12 @@ fun calculateAverageCycleLength(periodHistory: ArrayList<Date>): Float {
             // Takes the time and subtracts it, then divides to convert from milliseconds to days.
 
             if (periodHistory[i].date != null) {
-
                 val time = ((periodHistory[i].date?.time ?: 0) - (currDate?.time ?: 0)) / 86400000
                 cycleLengths.add(time.toInt())
 
                 currDate = periodHistory[i].date
 
                 currDatePlusOne = currDate?.let { addOneDay(it) }
-
             }
         }
     }
@@ -174,11 +170,12 @@ fun calculateDaysSinceLastPeriod(periodHistory: ArrayList<Date>): Long {
     val lastPeriodDate = periodHistory[periodHistory.size - 1].date?.time
     val currDate = Date1.from(
         LocalDateTime.of(
-            LocalDate.now(), LocalDateTime.MIN.toLocalTime()
-        ).atZone(ZoneId.systemDefault()).toInstant()
+            LocalDate.now(),
+            LocalDateTime.MIN.toLocalTime(),
+        ).atZone(ZoneId.systemDefault()).toInstant(),
     ).time
     if (lastPeriodDate != null) {
-        return (currDate - lastPeriodDate)/86400000
+        return (currDate - lastPeriodDate) / 86400000
     }
     return 0
 }

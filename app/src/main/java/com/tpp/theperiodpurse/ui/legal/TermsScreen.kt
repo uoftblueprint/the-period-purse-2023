@@ -35,14 +35,14 @@ fun TermsScreen(navController: NavHostController) {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(vertical = 12.dp, horizontal = 24.dp)
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(rememberScrollState()),
             ) {
                 Title(str = screenName)
 
                 Divider(
                     modifier = Modifier.padding(vertical = 8.dp),
                     color = Color.Gray,
-                    thickness = 2.dp
+                    thickness = 2.dp,
                 )
 
                 Body(stringResource(R.string.terms_and_conditions))
@@ -73,10 +73,9 @@ fun TermsScreen(navController: NavHostController) {
                 Body(stringResource(R.string.terms_conditions_effective_date))
                 Spacer(modifier = Modifier.size(36.dp))
             }
-        }
+        },
     )
 }
-
 
 @Preview
 @Composable

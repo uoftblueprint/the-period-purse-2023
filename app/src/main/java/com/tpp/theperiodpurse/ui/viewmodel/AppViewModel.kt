@@ -8,8 +8,8 @@ import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.data.model.Symptom
 import com.tpp.theperiodpurse.data.repository.DateRepository
 import com.tpp.theperiodpurse.data.repository.UserRepository
-import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
 import com.tpp.theperiodpurse.ui.state.AppUiState
+import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,14 +21,13 @@ import java.time.ZoneId
 import javax.inject.Inject
 
 @HiltViewModel
-class AppViewModel @Inject constructor (
+class AppViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val dateRepository: DateRepository,
-): ViewModel() {
+) : ViewModel() {
     private val _uiState = MutableStateFlow(AppUiState())
     val uiState: StateFlow<AppUiState> = _uiState.asStateFlow()
     var databaseIsLoadedFromStorage: MutableLiveData<Boolean?> = MutableLiveData(null)
-
 
     fun loadData(calendarViewModel: CalendarViewModel, context: Context) {
         val trackedSymptoms: MutableList<Symptom> = mutableListOf()
@@ -59,7 +58,7 @@ class AppViewModel @Inject constructor (
 
     private fun updateUIDateState(
         dates: List<Date>,
-        calendarViewModel: CalendarViewModel
+        calendarViewModel: CalendarViewModel,
     ) {
         _uiState.value = _uiState.value.copy(dates = dates)
 
@@ -68,14 +67,14 @@ class AppViewModel @Inject constructor (
             var convertedExcLen = ""
             if (date.exerciseLength != null) {
                 convertedExcLen = Time(
-                    date.exerciseLength.toMillis() - 19 * 36 * 100000
+                    date.exerciseLength.toMillis() - 19 * 36 * 100000,
                 ).toString()
             }
 
             var convertedSleepLen = ""
             if (date.sleep != null) {
                 convertedSleepLen = Time(
-                    date.sleep.toMillis() - 19 * 36 * 100000
+                    date.sleep.toMillis() - 19 * 36 * 100000,
                 ).toString()
             }
 
@@ -87,17 +86,17 @@ class AppViewModel @Inject constructor (
                     exerciseLengthString = convertedExcLen,
                     exerciseType = date.exerciseType,
                     crampSeverity = date.crampSeverity,
-                    sleepString = convertedSleepLen
-                )
+                    sleepString = convertedSleepLen,
+                ),
             )
         }
     }
 
-    fun getTrackedSymptoms() : List<Symptom> {
+    fun getTrackedSymptoms(): List<Symptom> {
         return uiState.value.trackedSymptoms
     }
 
-    fun getDates() : List<Date> {
+    fun getDates(): List<Date> {
         return uiState.value.dates
     }
 
@@ -113,7 +112,7 @@ class AppViewModel @Inject constructor (
     fun updateSymptoms(symptom: Symptom, context: Context): Boolean {
         val symptoms = getTrackedSymptoms()
         val sympCopy = symptoms.toMutableList()
-        if(symptoms.contains(symptom)){
+        if (symptoms.contains(symptom)) {
             sympCopy.remove(symptom)
             setTrackedSymptoms(sympCopy as ArrayList<Symptom>, context)
             return false
@@ -124,36 +123,36 @@ class AppViewModel @Inject constructor (
         }
     }
 
-    fun isSymptomChecked(symptom: Symptom): Boolean{
+    fun isSymptomChecked(symptom: Symptom): Boolean {
         val symptoms = getTrackedSymptoms()
         return symptoms.contains(symptom)
     }
 
-    fun getAllowReminders(): Boolean{
+    fun getAllowReminders(): Boolean {
         return uiState.value.allowReminders
     }
 
-    fun toggleAllowReminders(context: Context){
+    fun toggleAllowReminders(context: Context) {
         val currentReminderState = _uiState.value.allowReminders
-        _uiState.update { currentState -> currentState.copy(allowReminders = !currentReminderState)}
+        _uiState.update { currentState -> currentState.copy(allowReminders = !currentReminderState) }
         userRepository.setReminders(!currentReminderState, context)
     }
 
-    fun getReminderTime(): String{
+    fun getReminderTime(): String {
         return uiState.value.reminderTime
     }
 
-    fun setReminderTime(time: String, context: Context){
+    fun setReminderTime(time: String, context: Context) {
         _uiState.update { currentState -> currentState.copy(reminderTime = time) }
         userRepository.setReminderTime(time, context)
     }
 
-    fun setReminderFreq(freq: String){
+    fun setReminderFreq(freq: String) {
         _uiState.update { currentState -> currentState.copy(reminderFrequency = freq) }
         userRepository.setReminderFreq(freq)
     }
 
-    fun getReminderFreq(): String{
+    fun getReminderFreq(): String {
         return uiState.value.reminderFrequency
     }
 
@@ -162,7 +161,6 @@ class AppViewModel @Inject constructor (
         val newList = uiState.value.dates.toMutableList()
         newList.add(date)
         _uiState.update { currentState -> currentState.copy(dates = newList) }
-
     }
 
     fun deleteDate(date: Date, context: Context) {
@@ -170,7 +168,6 @@ class AppViewModel @Inject constructor (
         val newList = uiState.value.dates.toMutableList()
         newList.remove(date)
         _uiState.update { currentState -> currentState.copy(dates = newList) }
-
     }
 
     fun deleteManyDates(dates: List<java.util.Date>, context: Context) {
@@ -188,8 +185,5 @@ class AppViewModel @Inject constructor (
         }
 
         _uiState.update { currentState -> currentState.copy(dates = newList) }
-
-
-
     }
 }

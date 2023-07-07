@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -32,23 +31,25 @@ fun EducationDYKScreen(navController: NavHostController) {
             .fillMaxSize()
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
-        Icon(modifier = Modifier
-            .clickable(
-                interactionSource = interactionSource, indication = null
-            ) { navController.navigate(EducationNavigation.Learn.name) }
-            .size(20.dp)
-            .align(Alignment.Start),
+        Icon(
+            modifier = Modifier
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                ) { navController.navigate(EducationNavigation.Learn.name) }
+                .size(20.dp)
+                .align(Alignment.Start),
             painter = painterResource(R.drawable.arrow),
             contentDescription = stringResource(R.string.back_button_label),
-            tint = Teal
+            tint = Teal,
         )
         Spacer(modifier = Modifier.weight(1f))
         Image(
             modifier = Modifier.height(150.dp),
             painter = painterResource(R.drawable.dykpad),
-            contentDescription = stringResource(R.string.paddy)
+            contentDescription = stringResource(R.string.paddy),
         )
         Text(
             modifier = Modifier.padding(24.dp),
@@ -61,7 +62,7 @@ fun EducationDYKScreen(navController: NavHostController) {
             textAlign = TextAlign.Center,
             lineHeight = 20.scaledSp(),
             fontSize = 20.scaledSp(),
-            text = stringResource(R.string.board_game_long)
+            text = stringResource(R.string.board_game_long),
         )
         Spacer(modifier = Modifier.weight(1f))
     }

@@ -18,7 +18,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.data.findYears
@@ -26,6 +25,7 @@ import com.tpp.theperiodpurse.data.parseDatesIntoPeriods
 import com.tpp.theperiodpurse.ui.cycle.components.PeriodEntries
 import com.tpp.theperiodpurse.ui.cycle.components.YearTab
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import java.time.LocalDate
 import kotlin.collections.ArrayList
 
@@ -46,10 +46,9 @@ fun PeriodHistoryLayout(
     var yearSelected by remember { mutableStateOf(years.keys.last()) }
     val cyclePage = stringResource(R.string.cycle_page)
     // Iterate over years and create horizontally scrollable buttons
-    Scaffold(topBar = { AppBar(navController = navController) },)
-    {
+    Scaffold(topBar = { AppBar(navController = navController) }) {
         Box(
-            modifier = Modifier.padding(it)
+            modifier = Modifier.padding(it),
         ) {
             Image(
                 painter = bg,
@@ -62,7 +61,7 @@ fun PeriodHistoryLayout(
             Column(
                 modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 25.dp)
+                    .padding(horizontal = 20.dp, vertical = 25.dp),
             ) {
                 LazyRow {
                     // Reverse keys
@@ -85,17 +84,17 @@ fun PeriodHistoryLayout(
 private fun PeriodCard(
     modifier: Modifier,
     yearSelected: Int,
-    years: MutableMap<Int, ArrayList<ArrayList<Date>>>
+    years: MutableMap<Int, ArrayList<ArrayList<Date>>>,
 ) {
     Card(
         modifier.fillMaxWidth(),
         elevation = 2.dp,
-        shape = RoundedCornerShape(50.0f)
+        shape = RoundedCornerShape(50.0f),
     ) {
         Column(modifier.padding(horizontal = 15.dp, vertical = 15.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
                     // Replace the year
@@ -109,7 +108,7 @@ private fun PeriodCard(
                 color = Color(0xFF868083),
                 modifier = modifier
                     .padding(top = 5.dp, bottom = 10.dp)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
             )
             // Show last three most recent periods
             years[yearSelected]?.let { it1 -> PeriodEntries(it1, null) }
@@ -119,7 +118,7 @@ private fun PeriodCard(
 
 @Composable
 fun AppBar(navController: NavController) {
-    TopAppBar (
+    TopAppBar(
         {
             Text(
                 modifier = Modifier
@@ -127,7 +126,7 @@ fun AppBar(navController: NavController) {
                     .wrapContentHeight(),
                 text = stringResource(id = R.string.period_history),
                 fontWeight = FontWeight.Bold,
-                fontSize = 20.scaledSp()
+                fontSize = 20.scaledSp(),
             )
         },
         backgroundColor = Color.White,
@@ -138,10 +137,10 @@ fun AppBar(navController: NavController) {
 
 @Composable
 fun BackIcon(navController: NavController) {
-    IconButton(onClick = {navController.navigateUp()}) {
+    IconButton(onClick = { navController.navigateUp() }) {
         Icon(
             imageVector = Icons.Filled.ArrowBack,
-            contentDescription = stringResource(R.string.back_button)
+            contentDescription = stringResource(R.string.back_button),
         )
     }
 }

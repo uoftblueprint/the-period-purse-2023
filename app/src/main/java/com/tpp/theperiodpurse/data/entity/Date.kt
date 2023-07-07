@@ -13,7 +13,7 @@ import java.time.Duration
 import java.util.Date
 
 @Entity(tableName = "dates")
-data class Date (
+data class Date(
     @PrimaryKey
     @TypeConverters(DaysConverter::class)
     val date: Date,
@@ -25,5 +25,5 @@ data class Date (
     val crampSeverity: CrampSeverity?,
     @TypeConverters(DurationConverter::class)
     val sleep: Duration?,
-    val notes: String
-    )
+    val notes: String,
+)

@@ -4,8 +4,8 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.cycle.CycleScreenLayout
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 
 typealias ComposableNavFun = @Composable (calendarViewModel: CalendarViewModel, navController: NavController, appViewModel: AppViewModel) -> Unit
@@ -15,8 +15,15 @@ open class CalendarTabItem(var title: String, var screen: ComposableNavFun) {
     @RequiresApi(Build.VERSION_CODES.O)
     object CalendarTab : CalendarTabItem(
         "Calendar",
-        {calendarViewModel, navController, appViewModel -> CalendarScreenLayout(
-            calendarViewModel = calendarViewModel, navController, appViewModel = appViewModel) })
+        { calendarViewModel, navController, appViewModel ->
+            CalendarScreenLayout(
+                calendarViewModel = calendarViewModel,
+                navController,
+                appViewModel = appViewModel,
+            )
+        },
+    )
     object CycleTab : CalendarTabItem("Cycle", { _, navController, appViewModel ->
-        CycleScreenLayout(appViewModel = appViewModel, navController = navController) })
+        CycleScreenLayout(appViewModel = appViewModel, navController = navController)
+    })
 }

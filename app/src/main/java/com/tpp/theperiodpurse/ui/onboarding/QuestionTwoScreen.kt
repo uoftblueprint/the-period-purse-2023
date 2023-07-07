@@ -40,7 +40,7 @@ fun QuestionTwoScreen(
     onSelectionChanged: (String) -> Unit = {},
     navigateUp: () -> Unit,
     canNavigateBack: Boolean,
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     var entered by rememberSaveable { mutableStateOf(false) }
     val mDate = rememberSaveable { mutableStateOf("Choose date") }
@@ -57,7 +57,7 @@ fun QuestionTwoScreen(
     Box(
         modifier = Modifier
             .fillMaxHeight()
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -70,7 +70,7 @@ fun QuestionTwoScreen(
             Box(
                 modifier = Modifier
                     .width(screenwidth.dp)
-                    .height(height.dp)
+                    .height(height.dp),
             ) {
                 Background_shape()
                 Image(
@@ -96,7 +96,7 @@ fun QuestionTwoScreen(
                     .align(Alignment.CenterHorizontally)
                     .width(250.dp),
                 fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
             Text(
                 text = stringResource(R.string.description_two),
@@ -104,7 +104,7 @@ fun QuestionTwoScreen(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .width((screenwidth * (0.7)).dp),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
             Spacer(Modifier.height((screenheight * (0.005)).dp))
             Button(
@@ -119,15 +119,19 @@ fun QuestionTwoScreen(
                 shape = RoundedCornerShape(20),
                 elevation = ButtonDefaults.elevation(
                     defaultElevation = 0.dp,
-                    pressedElevation = 0.dp)
+                    pressedElevation = 0.dp,
+                ),
             ) {
                 if (mDate.value.contains("Choose date")) {
                     Row(
                         modifier = Modifier.padding(
-                            start = 12.dp, end = 16.dp, top = 12.dp, bottom = 12.dp
+                            start = 12.dp,
+                            end = 16.dp,
+                            top = 12.dp,
+                            bottom = 12.dp,
                         ),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                        horizontalArrangement = Arrangement.Center,
                     ) {
                         Text(text = mDate.value, color = Color.Gray, fontSize = 14.scaledSp())
                         Image(
@@ -139,10 +143,13 @@ fun QuestionTwoScreen(
                 } else {
                     Row(
                         modifier = Modifier.padding(
-                            start = 12.dp, end = 12.dp, top = 12.dp, bottom = 12.dp
+                            start = 12.dp,
+                            end = 12.dp,
+                            top = 12.dp,
+                            bottom = 12.dp,
                         ),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                        horizontalArrangement = Arrangement.Center,
                     ) {
                         Text(text = mDate.value, color = Color.Black, fontSize = 17.scaledSp())
                     }
@@ -155,7 +162,7 @@ fun QuestionTwoScreen(
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
                 .padding(bottom = (screenheight * (0.02)).dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             TextButton(
                 onClick = {
@@ -167,13 +174,13 @@ fun QuestionTwoScreen(
                     .padding(start = (screenwidth * (0.1)).dp)
                     .weight(1f)
                     .semantics { contentDescription = "Skip" },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
 
             ) {
                 Text(
                     stringResource(R.string.skip),
                     color = Color.Black,
-                    fontSize = 20.scaledSp()
+                    fontSize = 20.scaledSp(),
                 )
             }
             Button(
@@ -188,7 +195,7 @@ fun QuestionTwoScreen(
                     .semantics { contentDescription = "Next" },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Teal,
-                    disabledBackgroundColor = ButtonDisabledColor
+                    disabledBackgroundColor = ButtonDisabledColor,
                 ),
             ) {
                 Text(stringResource(R.string.next), color = Color.White, fontSize = 20.scaledSp())

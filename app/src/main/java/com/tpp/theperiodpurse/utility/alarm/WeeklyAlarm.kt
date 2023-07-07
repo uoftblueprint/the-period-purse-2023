@@ -14,40 +14,36 @@ import androidx.core.app.NotificationCompat
 import com.tpp.theperiodpurse.R
 import java.util.*
 
-class WeeklyAlarm: BroadcastReceiver() {
+class WeeklyAlarm : BroadcastReceiver() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onReceive(context: Context, intent: Intent?) {
         try {
             println("reached Alarm Class")
             showNotification(context, "Weekly Reminder to Log Symptoms!", "This is your weekly reminder to log your symptoms")
             setAlarm(context)
-
-        }catch (e: Exception){
+        } catch (e: Exception) {
             println("didn't work rip")
             Log.d("Recieved an Exception", e.printStackTrace().toString())
         }
-
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
-    fun setAlarm(context: Context){
-
+    fun setAlarm(context: Context) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, Alarm::class.java)
         val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         val hasAlarmPermission: Boolean = alarmManager.canScheduleExactAlarms()
 
-        val calendar= Calendar.getInstance().apply {
+        val calendar = Calendar.getInstance().apply {
 //            timeInMillis = System.currentTimeMillis() + 604800000 // 1 week in milliseconds
             timeInMillis = System.currentTimeMillis() + 120000 // 1 week in milliseconds
         }
-        if(hasAlarmPermission){
+        if (hasAlarmPermission) {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
         }
-
     }
 
-    private fun showNotification(context: Context, title: String, description:String) {
+    private fun showNotification(context: Context, title: String, description: String) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channelName = "notifications_channel"
         val channelId = "notifications_id"
@@ -67,5 +63,4 @@ class WeeklyAlarm: BroadcastReceiver() {
 
         println("notification sent")
     }
-
 }

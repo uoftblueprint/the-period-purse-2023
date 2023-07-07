@@ -35,49 +35,53 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
     val selectedTime = logViewModel.getText(LogPrompt.Exercise)
     var hoursExercised by remember {
         mutableStateOf(
-            if (selectedTime != "")
+            if (selectedTime != "") {
                 Time.valueOf(selectedTime).hours.toString()
-            else
+            } else {
                 ""
+            },
         )
     }
     var minutesExercised by remember {
         mutableStateOf(
-            if (selectedTime != "")
+            if (selectedTime != "") {
                 Time.valueOf(selectedTime).minutes.toString()
-            else
+            } else {
                 ""
+            },
         )
     }
 
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
-    Box(modifier = Modifier // this box allows clicking out of the keyboard
-        .fillMaxWidth()
-        .clickable(
-            interactionSource = interactionSource,
-            indication = null
-        ) {
-            keyboardController?.hide()
+    Box(
+        modifier = Modifier // this box allows clicking out of the keyboard
+            .fillMaxWidth()
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+            ) {
+                keyboardController?.hide()
 
-            focusManager.clearFocus(true)
-            try {
-                saveTextData(logViewModel, hoursExercised, minutesExercised)
-            } catch (e: NumberFormatException) {
-                hoursExercised = ""
-                minutesExercised = ""
-                saveTextData(logViewModel, hoursExercised, minutesExercised)
-            }
-        }) {
+                focusManager.clearFocus(true)
+                try {
+                    saveTextData(logViewModel, hoursExercised, minutesExercised)
+                } catch (e: NumberFormatException) {
+                    hoursExercised = ""
+                    minutesExercised = ""
+                    saveTextData(logViewModel, hoursExercised, minutesExercised)
+                }
+            },
+    ) {
         Column() {
             Row(
                 modifier = Modifier
-                    .padding(start = 10.dp, bottom = 10.dp)
+                    .padding(start = 10.dp, bottom = 10.dp),
             ) {
                 Box(
                     modifier = Modifier
-                        .width(85.dp)
+                        .width(85.dp),
                 ) {
                     EditNumberField(
                         label = R.string.hours,
@@ -95,20 +99,21 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
 
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.NumberPassword,
-                            imeAction = ImeAction.Done
+                            imeAction = ImeAction.Done,
                         ),
                         keyboardActions = KeyboardActions(
                             onDone = {
                                 focusManager.moveFocus(FocusDirection.Right)
                                 saveTextData(logViewModel, hoursExercised, minutesExercised)
-                            })
+                            },
+                        ),
                     )
                 }
 
                 Spacer(modifier = Modifier.size(17.dp))
                 Box(
                     modifier = Modifier
-                        .width(100.dp)
+                        .width(100.dp),
                 ) {
                     EditNumberField(
                         label = R.string.minutes,
@@ -126,13 +131,14 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
 
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.NumberPassword,
-                            imeAction = ImeAction.Done
+                            imeAction = ImeAction.Done,
                         ),
                         keyboardActions = KeyboardActions(
                             onDone = {
                                 focusManager.clearFocus()
                                 saveTextData(logViewModel, hoursExercised, minutesExercised)
-                            })
+                            },
+                        ),
                     )
                 }
                 Spacer(modifier = Modifier.size(6.dp))
@@ -144,10 +150,10 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
                     },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(200, 200, 200)),
                     modifier = Modifier
-                        .padding(start = 16.dp)
+                        .padding(start = 16.dp),
                 ) {
                     Text(
-                        "Clear"
+                        "Clear",
                     )
                 }
             }
@@ -164,7 +170,7 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
                 LogSquare.ExerciseWaterSports,
                 LogSquare.ExerciseCycling,
                 LogSquare.ExerciseRacquetSports,
-                LogSquare.ExerciseWinterSports
+                LogSquare.ExerciseWinterSports,
             )
 
             LazyVerticalGrid(
@@ -173,7 +179,7 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
                     start = 0.dp,
                     top = 20.dp,
                     end = 0.dp,
-                    bottom = 16.dp
+                    bottom = 16.dp,
                 ),
                 modifier = Modifier
                     .height(400.dp),
@@ -181,7 +187,7 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
                     items(flowSquares) { flowSquare ->
                         LogSelectableSquare(
                             logSquare = flowSquare,
-                            selected = selected
+                            selected = selected,
                         ) { logSquare ->
                             if (selected == logSquare.description) {
                                 selected = null
@@ -192,7 +198,7 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
                             }
                         }
                     }
-                }
+                },
             )
         }
     }
@@ -201,12 +207,12 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
 private fun saveTextData(
     logViewModel: LogViewModel,
     hoursExercised: String,
-    minutesExercised: String
+    minutesExercised: String,
 ) {
     val time = Time(
         if (hoursExercised != "") hoursExercised.toInt() else 0,
         if (minutesExercised != "") minutesExercised.toInt() else 0,
-        0
+        0,
     )
     logViewModel.setText(LogPrompt.Exercise, time.toString())
 }
@@ -216,7 +222,7 @@ private fun saveTextData(
 fun ExercisePromptPreview() {
     ExercisePrompt(
         logViewModel = LogViewModel(
-            logPrompts = listOf(LogPrompt.Exercise)
-        )
+            logPrompts = listOf(LogPrompt.Exercise),
+        ),
     )
 }

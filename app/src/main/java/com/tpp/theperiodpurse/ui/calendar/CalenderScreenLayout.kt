@@ -27,7 +27,6 @@ import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import java.time.YearMonth
 
-
 val previewTrackedSymptoms = Symptom.values().asList()
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -35,7 +34,7 @@ val previewTrackedSymptoms = Symptom.values().asList()
 fun CalendarScreenLayout(
     calendarViewModel: CalendarViewModel,
     navController: NavController,
-    appViewModel: AppViewModel
+    appViewModel: AppViewModel,
 ) {
     val calendarUIState by calendarViewModel.uiState.collectAsState()
     // Contains the swappable content
@@ -54,7 +53,7 @@ fun CalendarScreenLayout(
             startMonth = startMonth,
             endMonth = endMonth,
             firstVisibleMonth = currentMonth,
-            firstDayOfWeek = firstDayOfWeek
+            firstDayOfWeek = firstDayOfWeek,
         )
         var calendarContentDescription = stringResource(id = R.string.calendar_page)
         Box {
@@ -70,7 +69,7 @@ fun CalendarScreenLayout(
                 SymptomTab(
                     selectedSymptom = selectedSymptom,
                     onSymptomClick = { calendarViewModel.setSelectedSymptom(it) },
-                    trackedSymptoms = appUiState.trackedSymptoms
+                    trackedSymptoms = appUiState.trackedSymptoms,
                 )
                 calendarContentDescription = stringResource(id = R.string.calendar)
                 Calendar(
@@ -78,7 +77,7 @@ fun CalendarScreenLayout(
                     state = state,
                     calendarUIState = calendarUIState,
                     selectedSymptom = selectedSymptom,
-                    navController = navController
+                    navController = navController,
                 )
             }
         }

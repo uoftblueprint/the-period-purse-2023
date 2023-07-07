@@ -19,9 +19,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.LegalScreen
-import com.tpp.theperiodpurse.ui.education.teal
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
-import com.tpp.theperiodpurse.ui.theme.Teal
 
 @Composable
 fun TermsAndPrivacyFooter(navController: NavHostController, textColor: Color) {
@@ -34,7 +32,7 @@ fun TermsAndPrivacyFooter(navController: NavHostController, textColor: Color) {
             .wrapContentHeight()
             .padding(horizontal = 12.dp),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         ClickableText(
             onClick = { navController.navigate(LegalScreen.Terms.name) },
@@ -42,16 +40,16 @@ fun TermsAndPrivacyFooter(navController: NavHostController, textColor: Color) {
                 textDecoration = TextDecoration.Underline,
                 color = textColor,
                 textAlign = TextAlign.Center,
-                fontSize = (screenwidth*0.04).scaledSp(),
-                fontWeight = FontWeight.Bold
+                fontSize = (screenwidth * 0.04).scaledSp(),
+                fontWeight = FontWeight.Bold,
             ),
-            text = AnnotatedString("Terms and Conditions")
+            text = AnnotatedString("Terms and Conditions"),
         )
 
         Text(
             textAlign = TextAlign.Center,
-            fontSize = (screenwidth*0.04).scaledSp(),
-            text = " and "
+            fontSize = (screenwidth * 0.04).scaledSp(),
+            text = " and ",
         )
 
         ClickableText(
@@ -60,11 +58,10 @@ fun TermsAndPrivacyFooter(navController: NavHostController, textColor: Color) {
                 textDecoration = TextDecoration.Underline,
                 color = textColor,
                 textAlign = TextAlign.Center,
-                fontSize = (screenwidth*0.04).scaledSp(),
-                fontWeight = FontWeight.Bold
+                fontSize = (screenwidth * 0.04).scaledSp(),
+                fontWeight = FontWeight.Bold,
             ),
             text = AnnotatedString("Privacy Policy"),
         )
     }
-
 }

@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.tpp.theperiodpurse.data.ApplicationRoomDatabase
-import com.tpp.theperiodpurse.data.model.Symptom
-import com.tpp.theperiodpurse.data.entity.User
 import com.tpp.theperiodpurse.data.UserDAO
+import com.tpp.theperiodpurse.data.entity.User
+import com.tpp.theperiodpurse.data.model.Symptom
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,14 +17,14 @@ class UserRepository(private val userDAO: UserDAO) {
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     fun addUser(user: User, context: Context) {
-        coroutineScope.launch (Dispatchers.IO) {
+        coroutineScope.launch(Dispatchers.IO) {
             ApplicationRoomDatabase.getDatabase(context).userDAO().save(user)
         }
     }
 
     fun setSymptoms(symptoms: List<Symptom>, context: Context) {
-        coroutineScope.launch (Dispatchers.IO) {
-            val jsonSymptoms = Gson().toJson(symptoms);
+        coroutineScope.launch(Dispatchers.IO) {
+            val jsonSymptoms = Gson().toJson(symptoms)
             if (jsonSymptoms != null) {
                 ApplicationRoomDatabase.getDatabase(context).userDAO().updateSymptoms(symptoms = jsonSymptoms, id = 1)
             }
@@ -32,19 +32,19 @@ class UserRepository(private val userDAO: UserDAO) {
     }
 
     fun setReminders(allowReminders: Boolean, context: Context) {
-        coroutineScope.launch (Dispatchers.IO) {
+        coroutineScope.launch(Dispatchers.IO) {
             ApplicationRoomDatabase.getDatabase(context).userDAO().updateReminders(id = 1, allowReminders)
         }
     }
 
     fun setReminderTime(time: String, context: Context) {
-        coroutineScope.launch (Dispatchers.IO) {
+        coroutineScope.launch(Dispatchers.IO) {
             ApplicationRoomDatabase.getDatabase(context).userDAO().updateReminderTime(id = 1, time)
         }
     }
 
     fun setReminderFreq(freq: String) {
-        coroutineScope.launch (Dispatchers.IO) {
+        coroutineScope.launch(Dispatchers.IO) {
             userDAO.updateReminderFreq(id = 1, freq)
         }
     }
@@ -63,5 +63,4 @@ class UserRepository(private val userDAO: UserDAO) {
     suspend fun isOnboarded(context: Context) {
         isOnboarded.postValue(ApplicationRoomDatabase.getDatabase(context).userDAO().getUsers().isNotEmpty())
     }
-
 }

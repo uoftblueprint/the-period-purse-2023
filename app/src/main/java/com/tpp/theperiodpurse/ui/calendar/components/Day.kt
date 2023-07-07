@@ -35,14 +35,13 @@ fun Day(
     color: Color,
     @DrawableRes iconId: Int?,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = Modifier
             .padding(1.dp)
-            .aspectRatio(1f)
-    )
-    {
+            .aspectRatio(1f),
+    ) {
         Box(
             modifier = modifier
                 .size(64.dp)
@@ -53,39 +52,37 @@ fun Day(
                 .border(
                     color = Color(200, 205, 205),
                     width = 1.dp,
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(8.dp),
                 )
                 .clickable(
                     enabled = !dayDisabled(date),
-                    onClick = onClick
+                    onClick = onClick,
                 ),
         ) {
             val boxModifier = Modifier
                 .padding(12.dp)
                 .align(Alignment.Center)
-            DayInteriorStyling(date = date, boxModifier = boxModifier , iconId = iconId)
+            DayInteriorStyling(date = date, boxModifier = boxModifier, iconId = iconId)
         }
     }
 }
 
-
 @Composable
-fun DayInteriorStyling(date: LocalDate, boxModifier: Modifier, iconId: Int?){
+fun DayInteriorStyling(date: LocalDate, boxModifier: Modifier, iconId: Int?) {
     Text(
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
         fontSize = 12.scaledSp(),
         fontWeight = FontWeight.Bold,
         text = date.dayOfMonth.toString(),
-        color = if (dayDisabled(date)) Color(190, 190, 190) else Color.Black
+        color = if (dayDisabled(date)) Color(190, 190, 190) else Color.Black,
     )
     DayImage(boxModifier = boxModifier, iconId = iconId, date = date)
 }
 
-
 @Composable
-fun DayImage(boxModifier: Modifier, iconId: Int?, date: LocalDate){
+fun DayImage(boxModifier: Modifier, iconId: Int?, date: LocalDate) {
     Box(
-        modifier = boxModifier
+        modifier = boxModifier,
     ) {
         if (iconId != null && !dayDisabled(date)) {
             Image(
@@ -93,10 +90,8 @@ fun DayImage(boxModifier: Modifier, iconId: Int?, date: LocalDate){
                 modifier = Modifier
                     .size(20.dp)
                     .offset(y = 2.dp),
-                contentDescription = stringResource(R.string.day_flow_icon_content_decription)
+                contentDescription = stringResource(R.string.day_flow_icon_content_decription),
             )
         }
     }
-
 }
-

@@ -42,7 +42,7 @@ private fun PeriodEntry(
     current: Int,
     formatter: SimpleDateFormat,
     date: java.util.Date,
-    periods: ArrayList<ArrayList<Date>>
+    periods: ArrayList<ArrayList<Date>>,
 ) {
     if (i == 0 && converted == current) {
         val formattedDate = formatter.format(date)
@@ -59,7 +59,7 @@ private fun PeriodEntry(
         Text(text = "$startString - $endString")
         Text(
             text = "$periodLength-day period",
-            fontSize = 13.scaledSp()
+            fontSize = 13.scaledSp(),
         )
     }
 }

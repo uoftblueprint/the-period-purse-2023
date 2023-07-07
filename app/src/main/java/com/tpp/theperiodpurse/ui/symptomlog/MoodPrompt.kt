@@ -15,7 +15,7 @@ import com.tpp.theperiodpurse.data.model.LogSquare
 import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
 
 @Composable
-fun MoodPrompt (logViewModel: LogViewModel) {
+fun MoodPrompt(logViewModel: LogViewModel) {
     var selected by remember {
         mutableStateOf(logViewModel.getSquareSelected(logPrompt = LogPrompt.Mood))
     }
@@ -27,7 +27,7 @@ fun MoodPrompt (logViewModel: LogViewModel) {
             LogSquare.MoodSilly,
             LogSquare.MoodSick,
             LogSquare.MoodAngry,
-            LogSquare.MoodLoved
+            LogSquare.MoodLoved,
         )
 
         LazyVerticalGrid(
@@ -36,14 +36,15 @@ fun MoodPrompt (logViewModel: LogViewModel) {
                 start = 0.dp,
                 top = 0.dp,
                 end = 0.dp,
-                bottom = 16.dp),
+                bottom = 16.dp,
+            ),
             modifier = Modifier
                 .height(400.dp),
             content = {
                 items(flowSquares) { flowSquare ->
                     LogSelectableSquare(
                         logSquare = flowSquare,
-                        selected = selected
+                        selected = selected,
                     ) { logSquare ->
                         if (selected == logSquare.description) {
                             selected = null
@@ -54,18 +55,17 @@ fun MoodPrompt (logViewModel: LogViewModel) {
                         }
                     }
                 }
-            })
-
+            },
+        )
     }
 }
-
 
 @Preview
 @Composable
 fun MoodPromptPreview() {
     FlowPrompt(
         logViewModel = LogViewModel(
-            logPrompts = listOf(LogPrompt.Mood)
-        )
+            logPrompts = listOf(LogPrompt.Mood),
+        ),
     )
 }

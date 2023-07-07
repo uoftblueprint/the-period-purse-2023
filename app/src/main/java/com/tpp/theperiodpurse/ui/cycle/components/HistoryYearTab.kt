@@ -24,11 +24,11 @@ fun YearTab(year: Int, selected: Boolean = false, onClick: () -> Unit) {
         shape = RoundedCornerShape(25),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = backgroundColor,
-            contentColor = contentColor
+            contentColor = contentColor,
         ),
-        modifier = Modifier.padding(start = 5.dp, end = 5.dp, bottom = 10.dp)
-    ){
-        Text( text = year.toString() )
+        modifier = Modifier.padding(start = 5.dp, end = 5.dp, bottom = 10.dp),
+    ) {
+        Text(text = year.toString())
     }
 }
 

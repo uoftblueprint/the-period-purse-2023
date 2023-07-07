@@ -35,14 +35,14 @@ fun PrivacyScreen(navController: NavHostController) {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(vertical = 12.dp, horizontal = 24.dp)
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(rememberScrollState()),
             ) {
                 Title(str = screenName)
 
                 Divider(
                     modifier = Modifier.padding(vertical = 8.dp),
                     color = Color.Gray,
-                    thickness = 2.dp
+                    thickness = 2.dp,
                 )
 
                 Header(stringResource(R.string.privacy_statement))
@@ -57,14 +57,11 @@ fun PrivacyScreen(navController: NavHostController) {
                 Header(stringResource(R.string.did_you_collect_my_data))
                 Body(stringResource(R.string.data_collection_response))
 
-
                 Header(stringResource(R.string.do_you_share_my_information_with_anyone))
                 Body(stringResource(R.string.information_sharing_response))
 
-
                 Header(stringResource(R.string.is_my_information_protected))
                 Body(stringResource(R.string.information_protected_response))
-
 
                 Header(stringResource(R.string.i_am_underage_can_i_use_this_app))
                 Body(stringResource(R.string.under_age_response))
@@ -77,7 +74,7 @@ fun PrivacyScreen(navController: NavHostController) {
 
                 Spacer(modifier = Modifier.size(36.dp))
             }
-        }
+        },
     )
 }
 

@@ -25,9 +25,8 @@ class SettingsNavigationTest {
     @Inject
     lateinit var appViewModel: AppViewModel
 
-
-    @get:Rule
     // Used to manage the  components' state and is used to perform injection on tests
+    @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
     @Before
@@ -36,7 +35,7 @@ class SettingsNavigationTest {
         composeTestRule.setContent {
             navController = TestNavHostController(LocalContext.current)
             navController.navigatorProvider.addNavigator(
-                ComposeNavigator()
+                ComposeNavigator(),
             )
             SettingsScreen(
                 outController = navController,
@@ -47,7 +46,7 @@ class SettingsNavigationTest {
                 onboardViewModel = null,
                 appUiState = null,
                 calUiState = null,
-                signIn = {}
+                signIn = {},
             )
         }
     }

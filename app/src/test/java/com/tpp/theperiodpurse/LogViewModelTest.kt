@@ -12,13 +12,13 @@ class LogViewModelTest {
         LogPrompt.Cramps,
         LogPrompt.Sleep,
         LogPrompt.Exercise,
-        LogPrompt.Notes
+        LogPrompt.Notes,
     )
     private val viewModel = LogViewModel(logSquarePrompts)
 
     @Test
     fun logViewModel_UpdateUIState() {
-        val flow = FlowSeverity.Light; val cramp = CrampSeverity.Bad;
+        val flow = FlowSeverity.Light; val cramp = CrampSeverity.Bad
         val mood = Mood.SAD; val exercise = Exercise.CYCLING
         val exerciseString = "10:01:00"; val sleepString = "11:00:00"
         val state = CalendarDayUIState(
@@ -27,7 +27,7 @@ class LogViewModelTest {
             exerciseLengthString = exerciseString,
             crampSeverity = cramp,
             exerciseType = exercise,
-            sleepString = sleepString
+            sleepString = sleepString,
         )
         viewModel.populateWithUIState(state)
         val selectSquares = viewModel.uiState.value.selectSquares

@@ -55,7 +55,7 @@ fun SummaryScreen(
         onboardUiState.days,
     )
     val configuration = LocalConfiguration.current
-    val screenheight = configuration.screenHeightDp;
+    val screenheight = configuration.screenHeightDp
     backbutton(navigateUp, canNavigateBack)
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -70,7 +70,7 @@ fun SummaryScreen(
             text = "You're all set!",
             style = MaterialTheme.typography.h4,
             fontWeight = FontWeight.Bold,
-            fontSize = 33.scaledSp()
+            fontSize = 33.scaledSp(),
         )
         Spacer(modifier = Modifier.height((screenheight * 0.08).dp))
         if (onboardUiState.days != 0) {
@@ -80,7 +80,7 @@ fun SummaryScreen(
                     modifier = Modifier.fillMaxWidth(),
                     color = Color(97, 153, 154),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 15.scaledSp()
+                    fontSize = 15.scaledSp(),
                 )
                 Text(
                     text = numberOfDays,
@@ -91,7 +91,9 @@ fun SummaryScreen(
                 )
             }
             Divider(
-                thickness = 1.dp, color = Color(97, 153, 154), modifier = Modifier.fillMaxWidth()
+                thickness = 1.dp,
+                color = Color(97, 153, 154),
+                modifier = Modifier.fillMaxWidth(),
             )
         }
         if (!onboardUiState.date.contains("Choose date")) {
@@ -101,18 +103,20 @@ fun SummaryScreen(
                     modifier = Modifier.fillMaxWidth(),
                     color = Color(97, 153, 154),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 15.scaledSp()
+                    fontSize = 15.scaledSp(),
                 )
                 Text(
                     text = onboardUiState.date,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 10.dp),
-                    fontSize = 17.scaledSp()
+                    fontSize = 17.scaledSp(),
                 )
             }
             Divider(
-                thickness = 1.dp, color = Color(97, 153, 154), modifier = Modifier.fillMaxWidth()
+                thickness = 1.dp,
+                color = Color(97, 153, 154),
+                modifier = Modifier.fillMaxWidth(),
             )
         }
         Column(Modifier.padding(start = 25.dp)) {
@@ -121,7 +125,7 @@ fun SummaryScreen(
                 modifier = Modifier.fillMaxWidth(),
                 color = Color(97, 153, 154),
                 fontWeight = FontWeight.Bold,
-                fontSize = 15.scaledSp()
+                fontSize = 15.scaledSp(),
             )
             val symptoms = listOf(
                 "Mood",
@@ -135,29 +139,35 @@ fun SummaryScreen(
                     Image(
                         painter = painterResource(R.drawable.opacity_black_24dp),
                         contentDescription = null,
-                        modifier = Modifier.size(25.dp)
+                        modifier = Modifier.size(25.dp),
                     )
                 }
                 symptoms.forEach { symptom ->
                     onboardUiState.symptomsOptions.forEach { select ->
                         if (symptom == select || symptom == "Flow") {
-                            Column(modifier = Modifier
-                                .padding(all = 10.dp)
-                                .semantics { contentDescription = symptom }) {
+                            Column(
+                                modifier = Modifier
+                                    .padding(all = 10.dp)
+                                    .semantics { contentDescription = symptom },
+                            ) {
                                 var painter =
                                     painterResource(R.drawable.self_improvement_black_24dp)
                                 when (symptom) {
-                                    "Mood" -> painter =
-                                        painterResource(R.drawable.sentiment_neutral_black_24dp)
+                                    "Mood" ->
+                                        painter =
+                                            painterResource(R.drawable.sentiment_neutral_black_24dp)
 
-                                    "Exercise" -> painter =
-                                        painterResource(R.drawable.self_improvement_black_24dp)
+                                    "Exercise" ->
+                                        painter =
+                                            painterResource(R.drawable.self_improvement_black_24dp)
 
-                                    "Cramps" -> painter =
-                                        painterResource(R.drawable.sick_black_24dp)
+                                    "Cramps" ->
+                                        painter =
+                                            painterResource(R.drawable.sick_black_24dp)
 
-                                    "Sleep" -> painter =
-                                        painterResource(R.drawable.nightlight_black_24dp)
+                                    "Sleep" ->
+                                        painter =
+                                            painterResource(R.drawable.nightlight_black_24dp)
 
                                     else -> { // Note the block
                                         dontprint = true
@@ -167,7 +177,7 @@ fun SummaryScreen(
                                     Image(
                                         painter = painter,
                                         contentDescription = null,
-                                        modifier = Modifier.size(25.dp)
+                                        modifier = Modifier.size(25.dp),
                                     )
                                 }
                             }
@@ -189,13 +199,13 @@ fun SummaryScreen(
                     onboardUiState.days,
                     0,
                     getDaysSince(onboardUiState.date),
-                    context = context
+                    context = context,
                 )
                 onboardUiState.dateOptions.forEach {
                     appViewModel.saveDate(
                         Date(
                             date = java.util.Date.from(
-                                it.atStartOfDay(ZoneId.systemDefault()).toInstant()
+                                it.atStartOfDay(ZoneId.systemDefault()).toInstant(),
                             ),
                             flow = FlowSeverity.Medium,
                             exerciseType = null,
@@ -203,16 +213,18 @@ fun SummaryScreen(
                             crampSeverity = null,
                             sleep = null,
                             mood = null,
-                            notes = ""
-                        ), context
+                            notes = "",
+                        ),
+                        context,
                     )
                     calendarViewModel.updateDayInfo(
-                        it, CalendarDayUIState(flow = FlowSeverity.Medium)
+                        it,
+                        CalendarDayUIState(flow = FlowSeverity.Medium),
                     )
                 }
                 onSendButtonClicked()
             },
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154)),
         ) {
             Text(stringResource(R.string.lets_go), color = Color.White, fontSize = 25.scaledSp())
         }

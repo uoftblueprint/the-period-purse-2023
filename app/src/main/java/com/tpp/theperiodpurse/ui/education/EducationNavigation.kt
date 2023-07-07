@@ -20,10 +20,11 @@ enum class EducationNavigation {
 @Composable
 fun EducationScreen(
     outController: NavHostController = rememberNavController(),
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
 ) {
     NavHost(
-        navController = navController, startDestination = EducationNavigation.Learn.name
+        navController = navController,
+        startDestination = EducationNavigation.Learn.name,
     ) {
         composable(route = EducationNavigation.Learn.name) {
             EducationScreenLayout(outController, navController)
@@ -33,7 +34,7 @@ fun EducationScreen(
         }
         composable(
             route = EducationNavigation.ProductInfo.name,
-            arguments = listOf(navArgument("elementId") { nullable = true })
+            arguments = listOf(navArgument("elementId") { nullable = true }),
         ) {
             val elementId =
                 navController.previousBackStackEntry?.savedStateHandle?.get<String>("elementId")
@@ -50,6 +51,6 @@ fun EducationBackground() {
         painter = painterResource(R.drawable.colourwatercolour),
         contentDescription = null,
         modifier = Modifier.fillMaxSize(),
-        contentScale = ContentScale.FillBounds
+        contentScale = ContentScale.FillBounds,
     )
 }

@@ -10,9 +10,4 @@ class DatabaseTest {
     private lateinit var userRepository: UserRepository
 
 //    Todo: finish tests for OnboardViewModel and database testing with sample data
-
-
 }
-
-
-

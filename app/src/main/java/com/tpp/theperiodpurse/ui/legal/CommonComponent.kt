@@ -16,10 +16,9 @@ fun Body(str: String) {
     Text(
         fontSize = 14.scaledSp(),
         lineHeight = 16.scaledSp(),
-        text = str
+        text = str,
     )
 }
-
 
 @Composable
 fun Header(str: String) {
@@ -31,16 +30,16 @@ fun Header(str: String) {
             fontSize = 14.scaledSp(),
             fontWeight = FontWeight.Bold,
             lineHeight = 24.scaledSp(),
-            text = str
+            text = str,
         )
     }
 }
 
 @Composable
-fun Title(str:String) {
+fun Title(str: String) {
     Text(
         fontSize = 32.scaledSp(),
         fontWeight = FontWeight.Bold,
-        text = str
+        text = str,
     )
 }

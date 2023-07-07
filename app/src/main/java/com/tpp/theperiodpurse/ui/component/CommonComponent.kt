@@ -16,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.Screen
@@ -53,26 +52,25 @@ private fun BottomNavigation(
     onInfoNavigationClicked: () -> Unit,
     onSettingsNavigationClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    navItemModifier: Modifier = Modifier
+    navItemModifier: Modifier = Modifier,
 ) {
     Column() {
         Box {
             BottomNavigation(
                 backgroundColor = Color.White,
-                modifier = modifier.align(Alignment.BottomCenter)
+                modifier = modifier.align(Alignment.BottomCenter),
             ) {
-
                 BottomNavigationItem(
                     icon = {
                         Icon(
                             painterResource(R.drawable.info_black_24dp),
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     },
                     label = { Text(Screen.Learn.name) },
                     selected = false,
                     onClick = onInfoNavigationClicked,
-                    modifier = navItemModifier
+                    modifier = navItemModifier,
                 )
 
                 Spacer(modifier = modifier.width(58.dp))
@@ -81,21 +79,21 @@ private fun BottomNavigation(
                     icon = {
                         Icon(
                             painterResource(R.drawable.settings_black_24dp),
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     },
                     label = { Text(Screen.Settings.name) },
                     selected = false,
                     onClick = onSettingsNavigationClicked,
-                    modifier = navItemModifier
+                    modifier = navItemModifier,
                 )
             }
         }
-        Box (
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White)
-                .height(6.dp)
+                .height(6.dp),
         ) {}
     }
 }
@@ -105,7 +103,7 @@ fun FloatingActionButton(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     contentColor: Color = Color.White,
-    onClickInCalendar: () -> Unit
+    onClickInCalendar: () -> Unit,
 ) {
     val circle = MaterialTheme.shapes.large.copy(CornerSize(percent = 50))
     var iconId by remember { mutableStateOf(R.drawable.add_black_24dp) }
@@ -137,24 +135,25 @@ fun FloatingActionButton(
         modifier = modifier
             .padding(14.dp)
             .border(color = Color.White, width = 2.dp, shape = circle)
-            .size(70.dp)
+            .size(70.dp),
     ) {
         Icon(
             painter = painterResource(iconId),
             contentDescription = stringResource(contentId),
             modifier = Modifier
                 .width(30.dp)
-                .aspectRatio(1f)
+                .aspectRatio(1f),
         )
     }
 }
-
 
 @Composable
 fun PopupTopBar(
     onClose: () -> Unit,
     modifier: Modifier = Modifier,
-    content: @Composable() () -> Unit
+    content:
+    @Composable()
+    () -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -162,27 +161,26 @@ fun PopupTopBar(
             .fillMaxWidth()
             .background(color = HeaderColor1)
             .height(100.dp)
-            .padding(top = 10.dp)
+            .padding(top = 10.dp),
     ) {
         Row(
             modifier = Modifier
                 .align(Alignment.Start)
-                .padding(start = 10.dp)
+                .padding(start = 10.dp),
         ) {
             IconButton(
                 onClick = onClose,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(24.dp),
             ) {
                 Icon(
                     imageVector = Icons.Filled.Close,
-                    contentDescription = "Close Button"
+                    contentDescription = "Close Button",
                 )
             }
         }
         content()
     }
 }
-
 
 @Preview
 @Composable
@@ -196,4 +194,3 @@ fun PopupTopBarPreview() {
     PopupTopBar({}) {
     }
 }
-

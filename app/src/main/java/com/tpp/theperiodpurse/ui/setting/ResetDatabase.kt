@@ -1,6 +1,5 @@
 package com.tpp.theperiodpurse.ui.setting
 
-
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -11,11 +10,11 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
-import com.tpp.theperiodpurse.ui.state.AppUiState
 import com.tpp.theperiodpurse.OnboardingScreen
-import com.tpp.theperiodpurse.ui.state.OnboardUIState
-import com.tpp.theperiodpurse.ui.state.CalendarUIState
 import com.tpp.theperiodpurse.ui.component.LoadingScreen
+import com.tpp.theperiodpurse.ui.state.AppUiState
+import com.tpp.theperiodpurse.ui.state.CalendarUIState
+import com.tpp.theperiodpurse.ui.state.OnboardUIState
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -41,7 +40,7 @@ fun ResetDatabase(
     onboardUiState: OnboardUIState,
     appUiState: AppUiState,
     calUiState: CalendarUIState,
-    signout: () -> Unit = {}
+    signout: () -> Unit = {},
 ) {
     // Observe the state of whether the database is deleted or not
     val isDeleted by viewModel.isOnboarded.observeAsState(initial = null)
@@ -80,5 +79,4 @@ fun ResetDatabase(
             }
         }
     }
-
 }

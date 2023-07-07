@@ -3,8 +3,8 @@ package com.tpp.theperiodpurse.data.helper
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.tpp.theperiodpurse.data.model.Symptom
 import com.tpp.theperiodpurse.data.entity.Date
+import com.tpp.theperiodpurse.data.model.Symptom
 import java.time.Duration
 
 class SymptomConverter {

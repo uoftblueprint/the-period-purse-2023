@@ -19,28 +19,28 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.core.content.ContextCompat
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.tpp.theperiodpurse.ui.state.AppUiState
-import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.ui.state.OnboardUIState
+import com.tpp.theperiodpurse.ui.state.AppUiState
 import com.tpp.theperiodpurse.ui.state.CalendarUIState
+import com.tpp.theperiodpurse.ui.state.OnboardUIState
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 
 enum class SettingScreenNavigation(@StringRes val title: Int) {
     Start(title = R.string.settings_home), Notification(title = R.string.customize_notifications), BackUpAccount(
-        title = R.string.back_up_account
+        title = R.string.back_up_account,
     ),
     DeleteAccount(title = R.string.delete_account),
     ResetDatabase(title = R.string.reset_database),
-    BackupDatabase(title= R.string.back_up_database),
-    ConfirmBackup(title= R.string.confirm_back_up),
+    BackupDatabase(title = R.string.back_up_database),
+    ConfirmBackup(title = R.string.confirm_back_up),
 }
 
 /**
@@ -52,26 +52,25 @@ fun SettingAppBar(
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
-    color: Color
+    color: Color,
 ) {
     TopAppBar(
-        title = { Text(currentScreen)},
+        title = { Text(currentScreen) },
         modifier = modifier.padding(0.dp),
         navigationIcon = {
             if (canNavigateBack) {
                 IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.back_button)
+                        contentDescription = stringResource(R.string.back_button),
                     )
                 }
             }
         },
         backgroundColor = color,
-        elevation = 0.dp
+        elevation = 0.dp,
     )
 }
-
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
@@ -86,27 +85,25 @@ fun SettingsScreen(
     appUiState: AppUiState?,
     calUiState: CalendarUIState?,
     signIn: () -> Unit,
-    signout: () -> Unit = {}
+    signout: () -> Unit = {},
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = SettingScreenNavigation.valueOf(
-        backStackEntry?.destination?.route ?: SettingScreenNavigation.Start.name
+        backStackEntry?.destination?.route ?: SettingScreenNavigation.Start.name,
     )
 
-    Scaffold(
-    ) { innerPadding ->
+    Scaffold() { innerPadding ->
         Image(
             painter = painterResource(id = R.drawable.background),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.FillBounds
+            contentScale = ContentScale.FillBounds,
         )
-
 
         NavHost(
             navController = navController,
             startDestination = SettingScreenNavigation.Start.name,
-            modifier = modifier.padding(innerPadding)
+            modifier = modifier.padding(innerPadding),
         ) {
             composable(route = SettingScreenNavigation.Start.name) {
                 if (appViewModel != null) {
@@ -122,7 +119,7 @@ fun SettingsScreen(
                             navController.navigate(SettingScreenNavigation.DeleteAccount.name)
                         },
                         appViewModel = appViewModel,
-                        context = context
+                        context = context,
                     )
                 }
             }
@@ -133,10 +130,12 @@ fun SettingsScreen(
                         mutableStateOf(
                             ContextCompat.checkSelfPermission(
                                 context,
-                                Manifest.permission.POST_NOTIFICATIONS
-                            ) == PackageManager.PERMISSION_GRANTED
+                                Manifest.permission.POST_NOTIFICATIONS,
+                            ) == PackageManager.PERMISSION_GRANTED,
                         )
-                    } else mutableStateOf(true)
+                    } else {
+                        mutableStateOf(true)
+                    }
                 }
 //                var allowReminders = false
 //                if (appViewModel != null){
@@ -150,21 +149,24 @@ fun SettingsScreen(
                             currentScreen = currentScreen.name,
                             canNavigateBack = navController.previousBackStackEntry != null,
                             navigateUp = { navController.navigateUp() },
-                            color = Color.Transparent),
-                        appViewModel
+                            color = Color.Transparent,
+                        ),
+                        appViewModel,
                     )
                 }
             }
             composable(route = SettingScreenNavigation.BackUpAccount.name) {
-                BackUpAccountScreen(appbar = SettingAppBar(
-                    currentScreen = currentScreen.name,
-                    canNavigateBack = navController.previousBackStackEntry != null,
-                    navigateUp = { navController.navigateUp() },
-                    color = Color.White),
+                BackUpAccountScreen(
+                    appbar = SettingAppBar(
+                        currentScreen = currentScreen.name,
+                        canNavigateBack = navController.previousBackStackEntry != null,
+                        navigateUp = { navController.navigateUp() },
+                        color = Color.White,
+                    ),
                     navController = navController,
                     signIn = signIn,
                     signOut = signout,
-                    context = context
+                    context = context,
                 )
             }
             composable(route = SettingScreenNavigation.DeleteAccount.name) {
@@ -174,22 +176,32 @@ fun SettingsScreen(
                         currentScreen = currentScreen.name,
                         canNavigateBack = navController.previousBackStackEntry != null,
                         navigateUp = { navController.navigateUp() },
-                        color = Color.White),
-                    navController = navController
+                        color = Color.White,
+                    ),
+                    navController = navController,
                 )
             }
             composable(route = SettingScreenNavigation.ResetDatabase.name) {
                 if (onboardViewModel != null && onboardUiState != null && appUiState != null && calUiState != null) {
-                    ResetDatabase(context = context, viewModel = onboardViewModel, outController = outController, onboardUiState = onboardUiState,
-                    appUiState = appUiState, calUiState = calUiState, signout = signout)
+                    ResetDatabase(
+                        context = context,
+                        viewModel = onboardViewModel,
+                        outController = outController,
+                        onboardUiState = onboardUiState,
+                        appUiState = appUiState,
+                        calUiState = calUiState,
+                        signout = signout,
+                    )
                 }
             }
             composable(route = SettingScreenNavigation.BackupDatabase.name) {
                 if (onboardViewModel != null && onboardUiState != null) {
-                    BackupDatabase(viewModel = onboardViewModel,
+                    BackupDatabase(
+                        viewModel = onboardViewModel,
                         navController = navController,
                         signout = signout,
-                        context = context)
+                        context = context,
+                    )
                 }
             }
             composable(route = SettingScreenNavigation.ConfirmBackup.name) {

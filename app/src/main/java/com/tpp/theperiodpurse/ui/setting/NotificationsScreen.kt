@@ -1,6 +1,5 @@
 package com.tpp.theperiodpurse.ui.setting
 
-
 import android.Manifest
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -31,9 +30,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.utility.alarm.Alarm
 import com.tpp.theperiodpurse.utility.alarm.MonthlyAlarm
 import com.tpp.theperiodpurse.utility.alarm.WeeklyAlarm
@@ -44,7 +43,6 @@ import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-
 
 /**
  * Represents the notifications screen of the application.
@@ -65,8 +63,8 @@ class NotificationsScreen(private val appViewModel: AppViewModel) : ComponentAct
                     mutableStateOf(
                         ContextCompat.checkSelfPermission(
                             context,
-                            Manifest.permission.POST_NOTIFICATIONS
-                        ) == PackageManager.PERMISSION_GRANTED
+                            Manifest.permission.POST_NOTIFICATIONS,
+                        ) == PackageManager.PERMISSION_GRANTED,
                     )
                 } else {
                     mutableStateOf(true)
@@ -74,7 +72,10 @@ class NotificationsScreen(private val appViewModel: AppViewModel) : ComponentAct
             }
 
             NotificationsLayout(
-                LocalContext.current, hasNotificationPermission, temp(), appViewModel
+                LocalContext.current,
+                hasNotificationPermission,
+                temp(),
+                appViewModel,
             )
         }
     }
@@ -94,8 +95,7 @@ fun temp() {
  */
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, appBar: Unit, appViewModel: AppViewModel){
-
+fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, appBar: Unit, appViewModel: AppViewModel) {
     val formatter = DateTimeFormatter.ofPattern("h:mm a") // define the format of the input string
     var formattedTime = appViewModel.getReminderTime()
     var pickedTime = LocalTime.parse(formattedTime, formatter)
@@ -108,23 +108,25 @@ fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, a
         modifier = Modifier
             .fillMaxSize(),
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.Top,
     ) {
-
-        Text(text = stringResource(id = R.string.remind_me_to_log_symptoms),
+        Text(
+            text = stringResource(id = R.string.remind_me_to_log_symptoms),
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(15.dp, top = 60.dp),
-            fontSize = 20.scaledSp())
-        Text(text = stringResource(id = R.string.reminder_description),
+            fontSize = 20.scaledSp(),
+        )
+        Text(
+            text = stringResource(id = R.string.reminder_description),
             modifier = Modifier.padding(start = 15.dp),
             fontWeight = FontWeight.Light,
-            fontSize = 20.scaledSp())
+            fontSize = 20.scaledSp(),
+        )
         Divider(color = Color.Gray, thickness = 0.7.dp)
         Expandable(appViewModel)
         Divider(color = Color.Gray, thickness = 0.7.dp)
         TimePicker(timeDialogState, formattedTime)
         Divider(color = Color.Gray, thickness = 0.7.dp)
-
     }
     MaterialDialog(
         dialogState = timeDialogState,
@@ -132,18 +134,17 @@ fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, a
             positiveButton(text = "Ok") {
                 formattedTime = pickedTime.format(DateTimeFormatter.ofPattern("h:mm a"))
                 appViewModel.setReminderTime(formattedTime, context)
-                if(hasNotificationsPermission){
-                    if(appViewModel.getAllowReminders()){
+                if (hasNotificationsPermission) {
+                    if (appViewModel.getAllowReminders()) {
                         setAlarm(context, pickedTime, appViewModel)
                         println("alarm set")
                     } else {
                         println("didn't work")
                     }
-                }
-                else {println("alarm not set")}
+                } else { println("alarm not set") }
             }
             negativeButton(text = "Cancel")
-        }
+        },
     ) {
         timepicker(
             initialTime = pickedTime,
@@ -152,7 +153,6 @@ fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, a
             pickedTime = it
         }
     }
-
 }
 
 /**
@@ -192,12 +192,10 @@ fun setAlarm(context: Context, pickedTime: LocalTime, appViewModel: AppViewModel
     }
 }
 
-
-
 @Composable
 private fun TimePicker(
     timeDialogState: MaterialDialogState,
-    formattedTime: String
+    formattedTime: String,
 ) {
     val repeatExpanded by remember {
         mutableStateOf(false)
@@ -212,19 +210,21 @@ private fun TimePicker(
             modifier = Modifier
                 //        .padding(24.dp)
                 .background(Color.White.copy(alpha = 0.8f))
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             Column(
                 modifier = Modifier
                     .padding(bottom = extraPadding.coerceAtLeast(0.dp))
-                    .align(Alignment.CenterVertically)
+                    .align(Alignment.CenterVertically),
             ) {
-                Text(text = stringResource(id = R.string.reminder_time),
+                Text(
+                    text = stringResource(id = R.string.reminder_time),
                     modifier = Modifier.padding(start = 5.dp),
-                    fontSize = 18.scaledSp())
-
+                    fontSize = 18.scaledSp(),
+                )
             }
-            Button(colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+            Button(
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
                 elevation = null,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -232,21 +232,21 @@ private fun TimePicker(
                     .background(Color.Transparent),
                 onClick = {
                     timeDialogState.show()
-                }) {
+                },
+            ) {
                 Text(
                     text = formattedTime,
                     style = TextStyle(color = Color(0xFF74C5B7)),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 18.scaledSp()
+                    fontSize = 18.scaledSp(),
                 )
             }
         }
     }
 }
 
-
 @Composable
-fun Expandable(appViewModel: AppViewModel){
+fun Expandable(appViewModel: AppViewModel) {
     var repeatExpanded by remember {
         mutableStateOf(false)
     }
@@ -260,7 +260,7 @@ fun Expandable(appViewModel: AppViewModel){
             modifier = Modifier
                 //        .padding(24.dp)
                 .background(Color.White)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             val radioOptions = listOf("Every day", "Every week", "Every month")
             val selectedOption = appViewModel.getReminderFreq()
@@ -268,35 +268,41 @@ fun Expandable(appViewModel: AppViewModel){
                 modifier = Modifier
                     .weight(1f)
                     .padding(bottom = extraPadding.coerceAtLeast(0.dp))
-                    .align(Alignment.CenterVertically)
+                    .align(Alignment.CenterVertically),
             ) {
-                Text(text = stringResource(id = R.string.repeat), fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 5.dp),
-                    fontSize = 18.scaledSp())
+                Text(
+                    text = stringResource(id = R.string.repeat),
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(start = 5.dp),
+                    fontSize = 18.scaledSp(),
+                )
                 if (repeatExpanded) {
                     RadioButtons(radioOptions, selectedOption, appViewModel)
                 }
-
             }
-            Text(text = selectedOption, style = TextStyle(color = Color(0xFF74C5B7)), fontSize = 18.scaledSp(), modifier =
-            if(!repeatExpanded) Modifier.align(Alignment.CenterVertically) else Modifier.align(
-                Alignment.Top
-            ))
+            Text(
+                text = selectedOption,
+                style = TextStyle(color = Color(0xFF74C5B7)),
+                fontSize = 18.scaledSp(),
+                modifier =
+                if (!repeatExpanded) {
+                    Modifier.align(Alignment.CenterVertically)
+                } else Modifier.align(
+                    Alignment.Top,
+                ),
+            )
             IconButton(onClick = { repeatExpanded = !repeatExpanded }) {
                 Icon(
                     imageVector = if (repeatExpanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
-                    contentDescription = if (repeatExpanded) "Show less text" else "Show more text"
+                    contentDescription = if (repeatExpanded) "Show less text" else "Show more text",
                 )
             }
         }
     }
-
-
-
 }
 
 @Composable
 fun RadioButtons(radioOptions: List<String>, selectedOption: String, appViewModel: AppViewModel) {
-
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -309,33 +315,28 @@ fun RadioButtons(radioOptions: List<String>, selectedOption: String, appViewMode
                         .selectable(
                             selected = (text == selectedOption),
                             onClick = {
-                                //onOptionSelected(text)
+                                // onOptionSelected(text)
                                 appViewModel.setReminderFreq(text)
-                            }
+                            },
                         )
-                        .padding(horizontal = 15.dp)
+                        .padding(horizontal = 15.dp),
                 ) {
                     RadioButton(
-                        selected = (text == selectedOption), modifier = Modifier.padding(all = Dp(value = 8F)),
+                        selected = (text == selectedOption),
+                        modifier = Modifier.padding(all = Dp(value = 8F)),
                         onClick = {
                             appViewModel.setReminderFreq(text)
-                        }
+                        },
                     )
                     Text(
                         text = text,
                         modifier = Modifier
                             .padding(start = 16.dp)
                             .align(Alignment.CenterVertically),
-                        fontSize = 18.scaledSp()
+                        fontSize = 18.scaledSp(),
                     )
                 }
             }
         }
     }
 }
-
-
-
-
-
-

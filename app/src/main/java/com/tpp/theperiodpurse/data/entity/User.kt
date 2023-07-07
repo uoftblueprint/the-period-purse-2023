@@ -4,8 +4,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.tpp.theperiodpurse.data.helper.DateConverter
-import com.tpp.theperiodpurse.data.model.Symptom
 import com.tpp.theperiodpurse.data.helper.SymptomConverter
+import com.tpp.theperiodpurse.data.model.Symptom
 
 @Entity(tableName = "users")
 data class User(
@@ -21,4 +21,4 @@ data class User(
     val allowReminders: Boolean = false,
     val reminderTime: String = "12:00 PM",
     val reminderFreq: String = "Every day",
-    )
+)

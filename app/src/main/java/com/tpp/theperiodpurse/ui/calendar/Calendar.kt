@@ -25,9 +25,8 @@ fun Calendar(
     state: CalendarState,
     calendarUIState: CalendarUIState,
     selectedSymptom: Symptom,
-    navController: NavController
-)
-{
+    navController: NavController,
+) {
     VerticalCalendar(
         modifier = Modifier
             .padding(horizontal = 12.dp)
@@ -43,9 +42,9 @@ fun Calendar(
                     day = day,
                     calendarDayUIState = calendarUIState.days[day.date],
                     activeSymptom = selectedSymptom,
-                    onClick = { navigateToLogScreenWithDate(day.date, navController) }
+                    onClick = { navigateToLogScreenWithDate(day.date, navController) },
                 )
             }
-        }
+        },
     )
 }

@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
@@ -21,9 +20,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.datasource.Product
 import com.tpp.theperiodpurse.ui.datasource.ProductsList
-import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.theme.Teal
 
@@ -47,15 +46,17 @@ fun EducationInfoScreen(
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Icon(modifier = Modifier
-            .clickable(
-                interactionSource = interactionSource, indication = null
-            ) { navController.navigate(EducationNavigation.Learn.name) }
-            .size(20.dp)
-            .align(Alignment.Start),
+        Icon(
+            modifier = Modifier
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                ) { navController.navigate(EducationNavigation.Learn.name) }
+                .size(20.dp)
+                .align(Alignment.Start),
             painter = painterResource(R.drawable.arrow),
             contentDescription = stringResource(R.string.back_button_label),
-            tint = Teal
+            tint = Teal,
         )
         Spacer(modifier = Modifier.weight(1f))
         Image(
@@ -65,17 +66,20 @@ fun EducationInfoScreen(
                 .padding(12.dp),
             painter = painterResource(id = product.imageID),
             contentDescription = stringResource(
-                R.string.product_image_description, elementId
-            )
+                R.string.product_image_description,
+                elementId,
+            ),
         )
         Text(
-            fontWeight = Bold, fontSize = 32.scaledSp(), text = product.ProductName
+            fontWeight = Bold,
+            fontSize = 32.scaledSp(),
+            text = product.ProductName,
         )
         Text(
             modifier = Modifier.padding(12.dp),
             textAlign = TextAlign.Center,
             text = product.description,
-            fontSize = 18.scaledSp()
+            fontSize = 18.scaledSp(),
         )
         Spacer(modifier = Modifier.weight(45f))
     }
