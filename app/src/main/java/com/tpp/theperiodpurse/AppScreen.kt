@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             ThePeriodPurseTheme {
-                val context = LocalContext.current
+                val context = LocalContext.current.applicationContext
                 var hasNotificationPermission by remember {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         mutableStateOf(
