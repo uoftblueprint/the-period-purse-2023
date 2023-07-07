@@ -34,14 +34,18 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.common.api.Status
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.ui.state.OnboardUIState
+import com.tpp.theperiodpurse.ui.component.handleError
 import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
+import com.tpp.theperiodpurse.ui.state.OnboardUIState
 import com.tpp.theperiodpurse.ui.theme.MainFontColor
+import com.tpp.theperiodpurse.utility.validateUserAuthenticationAndAuthorization
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WelcomeScreen(
     signIn: () -> Unit,
+    signout: () -> Unit = {},
     onNextButtonClicked: () -> Unit,
     navController: NavHostController,
     context: Context,
@@ -51,19 +55,34 @@ fun WelcomeScreen(
     val screenheight = configuration.screenHeightDp
     val screenwidth = configuration.screenWidthDp
     val account = GoogleSignIn.getLastSignedInAccount(context)
-    if (account != null) {
-        onboardUIState.googleAccount = account.account
-        LaunchedEffect(Unit) {
-            navController.navigate(OnboardingScreen.LoadGoogleDrive.name)
-        }
-    } else {
-        val signInResult = remember {
-            mutableStateOf(
-                GoogleSignInResult(
-                    GoogleSignInAccount.createDefault(), Status.RESULT_CANCELED
-                )
+    // use a value through view model which appscreen can post to
+
+    val signInResult = remember {
+        mutableStateOf(
+            GoogleSignInResult(
+                GoogleSignInAccount.createDefault(), Status.RESULT_CANCELED
+            )
+        )
+    }
+    LaunchedEffect(signInResult.value) {
+        if (!signInResult.value.isSuccess) {
+            signInResult.value = GoogleSignInResult(
+                GoogleSignInAccount.createDefault(), Status.RESULT_CANCELED
             )
         }
+    }
+    if (account != null) {
+        onboardUIState.googleAccount = account.account
+        val hasGoogleDrivePermission = validateUserAuthenticationAndAuthorization(account)
+        if (!hasGoogleDrivePermission) {
+            handleSecurityError(context, signout, "ERROR - Please grant all the required " +
+                    "permissions", navController)
+        } else {
+            LaunchedEffect(Unit) {
+                navController.navigate(OnboardingScreen.RestoreFromGoogleDrivePrompt.name)
+            }
+        }
+    } else {
         Image(
             painter = painterResource(id = R.drawable.background),
             contentDescription = null,
@@ -101,15 +120,6 @@ fun WelcomeScreen(
             // Sign in with Google Button
             GoogleSignInButton {
                 signIn()
-            }
-            LaunchedEffect(signInResult.value) {
-                if (signInResult.value.isSuccess) {
-                    navController.navigate(OnboardingScreen.QuestionTwo.name)
-                } else {
-                    signInResult.value = GoogleSignInResult(
-                        GoogleSignInAccount.createDefault(), Status.RESULT_CANCELED
-                    )
-                }
             }
 
             Spacer(modifier = Modifier.height((screenheight*0.006).dp))
@@ -191,3 +201,11 @@ fun Int.scaledSp(): TextUnit {
 
 val Int.scaledSp: TextUnit
     @Composable get() = scaledSp()
+
+fun handleSecurityError(context: Context, signout: () -> Unit, msg: String, navController:
+NavHostController) {
+    handleError(context, msg) {
+        signout()
+        navController.navigate(OnboardingScreen.Welcome.name)
+    }
+}

@@ -1,7 +1,6 @@
 package com.tpp.theperiodpurse.ui.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,13 +11,11 @@ import com.tpp.theperiodpurse.data.repository.UserRepository
 import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
 import com.tpp.theperiodpurse.ui.state.AppUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.sql.Time
 import java.time.ZoneId
 import javax.inject.Inject
@@ -30,65 +27,70 @@ class AppViewModel @Inject constructor (
 ): ViewModel() {
     private val _uiState = MutableStateFlow(AppUiState())
     val uiState: StateFlow<AppUiState> = _uiState.asStateFlow()
-    var isLoaded: MutableLiveData<Boolean?> = MutableLiveData(null)
+    var databaseIsLoadedFromStorage: MutableLiveData<Boolean?> = MutableLiveData(null)
 
 
     fun loadData(calendarViewModel: CalendarViewModel, context: Context) {
         val trackedSymptoms: MutableList<Symptom> = mutableListOf()
         viewModelScope.launch {
-            Log.d(
-                "Lookies Here",
-                withContext(Dispatchers.Main) { !userRepository.isEmpty(context) }.toString()
-            )
-            if (withContext(Dispatchers.Main) { !userRepository.isEmpty(context) }) {
-                val user = withContext(Dispatchers.Main) { userRepository.getUser(1, context) }
+            // data base operations should be async
+            val isUserRepositoryEmpty = userRepository.isEmpty(context)
+            val databaseDates = dateRepository.getAllDates(context)
+//            databaseIsLoadedFromStorage.postValue(true)
+            if (!isUserRepositoryEmpty) {
+                val user = userRepository.getUser(1, context)
                 trackedSymptoms.add(Symptom.FLOW)
                 trackedSymptoms.addAll(user.symptomsToTrack)
                 _uiState.update { currentState ->
-                    currentState.copy(trackedSymptoms = trackedSymptoms,
-                    allowReminders = user.allowReminders,
-                    reminderFrequency = user.reminderFreq,
-                    reminderTime = user.reminderTime,)
+                    currentState.copy(
+                        trackedSymptoms = trackedSymptoms,
+                        allowReminders = user.allowReminders,
+                        reminderFrequency = user.reminderFreq,
+                        reminderTime = user.reminderTime,
+                    )
+                }
+                databaseDates.collect { dates ->
+                    updateUIDateState(dates, calendarViewModel)
                 }
             }
-            withContext(Dispatchers.IO) {
-                dateRepository.getAllDates(context).collect { dates ->
-                    _uiState.value = _uiState.value.copy(dates = dates)
-
-                    for (date in dates) {
-                        // for it convert correctly we subtract 19 hours worth of milliseconds
-                        var convertedExcLen = ""
-                        if (date.exerciseLength != null){
-                            convertedExcLen = Time(
-                                date.exerciseLength.toMillis()-19*36*100000
-                            ).toString()
-                        }
-
-                        var convertedSleepLen = ""
-                        if (date.sleep != null) {
-                            convertedSleepLen = Time(
-                                date.sleep.toMillis()-19*36*100000
-                            ).toString()
-                        }
-
-                        calendarViewModel.setDayInfo(
-                            date.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
-                            CalendarDayUIState(
-                                flow = date.flow,
-                                mood = date.mood,
-                                exerciseLengthString = convertedExcLen,
-                                exerciseType = date.exerciseType,
-                                crampSeverity = date.crampSeverity,
-                                sleepString = convertedSleepLen
-                            )
-                        )
-                    }
-                }
-            }
-
-
         }
-        isLoaded.postValue(true)
+        databaseIsLoadedFromStorage.postValue(true)
+    }
+
+    private fun updateUIDateState(
+        dates: List<Date>,
+        calendarViewModel: CalendarViewModel
+    ) {
+        _uiState.value = _uiState.value.copy(dates = dates)
+
+        for (date in dates) {
+            // for it convert correctly we subtract 19 hours worth of milliseconds
+            var convertedExcLen = ""
+            if (date.exerciseLength != null) {
+                convertedExcLen = Time(
+                    date.exerciseLength.toMillis() - 19 * 36 * 100000
+                ).toString()
+            }
+
+            var convertedSleepLen = ""
+            if (date.sleep != null) {
+                convertedSleepLen = Time(
+                    date.sleep.toMillis() - 19 * 36 * 100000
+                ).toString()
+            }
+
+            calendarViewModel.setDayInfo(
+                date.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+                CalendarDayUIState(
+                    flow = date.flow,
+                    mood = date.mood,
+                    exerciseLengthString = convertedExcLen,
+                    exerciseType = date.exerciseType,
+                    crampSeverity = date.crampSeverity,
+                    sleepString = convertedSleepLen
+                )
+            )
+        }
     }
 
     fun getTrackedSymptoms() : List<Symptom> {

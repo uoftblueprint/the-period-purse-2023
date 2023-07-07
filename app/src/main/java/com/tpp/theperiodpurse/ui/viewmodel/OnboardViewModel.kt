@@ -1,6 +1,7 @@
 package com.tpp.theperiodpurse.ui.viewmodel
 import android.accounts.Account
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.api.client.extensions.android.http.AndroidHttp
@@ -37,9 +38,10 @@ class OnboardViewModel @Inject constructor (
 
     var isOnboarded: LiveData<Boolean?> = userRepository.isOnboarded
     var isDeleted: MutableLiveData<Boolean?> = MutableLiveData(null)
-    var isDrive: MutableLiveData<FileList?> = MutableLiveData(null)
-    var isDownloaded: MutableLiveData<Boolean?> = MutableLiveData(null)
-    var isBackedUp: MutableLiveData<Boolean?> = MutableLiveData(null)
+    var googleDriveFolder: MutableLiveData<FileList?> = MutableLiveData(null)
+    var drivePermissionHasError: MutableLiveData<Boolean?> = MutableLiveData(null)
+    var googleDriveLoadSuccess: MutableLiveData<Boolean?> = MutableLiveData(null)
+    var hasBackedUpToGoogleDrive: MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun checkGoogleLogin(context: Context): Boolean{
         val account = GoogleSignIn.getLastSignedInAccount(context)
@@ -50,8 +52,8 @@ class OnboardViewModel @Inject constructor (
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 userRepository.isOnboarded(context)
-                isOnboarded = userRepository.isOnboarded
             }
+            isOnboarded = userRepository.isOnboarded
         }
     }
     fun checkDeletedStatus(context: Context) {
@@ -65,27 +67,39 @@ class OnboardViewModel @Inject constructor (
     }
 
 
+    // TODO: go through all google drive opeartions and make sure usage of coroutine scope is
+    //  correct
     fun checkGoogleDrive(account: Account, context: Context, ) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val credential = GoogleAccountCredential.usingOAuth2(
-                    context, listOf(DriveScopes.DRIVE_FILE,
-                        DriveScopes.DRIVE_APPDATA)
-                )
-                credential.selectedAccount = account
-                val drive = Drive
-                    .Builder(
-                        AndroidHttp.newCompatibleTransport(),
-                        JacksonFactory.getDefaultInstance(),
-                        credential
+                try {
+                    val credential = GoogleAccountCredential.usingOAuth2(
+                        context, listOf(DriveScopes.DRIVE_FILE,
+                            DriveScopes.DRIVE_APPDATA)
                     )
-                    .setApplicationName(context.getString(R.string.app_name))
-                    .build()
+                    credential.selectedAccount = account
+
+                    val drive = Drive
+                        .Builder(
+                            AndroidHttp.newCompatibleTransport(),
+                            JacksonFactory.getDefaultInstance(),
+                            credential
+                        )
+                        .setApplicationName(context.getString(R.string.app_name))
+                        .build()
+
+                    val googleDriveFolder = drive.files().list()
+                        .setQ("name = 'user_database.db' and trashed = false")
+                        .setSpaces("appDataFolder").execute()
 
 
-                isDrive.postValue(drive.files().list()
-                    .setQ("name = 'user_database.db' and trashed = false")
-                    .setSpaces("appDataFolder").execute())
+                    this@OnboardViewModel.googleDriveFolder.postValue(googleDriveFolder)
+                    drivePermissionHasError.postValue(null)
+                } catch (e: Exception) {
+                    Log.d("OnboardViewModel", e.toString())
+                    googleDriveFolder.postValue(null)
+                    drivePermissionHasError.postValue(true)
+                }
             }
         }
     }
@@ -130,7 +144,7 @@ class OnboardViewModel @Inject constructor (
             withContext(Dispatchers.IO) {
                 userDAO.getUsers()
             }
-            isDownloaded.postValue(true)
+            googleDriveLoadSuccess.postValue(true)
         }
     }
 
@@ -183,7 +197,7 @@ class OnboardViewModel @Inject constructor (
             withContext(Dispatchers.IO) {
                 newDatabase.userDAO().getUsers()
             }
-            isBackedUp.postValue(true)
+            hasBackedUpToGoogleDrive.postValue(true)
         }
     }
 

@@ -2,6 +2,7 @@ package com.tpp.theperiodpurse
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -57,10 +58,10 @@ enum class OnboardingScreen {
     QuestionTwo,
     QuestionThree,
     Summary,
-    LoadGoogleDrive,
+    RestoreFromGoogleDrivePrompt,
     LoadDatabase,
-    DownloadBackup,
-    DateRangePicker
+    DownloadBackupFromGoogleDrive,
+    DateRangePicker,
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -85,6 +86,7 @@ fun NavigationGraph(
         modifier = modifier
     ) {
         composable(route = Screen.Calendar.name) {
+            Log.d("NavGraph", "Someone navigated to Screen Calendar")
             CalendarScreen(
                 navController = navController,
                 appViewModel = appViewModel,
@@ -165,6 +167,7 @@ fun NavigationGraph(
                 onNextButtonClicked =
                 { navController.navigate(OnboardingScreen.QuestionOne.name) },
                 signIn = signIn,
+                signout = signout,
                 navController = navController,
                 context = context,
                 onboardUIState = onboardUIState,
@@ -206,6 +209,7 @@ fun NavigationGraph(
             SummaryScreen(
                 onboardUiState = onboardUIState,
                 onSendButtonClicked = {
+                    Log.d("Summary Screen", "Navigating to Load database")
                     navController.navigate(OnboardingScreen.LoadDatabase.name)
 
                 },
@@ -227,18 +231,20 @@ fun NavigationGraph(
                 context = context
             )
         }
-        composable(route = OnboardingScreen.LoadGoogleDrive.name) {
-                LoadGoogleDrive(
+        composable(route = OnboardingScreen.RestoreFromGoogleDrivePrompt.name) {
+                RestoreFromGoogleDrivePrompt(
                     viewModel = onboardViewModel,
                     navHostController = navController,
                     context = context,
+                    signout = signout,
                     googleAccount = onboardUIState.googleAccount)
         }
 
-        composable(route = OnboardingScreen.DownloadBackup.name) {
-            DownloadBackup(googleAccount = onboardUIState.googleAccount,
+        composable(route = OnboardingScreen.DownloadBackupFromGoogleDrive.name) {
+            DownloadBackupFromGoogleDrive(
                 viewModel = onboardViewModel,
                 navHostController = navController,
+                signout = signout,
             )
         }
 
@@ -248,7 +254,6 @@ fun NavigationGraph(
                 onboardViewModel,
                 onboardUIState)
         }
-
     }
 }
 

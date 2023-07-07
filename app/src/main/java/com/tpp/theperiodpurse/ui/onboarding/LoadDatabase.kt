@@ -2,6 +2,7 @@ package com.tpp.theperiodpurse.ui.onboarding
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -9,10 +10,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
-import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.Screen
+import com.tpp.theperiodpurse.ui.component.LoadingScreen
 import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 
+// TODO: add a clean up function for all view models so that they can be re-used if the user
+//  deletes account
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LoadDatabase(
@@ -21,17 +24,20 @@ fun LoadDatabase(
     calViewModel: CalendarViewModel,
     context: Context
 ) {
-    val isLoaded by appViewModel.isLoaded.observeAsState(initial = null)
+    Log.d("Load Database", "Navigating to calendar")
+    val databaseIsLoadedFromStorage by appViewModel.databaseIsLoadedFromStorage.observeAsState(initial = null)
+//    Log.d("Load Database", databaseIsLoadedFromStorage.toString())
     LaunchedEffect(Unit) {
+        Log.d("Load Database", "Loading database")
         appViewModel.loadData(calViewModel, context)
     }
-    if (isLoaded == null) {
+    if (databaseIsLoadedFromStorage == null) {
         LoadingScreen()
     } else {
         LaunchedEffect(Unit) {
-            appViewModel.isLoaded.postValue(null)
-            navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
+            Log.d("Load Database", "Navigating to calendar")
             navController.navigate(Screen.Calendar.name)
+            appViewModel.databaseIsLoadedFromStorage.postValue(null)
         }
     }
 }

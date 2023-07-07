@@ -98,7 +98,7 @@ class NavigationOnboardTest {
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
-            ScreenApp(
+            AppScreen(
                 navController = navController,
                 skipOnboarding = false,
                 skipWelcome = true,

@@ -49,7 +49,7 @@ class NavigationTest {
             navController.navigatorProvider.addNavigator(
                 ComposeNavigator()
             )
-            ScreenApp(
+            AppScreen(
                 navController = navController,
                 skipDatabase = true,
                 skipOnboarding = true,
