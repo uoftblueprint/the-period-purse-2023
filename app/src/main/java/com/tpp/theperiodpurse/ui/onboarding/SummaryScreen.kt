@@ -1,6 +1,5 @@
 package com.tpp.theperiodpurse.ui.onboarding
 
-import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -47,8 +46,8 @@ fun SummaryScreen(
     viewModel: OnboardViewModel,
     appViewModel: AppViewModel,
     calendarViewModel: CalendarViewModel,
-    context: Context
 ) {
+    val context = LocalContext.current.applicationContext
     val resources = LocalContext.current.resources
     val numberOfDays = resources.getQuantityString(
         R.plurals.period_length,

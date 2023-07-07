@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.data.model.Symptom
 import com.tpp.theperiodpurse.data.repository.DateRepository
@@ -172,9 +171,11 @@ class AppViewModel @Inject constructor (
 
     }
 
-    fun deleteManyDates(dates: List<java.util.Date>) {
+    fun deleteManyDates(dates: List<java.util.Date>, context: Context) {
         val convertedDates = dates.map { it.time }
-        dateRepository.deleteManyDates(convertedDates)
+        viewModelScope.launch {
+            dateRepository.deleteManyDates(convertedDates, context)
+        }
 
         val newList = mutableListOf<Date>()
 
