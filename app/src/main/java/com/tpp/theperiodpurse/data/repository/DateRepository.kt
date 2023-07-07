@@ -1,6 +1,7 @@
 package com.tpp.theperiodpurse.data.repository
 
 import android.content.Context
+import android.util.Log
 import com.tpp.theperiodpurse.data.ApplicationRoomDatabase
 import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.data.DateDAO
@@ -16,9 +17,9 @@ class DateRepository(private val dateDAO: DateDAO) {
 
     fun addDate(date: Date, context: Context) {
         coroutineScope.launch (Dispatchers.IO) {
-            withContext(Dispatchers.IO) {
-                ApplicationRoomDatabase.getDatabase(context).dateDAO().save(date)
-            }
+            val database = ApplicationRoomDatabase.getDatabase(context)
+            Log.d("DateRepository", "Adding date to database with id $database")
+            database.dateDAO().save(date)
         }
     }
 
@@ -36,11 +37,10 @@ class DateRepository(private val dateDAO: DateDAO) {
         }
     }
 
-    fun deleteManyDates(dates: List<Long>) {
+    fun deleteManyDates(dates: List<Long>, context: Context) {
         coroutineScope.launch (Dispatchers.IO) {
-            withContext(Dispatchers.IO) {
-                dateDAO.deleteMany(dates)
-            }
+            val database = ApplicationRoomDatabase.getDatabase(context)
+            database.dateDAO().deleteMany(dates)
         }
     }
 }

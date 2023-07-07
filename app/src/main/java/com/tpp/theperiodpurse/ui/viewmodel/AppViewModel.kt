@@ -173,9 +173,11 @@ class AppViewModel @Inject constructor (
 
     }
 
-    fun deleteManyDates(dates: List<java.util.Date>) {
+    fun deleteManyDates(dates: List<java.util.Date>, context: Context) {
         val convertedDates = dates.map { it.time }
-        dateRepository.deleteManyDates(convertedDates)
+        viewModelScope.launch {
+            dateRepository.deleteManyDates(convertedDates, context)
+        }
 
         val newList = mutableListOf<Date>()
 

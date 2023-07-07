@@ -117,7 +117,6 @@ fun NavigationGraph(
                 onClose = { navController.navigateUp() },
                 calendarViewModel,
                 appViewModel,
-                context
             )
         }
 
@@ -219,7 +218,6 @@ fun NavigationGraph(
                 viewModel = onboardViewModel,
                 appViewModel = appViewModel,
                 calendarViewModel = calendarViewModel,
-                context = context
 //                onCancelButtonClicked = {
 //                    cancelOrderAndNavigateToStart(onboardViewModel, navController)
 //                },
@@ -247,7 +245,7 @@ fun NavigationGraph(
                 viewModel = onboardViewModel,
                 navHostController = navController,
                 signout = signout,
-                context = context)
+            )
         }
 
         composable(route = OnboardingScreen.DateRangePicker.name) {
