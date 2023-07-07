@@ -11,7 +11,6 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
-import com.tpp.theperiodpurse.Application
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.data.entity.Date
@@ -91,50 +90,47 @@ class OnboardViewModel @Inject constructor (
         }
     }
 
-    fun downloadBackup(account: Account, context: Context){
+    fun downloadBackup(account: Account, context: Context) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                val instance = ApplicationRoomDatabase.getDatabase(context)
-                instance.close()
-
-                val credential = GoogleAccountCredential.usingOAuth2(
-                    context,
-                    listOf(
-                        DriveScopes.DRIVE_FILE,
-                        DriveScopes.DRIVE_APPDATA
-                    )
+            ApplicationRoomDatabase.closeDatabase()
+            val credential = GoogleAccountCredential.usingOAuth2(
+                context,
+                listOf(
+                    DriveScopes.DRIVE_FILE,
+                    DriveScopes.DRIVE_APPDATA
                 )
-                credential.selectedAccount = account
-                val drive = Drive
-                    .Builder(
-                        AndroidHttp.newCompatibleTransport(),
-                        JacksonFactory.getDefaultInstance(),
-                        credential
-                    )
-                    .setApplicationName(context.getString(R.string.app_name))
-                    .build()
+            )
+            credential.selectedAccount = account
+            val drive = Drive
+                .Builder(
+                    AndroidHttp.newCompatibleTransport(),
+                    JacksonFactory.getDefaultInstance(),
+                    credential
+                )
+                .setApplicationName(context.getString(R.string.app_name))
+                .build()
+            withContext(Dispatchers.IO) {
                 val fileList = drive.files().list()
                     .setQ("name = 'user_database.db' and trashed = false")
                     .setSpaces("appDataFolder").execute()
-
                 val fileId = fileList.files[0].id
-
                 val outputStream = ByteArrayOutputStream()
-
                 drive.files().get(fileId).executeMediaAndDownloadTo(outputStream)
-
                 val data = outputStream.toByteArray()
-
                 val dbFilePath = context.getDatabasePath("user_database.db").path
-
                 FileOutputStream(dbFilePath).apply {
                     write(data)
                     flush()
                     close()
                 }
-
-                isDownloaded.postValue(true)
             }
+            // reopen database
+            val database = ApplicationRoomDatabase.getDatabase(context)
+            val userDAO = database.userDAO()
+            withContext(Dispatchers.IO) {
+                userDAO.getUsers()
+            }
+            isDownloaded.postValue(true)
         }
     }
 
