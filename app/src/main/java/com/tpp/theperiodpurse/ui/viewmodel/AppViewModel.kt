@@ -35,6 +35,8 @@ class AppViewModel @Inject constructor (
         viewModelScope.launch {
             // data base operations should be async
             val isUserRepositoryEmpty = userRepository.isEmpty(context)
+            val databaseDates = dateRepository.getAllDates(context)
+//            databaseIsLoadedFromStorage.postValue(true)
             if (!isUserRepositoryEmpty) {
                 val user = userRepository.getUser(1, context)
                 trackedSymptoms.add(Symptom.FLOW)
@@ -47,12 +49,12 @@ class AppViewModel @Inject constructor (
                         reminderTime = user.reminderTime,
                     )
                 }
-                val databaseDates = dateRepository.getAllDates(context)
                 databaseDates.collect { dates ->
                     updateUIDateState(dates, calendarViewModel)
                 }
             }
         }
+        databaseIsLoadedFromStorage.postValue(true)
     }
 
     private fun updateUIDateState(
@@ -89,7 +91,6 @@ class AppViewModel @Inject constructor (
                 )
             )
         }
-        databaseIsLoadedFromStorage.postValue(true)
     }
 
     fun getTrackedSymptoms() : List<Symptom> {

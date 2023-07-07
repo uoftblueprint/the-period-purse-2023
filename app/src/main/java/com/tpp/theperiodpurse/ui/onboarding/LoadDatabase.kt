@@ -9,7 +9,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavHostController
-import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.Screen
 import com.tpp.theperiodpurse.ui.component.LoadingScreen
@@ -37,9 +36,8 @@ fun LoadDatabase(
     } else {
         LaunchedEffect(Unit) {
             Log.d("Load Database", "Navigating to calendar")
-            appViewModel.databaseIsLoadedFromStorage.postValue(null)
-            navController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
             navController.navigate(Screen.Calendar.name)
+            appViewModel.databaseIsLoadedFromStorage.postValue(null)
         }
     }
 }

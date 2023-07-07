@@ -50,10 +50,10 @@ class OnboardViewModel @Inject constructor (
 
     fun checkOnboardedStatus(context: Context) {
         viewModelScope.launch {
-            userRepository.isOnboarded(context)
             withContext(Dispatchers.IO) {
-                isOnboarded = userRepository.isOnboarded
+                userRepository.isOnboarded(context)
             }
+            isOnboarded = userRepository.isOnboarded
         }
     }
     fun checkDeletedStatus(context: Context) {
