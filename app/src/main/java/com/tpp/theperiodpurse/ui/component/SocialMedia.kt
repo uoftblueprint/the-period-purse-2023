@@ -25,46 +25,56 @@ fun SocialMedia(uriHandler: UriHandler) {
             .wrapContentHeight()
             .padding(6.dp),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(modifier = Modifier
-            .clickable { uriHandler.openUri("https://www.instagram.com/theperiodpurse/") }
-            .padding(horizontal = 8.dp)
-            .size(24.dp),
+        Icon(
+            modifier = Modifier
+                .clickable { uriHandler.openUri("https://www.instagram.com/theperiodpurse/") }
+                .padding(horizontal = 8.dp)
+                .size(24.dp),
             painter = painterResource(R.drawable.instagram),
             contentDescription = stringResource(R.string.instagram),
-            tint = Color(teal))
-        Icon(modifier = Modifier
-            .clickable { uriHandler.openUri("https://www.tiktok.com/@theperiodpurse") }
-            .padding(horizontal = 8.dp)
-            .size(24.dp),
+            tint = Color(teal),
+        )
+        Icon(
+            modifier = Modifier
+                .clickable { uriHandler.openUri("https://www.tiktok.com/@theperiodpurse") }
+                .padding(horizontal = 8.dp)
+                .size(24.dp),
             painter = painterResource(R.drawable.tiktok),
             contentDescription = stringResource(R.string.tiktok),
-            tint = Color(teal))
-        Icon(modifier = Modifier
-            .clickable {
-                uriHandler.openUri(
-                    "https://www.youtube.com/channel/" + "UC2YgDU_9XxbjJsGGvXwxwyA"
-                )
-            }
-            .padding(horizontal = 8.dp)
-            .size(24.dp),
+            tint = Color(teal),
+        )
+        Icon(
+            modifier = Modifier
+                .clickable {
+                    uriHandler.openUri(
+                        "https://www.youtube.com/channel/" + "UC2YgDU_9XxbjJsGGvXwxwyA",
+                    )
+                }
+                .padding(horizontal = 8.dp)
+                .size(24.dp),
             painter = painterResource(R.drawable.youtube),
             contentDescription = stringResource(R.string.youtube),
-            tint = Color(teal))
-        Icon(modifier = Modifier
-            .clickable { uriHandler.openUri("https://twitter.com/ThePeriodPurse") }
-            .padding(horizontal = 8.dp)
-            .size(24.dp),
+            tint = Color(teal),
+        )
+        Icon(
+            modifier = Modifier
+                .clickable { uriHandler.openUri("https://twitter.com/ThePeriodPurse") }
+                .padding(horizontal = 8.dp)
+                .size(24.dp),
             painter = painterResource(R.drawable.twitter),
             contentDescription = stringResource(R.string.twitter),
-            tint = Color(teal))
-        Icon(modifier = Modifier
-            .clickable { uriHandler.openUri("https://www.facebook.com/theperiodpurse") }
-            .padding(horizontal = 8.dp)
-            .size(24.dp),
+            tint = Color(teal),
+        )
+        Icon(
+            modifier = Modifier
+                .clickable { uriHandler.openUri("https://www.facebook.com/theperiodpurse") }
+                .padding(horizontal = 8.dp)
+                .size(24.dp),
             painter = painterResource(R.drawable.facebook),
             contentDescription = stringResource(R.string.facebook),
-            tint = Color(teal))
+            tint = Color(teal),
+        )
     }
 }

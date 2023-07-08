@@ -39,7 +39,7 @@ fun BackUpAccountScreen(
     navController: NavHostController = rememberNavController(),
     signIn: () -> Unit,
     signOut: () -> Unit = {},
-    context: Context
+    context: Context,
 ) {
     val configuration = LocalConfiguration.current
     val screenheight = configuration.screenHeightDp
@@ -50,14 +50,16 @@ fun BackUpAccountScreen(
     val signInResult = remember {
         mutableStateOf(
             GoogleSignInResult(
-                GoogleSignInAccount.createDefault(), Status.RESULT_CANCELED
-            )
+                GoogleSignInAccount.createDefault(),
+                Status.RESULT_CANCELED,
+            ),
         )
     }
     LaunchedEffect(signInResult.value) {
         if (!signInResult.value.isSuccess) {
             signInResult.value = GoogleSignInResult(
-                GoogleSignInAccount.createDefault(), Status.RESULT_CANCELED
+                GoogleSignInAccount.createDefault(),
+                Status.RESULT_CANCELED,
             )
         }
     }
@@ -72,28 +74,28 @@ fun BackUpAccountScreen(
                 .padding(
                     top = (screenheight * 0.09).dp,
                     start = (screenheight * 0.03).dp,
-                    end = (screenheight * 0.03).dp
+                    end = (screenheight * 0.03).dp,
                 ),
-            contentAlignment = Alignment.TopStart
+            contentAlignment = Alignment.TopStart,
         ) {
             Column {
                 Text(
                     text = "Back Up Account",
                     color = Color.DarkGray,
-                    fontSize = 18.scaledSp()
+                    fontSize = 18.scaledSp(),
                 )
 
                 Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))
                 Text(
                     text = "Backing up to Google Drive will upload your data to Google Drive and ensure you can access it on other devices.",
-                    fontSize = 13.scaledSp()
+                    fontSize = 13.scaledSp(),
                 )
                 Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(10.dp),
                     onClick = { startBackupProcess(navController) },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154)),
                 ) {
                     Text(text = "Back Up Account", color = Color.White)
                 }
@@ -101,7 +103,7 @@ fun BackUpAccountScreen(
                 Text(
                     text = "Last backup: Not available",
                     color = Color.Gray,
-                    fontSize = 13.scaledSp()
+                    fontSize = 13.scaledSp(),
                 )
             }
         }
@@ -109,7 +111,7 @@ fun BackUpAccountScreen(
         Toast.makeText(
             context,
             "ERROR - Please grant all the required permissions",
-            Toast.LENGTH_SHORT
+            Toast.LENGTH_SHORT,
         ).show()
         signOut()
         LaunchedEffect(Unit) {
@@ -126,22 +128,22 @@ private fun SignInView(screenheight: Int, signIn: () -> Unit) {
             .padding(
                 top = (screenheight * 0.09).dp,
                 start = (screenheight * 0.03).dp,
-                end = (screenheight * 0.03).dp
+                end = (screenheight * 0.03).dp,
             ),
-        contentAlignment = Alignment.TopStart
+        contentAlignment = Alignment.TopStart,
     ) {
         Column {
             Text(
                 text = "Back Up Account",
                 color = Color.Gray,
-                fontSize = 18.scaledSp()
+                fontSize = 18.scaledSp(),
             )
 
             Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))
 
             Text(
                 text = "Sign in to backup your data",
-                fontSize = 15.scaledSp()
+                fontSize = 15.scaledSp(),
             )
 
             Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))

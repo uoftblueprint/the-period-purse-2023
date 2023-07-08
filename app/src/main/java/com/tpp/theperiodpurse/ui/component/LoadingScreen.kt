@@ -20,13 +20,12 @@ fun LoadingScreen() {
         painter = painterResource(id = R.drawable.background),
         contentDescription = null,
         modifier = Modifier.fillMaxSize(),
-        contentScale = ContentScale.FillBounds
+        contentScale = ContentScale.FillBounds,
     )
     Box(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(color = redLoading)
     }
-
 }

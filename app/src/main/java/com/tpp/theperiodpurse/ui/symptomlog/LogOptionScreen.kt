@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -13,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -21,14 +19,13 @@ import androidx.compose.ui.window.Popup
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.theme.Red
-import com.tpp.theperiodpurse.ui.theme.Shapes
 
 @Composable
 fun LoggingOptionsPopup(
     onLogDailySymptomsClick: () -> Unit,
     onLogMultiplePeriodDates: () -> Unit,
     onExit: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Popup(
         alignment = Alignment.Center,
@@ -43,14 +40,14 @@ fun LoggingOptionsPopup(
                 .offset(y = 35.dp)
                 .clickable(
                     interactionSource = MutableInteractionSource(),
-                    indication = null
-                ) { onExit() }
+                    indication = null,
+                ) { onExit() },
         ) {
             Row(
                 verticalAlignment = Alignment.Bottom,
                 modifier = Modifier
                     .clickable(enabled = false) {}
-                    .padding(start = 5.dp, end = 5.dp, bottom = 10.dp)
+                    .padding(start = 5.dp, end = 5.dp, bottom = 10.dp),
             ) {
                 LoggingOptionButton(
                     title = "Log daily symptoms",
@@ -58,7 +55,7 @@ fun LoggingOptionsPopup(
                     onClick = {
                         onLogDailySymptomsClick()
                         onExit()
-                    }
+                    },
                 )
                 Spacer(modifier = Modifier.width(30.dp))
                 LoggingOptionButton(
@@ -67,13 +64,13 @@ fun LoggingOptionsPopup(
                     onClick = {
                         onExit()
                         onLogMultiplePeriodDates()
-                    }
+                    },
                 )
             }
             Spacer(
                 modifier = Modifier
-                .height(20.dp)
-                .clickable(enabled = false) {}
+                    .height(20.dp)
+                    .clickable(enabled = false) {},
             )
             CloseOverlayButton(onClick = onExit)
         }
@@ -83,17 +80,17 @@ fun LoggingOptionsPopup(
 @Composable
 fun CloseOverlayButton(
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     FloatingActionButton(
         onClick = onClick,
         backgroundColor = Color.White,
-        modifier = modifier.size(70.dp)
+        modifier = modifier.size(70.dp),
     ) {
         Icon(
             painterResource(R.drawable.close_black_24dp),
             contentDescription = "Close logging options",
-            tint = Red
+            tint = Red,
         )
     }
 }
@@ -103,28 +100,28 @@ private fun LoggingOptionButton(
     title: String,
     icon: Int,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = title,
             textAlign = TextAlign.Center,
             modifier = Modifier.width(100.dp),
-            fontSize = 15.scaledSp()
+            fontSize = 15.scaledSp(),
         )
         Spacer(modifier = Modifier.height(4.dp))
         FloatingActionButton(
             onClick = onClick,
             backgroundColor = Red,
-            modifier = modifier.size(70.dp)
+            modifier = modifier.size(70.dp),
         ) {
             Icon(
                 painterResource(icon),
                 contentDescription = title,
                 tint = Color.White,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(24.dp),
             )
         }
     }

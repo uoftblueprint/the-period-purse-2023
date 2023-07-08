@@ -29,17 +29,17 @@ fun CurrentCycleBox(modifier: Modifier = Modifier, dates: ArrayList<Date>) {
             .fillMaxWidth()
             .height(300.dp),
         elevation = 2.dp,
-        shape = RoundedCornerShape(5)
+        shape = RoundedCornerShape(5),
     ) {
         Text(
             text = stringResource(R.string.current_cycle),
             fontSize = 20.scaledSp(),
             fontWeight = FontWeight(700),
             color = Color(0xFFB12126),
-            modifier = modifier.padding(start = 20.dp, top = 20.dp)
+            modifier = modifier.padding(start = 20.dp, top = 20.dp),
         )
         Spacer(
-            modifier = Modifier.height(16.dp)
+            modifier = Modifier.height(16.dp),
         )
         CycleInfo(dates = dates, modifier = modifier)
     }
@@ -48,54 +48,53 @@ fun CurrentCycleBox(modifier: Modifier = Modifier, dates: ArrayList<Date>) {
 @Composable
 private fun CycleInfo(
     dates: ArrayList<Date>,
-    modifier: Modifier
+    modifier: Modifier,
 ) {
     Box(
         modifier = Modifier
             .padding(20.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
-
-    Box(
-        modifier = Modifier.Companion
-            .align(Alignment.Center)
-            .size(200.dp)
-    ) {
-        Canvas(modifier = Modifier.matchParentSize()) {
-            val strokeWidth = 25.dp.toPx()
-            val ringColor = Color(0xFFB12126)
-            val radius = (size.minDimension - strokeWidth) / 2
-
-            drawArc(
-                color = ringColor.copy(alpha = 0.2f),
-                startAngle = 0f,
-                sweepAngle = 360f,
-                useCenter = false,
-                topLeft = center - Offset(radius, radius),
-                size = Size(radius * 2, radius * 2),
-                style = Stroke(width = strokeWidth)
-            )
-
-            // Draw the progress ring
-            drawArc(
-                color = ringColor,
-                startAngle = -90f,
-                sweepAngle = calculateArcAngle(dates),
-                useCenter = false,
-                topLeft = center - Offset(radius, radius),
-                size = Size(radius * 2, radius * 2),
-                style = Stroke(width = strokeWidth, cap = StrokeCap.Round)
-            )
-        }
-        Column(
-            modifier = modifier.align(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        Box(
+            modifier = Modifier.Companion
+                .align(Alignment.Center)
+                .size(200.dp),
         ) {
+            Canvas(modifier = Modifier.matchParentSize()) {
+                val strokeWidth = 25.dp.toPx()
+                val ringColor = Color(0xFFB12126)
+                val radius = (size.minDimension - strokeWidth) / 2
+
+                drawArc(
+                    color = ringColor.copy(alpha = 0.2f),
+                    startAngle = 0f,
+                    sweepAngle = 360f,
+                    useCenter = false,
+                    topLeft = center - Offset(radius, radius),
+                    size = Size(radius * 2, radius * 2),
+                    style = Stroke(width = strokeWidth),
+                )
+
+                // Draw the progress ring
+                drawArc(
+                    color = ringColor,
+                    startAngle = -90f,
+                    sweepAngle = calculateArcAngle(dates),
+                    useCenter = false,
+                    topLeft = center - Offset(radius, radius),
+                    size = Size(radius * 2, radius * 2),
+                    style = Stroke(width = strokeWidth, cap = StrokeCap.Round),
+                )
+            }
+            Column(
+                modifier = modifier.align(Alignment.Center),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
                 Text(
                     text = calculateDaysSinceLastPeriod(dates).toString(),
                     fontSize = 50.scaledSp(),
                     fontWeight = FontWeight(900),
-                    color = Color(0xFFB12126)
+                    color = Color(0xFFB12126),
                 )
                 Text(
                     text = stringResource(R.string.days_since),

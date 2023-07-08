@@ -15,7 +15,7 @@ import com.tpp.theperiodpurse.data.model.LogSquare
 import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
 
 @Composable
-fun CrampsPrompt (logViewModel: LogViewModel) {
+fun CrampsPrompt(logViewModel: LogViewModel) {
     var selected by remember {
         mutableStateOf(logViewModel.getSquareSelected(logPrompt = LogPrompt.Cramps))
     }
@@ -24,7 +24,7 @@ fun CrampsPrompt (logViewModel: LogViewModel) {
             LogSquare.CrampsNeutral,
             LogSquare.CrampsBad,
             LogSquare.CrampsTerrible,
-            LogSquare.CrampsNone
+            LogSquare.CrampsNone,
         )
 
         LazyVerticalGrid(
@@ -33,14 +33,15 @@ fun CrampsPrompt (logViewModel: LogViewModel) {
                 start = 0.dp,
                 top = 0.dp,
                 end = 0.dp,
-                bottom = 16.dp),
+                bottom = 16.dp,
+            ),
             modifier = Modifier
                 .height(270.dp),
             content = {
                 items(flowSquares) { flowSquare ->
                     LogSelectableSquare(
                         logSquare = flowSquare,
-                        selected = selected
+                        selected = selected,
                     ) { logSquare ->
                         if (selected == logSquare.description) {
                             selected = null
@@ -51,18 +52,17 @@ fun CrampsPrompt (logViewModel: LogViewModel) {
                         }
                     }
                 }
-            })
-
+            },
+        )
     }
 }
-
 
 @Preview
 @Composable
 fun CrampPromptPreview() {
     FlowPrompt(
         logViewModel = LogViewModel(
-            logPrompts = listOf(LogPrompt.Cramps)
-        )
+            logPrompts = listOf(LogPrompt.Cramps),
+        ),
     )
 }

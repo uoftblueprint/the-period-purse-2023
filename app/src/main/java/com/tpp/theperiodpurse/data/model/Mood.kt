@@ -9,11 +9,12 @@ enum class Mood(val displayName: String) {
     SILLY("Silly/Goofy"), // Different from iOS
     SICK("Sick"),
     ANGRY("Angry"),
-    LOVED("Loved");
+    LOVED("Loved"),
+    ;
 
     companion object {
         fun getMoodByDisplayName(displayName: String): Mood? {
-            return Mood.values().find{ it.displayName == displayName }
+            return Mood.values().find { it.displayName == displayName }
         }
     }
 }

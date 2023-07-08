@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.time.LocalDate
 
-class CalendarViewModel: ViewModel() {
+class CalendarViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(CalendarUIState(getDayInfo(), Symptom.FLOW))
     val uiState: StateFlow<CalendarUIState> = _uiState.asStateFlow()
 
@@ -18,7 +18,7 @@ class CalendarViewModel: ViewModel() {
         return LinkedHashMap()
     }
 
-    fun setDayInfo(day: LocalDate, dayUIState: CalendarDayUIState){
+    fun setDayInfo(day: LocalDate, dayUIState: CalendarDayUIState) {
         _uiState.value.days[day] = dayUIState
         _uiState.update { state -> CalendarUIState(state.days, state.selectedSymptom) }
     }
@@ -30,12 +30,14 @@ class CalendarViewModel: ViewModel() {
             newState = CalendarDayUIState(
                 flow = dayUIState.flow ?: original.flow,
                 mood = dayUIState.mood ?: original.mood,
-                exerciseLengthString = if (dayUIState.exerciseLengthString != "")
-                    dayUIState.exerciseLengthString else original.exerciseLengthString,
+                exerciseLengthString = if (dayUIState.exerciseLengthString != "") {
+                    dayUIState.exerciseLengthString
+                } else original.exerciseLengthString,
                 exerciseType = dayUIState.exerciseType ?: original.exerciseType,
                 crampSeverity = dayUIState.crampSeverity ?: original.crampSeverity,
-                sleepString = if (dayUIState.sleepString != "") dayUIState.sleepString
-                        else original.sleepString,
+                sleepString = if (dayUIState.sleepString != "") {
+                    dayUIState.sleepString
+                } else original.sleepString,
             )
         }
         _uiState.value.days[day] = newState
@@ -64,4 +66,3 @@ class CalendarViewModel: ViewModel() {
         _uiState.update { state -> CalendarUIState(state.days, symptom) }
     }
 }
-

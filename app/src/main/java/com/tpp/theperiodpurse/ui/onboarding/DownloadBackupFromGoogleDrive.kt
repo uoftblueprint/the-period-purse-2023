@@ -28,14 +28,14 @@ fun DownloadBackupFromGoogleDrive(
         Toast.makeText(
             context,
             "ERROR - Please grant all the required permissions",
-            Toast.LENGTH_SHORT
+            Toast.LENGTH_SHORT,
         ).show()
         signout()
         navHostController.navigate(OnboardingScreen.Welcome.name)
     }
     LaunchedEffect(Unit) {
         if (googleAccount != null) {
-            Log.d("DownloadBackupFromGD" ,"Downloading backup")
+            Log.d("DownloadBackupFromGD", "Downloading backup")
             viewModel.downloadBackup(googleAccount, context)
         }
     }

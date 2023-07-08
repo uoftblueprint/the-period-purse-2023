@@ -9,9 +9,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavHostController
-import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.Screen
 import com.tpp.theperiodpurse.ui.component.LoadingScreen
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 
 // TODO: add a clean up function for all view models so that they can be re-used if the user
@@ -22,7 +22,7 @@ fun LoadDatabase(
     navController: NavHostController,
     appViewModel: AppViewModel,
     calViewModel: CalendarViewModel,
-    context: Context
+    context: Context,
 ) {
     Log.d("Load Database", "Navigating to calendar")
     val databaseIsLoadedFromStorage by appViewModel.databaseIsLoadedFromStorage.observeAsState(initial = null)

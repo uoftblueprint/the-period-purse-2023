@@ -20,84 +20,96 @@ class PeriodPredictionTest {
         sortPeriodHistory(testedList)
 
         assertEquals(
-            testedList, periodHistoryOneCycle
+            testedList,
+            periodHistoryOneCycle,
         )
     }
 
     @Test
     fun calculatePeriodLength_EmptyList() {
         assertEquals(
-            -1f, calculateAveragePeriodLength(periodHistoryEmpty)
+            -1f,
+            calculateAveragePeriodLength(periodHistoryEmpty),
         )
     }
 
     @Test
     fun calculatePeriodLength_Unsorted() {
         assertEquals(
-            3f, calculateAveragePeriodLength(periodHistoryUnsorted)
+            3f,
+            calculateAveragePeriodLength(periodHistoryUnsorted),
         )
     }
 
     @Test
     fun calculatePeriodLength_OneCycle() {
         assertEquals(
-            3f, calculateAveragePeriodLength(periodHistoryOneCycle)
+            3f,
+            calculateAveragePeriodLength(periodHistoryOneCycle),
         )
     }
 
     @Test
     fun calculatePeriodLength_TwoCycles() {
         assertEquals(
-            1.5f, calculateAveragePeriodLength(periodHistoryTwoCycles)
+            1.5f,
+            calculateAveragePeriodLength(periodHistoryTwoCycles),
         )
     }
 
     @Test
     fun calculatePeriodLength_ThreeCycles() {
         assertEquals(
-            2f, calculateAveragePeriodLength(periodHistoryThreeCycles)
+            2f,
+            calculateAveragePeriodLength(periodHistoryThreeCycles),
         )
     }
 
     @Test
     fun calculateCycleLength_EmptyList() {
         assertEquals(
-            -1f, calculateAverageCycleLength(periodHistoryEmpty)
+            -1f,
+            calculateAverageCycleLength(periodHistoryEmpty),
         )
     }
 
     @Test
     fun calculateCycleLength_OneCycle() {
         assertEquals(
-            -2f, calculateAverageCycleLength(periodHistoryOneCycle)
+            -2f,
+            calculateAverageCycleLength(periodHistoryOneCycle),
         )
     }
 
     @Test
     fun calculateCycleLength_TwoCycles() {
         assertEquals(
-            31f, calculateAverageCycleLength(periodHistoryTwoCycles)
+            31f,
+            calculateAverageCycleLength(periodHistoryTwoCycles),
         )
     }
 
     @Test
     fun calculateCycleLength_ThreeCycles() {
         assertEquals(
-            6f, calculateAverageCycleLength(periodHistoryThreeCycles)
+            6f,
+            calculateAverageCycleLength(periodHistoryThreeCycles),
         )
     }
 
     @Test
     fun parseDatesIntoPeriods_NoCycles() {
         assertEquals(
-            ArrayList<ArrayList<Date>>(), parseDatesIntoPeriods(periodHistoryEmpty)
+            ArrayList<ArrayList<Date>>(),
+            parseDatesIntoPeriods(periodHistoryEmpty),
         )
     }
 
     @Test
     fun parseDatesIntoPeriods_OneCycle() {
         assertEquals(
-            arrayListOf(periodHistoryOneCycle), parseDatesIntoPeriods(periodHistoryOneCycle)
+            arrayListOf(periodHistoryOneCycle),
+            parseDatesIntoPeriods(periodHistoryOneCycle),
         )
     }
 
@@ -106,15 +118,15 @@ class PeriodPredictionTest {
         val expected = arrayListOf(
             arrayListOf(
                 Date(
-                date = SimpleDateFormat("dd/MM/yyyy").parse("04/01/2023")!!,
-                flow = FlowSeverity.Light,
-                mood = Mood.HAPPY,
-                exerciseLength = null,
-                exerciseType = Exercise.CARDIO,
-                crampSeverity = CrampSeverity.None,
-                sleep = null,
-                notes = ""
-                )
+                    date = SimpleDateFormat("dd/MM/yyyy").parse("04/01/2023")!!,
+                    flow = FlowSeverity.Light,
+                    mood = Mood.HAPPY,
+                    exerciseLength = null,
+                    exerciseType = Exercise.CARDIO,
+                    crampSeverity = CrampSeverity.None,
+                    sleep = null,
+                    notes = "",
+                ),
             ),
             arrayListOf(
                 Date(
@@ -125,61 +137,69 @@ class PeriodPredictionTest {
                     exerciseType = Exercise.CARDIO,
                     crampSeverity = CrampSeverity.None,
                     sleep = null,
-                    notes = ""
-                )
-            )
+                    notes = "",
+                ),
+            ),
         )
         assertEquals(
-            expected, parseDatesIntoPeriods(periodHistoryHalfMonthMultiple)
+            expected,
+            parseDatesIntoPeriods(periodHistoryHalfMonthMultiple),
         )
     }
 
     @Test
     fun calculateDaysSinceLastPeriod_EmptyList() {
         assertEquals(
-            0, calculateDaysSinceLastPeriod(periodHistoryEmpty)
+            0,
+            calculateDaysSinceLastPeriod(periodHistoryEmpty),
         )
     }
 
     @Test
     fun calculateDaysSinceLastPeriod_CurrDate() {
         assertEquals(
-            0, calculateDaysSinceLastPeriod(periodHistoryCurrentDate)
+            0,
+            calculateDaysSinceLastPeriod(periodHistoryCurrentDate),
         )
     }
 
     @Test
     fun calculateDaysSinceLastPeriod_OneCycle() {
         assertEquals(
-            14, calculateDaysSinceLastPeriod(periodHistoryHalfMonth)
+            14,
+            calculateDaysSinceLastPeriod(periodHistoryHalfMonth),
         )
     }
 
     @Test
     fun calculateDaysSinceLastPeriod_MultipleCycles() {
         assertEquals(
-            14, calculateDaysSinceLastPeriod(periodHistoryHalfMonthMultiple)
+            14,
+            calculateDaysSinceLastPeriod(periodHistoryHalfMonthMultiple),
         )
     }
 
     @Test
     fun arcAngleCalculation_ZeroDays() {
         assertEquals(
-            0f, calculateArcAngle(periodHistoryCurrentDate)
+            0f,
+            calculateArcAngle(periodHistoryCurrentDate),
         )
     }
 
     @Test
     fun arcAngleCalculation() {
         assertEquals(
-            360f * 14 / 31, calculateArcAngle(periodHistoryHalfMonth)
+            360f * 14 / 31,
+            calculateArcAngle(periodHistoryHalfMonth),
         )
     }
 
     @Test
     fun arcAngleCalculation_MaxDays() {
         assertEquals(
-            360f, calculateArcAngle(periodHistoryOneCycle)
+            360f,
+            calculateArcAngle(periodHistoryOneCycle),
         )
     }
 
@@ -187,7 +207,8 @@ class PeriodPredictionTest {
     fun findYears_EmptyList() {
         val lst = parseDatesIntoPeriods(periodHistoryEmpty)
         assertEquals(
-            null, findYears(lst)
+            null,
+            findYears(lst),
         )
     }
 
@@ -196,11 +217,13 @@ class PeriodPredictionTest {
         val map = findYears(parseDatesIntoPeriods(periodHistoryOneCycle))
 
         assertEquals(
-            "[2023]", map?.keys.toString()
+            "[2023]",
+            map?.keys.toString(),
         )
 
         assertEquals(
-            1, map?.values?.toList()?.get(0)?.size
+            1,
+            map?.values?.toList()?.get(0)?.size,
         )
     }
 
@@ -209,11 +232,13 @@ class PeriodPredictionTest {
         val map = findYears(parseDatesIntoPeriods(periodHistoryThreeCycles))
 
         assertEquals(
-            "[2023]", map?.keys.toString()
+            "[2023]",
+            map?.keys.toString(),
         )
 
         assertEquals(
-            3, map?.values?.toList()?.get(0)?.size
+            3,
+            map?.values?.toList()?.get(0)?.size,
         )
     }
 
@@ -222,15 +247,18 @@ class PeriodPredictionTest {
         val map = findYears(parseDatesIntoPeriods(periodHistoryMultipleYears))
 
         assertEquals(
-            "[2022, 2023]", map?.keys.toString()
+            "[2022, 2023]",
+            map?.keys.toString(),
         )
 
         assertEquals(
-            2, map?.values?.toList()?.size
+            2,
+            map?.values?.toList()?.size,
         )
 
         assertEquals(
-            1, map?.values?.toList()?.get(0)?.size
+            1,
+            map?.values?.toList()?.get(0)?.size,
         )
     }
 }

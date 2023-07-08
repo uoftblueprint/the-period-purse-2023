@@ -23,7 +23,6 @@ import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import kotlinx.coroutines.launch
 
-
 private class NoRippleTheme : RippleTheme {
     @Composable
     override fun defaultColor() = RippleTheme.defaultRippleColor(Color.Unspecified, true)
@@ -49,11 +48,11 @@ fun Tabs(tabs: List<CalendarTabItem>, pagerState: PagerState) {
                 TabRowDefaults.Indicator(
                     Modifier.pagerTabIndicatorOffset(
                         pagerState,
-                        tabPositions
+                        tabPositions,
                     ),
-                    color = SelectedColor1
+                    color = SelectedColor1,
                 )
-            }
+            },
         ) {
             tabs.forEachIndexed { index, tab ->
                 Tab(
@@ -69,7 +68,7 @@ fun Tabs(tabs: List<CalendarTabItem>, pagerState: PagerState) {
                         scope.launch {
                             pagerState.animateScrollToPage(index)
                         }
-                    }
+                    },
                 )
             }
         }
@@ -83,13 +82,13 @@ fun TabsContent(
     pagerState: PagerState,
     calendarViewModel: CalendarViewModel,
     navController: NavController,
-    appViewModel: AppViewModel
+    appViewModel: AppViewModel,
 ) {
     HorizontalPager(state = pagerState, count = tabs.size) { page ->
         tabs[page].screen(
             navController = navController,
             calendarViewModel = calendarViewModel,
-            appViewModel = appViewModel
+            appViewModel = appViewModel,
         )
     }
 }

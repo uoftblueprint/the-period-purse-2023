@@ -12,9 +12,9 @@ import kotlinx.coroutines.flow.update
 class LogViewModel(val logPrompts: List<LogPrompt>) : ViewModel() {
     private val _uiState = MutableStateFlow(
         LogUiState(
-        getSquares(logPrompts),
-        getText(logPrompts)
-    )
+            getSquares(logPrompts),
+            getText(logPrompts),
+        ),
     )
     val uiState: StateFlow<LogUiState> = _uiState.asStateFlow()
 
@@ -47,12 +47,12 @@ class LogViewModel(val logPrompts: List<LogPrompt>) : ViewModel() {
             currentState.selectSquares[logSquare.promptTitle] = logSquare.dataName
             currentState.copy(
                 selectSquares =
-                    currentState.selectSquares
+                currentState.selectSquares,
             )
         }
     }
 
-    fun getSquareSelected(logPrompt: LogPrompt) : String? {
+    fun getSquareSelected(logPrompt: LogPrompt): String? {
         if (uiState.value.selectSquares[logPrompt.title] !is String) {
             return(null)
         } else {
@@ -99,7 +99,7 @@ class LogViewModel(val logPrompts: List<LogPrompt>) : ViewModel() {
             currentState.selectSquares[logSquare.promptTitle] = false
             currentState.copy(
                 selectSquares =
-                currentState.selectSquares
+                currentState.selectSquares,
             )
         }
     }
@@ -109,13 +109,13 @@ class LogViewModel(val logPrompts: List<LogPrompt>) : ViewModel() {
             currentState.promptToText[logPrompt.title] = newText
             currentState.copy(
                 selectSquares =
-                currentState.selectSquares
+                currentState.selectSquares,
             )
         }
     }
 
-    fun getText(logPrompt: LogPrompt): String{
-        return(uiState.value.promptToText[logPrompt.title]?: "")
+    fun getText(logPrompt: LogPrompt): String {
+        return(uiState.value.promptToText[logPrompt.title] ?: "")
     }
 
     fun resetText(logPrompt: LogPrompt) {
@@ -123,7 +123,7 @@ class LogViewModel(val logPrompts: List<LogPrompt>) : ViewModel() {
             currentState.promptToText[logPrompt.title] = ""
             currentState.copy(
                 selectSquares =
-                currentState.selectSquares
+                currentState.selectSquares,
             )
         }
     }
@@ -145,7 +145,7 @@ class LogViewModel(val logPrompts: List<LogPrompt>) : ViewModel() {
     }
 
     fun isFilled(): Boolean {
-        logPrompts.forEach() {it ->
+        logPrompts.forEach() { it ->
             // For Flow, Cramps, check not null and not None to return true
             // For Sleep, Excercise, Mood, check not null to return true
             // For Notes, check not empty to return true

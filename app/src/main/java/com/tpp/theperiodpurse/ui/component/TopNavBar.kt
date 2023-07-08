@@ -24,30 +24,32 @@ import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.theme.Teal
 
 @Composable
-fun TopNavBar(screenName: String, navController: NavController, interactionSource:
-MutableInteractionSource)
-{
+fun TopNavBar(
+    screenName: String,
+    navController: NavController,
+    interactionSource:
+    MutableInteractionSource,
+) {
     TopAppBar(
         backgroundColor = Color.White,
-        elevation = 0.dp
+        elevation = 0.dp,
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 modifier = Modifier
                     .clickable(
                         interactionSource = interactionSource,
-                        indication = null
-                    )
-                    { navController.popBackStack() }
+                        indication = null,
+                    ) { navController.popBackStack() }
                     .size(20.dp),
                 painter = painterResource(R.drawable.arrow),
                 contentDescription = stringResource(R.string.back_button),
-                tint = Teal
+                tint = Teal,
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -56,7 +58,7 @@ MutableInteractionSource)
                 fontSize = 20.scaledSp(),
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
-                text = screenName
+                text = screenName,
             )
             Spacer(modifier = Modifier.weight(1f))
         }

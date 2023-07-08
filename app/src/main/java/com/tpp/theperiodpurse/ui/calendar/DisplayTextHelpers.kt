@@ -7,7 +7,6 @@ import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.*
 
-
 // Function to display Month with Year
 @RequiresApi(Build.VERSION_CODES.O)
 fun YearMonth.displayText(short: Boolean = false): String {

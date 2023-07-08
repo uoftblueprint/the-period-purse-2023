@@ -38,30 +38,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.tpp.theperiodpurse.Screen
-import com.tpp.theperiodpurse.ui.theme.HeaderColor1
-import com.tpp.theperiodpurse.ui.theme.SecondaryFontColor
-import com.tpp.theperiodpurse.ui.theme.SelectedColor1
 import com.kizitonwose.calendar.core.atStartOfMonth
-import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.Screen
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.data.model.*
-import java.sql.Time
-import java.time.*
-import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
-import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import com.tpp.theperiodpurse.ui.component.PopupTopBar
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
+import com.tpp.theperiodpurse.ui.theme.HeaderColor1
 import com.tpp.theperiodpurse.ui.theme.LogSelectedTextColor
+import com.tpp.theperiodpurse.ui.theme.SecondaryFontColor
+import com.tpp.theperiodpurse.ui.theme.SelectedColor1
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
+import java.sql.Time
+import java.time.*
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Date as Date1
-
 
 @Composable
 fun LogScreen(
@@ -69,7 +68,7 @@ fun LogScreen(
     navController: NavController,
     appViewModel: AppViewModel,
     calendarViewModel: CalendarViewModel,
-    context: Context
+    context: Context,
 ) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val day = LocalDate.parse(date)
@@ -90,9 +89,11 @@ fun LogScreen(
             logViewModel.populateWithUIState(dayUIState)
         }
 
-
         LogScreenLayout(
-            day, navController, logPrompts, logViewModel,
+            day,
+            navController,
+            logPrompts,
+            logViewModel,
             onSave = {
                 navController.navigateUp()
                 // If None is selected, it should not count is a square is filled
@@ -112,36 +113,37 @@ fun LogScreen(
                         exerciseLengthString = logViewModel.getText(LogPrompt.Exercise),
                         exerciseType = logViewModel.getSelectedExercise(),
                         crampSeverity = cramps,
-                        sleepString = logViewModel.getText(LogPrompt.Sleep)
-                    )
+                        sleepString = logViewModel.getText(LogPrompt.Sleep),
+                    ),
                 )
                 if (logViewModel.isFilled()) {
                     var exercisedDuration: Duration? = null
                     val excTxt = logViewModel.getText(LogPrompt.Exercise)
                     if (excTxt != "") {
                         exercisedDuration = Duration.ofHours(
-                            Time.valueOf(excTxt).hours.toLong()
+                            Time.valueOf(excTxt).hours.toLong(),
                         ).plusMinutes(
-                            Time.valueOf(excTxt).minutes.toLong()
+                            Time.valueOf(excTxt).minutes.toLong(),
                         )
                     }
                     var sleepDuration: Duration? = null
                     val sleepTxt = logViewModel.getText(LogPrompt.Sleep)
                     if (sleepTxt != "") {
                         sleepDuration = Duration.ofHours(
-                            Time.valueOf(sleepTxt).hours.toLong()
+                            Time.valueOf(sleepTxt).hours.toLong(),
                         ).plusMinutes(
-                            Time.valueOf(sleepTxt).minutes.toLong()
+                            Time.valueOf(sleepTxt).minutes.toLong(),
                         )
                     }
-                    Log.d("MOOD CHECK",logViewModel.getSquareSelected(LogPrompt.Mood).toString())
+                    Log.d("MOOD CHECK", logViewModel.getSquareSelected(LogPrompt.Mood).toString())
                     logViewModel.getSelectedMood()?.let { Log.d("MOOD CHECKS", it.displayName) }
                     appViewModel.saveDate(
                         Date(
                             date = Date1.from(
                                 LocalDateTime.of(
-                                    day, LocalDateTime.MIN.toLocalTime()
-                                ).atZone(ZoneId.systemDefault()).toInstant()
+                                    day,
+                                    LocalDateTime.MIN.toLocalTime(),
+                                ).atZone(ZoneId.systemDefault()).toInstant(),
                             ),
                             flow = logViewModel.getSquareSelected(LogPrompt.Flow)
                                 ?.let { FlowSeverity.getSeverityByDisplayName(it) },
@@ -152,9 +154,9 @@ fun LogScreen(
                             crampSeverity = logViewModel.getSquareSelected(LogPrompt.Cramps)
                                 ?.let { CrampSeverity.getSeverityByDisplayName(it) },
                             sleep = sleepDuration,
-                            notes = logViewModel.getText(LogPrompt.Notes)
+                            notes = logViewModel.getText(LogPrompt.Notes),
                         ),
-                        context
+                        context,
                     )
                 } else {
                     // chcek  if given date is in the db, if it is, delete the entry
@@ -169,12 +171,10 @@ fun LogScreen(
                         }
                     }
                 }
-            })
-
+            },
+        )
     }
 }
-
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -190,35 +190,38 @@ fun LogScreenLayout(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(Color.White),
         ) {
             LogScreenTopBar(
                 navController = navController,
-                date = date
+                date = date,
             )
             LogPromptCards(logPrompts = logPrompts, logViewModel = logViewModel)
-            Spacer(modifier = Modifier
-                .height(130.dp)
-                .weight(1f))
+            Spacer(
+                modifier = Modifier
+                    .height(130.dp)
+                    .weight(1f),
+            )
         }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
-            Spacer(modifier = Modifier
-                .weight(1f)
+            Spacer(
+                modifier = Modifier
+                    .weight(1f),
             )
 
             SaveButton(onClick = onSave)
         }
-
     }
 }
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LogScreenTopBar(navController: NavController, date: LocalDate) {
-    PopupTopBar( onClose = { navController.navigateUp() }) {
+    PopupTopBar(onClose = { navController.navigateUp() }) {
         LogScreenTopBarContent(navController = navController, date = date)
     }
 }
@@ -229,7 +232,7 @@ private fun LogScreenTopBarContent(navController: NavController, date: LocalDate
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 0.dp, bottom = 0.dp, start = 35.dp, end = 35.dp)
+            .padding(top = 0.dp, bottom = 0.dp, start = 35.dp, end = 35.dp),
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -238,42 +241,43 @@ private fun LogScreenTopBarContent(navController: NavController, date: LocalDate
         ) {
             if (date.minusDays(1) >=
                 YearMonth.now().minusMonths(12).atStartOfMonth()
-            )
+            ) {
                 IconButton(
                     onClick = {
                         navController.navigate(
                             "%s/%s/%s".format(
                                 Screen.Calendar.name,
                                 Screen.Log.name,
-                                date.minusDays(1).toString()
-                            )
+                                date.minusDays(1).toString(),
+                            ),
                         ) {
                             popUpTo(Screen.Calendar.name) {
                                 inclusive = false
                             }
                         }
                     },
-                    modifier = Modifier
+                    modifier = Modifier,
                 ) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Log Back Arrow"
+                        contentDescription = "Log Back Arrow",
                     )
                 }
+            }
         }
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .weight(.8f)
+                .weight(.8f),
         ) {
             val configuration = LocalConfiguration.current
-            val screenwidth = configuration.screenWidthDp;
+            val screenwidth = configuration.screenWidthDp
 
             Text(
                 text = "Log your symptoms for:",
                 color = Color(50, 50, 50),
-                fontSize = (screenwidth*0.05).scaledSp()
+                fontSize = (screenwidth * 0.05).scaledSp(),
             )
             Text(
                 text = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)),
@@ -282,38 +286,40 @@ private fun LogScreenTopBarContent(navController: NavController, date: LocalDate
                 fontSize = 14.scaledSp(),
                 modifier = Modifier
                     .testTag("DateLabel")
-                    .semantics { contentDescription = "DateLabel" }
+                    .semantics { contentDescription = "DateLabel" },
             )
         }
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .weight(.1f)
+                .weight(.1f),
         ) {
-            if (date.plusDays(1) <= LocalDate.now())
-                IconButton(onClick = {
-                    navController.navigate(
-                        "%s/%s/%s"
-                            .format(
-                                Screen.Calendar.name,
-                                Screen.Log.name,
-                                date.plusDays(1)
-                            )
-                    ) {
-                        popUpTo(Screen.Calendar.name) {
-                            inclusive = false
+            if (date.plusDays(1) <= LocalDate.now()) {
+                IconButton(
+                    onClick = {
+                        navController.navigate(
+                            "%s/%s/%s"
+                                .format(
+                                    Screen.Calendar.name,
+                                    Screen.Log.name,
+                                    date.plusDays(1),
+                                ),
+                        ) {
+                            popUpTo(Screen.Calendar.name) {
+                                inclusive = false
+                            }
                         }
-                    }
-                },
+                    },
                     modifier = Modifier
-                        .semantics { contentDescription = "ClickNextDay" }
+                        .semantics { contentDescription = "ClickNextDay" },
                 ) {
                     Icon(
                         imageVector = Icons.Filled.ArrowForward,
-                        contentDescription = "Log Forward Arrow"
+                        contentDescription = "Log Forward Arrow",
                     )
                 }
+            }
         }
     }
 }
@@ -330,11 +336,12 @@ fun LogPromptCards(logPrompts: List<LogPrompt>, logViewModel: LogViewModel) {
 
                         drawLine(
                             color = HeaderColor1,
-                            start = Offset(0f, 0f), //(0,0) at top-left point of the box
-                            end = Offset(x, 0f), //top-right point of the box
-                            strokeWidth = strokeWidth
+                            start = Offset(0f, 0f), // (0,0) at top-left point of the box
+                            end = Offset(x, 0f), // top-right point of the box
+                            strokeWidth = strokeWidth,
                         )
-                    }) {
+                    },
+            ) {
                 LogPromptCard(logPrompt = it, logViewModel)
             }
         }
@@ -345,43 +352,45 @@ fun LogPromptCards(logPrompts: List<LogPrompt>, logViewModel: LogViewModel) {
 fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
     var expanded by remember { mutableStateOf(false) }
 
-    val hasInput = (logViewModel.getSquareSelected(logPrompt) != null ||
-            logViewModel.getText(logPrompt) != "")
+    val hasInput = (
+        logViewModel.getSquareSelected(logPrompt) != null ||
+            logViewModel.getText(logPrompt) != ""
+        )
     val iconColor = animateColorAsState(
-        targetValue = if (hasInput) SelectedColor1 else SecondaryFontColor ,
-        animationSpec = tween(500, 0, LinearEasing)
+        targetValue = if (hasInput) SelectedColor1 else SecondaryFontColor,
+        animationSpec = tween(500, 0, LinearEasing),
     )
-    val tabColor =  animateColorAsState(
-        targetValue = if (hasInput) LogSelectedTextColor else SecondaryFontColor ,
-        animationSpec = tween(500, 0, LinearEasing)
+    val tabColor = animateColorAsState(
+        targetValue = if (hasInput) LogSelectedTextColor else SecondaryFontColor,
+        animationSpec = tween(500, 0, LinearEasing),
     )
 
     Column(
         modifier = Modifier
             .animateContentSize(
                 animationSpec = spring(
-                    stiffness = Spring.StiffnessLow
-                )
-            )
+                    stiffness = Spring.StiffnessLow,
+                ),
+            ),
     ) {
-        Column (
+        Column(
             modifier = Modifier
-                .clickable { expanded = !expanded }
+                .clickable { expanded = !expanded },
         ) {
-            Row (
+            Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 10.dp, bottom = 10.dp, start = 30.dp, end = 15.dp)
+                    .padding(top = 10.dp, bottom = 10.dp, start = 30.dp, end = 15.dp),
             ) {
                 logPrompt.icon(iconColor.value)
                 Spacer(Modifier.size(10.dp))
                 Text(
                     text = stringResource(logPrompt.title),
-                    fontWeight =  if (hasInput) FontWeight.ExtraBold else null,
+                    fontWeight = if (hasInput) FontWeight.ExtraBold else null,
                     color = tabColor.value,
-                    fontSize = 16.scaledSp()
+                    fontSize = 16.scaledSp(),
                 )
                 Spacer(Modifier.weight(1f))
                 ChangeableExpandButton(expanded = expanded) {
@@ -397,8 +406,8 @@ fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
                         top = 10.dp,
                         bottom = 20.dp,
                         start = 40.dp,
-                        end = 40.dp
-                    )
+                        end = 40.dp,
+                    ),
             ) {
                 logPrompt.prompt(logViewModel)
             }
@@ -407,12 +416,13 @@ fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
 }
 
 @Composable
-fun ChangeableExpandButton( expanded: Boolean, onClick: () -> Unit) {
+fun ChangeableExpandButton(expanded: Boolean, onClick: () -> Unit) {
     IconButton(onClick = onClick) {
         Icon(
             imageVector =
-            if (expanded) Icons.Filled.KeyboardArrowUp
-            else Icons.Filled.KeyboardArrowDown,
+            if (expanded) {
+                Icons.Filled.KeyboardArrowUp
+            } else Icons.Filled.KeyboardArrowDown,
             tint = SelectedColor1,
             contentDescription = "Expand Button",
         )
@@ -422,34 +432,36 @@ fun ChangeableExpandButton( expanded: Boolean, onClick: () -> Unit) {
 @Composable
 fun LogSelectableSquare(
     logSquare: LogSquare,
-    selected : String?,
-    onClick: (LogSquare) -> Unit
+    selected: String?,
+    onClick: (LogSquare) -> Unit,
 ) {
-
     val squareColor = animateColorAsState(
         targetValue =
-        if (logSquare.description == selected) SelectedColor1
-        else HeaderColor1,
-        animationSpec = tween(250, 0, LinearEasing)
+        if (logSquare.description == selected) {
+            SelectedColor1
+        } else {
+            HeaderColor1
+        },
+        animationSpec = tween(250, 0, LinearEasing),
     )
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .wrapContentSize(Alignment.Center)
+            .wrapContentSize(Alignment.Center),
     ) {
-        Box (
+        Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .size(75.dp)
                 .clip(shape = RoundedCornerShape(10.dp))
                 .background(
-                    color = squareColor.value
+                    color = squareColor.value,
                 )
                 .clickable {
                     onClick(logSquare)
                 }
-                .semantics { contentDescription = logSquare.description }
+                .semantics { contentDescription = logSquare.description },
         ) {
             logSquare.icon(SecondaryFontColor)
         }
@@ -459,18 +471,18 @@ fun LogSelectableSquare(
             color = SecondaryFontColor,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(top = 10.dp, bottom = 20.dp)
+                .padding(top = 10.dp, bottom = 20.dp),
         )
     }
 }
 
 @Composable
 fun SaveButton(
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
-    Column (
+    Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
+        modifier = Modifier,
     ) {
         FloatingActionButton(
             onClick = onClick,
@@ -478,14 +490,14 @@ fun SaveButton(
             modifier = Modifier
                 .padding(20.dp)
                 .width(350.dp)
-                .height(40.dp)
+                .height(40.dp),
         ) {
             Text(
                 text = "Save",
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .semantics { contentDescription = "Save Button" },
-                color = Color.Black
+                color = Color.Black,
             )
         }
     }
@@ -501,14 +513,14 @@ fun LogScreenLayoutPreview() {
         LogPrompt.Sleep,
         LogPrompt.Cramps,
         LogPrompt.Exercise,
-        LogPrompt.Notes
+        LogPrompt.Notes,
     )
     LogScreenLayout(
         date = LocalDate.parse("2022-12-07"),
         navController = rememberNavController(),
         logPrompts = logPrompts,
         logViewModel = LogViewModel(logPrompts),
-        onSave = {}
+        onSave = {},
     )
 }
 
@@ -518,7 +530,7 @@ fun LogScreenTopBarPreview() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         LogScreenTopBar(
             date = LocalDate.parse("2000-01-01"),
-            navController = rememberNavController()
+            navController = rememberNavController(),
         )
     }
 }
@@ -541,7 +553,7 @@ fun LogPromptCardsPreview() {
         LogPrompt.Sleep,
         LogPrompt.Cramps,
         LogPrompt.Exercise,
-        LogPrompt.Notes
+        LogPrompt.Notes,
     )
     val logViewModel = LogViewModel(logPrompts)
     LogPromptCards(logPrompts = logPrompts, logViewModel)
@@ -556,7 +568,7 @@ fun LogSelectableSquarePreview() {
 
     LogSelectableSquare(
         logSquare = LogSquare.FlowLight,
-        selected = selected
+        selected = selected,
     ) { logSquare ->
         if (selected == logSquare.description) {
             selected = null

@@ -16,15 +16,15 @@ import com.tpp.theperiodpurse.data.helper.SymptomConverter
 import java.io.File
 import javax.inject.Singleton
 
-@Database(entities=[User::class, Date::class], version = 7, exportSchema = true)
+@Database(entities = [User::class, Date::class], version = 7, exportSchema = true)
 @Singleton
 @TypeConverters(
     SymptomConverter::class,
     DateConverter::class,
     DaysConverter::class,
-    DurationConverter::class
+    DurationConverter::class,
 )
-abstract class ApplicationRoomDatabase: RoomDatabase() {
+abstract class ApplicationRoomDatabase : RoomDatabase() {
     abstract fun userDAO(): UserDAO
     abstract fun dateDAO(): DateDAO
     companion object {
@@ -35,19 +35,19 @@ abstract class ApplicationRoomDatabase: RoomDatabase() {
             if (INSTANCE == null) {
                 synchronized(this) {
                     val reason = if (INSTANCE == null) "DB does not exist" else "DB is closed"
-                    Log.d("RoomDatabase", "Constructing new database because $reason" )
+                    Log.d("RoomDatabase", "Constructing new database because $reason")
                     val path = context.getDatabasePath("user_database.db").path
                     val databaseFile = File(path)
                     val instance = Room.databaseBuilder(
                         context,
                         ApplicationRoomDatabase::class.java,
-                        databaseFile.absolutePath
+                        databaseFile.absolutePath,
                     )
                         .addCallback(getCallback())
                         .fallbackToDestructiveMigration()
                         .build()
                     INSTANCE = instance
-                    Log.d("RoomDatabase", "Opening a new database $INSTANCE" )
+                    Log.d("RoomDatabase", "Opening a new database $INSTANCE")
                     return instance
                 }
             }
@@ -57,8 +57,8 @@ abstract class ApplicationRoomDatabase: RoomDatabase() {
 
         fun closeDatabase() {
             Log.d("RoomDatabase", "Closing database instance $INSTANCE")
-            if(INSTANCE != null){
-                if(INSTANCE!!.isOpen) {
+            if (INSTANCE != null) {
+                if (INSTANCE!!.isOpen) {
                     INSTANCE!!.close()
                 }
                 INSTANCE = null
@@ -73,6 +73,5 @@ abstract class ApplicationRoomDatabase: RoomDatabase() {
                 }
             }
         }
-
     }
 }

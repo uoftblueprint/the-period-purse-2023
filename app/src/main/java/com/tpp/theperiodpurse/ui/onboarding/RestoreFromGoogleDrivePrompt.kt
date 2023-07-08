@@ -4,6 +4,7 @@ import android.accounts.Account
 import android.content.Context
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,9 +18,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.OnboardingScreen
-import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
-import android.widget.Toast
 import com.tpp.theperiodpurse.ui.component.LoadingScreen
+import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -28,7 +28,7 @@ fun RestoreFromGoogleDrivePrompt(
     viewModel: OnboardViewModel,
     navHostController: NavHostController,
     signout: () -> Unit = {},
-    context: Context
+    context: Context,
 ) {
     val googleDriveFolder by viewModel.googleDriveFolder.observeAsState()
     val drivePermissionHasError by viewModel.drivePermissionHasError.observeAsState()
@@ -44,8 +44,8 @@ fun RestoreFromGoogleDrivePrompt(
     if (googleDriveFolder == null) {
         LoadingScreen()
     } else {
-       // no permission, give error and navigate away
-        if (drivePermissionHasError == true){
+        // no permission, give error and navigate away
+        if (drivePermissionHasError == true) {
             Toast.makeText(context, "ERROR - Please grant all the required permissions", Toast.LENGTH_SHORT).show()
             signout()
             navHostController.navigate(OnboardingScreen.Welcome.name)
@@ -54,8 +54,7 @@ fun RestoreFromGoogleDrivePrompt(
         // now we know google drive is loaded
         else if (!googleDriveFolder!!.files.isNotEmpty()) {
             navHostController.navigate(OnboardingScreen.QuestionOne.name)
-        }
-        else {
+        } else {
             BackUpFromGoogleDrivePrompt(navHostController)
         }
     }
@@ -63,7 +62,8 @@ fun RestoreFromGoogleDrivePrompt(
 
 @Composable
 private fun BackUpFromGoogleDrivePrompt(navHostController: NavHostController) {
-    AlertDialog(modifier = Modifier.padding(16.dp),
+    AlertDialog(
+        modifier = Modifier.padding(16.dp),
         shape = RoundedCornerShape(10.dp),
         backgroundColor = Color.White,
         contentColor = Color.Black,
@@ -71,12 +71,12 @@ private fun BackUpFromGoogleDrivePrompt(navHostController: NavHostController) {
         title = {
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
                     text = "Use Backup",
                     style = MaterialTheme.typography.h6,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
             }
         },
@@ -84,11 +84,11 @@ private fun BackUpFromGoogleDrivePrompt(navHostController: NavHostController) {
             Text(
                 text = "Would you like to use your backed up data for this app?",
                 style = MaterialTheme.typography.body1,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         },
         confirmButton = { ConfirmButton(navHostController) },
-        dismissButton = { DismissButton(navHostController) }
+        dismissButton = { DismissButton(navHostController) },
     )
 }
 
@@ -100,12 +100,12 @@ private fun ConfirmButton(navHostController: NavHostController) {
             .padding(2.dp)
             .height(48.dp)
             .fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
     ) {
         Text(
             text = "Yes",
             style = MaterialTheme.typography.button,
-            color = Color.Blue
+            color = Color.Blue,
         )
     }
 }
@@ -118,7 +118,7 @@ private fun DismissButton(navHostController: NavHostController) {
             .padding(2.dp)
             .height(48.dp)
             .fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
     ) {
         Text(
             text = "No",

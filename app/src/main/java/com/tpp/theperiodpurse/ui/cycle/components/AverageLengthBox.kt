@@ -25,13 +25,13 @@ fun AverageLengthBox(
     title: String,
     image: Painter,
     length: Float,
-    color: Color
+    color: Color,
 ) {
     Card(
         modifier.width(177.dp),
         elevation = 2.dp,
         backgroundColor = color,
-        shape = RoundedCornerShape(10)
+        shape = RoundedCornerShape(10),
     ) {
         Column(modifier.padding(18.dp)) {
             Text(
@@ -50,7 +50,7 @@ fun AverageLengthBox(
 private fun AverageLengthRow(
     length: Float,
     modifier: Modifier,
-    image: Painter
+    image: Painter,
 ) {
     Row {
         Text(
@@ -65,14 +65,14 @@ private fun AverageLengthRow(
                 else -> 20.scaledSp()
             },
             fontWeight = FontWeight(500),
-            modifier = modifier.width(55.dp)
+            modifier = modifier.width(55.dp),
         )
         Spacer(modifier.width(29.dp))
         Box(
             modifier
                 .size(50.dp)
                 .clip(RoundedCornerShape(50))
-                .background(Color.White)
+                .background(Color.White),
         ) {
             Image(
                 painter = image,
@@ -82,7 +82,7 @@ private fun AverageLengthRow(
                     .aspectRatio(1f) // Maintain a 1:1 aspect ratio
                     .padding(8.dp), // Add padding to shrink the image inside the box
                 contentScale = ContentScale.Fit,
-                alignment = Alignment.Center
+                alignment = Alignment.Center,
             )
         }
     }

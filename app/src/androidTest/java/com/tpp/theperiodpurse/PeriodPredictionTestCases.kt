@@ -18,7 +18,7 @@ val periodHistoryUnsorted = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-		notes = "" 
+        notes = "",
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("01/01/2023")!!,
@@ -28,7 +28,7 @@ val periodHistoryUnsorted = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-		notes = "" 
+        notes = "",
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("04/01/2023")!!,
@@ -38,7 +38,7 @@ val periodHistoryUnsorted = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-		notes = "" 
+        notes = "",
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("02/01/2023")!!,
@@ -48,7 +48,7 @@ val periodHistoryUnsorted = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-		notes = "" 
+        notes = "",
     ),
 )
 
@@ -61,7 +61,7 @@ val periodHistoryOneCycle = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-		notes = "" 
+        notes = "",
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("02/01/2023")!!,
@@ -71,7 +71,7 @@ val periodHistoryOneCycle = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-		notes = "" 
+        notes = "",
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("03/01/2023")!!,
@@ -81,8 +81,8 @@ val periodHistoryOneCycle = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-		notes = "" 
-    )
+        notes = "",
+    ),
 )
 
 val periodHistoryTwoCycles = arrayListOf(
@@ -94,7 +94,7 @@ val periodHistoryTwoCycles = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-		notes = "" 
+        notes = "",
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("02/01/2023")!!,
@@ -104,7 +104,7 @@ val periodHistoryTwoCycles = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-		notes = "" 
+        notes = "",
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("01/02/2023")!!,
@@ -114,7 +114,7 @@ val periodHistoryTwoCycles = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-		notes = "" 
+        notes = "",
     ),
 )
 
@@ -128,7 +128,7 @@ val periodHistoryThreeCycles = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-		notes = "" 
+        notes = "",
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("02/01/2023")!!,
@@ -138,7 +138,7 @@ val periodHistoryThreeCycles = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-		notes = "" 
+        notes = "",
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("04/01/2023")!!,
@@ -148,7 +148,7 @@ val periodHistoryThreeCycles = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-		notes = "" 
+        notes = "",
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("05/01/2023")!!,
@@ -158,7 +158,7 @@ val periodHistoryThreeCycles = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-		notes = "" 
+        notes = "",
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("06/01/2023")!!,
@@ -168,7 +168,7 @@ val periodHistoryThreeCycles = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-		notes = "" 
+        notes = "",
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("13/01/2023")!!,
@@ -178,12 +178,12 @@ val periodHistoryThreeCycles = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-		notes = "" 
-    )
+        notes = "",
+    ),
 )
 
 val currDate = java.util.Date(System.currentTimeMillis())
-val halfMonthDate = java.util.Date(System.currentTimeMillis() - 15*24*60*60*1000)
+val halfMonthDate = java.util.Date(System.currentTimeMillis() - 15 * 24 * 60 * 60 * 1000)
 
 val periodHistoryCurrentDate = arrayListOf(
     Date(
@@ -194,7 +194,7 @@ val periodHistoryCurrentDate = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-        notes = ""
+        notes = "",
     ),
 )
 
@@ -207,8 +207,8 @@ val periodHistoryHalfMonth = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-        notes = ""
-    )
+        notes = "",
+    ),
 )
 
 val periodHistoryHalfMonthMultiple = arrayListOf(
@@ -220,7 +220,7 @@ val periodHistoryHalfMonthMultiple = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-        notes = ""
+        notes = "",
     ),
     Date(
         date = halfMonthDate,
@@ -230,8 +230,8 @@ val periodHistoryHalfMonthMultiple = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-        notes = ""
-    )
+        notes = "",
+    ),
 )
 
 val periodHistoryMultipleYears = arrayListOf(
@@ -243,7 +243,7 @@ val periodHistoryMultipleYears = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-        notes = ""
+        notes = "",
     ),
     Date(
         date = SimpleDateFormat("dd/MM/yyyy").parse("03/01/2023")!!,
@@ -253,6 +253,6 @@ val periodHistoryMultipleYears = arrayListOf(
         exerciseType = Exercise.CARDIO,
         crampSeverity = CrampSeverity.None,
         sleep = null,
-        notes = ""
+        notes = "",
     ),
 )

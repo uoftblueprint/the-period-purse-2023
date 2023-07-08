@@ -9,9 +9,9 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
-import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
@@ -37,8 +37,8 @@ class NavigationTest {
     @Inject
     lateinit var calendarViewModel: CalendarViewModel
 
-    @get:Rule
     // Used to manage the components' state and is used to perform injection on tests
+    @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
     @Before
@@ -47,7 +47,7 @@ class NavigationTest {
         composeTestRule.setContent {
             navController = TestNavHostController(LocalContext.current)
             navController.navigatorProvider.addNavigator(
-                ComposeNavigator()
+                ComposeNavigator(),
             )
             AppScreen(
                 navController = navController,
@@ -57,7 +57,7 @@ class NavigationTest {
                 signIn = { signIn() },
                 onboardViewModel = onboardViewModel,
                 appViewModel = appViewModel,
-                calendarViewModel = calendarViewModel
+                calendarViewModel = calendarViewModel,
             )
         }
     }
@@ -104,6 +104,7 @@ class NavigationTest {
         composeTestRule.onNodeWithText(LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)))
             .assertIsDisplayed()
     }
+
     @Test
     fun appNavHost_clickCalendarFABOnCalendarScreen_navigatesLogMultipleDatesPage() {
         composeTestRule.onNodeWithContentDescription("Open logging options").performClick()
@@ -111,8 +112,6 @@ class NavigationTest {
             .performClick()
         navController.assertCurrentRouteName(Screen.LogMultipleDates.name)
     }
-    fun signIn(){
+    fun signIn() {
     }
-
 }
-

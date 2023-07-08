@@ -30,42 +30,47 @@ fun SleepPrompt(logViewModel: LogViewModel) {
     val selectedTime = logViewModel.getText(LogPrompt.Sleep)
     var hoursSlept by remember {
         mutableStateOf(
-            if (selectedTime != "")
+            if (selectedTime != "") {
                 Time.valueOf(selectedTime).hours.toString()
-            else
+            } else {
                 ""
+            },
         )
     }
     var minutesSlept by remember {
         mutableStateOf(
-            if (selectedTime != "")
+            if (selectedTime != "") {
                 Time.valueOf(selectedTime).minutes.toString()
-            else
+            } else {
                 ""
+            },
         )
     }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
-    Box(modifier = Modifier // this box allows clicking out of the keyboard
-        .fillMaxWidth()
-        .clickable(
-            interactionSource = interactionSource,
-            indication = null
-        ) {
-            keyboardController?.hide()
-            saveTextData(logViewModel, hoursSlept, minutesSlept)
-            focusManager.clearFocus(true)
-        }) {
+    Box(
+        modifier = Modifier // this box allows clicking out of the keyboard
+            .fillMaxWidth()
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+            ) {
+                keyboardController?.hide()
+                saveTextData(logViewModel, hoursSlept, minutesSlept)
+                focusManager.clearFocus(true)
+            },
+    ) {
         Row(
             modifier = Modifier
                 .padding(
-                    start = 10.dp, bottom = 10.dp
-                )
+                    start = 10.dp,
+                    bottom = 10.dp,
+                ),
         ) {
             Box(
                 modifier = Modifier
-                    .width(85.dp)
+                    .width(85.dp),
             ) {
                 EditNumberField(
                     label = R.string.hours,
@@ -79,23 +84,24 @@ fun SleepPrompt(logViewModel: LogViewModel) {
                             minutesSlept = ""
                             saveTextData(logViewModel, hoursSlept, minutesSlept)
                         }
-                                    },
+                    },
 
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.NumberPassword,
-                        imeAction = ImeAction.Done
+                        imeAction = ImeAction.Done,
                     ),
                     keyboardActions = KeyboardActions(
                         onDone = {
                             focusManager.clearFocus()
                             saveTextData(logViewModel, hoursSlept, minutesSlept)
-                        })
+                        },
+                    ),
                 )
             }
             Spacer(modifier = Modifier.size(17.dp))
             Box(
                 modifier = Modifier
-                    .width(100.dp)
+                    .width(100.dp),
             ) {
                 EditNumberField(
                     label = R.string.minutes,
@@ -109,17 +115,18 @@ fun SleepPrompt(logViewModel: LogViewModel) {
                             minutesSlept = ""
                             saveTextData(logViewModel, hoursSlept, minutesSlept)
                         }
-                                    },
+                    },
 
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.NumberPassword,
-                        imeAction = ImeAction.Done
+                        imeAction = ImeAction.Done,
                     ),
                     keyboardActions = KeyboardActions(
                         onDone = {
                             focusManager.clearFocus()
                             saveTextData(logViewModel, hoursSlept, minutesSlept)
-                        })
+                        },
+                    ),
                 )
             }
             Spacer(modifier = Modifier.size(6.dp))
@@ -131,10 +138,10 @@ fun SleepPrompt(logViewModel: LogViewModel) {
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(200, 200, 200)),
                 modifier = Modifier
-                    .padding(start = 16.dp)
+                    .padding(start = 16.dp),
             ) {
                 Text(
-                    "Clear"
+                    "Clear",
                 )
             }
         }
@@ -145,7 +152,7 @@ private fun saveTextData(logViewModel: LogViewModel, hoursSlept: String, minutes
     val time = Time(
         if (hoursSlept != "") hoursSlept.toInt() else 0,
         if (minutesSlept != "") minutesSlept.toInt() else 0,
-        0
+        0,
     )
     logViewModel.setText(LogPrompt.Sleep, time.toString())
 }
@@ -155,7 +162,7 @@ private fun saveTextData(logViewModel: LogViewModel, hoursSlept: String, minutes
 fun SleepPromptPreview() {
     SleepPrompt(
         logViewModel = LogViewModel(
-            logPrompts = listOf(LogPrompt.Sleep)
-        )
+            logPrompts = listOf(LogPrompt.Sleep),
+        ),
     )
 }

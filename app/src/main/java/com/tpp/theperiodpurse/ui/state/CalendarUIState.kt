@@ -8,5 +8,3 @@ data class CalendarUIState(
     var days: LinkedHashMap<LocalDate, CalendarDayUIState>,
     var selectedSymptom: Symptom,
 )
-
-

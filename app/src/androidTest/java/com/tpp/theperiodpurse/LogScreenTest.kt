@@ -13,9 +13,9 @@ import com.tpp.theperiodpurse.data.entity.User
 import com.tpp.theperiodpurse.data.model.*
 import com.tpp.theperiodpurse.data.repository.DateRepository
 import com.tpp.theperiodpurse.data.repository.UserRepository
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
-import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import junit.framework.Assert.assertTrue
@@ -50,9 +50,11 @@ class LogScreenTest {
     lateinit var dateRepository: DateRepository
 
     private val symptomList = arrayListOf(
-        Symptom.EXERCISE, Symptom.SLEEP, Symptom.MOOD,
-        Symptom.CRAMPS
-    );
+        Symptom.EXERCISE,
+        Symptom.SLEEP,
+        Symptom.MOOD,
+        Symptom.CRAMPS,
+    )
     private val currentDate = java.util.Date()
     private val duration: Duration = Duration.ofHours(1)
     private val dateList = arrayListOf(
@@ -64,8 +66,8 @@ class LogScreenTest {
             exerciseType = Exercise.YOGA,
             crampSeverity = CrampSeverity.Bad,
             sleep = duration,
-            notes = ""
-        )
+            notes = "",
+        ),
     )
     private fun insertDate(context: Context) {
         runBlocking {
@@ -79,15 +81,15 @@ class LogScreenTest {
             periodHistory = dateList,
             averagePeriodLength = 0,
             averageCycleLength = 0,
-            daysSinceLastPeriod = 0
+            daysSinceLastPeriod = 0,
         )
         runBlocking {
             userRepository.addUser(user, context)
         }
     }
 
-    @get:Rule
     // Used to manage the components' state and is used to perform injection on tests
+    @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
     @Before
@@ -99,7 +101,7 @@ class LogScreenTest {
             insertDate(LocalContext.current)
             navController = TestNavHostController(LocalContext.current)
             navController.navigatorProvider.addNavigator(
-                ComposeNavigator()
+                ComposeNavigator(),
             )
             AppScreen(
                 navController = navController,
@@ -117,8 +119,8 @@ class LogScreenTest {
     private fun navigateToLogScreen() {
         composeTestRule.onNodeWithContentDescription(
             LocalDate.now().format(
-                DateTimeFormatter.ofPattern("yyyy-MM-dd")
-            ).toString()
+                DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+            ).toString(),
         ).performClick()
     }
 
@@ -155,7 +157,6 @@ class LogScreenTest {
         composeTestRule.onNodeWithContentDescription("Close Button").performClick()
         navController.assertCurrentRouteName(Screen.Calendar.name)
     }
-    fun signIn(){
-
+    fun signIn() {
     }
 }

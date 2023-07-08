@@ -25,19 +25,19 @@ import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 fun CycleHistoryBox(
     modifier: Modifier = Modifier,
     dates: ArrayList<Date>?,
-    onClickShowFull: (Int) -> Unit
+    onClickShowFull: (Int) -> Unit,
 ) {
     Card(
         modifier
             .fillMaxWidth()
             .padding(bottom = 20.dp),
         elevation = 2.dp,
-        shape = RoundedCornerShape(10)
+        shape = RoundedCornerShape(10),
     ) {
         Column(modifier.padding(horizontal = 15.dp, vertical = 15.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
                     text = stringResource(R.string.period_history),
@@ -50,16 +50,16 @@ fun CycleHistoryBox(
                     style = TextStyle(
                         color = Color(teal),
                         fontWeight = FontWeight(700),
-                        fontSize = 15.scaledSp()
+                        fontSize = 15.scaledSp(),
                     ),
-                    text = AnnotatedString(stringResource(id = R.string.show_more))
+                    text = AnnotatedString(stringResource(id = R.string.show_more)),
                 )
             }
             Divider(
                 color = Color(0xFF868083),
                 modifier = modifier
                     .padding(top = 5.dp, bottom = 10.dp)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
             )
             // Show three most recent periods
             if (dates != null) {

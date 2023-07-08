@@ -8,7 +8,7 @@ fun validateUserAuthenticationAndAuthorization(account: GoogleSignInAccount?): B
     if (account == null) return false
     val requiredScopes = setOf(
         Scope(DriveScopes.DRIVE_FILE),
-        Scope(DriveScopes.DRIVE_APPDATA)
+        Scope(DriveScopes.DRIVE_APPDATA),
     )
     if (account.grantedScopes.containsAll(requiredScopes)) {
         return true

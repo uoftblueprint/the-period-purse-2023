@@ -39,7 +39,6 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Task
 import com.google.api.services.drive.DriveScopes
-import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import com.tpp.theperiodpurse.ui.component.BottomNavigation
 import com.tpp.theperiodpurse.ui.component.FloatingActionButton
 import com.tpp.theperiodpurse.ui.component.LoadingScreen
@@ -47,10 +46,10 @@ import com.tpp.theperiodpurse.ui.onboarding.*
 import com.tpp.theperiodpurse.ui.symptomlog.LoggingOptionsPopup
 import com.tpp.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
-
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -77,10 +76,12 @@ class MainActivity : ComponentActivity() {
                         mutableStateOf(
                             ContextCompat.checkSelfPermission(
                                 context,
-                                POST_NOTIFICATIONS
-                            ) == PackageManager.PERMISSION_GRANTED
+                                POST_NOTIFICATIONS,
+                            ) == PackageManager.PERMISSION_GRANTED,
                         )
-                    } else mutableStateOf(true)
+                    } else {
+                        mutableStateOf(true)
+                    }
                 }
                 val launcher = rememberLauncherForActivityResult(
                     contract = ActivityResultContracts.RequestPermission(),
@@ -91,7 +92,7 @@ class MainActivity : ComponentActivity() {
                                 shouldShowRequestPermissionRationale(POST_NOTIFICATIONS)
                             }
                         }
-                    }
+                    },
                 )
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     SideEffect {
@@ -115,10 +116,9 @@ class MainActivity : ComponentActivity() {
     }
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
-            if (completedTask.isSuccessful){
+            if (completedTask.isSuccessful) {
                 Toast.makeText(this, "SignIn Successful", Toast.LENGTH_SHORT).show()
-            }
-            else {
+            } else {
                 Toast.makeText(this, "SignIn Failed", Toast.LENGTH_SHORT).show()
             }
         } catch (e: ApiException) {
@@ -139,14 +139,18 @@ class MainActivity : ComponentActivity() {
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
-fun Application(context: Context,
-                signIn: () -> Unit,
-                signout: () -> Unit = {},
-                hasNotificationsPermission: Boolean = false) {
-    AppScreen(signIn = signIn,
+fun Application(
+    context: Context,
+    signIn: () -> Unit,
+    signout: () -> Unit = {},
+    hasNotificationsPermission: Boolean = false,
+) {
+    AppScreen(
+        signIn = signIn,
         context = context,
         signout = signout,
-    hasNotificationsPermissions = hasNotificationsPermission)
+        hasNotificationsPermissions = hasNotificationsPermission,
+    )
     createNotificationChannel(context)
 }
 
@@ -155,7 +159,7 @@ fun createNotificationChannel(context: Context) {
         val channel = NotificationChannel(
             "notification_channel",
             "Notification",
-            NotificationManager.IMPORTANCE_DEFAULT
+            NotificationManager.IMPORTANCE_DEFAULT,
         )
         channel.description = "Used for the reminder notifications"
 
@@ -164,7 +168,6 @@ fun createNotificationChannel(context: Context) {
         notificationManager.createNotificationChannel(channel)
     }
 }
-
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
@@ -182,31 +185,29 @@ fun AppScreen(
     signout: () -> Unit = {},
     hasNotificationsPermissions: Boolean = false,
 
-    ) {
+) {
     var loggingOptionsVisible by remember { mutableStateOf(false) }
     var skipOnboarding = skipOnboarding
     val isOnboarded by onboardViewModel.isOnboarded.observeAsState(initial = null)
 
-    if (!skipDatabase){
+    if (!skipDatabase) {
         LaunchedEffect(Unit) {
             onboardViewModel.checkOnboardedStatus(context)
         }
     }
-    val startdestination : String
+    val startdestination: String
 
-    if (isOnboarded == null && !skipDatabase){
+    if (isOnboarded == null && !skipDatabase) {
         LoadingScreen()
-    } else{
-        if (!skipDatabase){
+    } else {
+        if (!skipDatabase) {
             skipOnboarding = (isOnboarded as Boolean)
         }
         if (skipOnboarding) {
             startdestination = OnboardingScreen.LoadDatabase.name
-        }
-        else if (skipWelcome) {
+        } else if (skipWelcome) {
             startdestination = OnboardingScreen.QuestionOne.name
-        }
-        else {
+        } else {
             startdestination = OnboardingScreen.Welcome.name
         }
         Scaffold(
@@ -214,25 +215,25 @@ fun AppScreen(
                 if (currentRoute(navController) in screensWithNavigationBar) {
                     FloatingActionButton(
                         navController = navController,
-                        onClickInCalendar = { loggingOptionsVisible = true }
+                        onClickInCalendar = { loggingOptionsVisible = true },
                     )
                 }
             },
             floatingActionButtonPosition = FabPosition.Center,
-            isFloatingActionButtonDocked = true
+            isFloatingActionButtonDocked = true,
         ) { innerPadding ->
             Image(
                 painter = painterResource(id = R.drawable.background),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.FillBounds
+                contentScale = ContentScale.FillBounds,
             )
             Box {
                 NavigationGraph(
                     navController = navController,
                     startDestination = startdestination,
                     onboardViewModel = onboardViewModel,
-                    appViewModel= appViewModel,
+                    appViewModel = appViewModel,
                     calendarViewModel = calendarViewModel,
                     modifier = modifier.padding(innerPadding),
                     signIn = signIn,
@@ -240,23 +241,23 @@ fun AppScreen(
                     signout = signout,
                 )
 
-            if (loggingOptionsVisible) {
-                LoggingOptionsPopup(
-                    onLogDailySymptomsClick = {
-                        navigateToLogScreenWithDate(
-                            LocalDate.now(),
-                            navController
-                        )
-                    },
-                    onLogMultiplePeriodDates = { navController.navigate(Screen.LogMultipleDates.name) },
-                    onExit = { loggingOptionsVisible = false },
-                    modifier = modifier.padding(bottom = 64.dp)
+                if (loggingOptionsVisible) {
+                    LoggingOptionsPopup(
+                        onLogDailySymptomsClick = {
+                            navigateToLogScreenWithDate(
+                                LocalDate.now(),
+                                navController,
+                            )
+                        },
+                        onLogMultiplePeriodDates = { navController.navigate(Screen.LogMultipleDates.name) },
+                        onExit = { loggingOptionsVisible = false },
+                        modifier = modifier.padding(bottom = 64.dp),
                     )
                 }
             }
             Box(
                 contentAlignment = Alignment.BottomCenter,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             ) {
                 if (currentRoute(navController) in screensWithNavigationBar) {
                     BottomNavigation(navController = navController)
@@ -265,4 +266,3 @@ fun AppScreen(
         }
     }
 }
-

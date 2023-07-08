@@ -14,9 +14,9 @@ import com.tpp.theperiodpurse.data.model.*
 import com.tpp.theperiodpurse.data.repository.DateRepository
 import com.tpp.theperiodpurse.data.repository.UserRepository
 import com.tpp.theperiodpurse.ui.calendar.CalendarTabItem
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
-import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.runBlocking
@@ -51,9 +51,11 @@ class CalendarScreenTest {
     lateinit var dateRepository: DateRepository
 
     private val symptomList = arrayListOf(
-        Symptom.EXERCISE, Symptom.SLEEP, Symptom.MOOD,
-        Symptom.CRAMPS
-    );
+        Symptom.EXERCISE,
+        Symptom.SLEEP,
+        Symptom.MOOD,
+        Symptom.CRAMPS,
+    )
     private val currentDate = java.util.Date()
     private val duration: Duration = Duration.ofHours(1)
     private val dateList = arrayListOf(
@@ -65,8 +67,8 @@ class CalendarScreenTest {
             exerciseType = Exercise.YOGA,
             crampSeverity = CrampSeverity.Bad,
             sleep = duration,
-            notes = ""
-        )
+            notes = "",
+        ),
     )
     private fun insertDate(context: Context) {
         runBlocking {
@@ -80,15 +82,15 @@ class CalendarScreenTest {
             periodHistory = dateList,
             averagePeriodLength = 0,
             averageCycleLength = 0,
-            daysSinceLastPeriod = 0
+            daysSinceLastPeriod = 0,
         )
         runBlocking {
             userRepository.addUser(user, context)
         }
     }
 
-    @get:Rule
     // Used to manage the components' state and is used to perform injection on tests
+    @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
     @Before
@@ -101,17 +103,17 @@ class CalendarScreenTest {
             navController =
                 TestNavHostController(LocalContext.current)
             navController.navigatorProvider.addNavigator(
-                ComposeNavigator()
+                ComposeNavigator(),
             )
             AppScreen(
                 onboardViewModel = onboardViewModel,
                 appViewModel = appViewModel,
                 navController = navController,
                 calendarViewModel = calendarViewModel,
-                signIn = { signIn()  },
+                signIn = { signIn() },
                 skipDatabase = true,
                 skipOnboarding = true,
-                context = LocalContext.current
+                context = LocalContext.current,
             )
         }
     }
@@ -138,8 +140,8 @@ class CalendarScreenTest {
     fun displayCurrentMonth() {
         composeTestRule.onNodeWithContentDescription(
             LocalDate.now().format(
-                DateTimeFormatter.ofPattern("yyyy-MM-dd")
-            )
+                DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+            ),
         ).assertIsDisplayed()
     }
 
@@ -162,8 +164,8 @@ class CalendarScreenTest {
     fun appScreen_DisplayLogScreen() {
         composeTestRule.onNodeWithContentDescription(
             LocalDate.now().format(
-                DateTimeFormatter.ofPattern("yyyy-MM-dd")
-            ).toString()
+                DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+            ).toString(),
         ).performClick()
     }
 
@@ -178,7 +180,6 @@ class CalendarScreenTest {
         assert(date == today)
     }
 
-    fun signIn(){
-
+    fun signIn() {
     }
 }

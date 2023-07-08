@@ -5,28 +5,28 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import com.tpp.theperiodpurse.R
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.OnboardingScreen
+import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.state.OnboardUIState
 import com.tpp.theperiodpurse.ui.theme.ButtonDisabledColor
 import com.tpp.theperiodpurse.ui.theme.Teal
@@ -37,7 +37,7 @@ fun QuestionThreeScreen(
     onSelectionChanged: (String) -> Unit = {},
     canNavigateBack: Boolean,
     navController: NavHostController,
-    onboardUiState: OnboardUIState
+    onboardUiState: OnboardUIState,
 ) {
     var selectedValue by rememberSaveable { mutableStateOf("") }
     var updateList by rememberSaveable { mutableStateOf(false) }
@@ -50,12 +50,12 @@ fun QuestionThreeScreen(
         updateList = true
     }
     val configuration = LocalConfiguration.current
-    val screenwidth = configuration.screenWidthDp;
-    val screenheight = configuration.screenHeightDp;
+    val screenwidth = configuration.screenWidthDp
+    val screenheight = configuration.screenHeightDp
     Box(
         Modifier
             .fillMaxHeight()
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         val ratio = 0.45
         val ratioimage = 0.17
@@ -64,12 +64,12 @@ fun QuestionThreeScreen(
         Box(
             modifier = Modifier
                 .width(screenwidth.dp)
-                .height(height.dp)
+                .height(height.dp),
         ) {
             Image(
                 painter = painterResource(R.drawable.background_shape__1_),
                 contentDescription = null,
-                modifier = Modifier.size((screenheight * 0.65).dp)
+                modifier = Modifier.size((screenheight * 0.65).dp),
             )
             Image(
                 painter = painterResource(R.drawable.menstruation_calendar__1_),
@@ -98,7 +98,7 @@ fun QuestionThreeScreen(
                     .align(Alignment.CenterHorizontally)
                     .width((screenheight * (0.7)).dp),
                 fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
             Text(
                 text = stringResource(R.string.description_three),
@@ -106,7 +106,7 @@ fun QuestionThreeScreen(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
             Spacer(modifier = Modifier.height((screenheight * (0.005)).dp))
             Box(
@@ -121,10 +121,10 @@ fun QuestionThreeScreen(
                     modifier = Modifier.padding(
                         top = (screenheight * (0.02)).dp,
                         start = (screenheight * (0.03)).dp,
-                        end = (screenheight * (0.03)).dp
+                        end = (screenheight * (0.03)).dp,
                     ),
                     horizontalArrangement = Arrangement.spacedBy((screenheight * (0.04)).dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Box(
@@ -132,7 +132,7 @@ fun QuestionThreeScreen(
                                 .height((screenheight * (0.08)).dp)
                                 .width((screenheight * (0.08)).dp)
                                 .clip(RoundedCornerShape(30))
-                                .background(Color(rgb(220, 242, 240)))
+                                .background(Color(rgb(220, 242, 240))),
                         ) {
                             Image(
                                 painter = painterResource(R.drawable.opacity_black_24dp),
@@ -140,13 +140,13 @@ fun QuestionThreeScreen(
                                 modifier = Modifier
                                     .size((screenheight * (0.05)).dp)
                                     .align(Alignment.Center),
-                                colorFilter = ColorFilter.tint(Color.Gray)
+                                colorFilter = ColorFilter.tint(Color.Gray),
                             )
                         }
                         Text(
                             text = stringResource(R.string.flow),
                             fontSize = 12.scaledSp(),
-                            color = Color.Gray
+                            color = Color.Gray,
                         )
                     }
                     Text(
@@ -178,17 +178,19 @@ fun QuestionThreeScreen(
                             .width((screenheight * (0.08)).dp)
                             .clip(RoundedCornerShape(30))
                             .then(
-                                if (!selectedValue.contains("Mood")) Modifier.background(Color.White) else Modifier.background(
-                                    Color(rgb(142, 212, 193))
-                                )
-                            )
+                                if (!selectedValue.contains("Mood")) {
+                                    Modifier.background(Color.White)
+                                } else Modifier.background(
+                                    Color(rgb(142, 212, 193)),
+                                ),
+                            ),
                     ) {
                         Image(
                             painter = painterResource(R.drawable.sentiment_neutral_black_24dp),
                             contentDescription = "Mood",
                             modifier = Modifier
                                 .size((screenheight * (0.05)).dp)
-                                .align(Alignment.Center)
+                                .align(Alignment.Center),
                         )
                     }
                     Text(
@@ -209,7 +211,7 @@ fun QuestionThreeScreen(
                         .padding(horizontal = 13.dp)
                         .semantics { contentDescription = "fitness" },
                     verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Box(
                         modifier = Modifier
@@ -217,10 +219,12 @@ fun QuestionThreeScreen(
                             .width((screenheight * (0.08)).dp)
                             .clip(RoundedCornerShape(30))
                             .then(
-                                if (!selectedValue.contains("Exercise")) Modifier.background(Color.White) else Modifier.background(
-                                    Color(rgb(142, 212, 193))
-                                )
-                            )
+                                if (!selectedValue.contains("Exercise")) {
+                                    Modifier.background(Color.White)
+                                } else Modifier.background(
+                                    Color(rgb(142, 212, 193)),
+                                ),
+                            ),
                     ) {
                         Image(
                             painter = painterResource(R.drawable.self_improvement_black_24dp),
@@ -248,7 +252,7 @@ fun QuestionThreeScreen(
                         .padding(horizontal = 13.dp)
                         .semantics { contentDescription = "Cramps" },
                     verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Box(
                         modifier = Modifier
@@ -256,10 +260,12 @@ fun QuestionThreeScreen(
                             .width((screenheight * (0.08)).dp)
                             .clip(RoundedCornerShape(30))
                             .then(
-                                if (!selectedValue.contains("Cramps")) Modifier.background(Color.White) else Modifier.background(
-                                    Color(rgb(142, 212, 193))
-                                )
-                            )
+                                if (!selectedValue.contains("Cramps")) {
+                                    Modifier.background(Color.White)
+                                } else Modifier.background(
+                                    Color(rgb(142, 212, 193)),
+                                ),
+                            ),
                     ) {
                         Image(
                             painter = painterResource(R.drawable.sick_black_24dp),
@@ -287,18 +293,22 @@ fun QuestionThreeScreen(
                         .padding(horizontal = 13.dp)
                         .semantics { contentDescription = "Exercise" },
                     verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Box(modifier = Modifier
-                        .height((screenheight * (0.08)).dp)
-                        .width((screenheight * (0.08)).dp)
-                        .clip(RoundedCornerShape(30))
-                        .semantics { contentDescription = "Sleep" }
-                        .then(
-                            if (!selectedValue.contains("Sleep")) Modifier.background(Color.White) else Modifier.background(
-                                Color(rgb(142, 212, 193))
-                            )
-                        )) {
+                    Box(
+                        modifier = Modifier
+                            .height((screenheight * (0.08)).dp)
+                            .width((screenheight * (0.08)).dp)
+                            .clip(RoundedCornerShape(30))
+                            .semantics { contentDescription = "Sleep" }
+                            .then(
+                                if (!selectedValue.contains("Sleep")) {
+                                    Modifier.background(Color.White)
+                                } else Modifier.background(
+                                    Color(rgb(142, 212, 193)),
+                                ),
+                            ),
+                    ) {
                         Image(
                             painter = painterResource(R.drawable.nightlight_black_24dp),
                             contentDescription = "Sleep",
@@ -319,20 +329,23 @@ fun QuestionThreeScreen(
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
                 .padding(bottom = (screenheight * (0.005)).dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            TextButton(modifier = Modifier
-                .padding(start = (screenwidth * (0.1)).dp)
-                .weight(1f)
-                .semantics { contentDescription = "Skip" }, onClick = {
-                onSelectionChanged("")
-                navController.navigate(OnboardingScreen.Summary.name)
-            }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+            TextButton(
+                modifier = Modifier
+                    .padding(start = (screenwidth * (0.1)).dp)
+                    .weight(1f)
+                    .semantics { contentDescription = "Skip" },
+                onClick = {
+                    onSelectionChanged("")
+                    navController.navigate(OnboardingScreen.Summary.name)
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
             ) {
                 Text(
                     stringResource(R.string.skip),
                     color = Color.Black,
-                    fontSize = 20.scaledSp()
+                    fontSize = 20.scaledSp(),
                 )
             }
             Button(
@@ -341,13 +354,14 @@ fun QuestionThreeScreen(
                     .weight(1f)
                     .semantics { contentDescription = "Next" },
                 // the button is enabled when the user makes a selection
-                enabled = selectedValue.replace("|", "").isNotEmpty(), onClick = {
+                enabled = selectedValue.replace("|", "").isNotEmpty(),
+                onClick = {
                     onSelectionChanged(selectedValue)
                     navController.navigate(OnboardingScreen.Summary.name)
                 },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Teal,
-                    disabledBackgroundColor = ButtonDisabledColor
+                    disabledBackgroundColor = ButtonDisabledColor,
                 ),
             ) {
                 Text(stringResource(R.string.next), color = Color.White, fontSize = 20.scaledSp())

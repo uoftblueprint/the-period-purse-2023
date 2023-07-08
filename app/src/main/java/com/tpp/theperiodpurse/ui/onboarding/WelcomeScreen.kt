@@ -40,7 +40,6 @@ import com.tpp.theperiodpurse.ui.state.OnboardUIState
 import com.tpp.theperiodpurse.ui.theme.MainFontColor
 import com.tpp.theperiodpurse.utility.validateUserAuthenticationAndAuthorization
 
-
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WelcomeScreen(
@@ -49,7 +48,7 @@ fun WelcomeScreen(
     onNextButtonClicked: () -> Unit,
     navController: NavHostController,
     context: Context,
-    onboardUIState: OnboardUIState
+    onboardUIState: OnboardUIState,
 ) {
     val configuration = LocalConfiguration.current
     val screenheight = configuration.screenHeightDp
@@ -60,14 +59,16 @@ fun WelcomeScreen(
     val signInResult = remember {
         mutableStateOf(
             GoogleSignInResult(
-                GoogleSignInAccount.createDefault(), Status.RESULT_CANCELED
-            )
+                GoogleSignInAccount.createDefault(),
+                Status.RESULT_CANCELED,
+            ),
         )
     }
     LaunchedEffect(signInResult.value) {
         if (!signInResult.value.isSuccess) {
             signInResult.value = GoogleSignInResult(
-                GoogleSignInAccount.createDefault(), Status.RESULT_CANCELED
+                GoogleSignInAccount.createDefault(),
+                Status.RESULT_CANCELED,
             )
         }
     }
@@ -75,8 +76,13 @@ fun WelcomeScreen(
         onboardUIState.googleAccount = account.account
         val hasGoogleDrivePermission = validateUserAuthenticationAndAuthorization(account)
         if (!hasGoogleDrivePermission) {
-            handleSecurityError(context, signout, "ERROR - Please grant all the required " +
-                    "permissions", navController)
+            handleSecurityError(
+                context,
+                signout,
+                "ERROR - Please grant all the required " +
+                    "permissions",
+                navController,
+            )
         } else {
             LaunchedEffect(Unit) {
                 navController.navigate(OnboardingScreen.RestoreFromGoogleDrivePrompt.name)
@@ -87,21 +93,21 @@ fun WelcomeScreen(
             painter = painterResource(id = R.drawable.background),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.FillBounds
+            contentScale = ContentScale.FillBounds,
         )
         Column(
             modifier = Modifier
                 .padding((screenheight * 0.03).dp)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Spacer(modifier = Modifier.height((screenheight * 0.05).dp))
             // Logo Image
             Image(
                 painter = painterResource(R.drawable.app_logo),
                 contentDescription = null,
-                modifier = Modifier.size((screenheight * 0.25).dp)
+                modifier = Modifier.size((screenheight * 0.25).dp),
             )
             Spacer(modifier = Modifier.height((screenheight * 0.02).dp))
             // Welcome text
@@ -109,12 +115,12 @@ fun WelcomeScreen(
                 text = stringResource(R.string.welcome),
                 style = MaterialTheme.typography.h4,
                 fontWeight = FontWeight.Bold,
-                fontSize = 35.scaledSp()
+                fontSize = 35.scaledSp(),
             )
             Spacer(modifier = Modifier.height((screenheight * 0.05).dp))
             // Quick Start button
             QuickStartButton(
-                onClick = onNextButtonClicked
+                onClick = onNextButtonClicked,
             )
             Spacer(modifier = Modifier.height(5.dp))
             // Sign in with Google Button
@@ -122,10 +128,9 @@ fun WelcomeScreen(
                 signIn()
             }
 
-            Spacer(modifier = Modifier.height((screenheight*0.006).dp))
+            Spacer(modifier = Modifier.height((screenheight * 0.006).dp))
 
-
-            Text("By continuing, you accept the", textAlign = TextAlign.Center, fontSize = (screenwidth*0.04).scaledSp())
+            Text("By continuing, you accept the", textAlign = TextAlign.Center, fontSize = (screenwidth * 0.04).scaledSp())
             TermsAndPrivacyFooter(navController, MainFontColor)
         }
     }
@@ -134,16 +139,16 @@ fun WelcomeScreen(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GoogleSignInButton(
-    signInClicked: () -> Unit
+    signInClicked: () -> Unit,
 ) {
     Button(
         onClick = signInClicked,
         modifier = Modifier
             .widthIn(min = 350.dp)
             .height(50.dp),
-        shape= RoundedCornerShape(15),
-        border = BorderStroke(width = 1.dp, color=Color.Black),
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
+        shape = RoundedCornerShape(15),
+        border = BorderStroke(width = 1.dp, color = Color.Black),
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_google_logo),
@@ -153,14 +158,16 @@ fun GoogleSignInButton(
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = "Sign in with Google",
-            color = Color.Black, fontSize = 20.scaledSp(),
+            color = Color.Black,
+            fontSize = 20.scaledSp(),
         )
     }
 }
 
 @Composable
 fun QuickStartButton(
-    onClick: () -> Unit, modifier: Modifier = Modifier
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Button(
         onClick = onClick,
@@ -170,7 +177,7 @@ fun QuickStartButton(
             .semantics { contentDescription = "Next" },
         shape = RoundedCornerShape(15),
 //        color = Color(52, 235, 161)
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154))
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color(97, 153, 154)),
     ) {
         Text("Quick Start", color = MainFontColor, fontSize = 20.scaledSp())
     }
@@ -202,8 +209,13 @@ fun Int.scaledSp(): TextUnit {
 val Int.scaledSp: TextUnit
     @Composable get() = scaledSp()
 
-fun handleSecurityError(context: Context, signout: () -> Unit, msg: String, navController:
-NavHostController) {
+fun handleSecurityError(
+    context: Context,
+    signout: () -> Unit,
+    msg: String,
+    navController:
+    NavHostController,
+) {
     handleError(context, msg) {
         signout()
         navController.navigate(OnboardingScreen.Welcome.name)

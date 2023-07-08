@@ -1,6 +1,5 @@
 package com.tpp.theperiodpurse.ui.setting
 
-
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
@@ -39,7 +38,7 @@ fun ConfirmBackUp(navController: NavHostController) {
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "Backup Successful",
-                    style = MaterialTheme.typography.h6
+                    style = MaterialTheme.typography.h6,
                 )
             }
         },
@@ -47,7 +46,7 @@ fun ConfirmBackUp(navController: NavHostController) {
             Text(
                 text = "Your data has been backed up to your Google Drive!",
                 style = MaterialTheme.typography.body1,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         },
         confirmButton = {
@@ -61,12 +60,12 @@ fun ConfirmBackUp(navController: NavHostController) {
                     .padding(2.dp)
                     .height(48.dp)
                     .fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
             ) {
                 Text(
                     text = "OK",
                     style = MaterialTheme.typography.button,
-                    color = Color.Blue
+                    color = Color.Blue,
                 )
             }
         },

@@ -1,6 +1,5 @@
 package com.tpp.theperiodpurse.ui.setting
 
-
 import android.Manifest
 import android.Manifest.permission.SCHEDULE_EXACT_ALARM
 import android.content.Context
@@ -29,19 +28,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.model.Symptom
 import com.tpp.theperiodpurse.ui.component.SocialMedia
-import com.tpp.theperiodpurse.ui.education.teal
-import androidx.core.content.ContextCompat
-import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.theme.MainFontColor
 import com.tpp.theperiodpurse.ui.theme.Teal
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
-
 
 /**
  * Displays the layout for the settings screen.
@@ -62,7 +59,7 @@ fun SettingScreenLayout(
     onBackUpClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
     appViewModel: AppViewModel = viewModel(),
-    context: Context
+    context: Context,
 ) {
     val symptoms = appViewModel.getTrackedSymptoms()
     var hasAlarmPermission by remember {
@@ -70,10 +67,12 @@ fun SettingScreenLayout(
             mutableStateOf(
                 ContextCompat.checkSelfPermission(
                     context,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) == PackageManager.PERMISSION_GRANTED
+                    Manifest.permission.POST_NOTIFICATIONS,
+                ) == PackageManager.PERMISSION_GRANTED,
             )
-        } else mutableStateOf(true)
+        } else {
+            mutableStateOf(true)
+        }
     }
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
@@ -81,10 +80,10 @@ fun SettingScreenLayout(
             hasAlarmPermission = isGranted
 //                   if (!isGranted) {
 //                       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-////                           shouldShowRequestPermissionRationale(SCHEDULE_EXACT_ALARM)
+// //                           shouldShowRequestPermissionRationale(SCHEDULE_EXACT_ALARM)
 //                       }
 //                   }
-        }
+        },
     )
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -98,54 +97,58 @@ fun SettingScreenLayout(
         modifier = modifier
             .fillMaxSize()
             .padding(10.dp)
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()),
     ) {
         Text(
             text = stringResource(R.string.tracking_preferences),
             modifier = modifier.padding(top = 30.dp, start = 10.dp),
             color = Color.DarkGray,
             fontWeight = FontWeight.Bold,
-            fontSize = 20.scaledSp()
+            fontSize = 20.scaledSp(),
         )
 
-       TrackingPreferencesRow(symptoms, appViewModel = appViewModel, context = context)
-       Text(
-           text = stringResource(R.string.notifications_heading),
-           modifier = modifier.padding(top = 5.dp, start = 10.dp),
-           color = Color.DarkGray,
-           fontWeight = FontWeight.Bold,
-           fontSize = 20.scaledSp()
-       )
-       Row(modifier = modifier.padding(20.dp)) {
-           Column (modifier = Modifier) {
-               Text(text = stringResource(
-                   R.string.remind_me_to_log_symptoms),
-                   fontWeight = FontWeight.Bold,
-                   fontSize = 15.scaledSp(),)
-               Spacer(modifier = modifier.padding(3.dp))
-               Text(text = time,
-                   modifier = Modifier.padding(start = 5.dp),
-                   color = Color.Gray,
-                   fontSize = 15.scaledSp(),
-               )
-           }
-           Switch(
-               enabled = false,
-               checked = appViewModel.getAllowReminders(),
-               onCheckedChange = {appViewModel.toggleAllowReminders(context)},
-               modifier = modifier
-                   .fillMaxWidth()
-                   .wrapContentWidth(Alignment.End),
-               colors = SwitchDefaults.colors(
-                   uncheckedThumbColor = Color.DarkGray
-               )
-           )
-       }
-       Divider(modifier = Modifier.padding(start= 10.dp, end = 10.dp))
+        TrackingPreferencesRow(symptoms, appViewModel = appViewModel, context = context)
+        Text(
+            text = stringResource(R.string.notifications_heading),
+            modifier = modifier.padding(top = 5.dp, start = 10.dp),
+            color = Color.DarkGray,
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.scaledSp(),
+        )
+        Row(modifier = modifier.padding(20.dp)) {
+            Column(modifier = Modifier) {
+                Text(
+                    text = stringResource(
+                        R.string.remind_me_to_log_symptoms,
+                    ),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.scaledSp(),
+                )
+                Spacer(modifier = modifier.padding(3.dp))
+                Text(
+                    text = time,
+                    modifier = Modifier.padding(start = 5.dp),
+                    color = Color.Gray,
+                    fontSize = 15.scaledSp(),
+                )
+            }
+            Switch(
+                enabled = false,
+                checked = appViewModel.getAllowReminders(),
+                onCheckedChange = { appViewModel.toggleAllowReminders(context) },
+                modifier = modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth(Alignment.End),
+                colors = SwitchDefaults.colors(
+                    uncheckedThumbColor = Color.DarkGray,
+                ),
+            )
+        }
+        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
 
         NavigateButton(
             stringResource(id = R.string.customize_notifications),
-            onClicked = onNotificationClicked
+            onClicked = onNotificationClicked,
         )
 
         Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
@@ -155,16 +158,16 @@ fun SettingScreenLayout(
             modifier = Modifier.padding(start = 10.dp, top = 30.dp),
             color = Color.DarkGray,
             fontWeight = FontWeight.Bold,
-            fontSize = 20.scaledSp()
+            fontSize = 20.scaledSp(),
         )
         NavigateButton(
             text = stringResource(R.string.back_up_account),
-            onClicked = onBackUpClicked
+            onClicked = onBackUpClicked,
         )
         Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
         NavigateButton(
             text = stringResource(id = R.string.delete_account),
-            onClicked = onDeleteClicked
+            onClicked = onDeleteClicked,
         )
         Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
         Spacer(modifier = Modifier.padding(20.dp))
@@ -180,18 +183,18 @@ fun SettingScreenLayout(
             text = "© 2023 The Period Purse. All rights reserved.",
             textAlign = TextAlign.Center,
             color = Color.DarkGray,
-            fontSize = 15.scaledSp()
+            fontSize = 15.scaledSp(),
         )
 
        /*
        Terms & Conditions, and Privacy Policy
         */
-       Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-           TermsAndPrivacyFooter(outController, MainFontColor)
-           Spacer(modifier = Modifier.size(80.dp))
-       }
-       Spacer(modifier = Modifier.size(80.dp).padding(bottom = 5.dp))
-   }
+        Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            TermsAndPrivacyFooter(outController, MainFontColor)
+            Spacer(modifier = Modifier.size(80.dp))
+        }
+        Spacer(modifier = Modifier.size(80.dp).padding(bottom = 5.dp))
+    }
 }
 
 /**
@@ -202,14 +205,13 @@ fun SettingScreenLayout(
  * @param appViewModel The view model for the app.
  */
 @Composable
-fun TrackingPreferencesRow(symptoms: List<Symptom>, modifier: Modifier = Modifier, appViewModel: AppViewModel, context: Context){
-
+fun TrackingPreferencesRow(symptoms: List<Symptom>, modifier: Modifier = Modifier, appViewModel: AppViewModel, context: Context) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.Center,
     ) {
         TrackingOptionButton(
             modifier = modifier,
@@ -219,7 +221,7 @@ fun TrackingPreferencesRow(symptoms: List<Symptom>, modifier: Modifier = Modifie
             ischecked = symptoms.contains(Symptom.MOOD),
             symptom = Symptom.MOOD,
             appViewModel = appViewModel,
-            context = context
+            context = context,
         )
         TrackingOptionButton(
             modifier = modifier,
@@ -229,7 +231,7 @@ fun TrackingPreferencesRow(symptoms: List<Symptom>, modifier: Modifier = Modifie
             ischecked = symptoms.contains(Symptom.EXERCISE),
             symptom = Symptom.EXERCISE,
             appViewModel = appViewModel,
-            context = context
+            context = context,
         )
         TrackingOptionButton(
             modifier = modifier,
@@ -239,7 +241,7 @@ fun TrackingPreferencesRow(symptoms: List<Symptom>, modifier: Modifier = Modifie
             ischecked = symptoms.contains(Symptom.CRAMPS),
             symptom = Symptom.CRAMPS,
             appViewModel = appViewModel,
-            context = context
+            context = context,
         )
         TrackingOptionButton(
             modifier = modifier,
@@ -249,7 +251,7 @@ fun TrackingPreferencesRow(symptoms: List<Symptom>, modifier: Modifier = Modifie
             ischecked = symptoms.contains(Symptom.SLEEP),
             symptom = Symptom.SLEEP,
             appViewModel = appViewModel,
-            context = context
+            context = context,
         )
     }
 }
@@ -266,14 +268,18 @@ fun TrackingPreferencesRow(symptoms: List<Symptom>, modifier: Modifier = Modifie
  * @param appViewModel The view model for the app.
  */
 @Composable
-fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter,
-                         contentDescription: String, ischecked: Boolean,
-                         symptom: Symptom, appViewModel: AppViewModel,
-                         context: Context
+fun TrackingOptionButton(
+    modifier: Modifier,
+    label: String,
+    icon: Painter,
+    contentDescription: String,
+    ischecked: Boolean,
+    symptom: Symptom,
+    appViewModel: AppViewModel,
+    context: Context,
 ) {
-
     val configuration = LocalConfiguration.current
-    val screenwidth = configuration.screenWidthDp;
+    val screenwidth = configuration.screenWidthDp
     val color = if (appViewModel.isSymptomChecked(symptom)) Teal else Color.White
     Column(
         modifier = modifier
@@ -283,8 +289,8 @@ fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter,
     ) {
         IconToggleButton(
             checked = ischecked,
-            onCheckedChange = {appViewModel.updateSymptoms(symptom, context)},
-            modifier = Modifier.clip(RoundedCornerShape(10.dp))
+            onCheckedChange = { appViewModel.updateSymptoms(symptom, context) },
+            modifier = Modifier.clip(RoundedCornerShape(10.dp)),
         ) {
             Icon(
                 painter = icon,
@@ -294,14 +300,13 @@ fun TrackingOptionButton(modifier: Modifier, label: String, icon: Painter,
                     .background(color)
                     .height((screenwidth * 0.12).dp)
                     .width((screenwidth * 0.12).dp)
-                    .padding((screenwidth * 0.02).dp)
+                    .padding((screenwidth * 0.02).dp),
             )
-
         }
         Text(
             modifier = Modifier.padding(5.dp),
             text = label,
-            fontSize = 12.scaledSp()
+            fontSize = 12.scaledSp(),
         )
     }
 }
@@ -318,21 +323,20 @@ fun NavigateButton(text: String, onClicked: () -> Unit) {
         onClick = onClicked,
         modifier = Modifier.fillMaxWidth(),
         colors = ButtonDefaults.buttonColors(
-            Color.Transparent
+            Color.Transparent,
         ),
-        elevation = ButtonDefaults.elevation(0.dp)
+        elevation = ButtonDefaults.elevation(0.dp),
     ) {
         Text(
             modifier = Modifier.weight(1f),
             text = text,
             fontWeight = FontWeight.Bold,
-            fontSize = 15.scaledSp()
+            fontSize = 15.scaledSp(),
         )
         Icon(
             imageVector = Icons.Filled.KeyboardArrowRight,
             contentDescription = "arrow",
-            modifier = Modifier.wrapContentWidth(Alignment.End)
+            modifier = Modifier.wrapContentWidth(Alignment.End),
         )
-
     }
 }

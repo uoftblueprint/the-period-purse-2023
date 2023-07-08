@@ -2,7 +2,7 @@ package com.tpp.theperiodpurse.ui.state
 
 import com.tpp.theperiodpurse.data.model.Symptom
 
-data class SettingsUIState (
+data class SettingsUIState(
 
     /** Available Symptoms to track*/
     val symptomsOptions: List<Symptom>,

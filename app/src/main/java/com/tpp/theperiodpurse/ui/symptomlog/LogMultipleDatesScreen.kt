@@ -20,22 +20,22 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.data.model.FlowSeverity
-import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
-import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
-import com.tpp.theperiodpurse.ui.calendar.components.Day
-import com.tpp.theperiodpurse.ui.component.PopupTopBar
-import com.tpp.theperiodpurse.ui.theme.Red
-import com.tpp.theperiodpurse.ui.theme.SelectedColor1
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
-import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
+import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.entity.Date
+import com.tpp.theperiodpurse.data.model.FlowSeverity
+import com.tpp.theperiodpurse.ui.calendar.components.Day
 import com.tpp.theperiodpurse.ui.calendar.components.MonthHeader
+import com.tpp.theperiodpurse.ui.component.PopupTopBar
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
+import com.tpp.theperiodpurse.ui.theme.Red
+import com.tpp.theperiodpurse.ui.theme.SelectedColor1
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.ZoneId
@@ -52,7 +52,7 @@ fun LogMultipleDatesScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(Color.White),
     ) {
         PopupTopBar(onClose = onClose) {
             LogMultipleDatesText()
@@ -66,7 +66,7 @@ fun LogMultipleDatesScreen(
             startMonth = startMonth,
             endMonth = endMonth,
             firstVisibleMonth = currentMonth,
-            firstDayOfWeek = firstDayOfWeek
+            firstDayOfWeek = firstDayOfWeek,
         )
 
         val calendarDayUIStates = calendarViewModel.uiState.collectAsState().value.days
@@ -98,19 +98,20 @@ fun LogMultipleDatesScreen(
                                 if (selected) {
                                     selectedDates.add(day.date)
                                     unselectedDates.remove(day.date)
-                                }
-                                else {
+                                } else {
                                     selectedDates.remove(day.date)
                                     unselectedDates.add(day.date)
                                 }
-                            }
+                            },
                         )
                     }
-                })
+                },
+            )
 
-            FloatingActionButton(onClick = {
-                selectedDates.forEach {
-                    appViewModel.saveDate(
+            FloatingActionButton(
+                onClick = {
+                    selectedDates.forEach {
+                        appViewModel.saveDate(
                             Date(
                                 date = from(it.atStartOfDay(ZoneId.systemDefault()).toInstant()),
                                 flow = FlowSeverity.Medium,
@@ -119,31 +120,32 @@ fun LogMultipleDatesScreen(
                                 crampSeverity = null,
                                 sleep = null,
                                 mood = null,
-                                notes = ""
+                                notes = "",
                             ),
-                        context
+                            context,
                         )
-                    calendarViewModel.updateDayInfo(it, CalendarDayUIState(flow = FlowSeverity.Medium))
-                }
-                val converted = unselectedDates.toList().map {
-                    from(it.atStartOfDay(ZoneId.systemDefault()).toInstant())
-                }
-                unselectedDates.forEach {
-                    calendarViewModel.clearFlow(it)
-                }
-                if (converted.isNotEmpty()) {
-                    appViewModel.deleteManyDates(converted, context)
-                }
-                onClose()},
+                        calendarViewModel.updateDayInfo(it, CalendarDayUIState(flow = FlowSeverity.Medium))
+                    }
+                    val converted = unselectedDates.toList().map {
+                        from(it.atStartOfDay(ZoneId.systemDefault()).toInstant())
+                    }
+                    unselectedDates.forEach {
+                        calendarViewModel.clearFlow(it)
+                    }
+                    if (converted.isNotEmpty()) {
+                        appViewModel.deleteManyDates(converted, context)
+                    }
+                    onClose()
+                },
                 backgroundColor = SelectedColor1,
                 modifier = Modifier
                     .padding(end = 16.dp, bottom = 16.dp)
-                    .align(Alignment.BottomEnd)
+                    .align(Alignment.BottomEnd),
             ) {
                 Icon(
                     Icons.Rounded.Check,
                     contentDescription = "Save",
-                    tint = Color.White
+                    tint = Color.White,
                 )
             }
         }
@@ -160,12 +162,12 @@ private fun LogMultipleDatesText(modifier: Modifier = Modifier) {
             fontSize = 20.scaledSp(),
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
-            modifier = modifier
+            modifier = modifier,
         )
         Text(
             stringResource(R.string.log_multiple_dates_header_body),
             fontSize = 13.scaledSp(),
-            modifier = modifier
+            modifier = modifier,
         )
     }
 }

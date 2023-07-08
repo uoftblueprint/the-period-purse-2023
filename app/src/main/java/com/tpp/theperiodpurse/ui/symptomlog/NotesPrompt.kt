@@ -33,16 +33,18 @@ fun NotesPrompt(logViewModel: LogViewModel) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
-    Box(modifier = Modifier // this box allows clicking out of the keyboard
-        .fillMaxWidth()
-        .clickable(
-            interactionSource = interactionSource,
-            indication = null
-        ) {
-            keyboardController?.hide()
-            saveTextData(logViewModel, notesText)
-            focusManager.clearFocus(true)
-        }) {
+    Box(
+        modifier = Modifier // this box allows clicking out of the keyboard
+            .fillMaxWidth()
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+            ) {
+                keyboardController?.hide()
+                saveTextData(logViewModel, notesText)
+                focusManager.clearFocus(true)
+            },
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -51,34 +53,34 @@ fun NotesPrompt(logViewModel: LogViewModel) {
                         logViewModel.setText(LogPrompt.Notes, notesText)
                         focusManager.clearFocus()
                     })
-                }
+                },
 
         ) {
-
             MinLinesOutlinedTextField(
                 value = notesText,
                 onValueChange = {
-                        notes: String -> notesText = notes
-                        saveTextData(logViewModel, notesText)
-                                },
+                        notes: String ->
+                    notesText = notes
+                    saveTextData(logViewModel, notesText)
+                },
                 label = { Text(text = "Record a symptom or make a note") },
                 maxLines = 5,
                 keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done
+                    imeAction = ImeAction.Done,
                 ),
                 keyboardActions = KeyboardActions(
                     onDone = {
                         saveTextData(logViewModel, notesText)
                         focusManager.clearFocus()
-                    }
+                    },
                 ),
                 minLines = 3,
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     unfocusedBorderColor = LogSelectedTextColor,
                     focusedBorderColor = MainFontColor,
                     focusedLabelColor = MainFontColor,
-                    cursorColor = MainFontColor
-                )
+                    cursorColor = MainFontColor,
+                ),
             )
         }
     }
@@ -110,7 +112,7 @@ fun MinLinesOutlinedTextField(
     maxLines: Int = Int.MAX_VALUE,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = MaterialTheme.shapes.small,
-    colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors()
+    colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(),
 ) {
     val heightState = remember { mutableStateOf<Int?>(null) }
     var heightUpdateNeeded by remember(modifier, textStyle) { mutableStateOf(true) }
@@ -120,7 +122,7 @@ fun MinLinesOutlinedTextField(
     Box(
         modifier
             .height(IntrinsicSize.Min)
-            .width(IntrinsicSize.Min)
+            .width(IntrinsicSize.Min),
     ) {
         if (heightUpdateNeeded) {
             OutlinedTextField(
@@ -149,7 +151,7 @@ fun MinLinesOutlinedTextField(
                         heightUpdateNeeded = false
                         println("onSizeChanged $it")
                         heightState.value = it.height
-                    }
+                    },
             )
         }
         if (height != null) {
@@ -174,7 +176,7 @@ fun MinLinesOutlinedTextField(
                 colors = colors,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(height)
+                    .height(height),
             )
         }
     }

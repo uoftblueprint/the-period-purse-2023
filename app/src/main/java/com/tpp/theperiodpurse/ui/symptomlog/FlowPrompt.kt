@@ -25,7 +25,7 @@ fun FlowPrompt(logViewModel: LogViewModel) {
             LogSquare.FlowMedium,
             LogSquare.FlowHeavy,
             LogSquare.FlowSpotting,
-            LogSquare.FlowNone
+            LogSquare.FlowNone,
         )
 
         LazyVerticalGrid(
@@ -34,7 +34,7 @@ fun FlowPrompt(logViewModel: LogViewModel) {
                 start = 0.dp,
                 top = 0.dp,
                 end = 0.dp,
-                bottom = 16.dp
+                bottom = 16.dp,
             ),
             modifier = Modifier
                 .height(270.dp),
@@ -42,7 +42,7 @@ fun FlowPrompt(logViewModel: LogViewModel) {
                 items(flowSquares) { flowSquare ->
                     LogSelectableSquare(
                         logSquare = flowSquare,
-                        selected = selected
+                        selected = selected,
                     ) { logSquare ->
                         if (selected == logSquare.description) {
                             selected = null
@@ -53,17 +53,17 @@ fun FlowPrompt(logViewModel: LogViewModel) {
                         }
                     }
                 }
-            })
+            },
+        )
     }
 }
-
 
 @Preview
 @Composable
 fun FlowPromptPreview() {
     FlowPrompt(
         logViewModel = LogViewModel(
-            logPrompts = listOf(LogPrompt.Flow)
-        )
+            logPrompts = listOf(LogPrompt.Flow),
+        ),
     )
 }

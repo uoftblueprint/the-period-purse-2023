@@ -15,20 +15,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
-import com.tpp.theperiodpurse.ui.symptomlog.LogMultipleDatesScreen
 import com.tpp.theperiodpurse.data.*
-import com.tpp.theperiodpurse.ui.onboarding.SummaryScreen
 import com.tpp.theperiodpurse.ui.calendar.CalendarScreen
-import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import com.tpp.theperiodpurse.ui.cycle.CycleScreenLayout
 import com.tpp.theperiodpurse.ui.cycle.PeriodHistoryLayout
 import com.tpp.theperiodpurse.ui.education.*
 import com.tpp.theperiodpurse.ui.legal.PrivacyScreen
 import com.tpp.theperiodpurse.ui.legal.TermsScreen
 import com.tpp.theperiodpurse.ui.onboarding.*
+import com.tpp.theperiodpurse.ui.onboarding.SummaryScreen
 import com.tpp.theperiodpurse.ui.setting.SettingsScreen
+import com.tpp.theperiodpurse.ui.symptomlog.LogMultipleDatesScreen
 import com.tpp.theperiodpurse.ui.symptomlog.LogScreen
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
+import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 import java.time.LocalDate
 
@@ -39,17 +39,21 @@ enum class Screen {
     Settings,
     Learn,
     LogMultipleDates,
-    CycleFullHistory
+    CycleFullHistory,
 }
 
 enum class LegalScreen {
     Terms,
-    Privacy
+    Privacy,
 }
 
 val screensWithNavigationBar = arrayOf(
-    Screen.Calendar.name, Screen.Log.name, Screen.Cycle.name,
-    Screen.Settings.name, Screen.Learn.name, Screen.CycleFullHistory.name
+    Screen.Calendar.name,
+    Screen.Log.name,
+    Screen.Cycle.name,
+    Screen.Settings.name,
+    Screen.Learn.name,
+    Screen.CycleFullHistory.name,
 )
 
 enum class OnboardingScreen {
@@ -83,21 +87,21 @@ fun NavigationGraph(
     NavHost(
         navController = navController,
         startDestination = startDestination,
-        modifier = modifier
+        modifier = modifier,
     ) {
         composable(route = Screen.Calendar.name) {
             Log.d("NavGraph", "Someone navigated to Screen Calendar")
             CalendarScreen(
                 navController = navController,
                 appViewModel = appViewModel,
-                calendarViewModel = calendarViewModel
+                calendarViewModel = calendarViewModel,
             )
         }
 
         composable(
             route = "%s/%s/{date}"
                 .format(Screen.Calendar, Screen.Log),
-            arguments = listOf(navArgument("date") { type = NavType.StringType })
+            arguments = listOf(navArgument("date") { type = NavType.StringType }),
         ) { backStackEntry ->
             // date is in yyyy-mm-dd format
             val date = backStackEntry.arguments?.getString("date")
@@ -107,7 +111,7 @@ fun NavigationGraph(
                     navController = navController,
                     appViewModel = appViewModel,
                     calendarViewModel = calendarViewModel,
-                    context = context
+                    context = context,
                 )
             }
         }
@@ -121,7 +125,8 @@ fun NavigationGraph(
         }
 
         composable(route = Screen.Settings.name) {
-            SettingsScreen(appViewModel = appViewModel,
+            SettingsScreen(
+                appViewModel = appViewModel,
                 outController = navController,
                 context = context,
                 onboardUiState = onboardUIState,
@@ -129,20 +134,21 @@ fun NavigationGraph(
                 appUiState = appUiState,
                 calUiState = calUiState,
                 signIn = signIn,
-                signout = signout)
+                signout = signout,
+            )
         }
 
         composable(route = Screen.Cycle.name) {
             CycleScreenLayout(
                 appViewModel = appViewModel,
-                navController = navController
+                navController = navController,
             )
         }
 
         composable(route = Screen.CycleFullHistory.name) {
             PeriodHistoryLayout(
                 appViewModel = appViewModel,
-                navController = navController
+                navController = navController,
             )
         }
 
@@ -160,7 +166,6 @@ fun NavigationGraph(
             PrivacyScreen(navController)
         }
 
-
         // Welcome Screen
         composable(route = OnboardingScreen.Welcome.name) {
             WelcomeScreen(
@@ -174,7 +179,6 @@ fun NavigationGraph(
             )
         }
 
-
         // Onboard Screens
         composable(route = OnboardingScreen.QuestionOne.name) {
             QuestionOneScreen(
@@ -184,7 +188,7 @@ fun NavigationGraph(
                 onboardUiState = onboardUIState,
                 viewModel = onboardViewModel,
                 signOut = signout,
-                context = context
+                context = context,
             )
         }
         composable(route = OnboardingScreen.QuestionTwo.name) {
@@ -193,7 +197,7 @@ fun NavigationGraph(
                 onboardUiState = onboardUIState,
                 onSelectionChanged = { onboardViewModel.setDate(it) },
                 navigateUp = { navController.navigate(OnboardingScreen.QuestionOne.name) },
-                canNavigateBack = navController.previousBackStackEntry != null
+                canNavigateBack = navController.previousBackStackEntry != null,
             )
         }
 
@@ -202,7 +206,7 @@ fun NavigationGraph(
                 navController = navController,
                 onboardUiState = onboardUIState,
                 onSelectionChanged = { onboardViewModel.setSymptoms(it) },
-                canNavigateBack = navController.previousBackStackEntry != null
+                canNavigateBack = navController.previousBackStackEntry != null,
             )
         }
         composable(route = OnboardingScreen.Summary.name) {
@@ -211,7 +215,6 @@ fun NavigationGraph(
                 onSendButtonClicked = {
                     Log.d("Summary Screen", "Navigating to Load database")
                     navController.navigate(OnboardingScreen.LoadDatabase.name)
-
                 },
                 navigateUp = { navController.navigateUp() },
                 canNavigateBack = navController.previousBackStackEntry != null,
@@ -228,16 +231,17 @@ fun NavigationGraph(
                 appViewModel = appViewModel,
                 calViewModel = calendarViewModel,
                 navController = navController,
-                context = context
+                context = context,
             )
         }
         composable(route = OnboardingScreen.RestoreFromGoogleDrivePrompt.name) {
-                RestoreFromGoogleDrivePrompt(
-                    viewModel = onboardViewModel,
-                    navHostController = navController,
-                    context = context,
-                    signout = signout,
-                    googleAccount = onboardUIState.googleAccount)
+            RestoreFromGoogleDrivePrompt(
+                viewModel = onboardViewModel,
+                navHostController = navController,
+                context = context,
+                signout = signout,
+                googleAccount = onboardUIState.googleAccount,
+            )
         }
 
         composable(route = OnboardingScreen.DownloadBackupFromGoogleDrive.name) {
@@ -252,7 +256,8 @@ fun NavigationGraph(
             DateRangePicker(
                 { navController.navigate(OnboardingScreen.QuestionTwo.name) },
                 onboardViewModel,
-                onboardUIState)
+                onboardUIState,
+            )
         }
     }
 }
@@ -264,6 +269,8 @@ fun currentRoute(navController: NavController): String? {
 }
 
 fun navigateToLogScreenWithDate(date: LocalDate, navController: NavController) {
-    navController.navigate(route = "%s/%s/%s"
-        .format(Screen.Calendar, Screen.Log, date.toString()))
+    navController.navigate(
+        route = "%s/%s/%s"
+            .format(Screen.Calendar, Screen.Log, date.toString()),
+    )
 }

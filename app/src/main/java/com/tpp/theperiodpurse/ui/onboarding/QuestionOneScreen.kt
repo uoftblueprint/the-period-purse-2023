@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material3.ButtonElevation
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -45,14 +44,14 @@ fun QuestionOneScreen(
     navController: NavHostController,
     viewModel: OnboardViewModel,
     context: Context,
-    signOut: () -> Unit = {}
+    signOut: () -> Unit = {},
 ) {
     var periodCycle by rememberSaveable { mutableStateOf("") }
     var entered by rememberSaveable { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val configuration = LocalConfiguration.current
-    val screenwidth = configuration.screenWidthDp;
-    val screenheight = configuration.screenHeightDp;
+    val screenwidth = configuration.screenWidthDp
+    val screenheight = configuration.screenHeightDp
     if (periodCycle == "") {
         entered = false
     }
@@ -69,7 +68,7 @@ fun QuestionOneScreen(
     Box(
         modifier = Modifier
             .fillMaxHeight()
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -82,7 +81,7 @@ fun QuestionOneScreen(
             Box(
                 modifier = Modifier
                     .width(screenwidth.dp)
-                    .height(height.dp)
+                    .height(height.dp),
 
             ) {
                 Background_shape()
@@ -109,7 +108,7 @@ fun QuestionOneScreen(
                     .align(Alignment.CenterHorizontally)
                     .width(300.dp),
                 fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
             Spacer(Modifier.height((screenheight * (0.01)).dp))
             Text(
@@ -118,14 +117,14 @@ fun QuestionOneScreen(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .width((screenwidth * (0.7)).dp),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
             Spacer(Modifier.height((screenheight * (0.02)).dp))
             EditDaysField(
                 value = periodCycle,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Done
+                    imeAction = ImeAction.Done,
                 ),
                 onValueChange = { newValue ->
                     val filteredValue = newValue.filter { it.isDigit() }
@@ -134,10 +133,10 @@ fun QuestionOneScreen(
                 keyboardActions = KeyboardActions(
                     onDone = {
                         entered = periodCycle.isNotEmpty()
-                        focusManager.clearFocus();
+                        focusManager.clearFocus()
                     },
                 ),
-                entered = entered
+                entered = entered,
             )
             Spacer(Modifier.height((screenheight * (0.01)).dp))
         }
@@ -146,7 +145,7 @@ fun QuestionOneScreen(
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
                 .padding(bottom = (screenheight * (0.02)).dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             TextButton(
                 onClick = {
@@ -165,12 +164,12 @@ fun QuestionOneScreen(
                 Text(
                     stringResource(R.string.skip),
                     color = Color.Black,
-                    fontSize = 20.scaledSp()
+                    fontSize = 20.scaledSp(),
                 )
             }
             Button(
                 onClick = {
-                    onSelectionChanged(periodCycle);
+                    onSelectionChanged(periodCycle)
                     navController.navigate(OnboardingScreen.QuestionTwo.name)
                 },
                 enabled = entered,
@@ -180,7 +179,8 @@ fun QuestionOneScreen(
                     .semantics { contentDescription = "Next" },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Teal,
-                    disabledBackgroundColor = ButtonDisabledColor),
+                    disabledBackgroundColor = ButtonDisabledColor,
+                ),
             ) {
                 Text(stringResource(R.string.next), color = Color.White, fontSize = 20.scaledSp())
             }
@@ -190,15 +190,20 @@ fun QuestionOneScreen(
 
 @Composable
 fun backbutton(navigateUp: () -> Unit, canNavigateBack: Boolean) {
-    TopAppBar(title = { "" }, navigationIcon = {
-        if (canNavigateBack) {
-            IconButton(onClick = navigateUp) {
-                Image(
-                    painter = painterResource(R.drawable.back_icon), contentDescription = "Back"
-                )
+    TopAppBar(
+        title = { "" },
+        navigationIcon = {
+            if (canNavigateBack) {
+                IconButton(onClick = navigateUp) {
+                    Image(
+                        painter = painterResource(R.drawable.back_icon),
+                        contentDescription = "Back",
+                    )
+                }
             }
-        }
-    }, backgroundColor = Color.Transparent, elevation = 0.dp
+        },
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp,
     )
 }
 
@@ -217,7 +222,7 @@ fun EditNumberField(
         modifier = Modifier.fillMaxWidth(),
         singleLine = true,
         keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions
+        keyboardActions = keyboardActions,
     )
 }
 
@@ -227,7 +232,7 @@ fun EditDaysField(
     keyboardOptions: KeyboardOptions,
     onValueChange: (String) -> Unit,
     keyboardActions: KeyboardActions,
-    entered: Boolean
+    entered: Boolean,
 ) {
     TextField(
         shape = RoundedCornerShape(20),
@@ -241,7 +246,9 @@ fun EditDaysField(
         onValueChange = onValueChange,
         placeholder = {
             Text(
-                "Tap to input", fontSize = 17.scaledSp(), modifier = Modifier.padding(start = 10.dp)
+                "Tap to input",
+                fontSize = 17.scaledSp(),
+                modifier = Modifier.padding(start = 10.dp),
             )
         },
         modifier = Modifier
@@ -249,7 +256,8 @@ fun EditDaysField(
             .height(60.dp)
             .background(color = Color.White, shape = RoundedCornerShape(20))
             .border(
-                BorderStroke(2.dp, SolidColor(Color.Transparent)), shape = RoundedCornerShape(20)
+                BorderStroke(2.dp, SolidColor(Color.Transparent)),
+                shape = RoundedCornerShape(20),
             )
             .semantics { contentDescription = "Pick Days" },
         trailingIcon = {
@@ -259,7 +267,7 @@ fun EditDaysField(
                     fontSize = 18.scaledSp(),
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
-                    modifier = Modifier.padding(end = 20.dp)
+                    modifier = Modifier.padding(end = 20.dp),
                 )
             } else {
                 Image(
@@ -270,7 +278,9 @@ fun EditDaysField(
             }
         },
         textStyle = androidx.compose.ui.text.TextStyle(
-            fontSize = 20.scaledSp(), textAlign = TextAlign.Center, fontWeight = FontWeight.Bold
+            fontSize = 20.scaledSp(),
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold,
         ),
         singleLine = true,
         keyboardOptions = keyboardOptions,
@@ -283,7 +293,6 @@ fun Background_shape() {
     Image(
         painter = painterResource(R.drawable.background_shape__1_),
         contentDescription = null,
-        modifier = Modifier.size(1000.dp)
+        modifier = Modifier.size(1000.dp),
     )
 }
-

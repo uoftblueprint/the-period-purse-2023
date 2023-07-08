@@ -11,7 +11,6 @@ import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.symptomlog.*
 import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
 
-
 typealias ComposablePromptFun = @Composable (logViewModel: LogViewModel) -> Unit
 typealias ComposableIconFun = @Composable (color: Color) -> Unit
 
@@ -19,16 +18,17 @@ enum class LogPrompt(
     var title: Int,
     var icon: ComposableIconFun,
     var prompt: ComposablePromptFun,
-    ) {
+) {
     Flow(
         title = R.string.period_flow,
         icon = { color ->
             Icon(
                 painter = painterResource(R.drawable.opacity_black_24dp),
                 contentDescription = "Flow Icon",
-                tint = color
-        ) },
-        prompt = { logViewModel -> FlowPrompt(logViewModel = logViewModel) }
+                tint = color,
+            )
+        },
+        prompt = { logViewModel -> FlowPrompt(logViewModel = logViewModel) },
     ),
     Mood(
         title = R.string.mood,
@@ -36,163 +36,173 @@ enum class LogPrompt(
             Icon(
                 imageVector = Icons.Outlined.AddReaction,
                 contentDescription = "Mood Icon",
-                tint = color
-        ) },
-        prompt = { logViewModel -> MoodPrompt(logViewModel = logViewModel) }
+                tint = color,
+            )
+        },
+        prompt = { logViewModel -> MoodPrompt(logViewModel = logViewModel) },
     ),
     Sleep(
         title = R.string.sleep,
-        icon = { color -> Icon(
+        icon = { color ->
+            Icon(
                 painter = painterResource(R.drawable.nightlight_black_24dp),
                 contentDescription = "Sleep Icon",
-                tint = color
-        ) },
-        prompt = { logViewModel -> SleepPrompt(logViewModel = logViewModel) }
+                tint = color,
+            )
+        },
+        prompt = { logViewModel -> SleepPrompt(logViewModel = logViewModel) },
     ),
     Cramps(
         title = R.string.cramps,
-        icon = { color -> Icon(
+        icon = { color ->
+            Icon(
                 painter = painterResource(R.drawable.sentiment_very_dissatisfied_black_24dp),
                 contentDescription = "Cramp Icon",
-                tint = color
-        ) },
-        prompt = { logViewModel -> CrampsPrompt(logViewModel = logViewModel)}
+                tint = color,
+            )
+        },
+        prompt = { logViewModel -> CrampsPrompt(logViewModel = logViewModel) },
     ),
     Exercise(
         title = R.string.exercise,
-        icon = { color -> Icon(
-                painter = painterResource(id =R.drawable.self_improvement_black_24dp),
+        icon = { color ->
+            Icon(
+                painter = painterResource(id = R.drawable.self_improvement_black_24dp),
                 contentDescription = "Exercise Icon",
-                tint = color
-        ) },
-        prompt = { logViewModel -> ExercisePrompt(logViewModel = logViewModel) }
+                tint = color,
+            )
+        },
+        prompt = { logViewModel -> ExercisePrompt(logViewModel = logViewModel) },
     ),
     Notes(
         title = R.string.notes,
-        icon = { color -> Icon(
+        icon = { color ->
+            Icon(
                 painter = painterResource(R.drawable.edit_black_24dp),
                 contentDescription = "Notes Icon",
-                tint = color
-        ) },
-        prompt = { logViewModel -> NotesPrompt(logViewModel = logViewModel) }
-    );
+                tint = color,
+            )
+        },
+        prompt = { logViewModel -> NotesPrompt(logViewModel = logViewModel) },
+    ),
+    ;
     companion object {
         private val map = values().associateBy { it.title }
         infix fun from(title: Int) = map[title]
     }
 }
 
-open class LogSquare (
+open class LogSquare(
     var description: String,
     var icon: ComposableIconFun,
     var promptTitle: Int,
-    var dataName: String
-    ) {
-    object FlowLight: LogSquare(
+    var dataName: String,
+) {
+    object FlowLight : LogSquare(
         description = "Light",
         icon = {
             Icon(
                 painter = painterResource(R.drawable.water_drop_black_24dp),
-                contentDescription = "FlowLight"
+                contentDescription = "FlowLight",
             )
         },
         promptTitle = R.string.period_flow,
-        dataName = FlowSeverity.Light.name
+        dataName = FlowSeverity.Light.name,
     )
-    object FlowMedium: LogSquare(
+    object FlowMedium : LogSquare(
         description = "Medium",
         icon = {
             Icon(
                 painter = painterResource(R.drawable.opacity_black_24dp),
-                contentDescription = "FlowMedium"
+                contentDescription = "FlowMedium",
             )
         },
         promptTitle = R.string.period_flow,
-        dataName = FlowSeverity.Medium.name
+        dataName = FlowSeverity.Medium.name,
     )
-    object FlowHeavy: LogSquare(
+    object FlowHeavy : LogSquare(
         description = "Heavy",
         icon = {
             Icon(
                 painter = painterResource(R.drawable.flow_heavy),
-                contentDescription = "FlowHeavy"
+                contentDescription = "FlowHeavy",
             )
         },
         promptTitle = R.string.period_flow,
-        dataName = FlowSeverity.Heavy.name
+        dataName = FlowSeverity.Heavy.name,
     )
-    object FlowSpotting: LogSquare(
+    object FlowSpotting : LogSquare(
         description = "Spotting",
         icon = {
             Icon(
                 painter = painterResource(R.drawable.spotting),
-                contentDescription = "FlowSpotting"
+                contentDescription = "FlowSpotting",
             )
         },
         promptTitle = R.string.period_flow,
-        dataName = FlowSeverity.Spotting.name
+        dataName = FlowSeverity.Spotting.name,
     )
-    object FlowNone: LogSquare(
+    object FlowNone : LogSquare(
         description = "None",
         icon = {
             Icon(
                 painter = painterResource(R.drawable.not_interested_black_24dp),
-                contentDescription = "FlowNone"
+                contentDescription = "FlowNone",
             )
         },
         promptTitle = R.string.period_flow,
-        dataName = FlowSeverity.None.name
+        dataName = FlowSeverity.None.name,
     )
 
-    object MoodHappy: LogSquare(
+    object MoodHappy : LogSquare(
         description = "Happy",
         icon = {
             Icon(
                 painter = painterResource(R.drawable.sentiment_satisfied_black_24dp),
-                contentDescription = "MoodHappy"
+                contentDescription = "MoodHappy",
             )
         },
         promptTitle = R.string.mood,
-        dataName = Mood.HAPPY.displayName
+        dataName = Mood.HAPPY.displayName,
     )
 
-    object MoodNeutral: LogSquare(
+    object MoodNeutral : LogSquare(
         description = "Meh",
         icon = {
             Icon(
                 painter = painterResource(R.drawable.sentiment_neutral_black_24dp),
-                contentDescription = "MoodNeutral"
+                contentDescription = "MoodNeutral",
             )
         },
         promptTitle = R.string.mood,
-        dataName = Mood.NEUTRAL.displayName
+        dataName = Mood.NEUTRAL.displayName,
     )
 
-    object MoodSad: LogSquare(
+    object MoodSad : LogSquare(
         description = "Sad",
         icon = {
             Icon(
                 painter = painterResource(R.drawable.sentiment_dissatisfied_black_24dp),
-                contentDescription = "MoodSad"
+                contentDescription = "MoodSad",
             )
         },
         promptTitle = R.string.mood,
-        dataName = Mood.SAD.displayName
+        dataName = Mood.SAD.displayName,
     )
 
-    object MoodSilly: LogSquare(
+    object MoodSilly : LogSquare(
         description = "Silly/Goofy",
         icon = {
             Icon(
                 painter = painterResource(R.drawable.sentiment_very_satisfied_black_24dp),
-                contentDescription = "MoodSilly"
+                contentDescription = "MoodSilly",
             )
         },
         promptTitle = R.string.mood,
-        dataName = Mood.LOL.displayName
+        dataName = Mood.LOL.displayName,
     )
 
-    object MoodSick: LogSquare(
+    object MoodSick : LogSquare(
         description = "Sick",
         icon = {
             Icon(
@@ -201,10 +211,10 @@ open class LogSquare (
             )
         },
         promptTitle = R.string.mood,
-        dataName = Mood.SICK.displayName
+        dataName = Mood.SICK.displayName,
     )
 
-    object MoodAngry: LogSquare(
+    object MoodAngry : LogSquare(
         description = "Angry",
         icon = {
             Icon(
@@ -213,10 +223,10 @@ open class LogSquare (
             )
         },
         promptTitle = R.string.mood,
-        dataName = Mood.ANGRY.displayName
+        dataName = Mood.ANGRY.displayName,
     )
 
-    object MoodLoved: LogSquare(
+    object MoodLoved : LogSquare(
         description = "Loved",
         icon = {
             Icon(
@@ -225,10 +235,10 @@ open class LogSquare (
             )
         },
         promptTitle = R.string.mood,
-        dataName = Mood.LOVED.displayName
+        dataName = Mood.LOVED.displayName,
     )
 
-    object CrampsNeutral: LogSquare(
+    object CrampsNeutral : LogSquare(
         description = "Neutral",
         icon = {
             Icon(
@@ -237,10 +247,10 @@ open class LogSquare (
             )
         },
         promptTitle = R.string.cramps,
-        dataName = CrampSeverity.Neutral.name
+        dataName = CrampSeverity.Neutral.name,
     )
 
-    object CrampsBad: LogSquare(
+    object CrampsBad : LogSquare(
         description = "Bad",
         icon = {
             Icon(
@@ -249,10 +259,10 @@ open class LogSquare (
             )
         },
         promptTitle = R.string.cramps,
-        dataName = CrampSeverity.Bad.name
+        dataName = CrampSeverity.Bad.name,
     )
 
-    object CrampsTerrible: LogSquare(
+    object CrampsTerrible : LogSquare(
         description = "Terrible",
         icon = {
             Icon(
@@ -261,10 +271,10 @@ open class LogSquare (
             )
         },
         promptTitle = R.string.cramps,
-        dataName = CrampSeverity.Terrible.name
+        dataName = CrampSeverity.Terrible.name,
     )
 
-    object CrampsNone: LogSquare(
+    object CrampsNone : LogSquare(
         description = "None",
         icon = {
             Icon(
@@ -273,7 +283,7 @@ open class LogSquare (
             )
         },
         promptTitle = R.string.cramps,
-        dataName = CrampSeverity.None.name
+        dataName = CrampSeverity.None.name,
     )
 
     object ExerciseCardio : LogSquare(
@@ -285,7 +295,7 @@ open class LogSquare (
             )
         },
         promptTitle = R.string.exercise,
-        dataName = Exercise.CARDIO.displayName
+        dataName = Exercise.CARDIO.displayName,
     )
 
     object ExerciseYoga : LogSquare(
@@ -297,7 +307,7 @@ open class LogSquare (
             )
         },
         promptTitle = R.string.exercise,
-        dataName = Exercise.YOGA.displayName
+        dataName = Exercise.YOGA.displayName,
     )
 
     object ExerciseStrength : LogSquare(
@@ -309,7 +319,7 @@ open class LogSquare (
             )
         },
         promptTitle = R.string.exercise,
-        dataName = Exercise.STRENGTH.displayName
+        dataName = Exercise.STRENGTH.displayName,
     )
 
     object ExerciseBallSports : LogSquare(
@@ -321,7 +331,7 @@ open class LogSquare (
             )
         },
         promptTitle = R.string.exercise,
-        dataName = Exercise.BALL_SPORTS.displayName
+        dataName = Exercise.BALL_SPORTS.displayName,
     )
 
     object ExerciseMartialArts : LogSquare(
@@ -333,7 +343,7 @@ open class LogSquare (
             )
         },
         promptTitle = R.string.exercise,
-        dataName = Exercise.MARTIAL_ARTS.displayName
+        dataName = Exercise.MARTIAL_ARTS.displayName,
     )
 
     object ExerciseWaterSports : LogSquare(
@@ -345,7 +355,7 @@ open class LogSquare (
             )
         },
         promptTitle = R.string.exercise,
-        dataName = Exercise.WATER_SPORTS.displayName
+        dataName = Exercise.WATER_SPORTS.displayName,
     )
 
     object ExerciseCycling : LogSquare(
@@ -357,7 +367,7 @@ open class LogSquare (
             )
         },
         promptTitle = R.string.exercise,
-        dataName = Exercise.CYCLING.displayName
+        dataName = Exercise.CYCLING.displayName,
     )
 
     object ExerciseRacquetSports : LogSquare(
@@ -369,7 +379,7 @@ open class LogSquare (
             )
         },
         promptTitle = R.string.exercise,
-        dataName = Exercise.RACKET_SPORTS.displayName
+        dataName = Exercise.RACKET_SPORTS.displayName,
     )
 
     object ExerciseWinterSports : LogSquare(
@@ -381,6 +391,6 @@ open class LogSquare (
             )
         },
         promptTitle = R.string.exercise,
-        dataName = Exercise.WINTER_SPORTS.displayName
+        dataName = Exercise.WINTER_SPORTS.displayName,
     )
 }

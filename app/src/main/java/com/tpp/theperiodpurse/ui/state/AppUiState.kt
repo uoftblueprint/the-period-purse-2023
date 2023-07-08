@@ -4,7 +4,7 @@ import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.data.model.Symptom
 
 // data class
-data class AppUiState (
+data class AppUiState(
     // Preffered Symptoms to be tracked
     var trackedSymptoms: List<Symptom> = listOf(),
     var allowReminders: Boolean = false,

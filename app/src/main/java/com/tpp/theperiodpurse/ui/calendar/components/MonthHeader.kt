@@ -25,7 +25,7 @@ fun MonthHeader(calendarMonth: CalendarMonth) {
     Column(
         modifier = Modifier
             .padding(vertical = 18.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         MonthAndDayHeadings(calendarMonth, daysOfWeek)
     }
@@ -40,7 +40,7 @@ fun MonthAndDayHeadings(calendarMonth: CalendarMonth, daysOfWeek: List<DayOfWeek
         textAlign = TextAlign.Center,
         fontSize = 18.scaledSp(),
         fontWeight = FontWeight.W500,
-        text = calendarMonth.yearMonth.displayText()
+        text = calendarMonth.yearMonth.displayText(),
     )
 
     // Days of Week
@@ -53,7 +53,7 @@ fun MonthAndDayHeadings(calendarMonth: CalendarMonth, daysOfWeek: List<DayOfWeek
                 textAlign = TextAlign.Center,
                 fontSize = 10.scaledSp(),
                 fontWeight = FontWeight.ExtraBold,
-                text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
+                text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
             )
         }
     }

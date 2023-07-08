@@ -40,14 +40,14 @@ fun SymptomTab(
             selectedSymptom = selectedSymptom,
             expanded = expanded,
             onExpandButtonClick = { expanded = !expanded },
-            modifier = tabModifier
+            modifier = tabModifier,
         )
         if (expanded) {
             SwitchSymptomTab(
                 selectedSymptom = selectedSymptom,
                 symptoms = trackedSymptoms,
                 onSymptomOnClicks = trackedSymptoms.map { { onSymptomClick(it) } },
-                modifier = tabModifier
+                modifier = tabModifier,
             )
         }
     }
@@ -60,30 +60,29 @@ private fun DisplaySymptomTab(
     onExpandButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(
             text = stringResource(selectedSymptom.nameId),
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(end = 2.dp)
+            modifier = Modifier.padding(end = 2.dp),
         )
         Icon(
             painter = painterResource(
-                id = selectedSymptom.resourceId
+                id = selectedSymptom.resourceId,
             ),
             tint = Color.Black,
             contentDescription = selectedSymptom.name,
             modifier = Modifier
                 .padding(end = 0.dp)
-                .testTag("Selected Symptom")
+                .testTag("Selected Symptom"),
         )
         SwitchSymptomButton(
             expanded = expanded,
-            onClick = onExpandButtonClick
+            onClick = onExpandButtonClick,
         )
     }
 }
@@ -92,13 +91,13 @@ private fun DisplaySymptomTab(
 private fun SwitchSymptomButton(
     expanded: Boolean,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     IconButton(onClick = onClick, modifier = modifier) {
         Icon(
             imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
             tint = Color.Gray,
-            contentDescription = stringResource(R.string.expand_button_symptoms_content_description)
+            contentDescription = stringResource(R.string.expand_button_symptoms_content_description),
         )
     }
 }
@@ -108,11 +107,11 @@ private fun SwitchSymptomTab(
     selectedSymptom: Symptom,
     symptoms: List<Symptom>,
     onSymptomOnClicks: List<() -> Unit>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = modifier.testTag("Symptom Options")
+        modifier = modifier.testTag("Symptom Options"),
     ) {
         symptoms.zip(onSymptomOnClicks).forEach { (symptom, onClick) ->
             val interactionSource = remember { MutableInteractionSource() }
@@ -120,7 +119,7 @@ private fun SwitchSymptomTab(
 
             IconButton(
                 onClick = onClick,
-                interactionSource = interactionSource
+                interactionSource = interactionSource,
             ) {
                 val defaultColor = Color.Black
                 val color = if (isPressed) {
@@ -133,7 +132,7 @@ private fun SwitchSymptomTab(
                 Icon(
                     painter = painterResource(id = symptom.resourceId),
                     tint = color,
-                    contentDescription = stringResource(symptom.nameId)
+                    contentDescription = stringResource(symptom.nameId),
                 )
             }
         }
@@ -147,6 +146,6 @@ fun SymptomTabPreview() {
     SymptomTab(
         trackedSymptoms = Symptom.values().asList(),
         selectedSymptom = selectedSymptom,
-        onSymptomClick = { selectedSymptom = it }
+        onSymptomClick = { selectedSymptom = it },
     )
 }

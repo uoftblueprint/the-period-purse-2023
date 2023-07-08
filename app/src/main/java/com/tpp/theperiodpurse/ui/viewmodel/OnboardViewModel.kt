@@ -29,9 +29,9 @@ import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class OnboardViewModel @Inject constructor (
+class OnboardViewModel @Inject constructor(
     private val userRepository: UserRepository,
-): ViewModel() {
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(OnboardUIState())
     val uiState: StateFlow<OnboardUIState> = _uiState.asStateFlow()
@@ -43,9 +43,9 @@ class OnboardViewModel @Inject constructor (
     var googleDriveLoadSuccess: MutableLiveData<Boolean?> = MutableLiveData(null)
     var hasBackedUpToGoogleDrive: MutableLiveData<Boolean> = MutableLiveData(false)
 
-    fun checkGoogleLogin(context: Context): Boolean{
+    fun checkGoogleLogin(context: Context): Boolean {
         val account = GoogleSignIn.getLastSignedInAccount(context)
-        return (account!=null)
+        return (account != null)
     }
 
     fun checkOnboardedStatus(context: Context) {
@@ -66,16 +66,18 @@ class OnboardViewModel @Inject constructor (
         }
     }
 
-
     // TODO: go through all google drive opeartions and make sure usage of coroutine scope is
     //  correct
-    fun checkGoogleDrive(account: Account, context: Context, ) {
+    fun checkGoogleDrive(account: Account, context: Context) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
                     val credential = GoogleAccountCredential.usingOAuth2(
-                        context, listOf(DriveScopes.DRIVE_FILE,
-                            DriveScopes.DRIVE_APPDATA)
+                        context,
+                        listOf(
+                            DriveScopes.DRIVE_FILE,
+                            DriveScopes.DRIVE_APPDATA,
+                        ),
                     )
                     credential.selectedAccount = account
 
@@ -83,7 +85,7 @@ class OnboardViewModel @Inject constructor (
                         .Builder(
                             AndroidHttp.newCompatibleTransport(),
                             JacksonFactory.getDefaultInstance(),
-                            credential
+                            credential,
                         )
                         .setApplicationName(context.getString(R.string.app_name))
                         .build()
@@ -91,7 +93,6 @@ class OnboardViewModel @Inject constructor (
                     val googleDriveFolder = drive.files().list()
                         .setQ("name = 'user_database.db' and trashed = false")
                         .setSpaces("appDataFolder").execute()
-
 
                     this@OnboardViewModel.googleDriveFolder.postValue(googleDriveFolder)
                     drivePermissionHasError.postValue(null)
@@ -111,15 +112,15 @@ class OnboardViewModel @Inject constructor (
                 context,
                 listOf(
                     DriveScopes.DRIVE_FILE,
-                    DriveScopes.DRIVE_APPDATA
-                )
+                    DriveScopes.DRIVE_APPDATA,
+                ),
             )
             credential.selectedAccount = account
             val drive = Drive
                 .Builder(
                     AndroidHttp.newCompatibleTransport(),
                     JacksonFactory.getDefaultInstance(),
-                    credential
+                    credential,
                 )
                 .setApplicationName(context.getString(R.string.app_name))
                 .build()
@@ -155,14 +156,14 @@ class OnboardViewModel @Inject constructor (
                 context,
                 listOf(
                     DriveScopes.DRIVE_APPDATA,
-                    DriveScopes.DRIVE_FILE
-                )
+                    DriveScopes.DRIVE_FILE,
+                ),
             )
             credential.selectedAccount = account
             val drive = Drive.Builder(
                 AndroidHttp.newCompatibleTransport(),
                 JacksonFactory.getDefaultInstance(),
-                credential
+                credential,
             ).setApplicationName(context.getString(R.string.app_name)).build()
 
             withContext(Dispatchers.IO) {
@@ -201,10 +202,6 @@ class OnboardViewModel @Inject constructor (
         }
     }
 
-
-
-
-
     /**
      * Set the quantity [averageDays] for average period length for this onboarding session
      */
@@ -213,7 +210,7 @@ class OnboardViewModel @Inject constructor (
             currentState.copy(
                 days = numberDays,
 
-                )
+            )
         }
     }
 
@@ -238,7 +235,7 @@ class OnboardViewModel @Inject constructor (
      * Set the [lastDate] of last period for current onboarding session
      */
     fun setDate(startDate: String) {
-        var dates= startDate.split("|")
+        var dates = startDate.split("|")
         _uiState.update { currentState ->
             currentState.copy(
                 date = dates[0] + " to " + dates[1],
@@ -246,16 +243,19 @@ class OnboardViewModel @Inject constructor (
         }
     }
 
-
-    private fun createUser(symptomsToTrack: ArrayList<Symptom>, periodHistory: ArrayList<Date>,
-                           averagePeriodLength: Int, averageCycleLength: Int,
-                           daysSinceLastPeriod: Int): User {
+    private fun createUser(
+        symptomsToTrack: ArrayList<Symptom>,
+        periodHistory: ArrayList<Date>,
+        averagePeriodLength: Int,
+        averageCycleLength: Int,
+        daysSinceLastPeriod: Int,
+    ): User {
         return User(
             symptomsToTrack = symptomsToTrack,
             periodHistory = periodHistory,
             averagePeriodLength = averagePeriodLength,
             averageCycleLength = averageCycleLength,
-            daysSinceLastPeriod = daysSinceLastPeriod
+            daysSinceLastPeriod = daysSinceLastPeriod,
         )
     }
 
@@ -263,16 +263,27 @@ class OnboardViewModel @Inject constructor (
         userRepository.addUser(user, context)
     }
 
-    fun addNewUser(symptomsToTrack: ArrayList<Symptom>, periodHistory: ArrayList<Date>,
-                   averagePeriodLength: Int, averageCycleLength: Int, daysSinceLastPeriod: Int, context: Context) {
-        saveUser(createUser(symptomsToTrack, periodHistory, averagePeriodLength, averageCycleLength,
-            daysSinceLastPeriod), context)
+    fun addNewUser(
+        symptomsToTrack: ArrayList<Symptom>,
+        periodHistory: ArrayList<Date>,
+        averagePeriodLength: Int,
+        averageCycleLength: Int,
+        daysSinceLastPeriod: Int,
+        context: Context,
+    ) {
+        saveUser(
+            createUser(
+                symptomsToTrack,
+                periodHistory,
+                averagePeriodLength,
+                averageCycleLength,
+                daysSinceLastPeriod,
+            ),
+            context,
+        )
         viewModelScope.launch {
             val user = withContext(Dispatchers.Main) { userRepository.getUser(1, context) }
             _uiState.value = _uiState.value.copy(user = user)
         }
     }
-
-
-
 }

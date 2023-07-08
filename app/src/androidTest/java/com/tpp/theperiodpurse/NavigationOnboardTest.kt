@@ -12,9 +12,9 @@ import com.tpp.theperiodpurse.data.entity.User
 import com.tpp.theperiodpurse.data.model.*
 import com.tpp.theperiodpurse.data.repository.DateRepository
 import com.tpp.theperiodpurse.data.repository.UserRepository
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
-import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.runBlocking
@@ -46,9 +46,11 @@ class NavigationOnboardTest {
     lateinit var dateRepository: DateRepository
 
     private val symptomList = arrayListOf(
-        Symptom.EXERCISE, Symptom.SLEEP, Symptom.MOOD,
-        Symptom.CRAMPS
-    );
+        Symptom.EXERCISE,
+        Symptom.SLEEP,
+        Symptom.MOOD,
+        Symptom.CRAMPS,
+    )
     private val currentDate = java.util.Date()
     private val duration: Duration = Duration.ofHours(1)
     private val dateList = arrayListOf(
@@ -60,8 +62,8 @@ class NavigationOnboardTest {
             exerciseType = Exercise.YOGA,
             crampSeverity = CrampSeverity.Bad,
             sleep = duration,
-            notes = ""
-        )
+            notes = "",
+        ),
     )
 
     private fun insertDate(context: Context) {
@@ -76,15 +78,15 @@ class NavigationOnboardTest {
             periodHistory = dateList,
             averagePeriodLength = 0,
             averageCycleLength = 0,
-            daysSinceLastPeriod = 0
+            daysSinceLastPeriod = 0,
         )
         runBlocking {
             userRepository.addUser(user, context)
         }
     }
 
-    @get:Rule
     // Used to manage the components' state and is used to perform injection on tests
+    @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
     @Before
@@ -96,7 +98,7 @@ class NavigationOnboardTest {
             insertDate(LocalContext.current)
             navController = TestNavHostController(LocalContext.current)
             navController.navigatorProvider.addNavigator(
-                ComposeNavigator()
+                ComposeNavigator(),
             )
             AppScreen(
                 navController = navController,
@@ -107,14 +109,13 @@ class NavigationOnboardTest {
                 signIn = { signIn() },
                 skipDatabase = true,
                 context = LocalContext.current,
-                calendarViewModel = calendarViewModel
+                calendarViewModel = calendarViewModel,
             )
         }
     }
 
     @Test
     fun appNavHost_Onboard_navigatesToSummary_viewModel() {
-
         // welcome page
         navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
 
@@ -125,7 +126,6 @@ class NavigationOnboardTest {
         composeTestRule.onNodeWithContentDescription("Pick Days")
             .performImeAction()
         composeTestRule.onNodeWithContentDescription("Next").performClick()
-
 
         navController.assertCurrentRouteName(OnboardingScreen.QuestionTwo.name)
 
@@ -144,8 +144,8 @@ class NavigationOnboardTest {
         composeTestRule.onNodeWithContentDescription("Mood").performClick()
 
         composeTestRule.onNodeWithContentDescription("fitness").performClick()
-////
-////
+// //
+// //
         composeTestRule.onNodeWithContentDescription("Cramps").performClick()
 //
         composeTestRule.onNodeWithContentDescription("Sleep").performClick()
@@ -160,9 +160,9 @@ class NavigationOnboardTest {
         composeTestRule.onNodeWithContentDescription("Sleep").assertExists()
         composeTestRule.onNodeWithContentDescription("Exercise").assertExists()
     }
+
     @Test
     fun appNavHost_clickOnboard_navigatesToSummaryBack() {
-
         composeTestRule.runOnIdle {
             navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
         }
@@ -185,7 +185,6 @@ class NavigationOnboardTest {
         // back to quesiton three page
         composeTestRule.onNodeWithContentDescription("Back").performClick()
 
-
         navController.assertCurrentRouteName(OnboardingScreen.QuestionThree.name)
         composeTestRule.onNodeWithContentDescription("Back").performClick()
 
@@ -196,17 +195,14 @@ class NavigationOnboardTest {
 
         // back to quesiton one page
         navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
-
-
-
     }
+
     @Test
     fun appNavHost_blank_input_questionone() {
         navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
         composeTestRule.onNodeWithContentDescription("Pick Days")
             .performImeAction()
         navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
-
     }
 
     @Test
@@ -237,7 +233,6 @@ class NavigationOnboardTest {
         // back to quesiton one page
         navController.assertCurrentRouteName(OnboardingScreen.QuestionOne.name)
 
-
         val newtextFieldValue = "6"
         composeTestRule.onNodeWithContentDescription("Pick Days")
             .performTextClearance()
@@ -257,15 +252,6 @@ class NavigationOnboardTest {
         composeTestRule.onNodeWithText("6 days").assertExists()
     }
 
-
-
-
-
-    fun signIn(){
-
+    fun signIn() {
     }
-
 }
-
-
-
