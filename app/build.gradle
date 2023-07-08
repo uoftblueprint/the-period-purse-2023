@@ -5,6 +5,7 @@ plugins {
     id "org.jetbrains.kotlin.plugin.noarg" version "1.6.10"
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -69,6 +70,9 @@ android {
 }
 
 dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:32.1.1"))
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
+    implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("androidx.compose.material3:material3:1.2.0-alpha01")
     implementation("androidx.compose.material3:material3-window-size-class:1.2.0-alpha01")
     implementation 'com.google.android.gms:play-services-auth:20.4.1'
