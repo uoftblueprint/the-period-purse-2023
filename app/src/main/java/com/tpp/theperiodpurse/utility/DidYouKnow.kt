@@ -21,8 +21,9 @@ fun readRandomLine(inputStream: InputStream): String {
 /**
  * Gets and returns the SharedPreference based on the context of the environment.
  */
-fun getSharedPreferences(context: Context): SharedPreferences =
-    context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+fun getSharedPreferences(context: Context): SharedPreferences {
+    return context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
+}
 
 
 /**
@@ -33,8 +34,8 @@ fun getSharedPreferences(context: Context): SharedPreferences =
 fun setFact(context: Context) {
     val sharedPreferences = getSharedPreferences(context)
     val inputStream: InputStream = context.resources.openRawResource(R.raw.dykfacts)
-
     val c = LocalDate.now().toString()
+
     if (c != getLastDate(context)) {
         val editor = sharedPreferences.edit()
         editor.apply {
