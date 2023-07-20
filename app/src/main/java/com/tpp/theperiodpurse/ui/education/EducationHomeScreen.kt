@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.res.painterResource
@@ -28,6 +29,8 @@ import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.theme.MainFontColor
 import com.tpp.theperiodpurse.ui.theme.Teal
+import com.tpp.theperiodpurse.utility.getFact
+import com.tpp.theperiodpurse.utility.getSubString
 
 const val gray = 0xFF6D6E71
 const val teal = 0xFF72C6B7
@@ -120,6 +123,8 @@ fun BottomSection(uriHandler: UriHandler, outController: NavHostController) {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DYKCard(navController: NavHostController) {
+    val context = LocalContext.current
+    val currFact: String = getFact(context)!!
     Card(
         modifier = Modifier.padding(12.dp),
         shape = RoundedCornerShape(12.dp),
@@ -127,6 +132,7 @@ fun DYKCard(navController: NavHostController) {
         backgroundColor = Teal,
         onClick = { navController.navigate(EducationNavigation.DYK.name) },
     ) {
+
         Row {
             Column(
                 verticalArrangement = Arrangement.Center,
@@ -147,7 +153,7 @@ fun DYKCard(navController: NavHostController) {
                     textAlign = TextAlign.Left,
                     fontSize = 13.scaledSp(),
                     maxLines = 2,
-                    text = stringResource(R.string.board_game),
+                    text = getSubString(currFact, 40)
                 )
             }
             Image(
