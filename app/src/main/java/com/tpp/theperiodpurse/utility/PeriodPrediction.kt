@@ -8,6 +8,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 import java.util.Date as Date1
 
 val c: Calendar = Calendar.getInstance()
@@ -210,4 +211,32 @@ fun findYears(periods: ArrayList<ArrayList<Date>>): MutableMap<Int, ArrayList<Ar
         }
     }
     return years
+}
+
+
+fun getPeriodPrediction(periodHistory: ArrayList<Date>): ArrayList<java.util.Date> {
+    var periodLength = calculateAveragePeriodLength(periodHistory)
+    var cycleLength = calculateAverageCycleLength(periodHistory)
+
+    var periods = parseDatesIntoPeriods(periodHistory)
+    var latestCycle = periods[0].last().date
+
+    val dayInMilliseconds = 24 * 60 * 60 * 1000
+
+    val timeToAdd = cycleLength * dayInMilliseconds // convert to milliseconds
+
+    // start date of next period = start date of lastest period + cycleLength days
+    val newTime = (latestCycle.time + timeToAdd).toLong()
+    var newDate = java.util.Date(newTime)
+
+    var dates = ArrayList<java.util.Date>()
+    dates.add(newDate)
+
+    // create an array of all consecutive predicted dates
+    for (i in 1 until periodLength.roundToInt()) {
+        newDate = java.util.Date(newDate.time + dayInMilliseconds)
+        dates.add(newDate)
+    }
+
+    return dates
 }
