@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 7,
-    "identityHash": "182c002d67936a7e34da9217879222bd",
+    "identityHash": "72ca8d96e04e3d82325ab56b1d32b724",
     "entities": [
       {
         "tableName": "users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `symptomsToTrack` TEXT NOT NULL, `periodHistory` TEXT NOT NULL, `averagePeriodLength` INTEGER NOT NULL, `averageCycleLength` INTEGER NOT NULL, `daysSinceLastPeriod` INTEGER NOT NULL, `allowReminders` INTEGER NOT NULL, `reminderTime` TEXT NOT NULL, `reminderFreq` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `symptomsToTrack` TEXT NOT NULL, `periodHistory` TEXT NOT NULL, `averagePeriodLength` INTEGER NOT NULL, `averageCycleLength` INTEGER NOT NULL, `daysSinceLastPeriod` INTEGER NOT NULL, `allowReminders` INTEGER NOT NULL, `darkMode` INTEGER NOT NULL, `reminderTime` TEXT NOT NULL, `reminderFreq` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -47,6 +47,12 @@
           {
             "fieldPath": "allowReminders",
             "columnName": "allowReminders",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "darkMode",
+            "columnName": "darkMode",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -138,7 +144,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '182c002d67936a7e34da9217879222bd')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '72ca8d96e04e3d82325ab56b1d32b724')"
     ]
   }
 }

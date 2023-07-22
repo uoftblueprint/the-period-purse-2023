@@ -46,6 +46,7 @@ class AppViewModel @Inject constructor(
                         allowReminders = user.allowReminders,
                         reminderFrequency = user.reminderFreq,
                         reminderTime = user.reminderTime,
+                        darkMode = user.darkMode
                     )
                 }
                 databaseDates.collect { dates ->
@@ -98,6 +99,16 @@ class AppViewModel @Inject constructor(
 
     fun getDates(): List<Date> {
         return uiState.value.dates
+    }
+
+    fun toggleColorMode(context: Context) {
+        val currentColorMode = _uiState.value.darkMode
+        _uiState.update { currentState -> currentState.copy(darkMode = !currentColorMode) }
+        userRepository.setColorMode(!currentColorMode, context)
+    }
+
+    fun getColorMode(): Boolean {
+        return uiState.value.darkMode
     }
 
     fun setTrackedSymptoms(trackedSymptoms: ArrayList<Symptom>, context: Context) {

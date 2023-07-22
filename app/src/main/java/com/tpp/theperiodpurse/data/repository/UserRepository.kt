@@ -31,6 +31,12 @@ class UserRepository(private val userDAO: UserDAO) {
         }
     }
 
+    fun setColorMode(darkMode: Boolean, context: Context) {
+        coroutineScope.launch(Dispatchers.IO) {
+            ApplicationRoomDatabase.getDatabase(context).userDAO().toggleColorMode(id = 1, darkMode)
+        }
+    }
+
     fun setReminders(allowReminders: Boolean, context: Context) {
         coroutineScope.launch(Dispatchers.IO) {
             ApplicationRoomDatabase.getDatabase(context).userDAO().updateReminders(id = 1, allowReminders)

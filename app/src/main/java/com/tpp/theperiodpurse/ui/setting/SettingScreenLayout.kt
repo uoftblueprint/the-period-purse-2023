@@ -144,12 +144,56 @@ fun SettingScreenLayout(
                 ),
             )
         }
+
         Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
 
         NavigateButton(
             stringResource(id = R.string.customize_notifications),
             onClicked = onNotificationClicked,
         )
+
+        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
+
+        Text(
+            text = stringResource(R.string.personalization_heading),
+            modifier = modifier.padding(top = 30.dp, start = 10.dp),
+            color = Color.DarkGray,
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.scaledSp(),
+        )
+
+        Row(modifier = modifier.padding(20.dp)) {
+            Column(modifier = Modifier) {
+                Text(
+                    text = stringResource(
+                        R.string.toggle_color,
+                    ),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.scaledSp(),
+                )
+                var colorMode = "Light Mode"
+                if (appViewModel.getColorMode()){
+                    colorMode = "Dark Mode"
+                }
+                Spacer(modifier = modifier.padding(3.dp))
+                Text(
+                    text = colorMode,
+                    modifier = Modifier.padding(start = 5.dp),
+                    color = Color.Gray,
+                    fontSize = 15.scaledSp(),
+                )
+            }
+            Switch(
+                checked = appViewModel.getColorMode(),
+                onCheckedChange = { appViewModel.toggleColorMode(context) },
+                modifier = modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth(Alignment.End),
+                colors = SwitchDefaults.colors(
+                    uncheckedThumbColor = Color.DarkGray,
+                ),
+            )
+        }
 
         Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
 
@@ -193,7 +237,9 @@ fun SettingScreenLayout(
             TermsAndPrivacyFooter(outController, MainFontColor)
             Spacer(modifier = Modifier.size(80.dp))
         }
-        Spacer(modifier = Modifier.size(80.dp).padding(bottom = 5.dp))
+        Spacer(modifier = Modifier
+            .size(80.dp)
+            .padding(bottom = 5.dp))
     }
 }
 
