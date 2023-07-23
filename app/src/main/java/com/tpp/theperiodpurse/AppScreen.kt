@@ -223,7 +223,7 @@ fun AppScreen(
             isFloatingActionButtonDocked = true,
         ) { innerPadding ->
             Image(
-                painter = painterResource(id = R.drawable.background),
+                painter = painterResource(id = appViewModel.colorPalette.background),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.FillBounds,

@@ -179,7 +179,7 @@ fun SettingScreenLayout(
                 Text(
                     text = colorMode,
                     modifier = Modifier.padding(start = 5.dp),
-                    color = Color.Gray,
+                    color = appViewModel.colorPalette.text1,
                     fontSize = 15.scaledSp(),
                 )
             }

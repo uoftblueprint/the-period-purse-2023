@@ -29,7 +29,7 @@ class AppViewModel @Inject constructor(
     private val dateRepository: DateRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(AppUiState())
-    var colorPallete: ColorPalette = if (_uiState.value.darkMode == true){
+    var colorPalette: ColorPalette = if (_uiState.value.darkMode == true){
         DarkColorPaletteImpl()
     } else {
         LightColorPaletteImpl()
@@ -57,6 +57,7 @@ class AppViewModel @Inject constructor(
                         darkMode = user.darkMode
                     )
                 }
+                setColorMode(darkMode = user.darkMode, context = context)
                 databaseDates.collect { dates ->
                     updateUIDateState(dates, calendarViewModel)
                 }
@@ -115,11 +116,22 @@ class AppViewModel @Inject constructor(
         _uiState.update { currentState -> currentState.copy(darkMode = !currentColorMode) }
         userRepository.setColorMode(!currentColorMode, context)
 
-        colorPallete = if (!currentColorMode == true) {
-            LightColorPaletteImpl()
-        } else {
+        colorPalette = if (!currentColorMode == true) {
             DarkColorPaletteImpl()
+        } else {
+            LightColorPaletteImpl()
         }
+    }
+
+    fun setColorMode(darkMode: Boolean, context: Context) {
+        colorPalette = if (darkMode == true) {
+            DarkColorPaletteImpl()
+        } else {
+            LightColorPaletteImpl()
+        }
+        _uiState.update { currentState -> currentState.copy(darkMode = darkMode) }
+        userRepository.setColorMode(darkMode, context)
+
     }
 
     fun getColorMode(): Boolean {
