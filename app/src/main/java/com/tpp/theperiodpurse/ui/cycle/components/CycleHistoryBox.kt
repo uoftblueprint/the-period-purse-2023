@@ -67,7 +67,7 @@ fun CycleHistoryBox(
             // Show three most recent periods
             if (dates != null) {
                 val periods = parseDatesIntoPeriods(dates)
-                PeriodEntries(periods, 3)
+                PeriodEntries(periods, 3, appViewModel)
             }
         }
     }

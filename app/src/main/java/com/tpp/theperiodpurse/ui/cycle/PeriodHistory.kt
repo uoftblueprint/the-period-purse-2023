@@ -112,7 +112,7 @@ private fun PeriodCard(
                     .fillMaxWidth(),
             )
             // Show last three most recent periods
-            years[yearSelected]?.let { it1 -> PeriodEntries(it1, null) }
+            years[yearSelected]?.let { it1 -> PeriodEntries(it1, null, appViewModel) }
         }
     }
 }
