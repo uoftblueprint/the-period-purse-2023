@@ -78,6 +78,7 @@ fun CalendarScreenLayout(
                     calendarUIState = calendarUIState,
                     selectedSymptom = selectedSymptom,
                     navController = navController,
+                    appViewModel = appViewModel
                 )
             }
         }

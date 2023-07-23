@@ -19,6 +19,7 @@ interface ColorPalette {
     val BottomBarColor1: Color
     val SelectedColor1: Color
     val LogSelectedTextColor: Color
+    val CalendarDayColor: Color
     val MainFontColor: Color
     val SecondaryFontColor: Color
     val ButtonDisabledColor: Color
@@ -42,6 +43,7 @@ class DarkColorPaletteImpl : ColorPalette {
     override val BottomBarColor1 = Color(0xFF090909)
     override val SelectedColor1 = Color(0xFF589E92)
     override val LogSelectedTextColor = Color(0xFF6D6E71)
+    override val CalendarDayColor = Color(0xFF6D6E71)
     override val MainFontColor = Color(0xFFF1F1F1)
     override val SecondaryFontColor = Color(161, 162, 166)
     override val ButtonDisabledColor = Color(0xFFA9BDBA)
@@ -67,6 +69,7 @@ class LightColorPaletteImpl : ColorPalette {
     override val BottomBarColor1 = Color(0xFFFFFFFF)
     override val SelectedColor1 = Color(0xFF589E92)
     override val LogSelectedTextColor = Color(0xFF6D6E71)
+    override val CalendarDayColor = Color.White
     override val MainFontColor = Color(0xFF090909)
     override val SecondaryFontColor = Color(0xFF717173)
     override val ButtonDisabledColor = Color(0xFFA9BDBA)

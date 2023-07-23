@@ -29,7 +29,7 @@ fun ThePeriodPurseTheme(
 
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(
-        color = HeaderColor1,
+        color = Color.Black,
     )
     systemUiController.setNavigationBarColor(
         color = BottomBarColor1,

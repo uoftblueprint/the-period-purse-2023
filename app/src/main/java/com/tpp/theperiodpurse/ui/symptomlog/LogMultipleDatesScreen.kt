@@ -82,7 +82,7 @@ fun LogMultipleDatesScreen(
                 contentPadding = PaddingValues(bottom = 48.dp),
                 state = state,
                 monthHeader = { month ->
-                    MonthHeader(month)
+                    MonthHeader(month, appViewModel)
                 },
                 dayContent = { day ->
                     if (day.position == DayPosition.MonthDate) {
