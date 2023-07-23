@@ -30,7 +30,7 @@ class DarkColorPaletteImpl : ColorPalette {
     override val secondary3 = Color(250, 103, 103)
     override val secondary4 = Color(161, 162, 166)
     override val text1 = Color(	217, 218, 217)
-    override val text2 = Color(	240, 46, 48)
+    override val text2 = Color(161, 162, 166)
 
 
     override val background: Int= R.drawable.darkwatercolour
@@ -46,7 +46,7 @@ class LightColorPaletteImpl : ColorPalette {
     override val secondary2 = Color(115, 199, 183)
     override val secondary3 = Color(179, 31, 32)
     override val secondary4 = Color(109, 110, 113)
-    override val text1 = Color.Black
+    override val text1 = Color.DarkGray
     override val text2 = Color.Gray
 
     override val background: Int = R.drawable.background

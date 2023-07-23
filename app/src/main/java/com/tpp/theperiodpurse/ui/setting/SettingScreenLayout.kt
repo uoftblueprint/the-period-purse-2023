@@ -102,7 +102,7 @@ fun SettingScreenLayout(
         Text(
             text = stringResource(R.string.tracking_preferences),
             modifier = modifier.padding(top = 30.dp, start = 10.dp),
-            color = Color.DarkGray,
+            color = appViewModel.colorPalette.text1,
             fontWeight = FontWeight.Bold,
             fontSize = 20.scaledSp(),
         )
@@ -111,7 +111,7 @@ fun SettingScreenLayout(
         Text(
             text = stringResource(R.string.notifications_heading),
             modifier = modifier.padding(top = 5.dp, start = 10.dp),
-            color = Color.DarkGray,
+            color = appViewModel.colorPalette.text1,
             fontWeight = FontWeight.Bold,
             fontSize = 20.scaledSp(),
         )
@@ -123,12 +123,13 @@ fun SettingScreenLayout(
                     ),
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.scaledSp(),
+                    color = appViewModel.colorPalette.text1
                 )
                 Spacer(modifier = modifier.padding(3.dp))
                 Text(
                     text = time,
                     modifier = Modifier.padding(start = 5.dp),
-                    color = Color.Gray,
+                    color = appViewModel.colorPalette.text2,
                     fontSize = 15.scaledSp(),
                 )
             }
@@ -140,7 +141,7 @@ fun SettingScreenLayout(
                     .fillMaxWidth()
                     .wrapContentWidth(Alignment.End),
                 colors = SwitchDefaults.colors(
-                    uncheckedThumbColor = Color.DarkGray,
+                    uncheckedThumbColor = appViewModel.colorPalette.text2,
                 ),
             )
         }
@@ -149,6 +150,7 @@ fun SettingScreenLayout(
 
         NavigateButton(
             stringResource(id = R.string.customize_notifications),
+            appViewModel = appViewModel,
             onClicked = onNotificationClicked,
         )
 
@@ -157,7 +159,7 @@ fun SettingScreenLayout(
         Text(
             text = stringResource(R.string.personalization_heading),
             modifier = modifier.padding(top = 30.dp, start = 10.dp),
-            color = Color.DarkGray,
+            color = appViewModel.colorPalette.text1,
             fontWeight = FontWeight.Bold,
             fontSize = 20.scaledSp(),
         )
@@ -170,6 +172,7 @@ fun SettingScreenLayout(
                     ),
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.scaledSp(),
+                    color = appViewModel.colorPalette.text1
                 )
                 var colorMode = "Light Mode"
                 if (appViewModel.getColorMode()){
@@ -179,7 +182,7 @@ fun SettingScreenLayout(
                 Text(
                     text = colorMode,
                     modifier = Modifier.padding(start = 5.dp),
-                    color = appViewModel.colorPalette.text1,
+                    color = appViewModel.colorPalette.text2,
                     fontSize = 15.scaledSp(),
                 )
             }
@@ -190,7 +193,7 @@ fun SettingScreenLayout(
                     .fillMaxWidth()
                     .wrapContentWidth(Alignment.End),
                 colors = SwitchDefaults.colors(
-                    uncheckedThumbColor = Color.DarkGray,
+                    uncheckedThumbColor = appViewModel.colorPalette.text1,
                 ),
             )
         }
@@ -200,17 +203,19 @@ fun SettingScreenLayout(
         Text(
             text = stringResource(R.string.account_settings_heading),
             modifier = Modifier.padding(start = 10.dp, top = 30.dp),
-            color = Color.DarkGray,
+            color = appViewModel.colorPalette.text1,
             fontWeight = FontWeight.Bold,
             fontSize = 20.scaledSp(),
         )
         NavigateButton(
             text = stringResource(R.string.back_up_account),
+            appViewModel= appViewModel,
             onClicked = onBackUpClicked,
         )
         Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
         NavigateButton(
             text = stringResource(id = R.string.delete_account),
+            appViewModel = appViewModel,
             onClicked = onDeleteClicked,
         )
         Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
@@ -226,7 +231,7 @@ fun SettingScreenLayout(
                 .align(Alignment.CenterHorizontally),
             text = "© 2023 The Period Purse. All rights reserved.",
             textAlign = TextAlign.Center,
-            color = Color.DarkGray,
+            color = appViewModel.colorPalette.text1,
             fontSize = 15.scaledSp(),
         )
 
@@ -234,7 +239,7 @@ fun SettingScreenLayout(
        Terms & Conditions, and Privacy Policy
         */
         Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            TermsAndPrivacyFooter(outController, MainFontColor)
+            TermsAndPrivacyFooter(outController, appViewModel.colorPalette.text1)
             Spacer(modifier = Modifier.size(80.dp))
         }
         Spacer(modifier = Modifier
@@ -353,6 +358,7 @@ fun TrackingOptionButton(
             modifier = Modifier.padding(5.dp),
             text = label,
             fontSize = 12.scaledSp(),
+            color = appViewModel.colorPalette.text1
         )
     }
 }
@@ -364,7 +370,7 @@ fun TrackingOptionButton(
  * @param onClicked The callback function for button click.
  */
 @Composable
-fun NavigateButton(text: String, onClicked: () -> Unit) {
+fun NavigateButton(text: String, appViewModel: AppViewModel, onClicked: () -> Unit) {
     Button(
         onClick = onClicked,
         modifier = Modifier.fillMaxWidth(),
@@ -378,6 +384,7 @@ fun NavigateButton(text: String, onClicked: () -> Unit) {
             text = text,
             fontWeight = FontWeight.Bold,
             fontSize = 15.scaledSp(),
+            color = appViewModel.colorPalette.text1
         )
         Icon(
             imageVector = Icons.Filled.KeyboardArrowRight,
