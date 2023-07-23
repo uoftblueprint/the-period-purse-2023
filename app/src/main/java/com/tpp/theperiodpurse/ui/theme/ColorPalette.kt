@@ -1,8 +1,6 @@
 package com.tpp.theperiodpurse.ui.theme
 
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import com.tpp.theperiodpurse.R
 
 
