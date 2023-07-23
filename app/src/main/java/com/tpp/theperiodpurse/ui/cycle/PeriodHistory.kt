@@ -74,7 +74,7 @@ fun PeriodHistoryLayout(
                         }
                     }
                 }
-                PeriodCard(modifier, yearSelected, years)
+                PeriodCard(modifier, yearSelected, years, appViewModel)
             }
         }
     }
@@ -85,13 +85,14 @@ private fun PeriodCard(
     modifier: Modifier,
     yearSelected: Int,
     years: MutableMap<Int, ArrayList<ArrayList<Date>>>,
+    appViewModel: AppViewModel
 ) {
     Card(
         modifier.fillMaxWidth(),
         elevation = 2.dp,
         shape = RoundedCornerShape(50.0f),
     ) {
-        Column(modifier.padding(horizontal = 15.dp, vertical = 15.dp)) {
+        Column(modifier.background(color = appViewModel.colorPalette.HeaderColor1).padding(horizontal = 15.dp, vertical = 15.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -127,20 +128,22 @@ fun AppBar(navController: NavController, appViewModel: AppViewModel) {
                 text = stringResource(id = R.string.period_history),
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.scaledSp(),
+                color = appViewModel.colorPalette.MainFontColor
             )
         },
         backgroundColor = appViewModel.colorPalette.HeaderColor1,
         elevation = 0.dp,
-        navigationIcon = { BackIcon(navController = navController) },
+        navigationIcon = { BackIcon(navController = navController, appViewModel = appViewModel) },
     )
 }
 
 @Composable
-fun BackIcon(navController: NavController) {
+fun BackIcon(navController: NavController, appViewModel: AppViewModel) {
     IconButton(onClick = { navController.navigateUp() }) {
         Icon(
             imageVector = Icons.Filled.ArrowBack,
             contentDescription = stringResource(R.string.back_button),
+            tint = appViewModel.colorPalette.MainFontColor
         )
     }
 }

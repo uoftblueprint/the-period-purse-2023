@@ -2,6 +2,7 @@ package com.tpp.theperiodpurse.ui.symptomlog
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.FloatingActionButton
@@ -13,7 +14,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -49,10 +52,17 @@ fun LogMultipleDatesScreen(
     appViewModel: AppViewModel,
 ) {
     val context = LocalContext.current.applicationContext
-    Column(
+    Image(
+        painter = painterResource(appViewModel.colorPalette.background),
+        contentDescription = null,
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .semantics { contentDescription = "Cycle Page" },
+        contentScale = ContentScale.FillBounds,
+    )
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
     ) {
         PopupTopBar(onClose = onClose, appViewModel = appViewModel) {
             LogMultipleDatesText()
@@ -91,7 +101,7 @@ fun LogMultipleDatesScreen(
 //                        val (dayColor, _) = getDayColorAndIcon(Symptom.FLOW, calendarDayUIStates[day.date])
                         Day(
                             day.date,
-                            color = if (selected) Red else appViewModel.colorPalette.HeaderColor1,
+                            color = if (selected) Red else appViewModel.colorPalette.CalendarDayColor,
                             iconId = null,
                             onClick = {
                                 selected = !selected

@@ -52,19 +52,19 @@ fun CycleScreenLayout(
                 .fillMaxHeight()
                 .padding(horizontal = 20.dp, vertical = 25.dp),
         ) {
-            CurrentCycleBox(dates = dates)
+            CurrentCycleBox(dates = dates, appViewModel = appViewModel)
             Spacer(modifier.height(30.dp))
             Row {
                 AverageLengthBox(
                     title = stringResource(R.string.avg_period_len),
-                    color = Color(0xFFFEDBDB),
+                    color = appViewModel.colorPalette.cyclePink,
                     length = periodLength,
                     image = painterResource(R.drawable.flow_with_heart),
                 )
                 Spacer(modifier.width(16.dp))
                 AverageLengthBox(
                     title = stringResource(R.string.avg_cycle_len),
-                    color = Color(0xFFBAE0D8),
+                    color = appViewModel.colorPalette.cycleBlue,
                     length = cycleLength,
                     image = painterResource(R.drawable.menstruation_calendar__1_),
                 )
@@ -75,6 +75,7 @@ fun CycleScreenLayout(
                 onClickShowFull = {
                     navController.navigate(Screen.CycleFullHistory.name)
                 },
+                appViewModel = appViewModel
             )
             Spacer(modifier.height(80.dp))
         }

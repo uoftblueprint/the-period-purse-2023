@@ -25,6 +25,8 @@ interface ColorPalette {
     val MainFontColor: Color
     val SecondaryFontColor: Color
     val ButtonDisabledColor: Color
+    val cyclePink: Color
+    val cycleBlue: Color
 
     val background: Int
 }
@@ -50,6 +52,8 @@ class DarkColorPaletteImpl : ColorPalette {
     override val MainFontColor = Color(0xFFF1F1F1)
     override val SecondaryFontColor = Color(161, 162, 166)
     override val ButtonDisabledColor = Color(0xFFA9BDBA)
+    override val cyclePink = Color(	250, 103, 103)
+    override val cycleBlue = Color(	90, 159, 147)
 
 
     override val background: Int= R.drawable.darkwatercolour
@@ -78,6 +82,8 @@ class LightColorPaletteImpl : ColorPalette {
     override val MainFontColor = Color(0xFF090909)
     override val SecondaryFontColor = Color(0xFF717173)
     override val ButtonDisabledColor = Color(0xFFA9BDBA)
+    override val cyclePink = Color(0xFFFEDBDB)
+    override val cycleBlue = Color(0xFFBAE0D8)
 
     override val background: Int = R.drawable.background
 }
