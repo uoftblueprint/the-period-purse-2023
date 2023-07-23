@@ -54,7 +54,7 @@
     <string name="notifications_heading">Notifications</string>
     <string name="personalization_heading">Personalizations</string>
     <string name="account_settings_heading">Account settings</string>
-    <string name="toggle_color">Toggle Color Theme</string>
+    <string name="toggle_color">Dark Mode</string>
     <string name="remind_me_to_log_symptoms">Remind me to log symptoms</string>
     <string name="customize_notifications">Customise Notifications</string>
     <string name="reminder_time">Reminder Time</string>

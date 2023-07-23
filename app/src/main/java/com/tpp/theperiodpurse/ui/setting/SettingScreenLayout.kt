@@ -146,7 +146,7 @@ fun SettingScreenLayout(
             )
         }
 
-        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
+        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp).background(color = appViewModel.colorPalette.MainFontColor))
 
         NavigateButton(
             stringResource(id = R.string.customize_notifications),
@@ -154,18 +154,18 @@ fun SettingScreenLayout(
             onClicked = onNotificationClicked,
         )
 
-        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
+        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp).background(color = appViewModel.colorPalette.MainFontColor))
 
         Text(
-            text = stringResource(R.string.personalization_heading),
-            modifier = modifier.padding(top = 30.dp, start = 10.dp),
+            text = stringResource(R.string.account_settings_heading),
+            modifier = Modifier.padding(start = 10.dp, top = 30.dp),
             color = appViewModel.colorPalette.text1,
             fontWeight = FontWeight.Bold,
             fontSize = 20.scaledSp(),
         )
 
-        Row(modifier = modifier.padding(20.dp)) {
-            Column(modifier = Modifier) {
+        Row(modifier = modifier.padding(start = 18.dp, end = 18.dp)) {
+            Column(modifier = modifier.align(Alignment.CenterVertically)) {
                 Text(
                     text = stringResource(
                         R.string.toggle_color,
@@ -173,17 +173,6 @@ fun SettingScreenLayout(
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.scaledSp(),
                     color = appViewModel.colorPalette.text1
-                )
-                var colorMode = "Light Mode"
-                if (appViewModel.getColorMode()){
-                    colorMode = "Dark Mode"
-                }
-                Spacer(modifier = modifier.padding(3.dp))
-                Text(
-                    text = colorMode,
-                    modifier = Modifier.padding(start = 5.dp),
-                    color = appViewModel.colorPalette.text2,
-                    fontSize = 15.scaledSp(),
                 )
             }
             Switch(
@@ -198,27 +187,20 @@ fun SettingScreenLayout(
             )
         }
 
-        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
+        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp).background(color = appViewModel.colorPalette.MainFontColor))
 
-        Text(
-            text = stringResource(R.string.account_settings_heading),
-            modifier = Modifier.padding(start = 10.dp, top = 30.dp),
-            color = appViewModel.colorPalette.text1,
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.scaledSp(),
-        )
         NavigateButton(
             text = stringResource(R.string.back_up_account),
             appViewModel= appViewModel,
             onClicked = onBackUpClicked,
         )
-        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
+        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp).background(color = appViewModel.colorPalette.MainFontColor))
         NavigateButton(
             text = stringResource(id = R.string.delete_account),
             appViewModel = appViewModel,
             onClicked = onDeleteClicked,
         )
-        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp))
+        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp).background(color = appViewModel.colorPalette.MainFontColor))
         Spacer(modifier = Modifier.padding(20.dp))
         val uriHandler = LocalUriHandler.current
         Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
@@ -391,6 +373,7 @@ fun NavigateButton(text: String, appViewModel: AppViewModel, onClicked: () -> Un
             imageVector = Icons.Filled.KeyboardArrowRight,
             contentDescription = "arrow",
             modifier = Modifier.wrapContentWidth(Alignment.End),
+            tint = appViewModel.colorPalette.MainFontColor
         )
     }
 }
