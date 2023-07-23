@@ -57,6 +57,7 @@ fun EducationDYKScreen(navController: NavHostController, appViewModel: AppViewMo
             fontWeight = FontWeight.Bold,
             text = stringResource(R.string.did_you_know),
             fontSize = 25.scaledSp(),
+            color = appViewModel.colorPalette.MainFontColor
         )
         Text(
             modifier = Modifier.padding(horizontal = 72.dp, vertical = 0.dp),
@@ -64,6 +65,7 @@ fun EducationDYKScreen(navController: NavHostController, appViewModel: AppViewMo
             lineHeight = 20.scaledSp(),
             fontSize = 20.scaledSp(),
             text = stringResource(R.string.board_game_long),
+            color = appViewModel.colorPalette.MainFontColor
         )
         Spacer(modifier = Modifier.weight(1f))
     }
