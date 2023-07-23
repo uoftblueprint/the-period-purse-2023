@@ -124,6 +124,7 @@ fun SettingsScreen(
                         },
                         appViewModel = appViewModel,
                         context = context,
+                        navController = navController
                     )
                 }
             }

@@ -19,14 +19,19 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.Screen
+import com.tpp.theperiodpurse.ui.state.AppUiState
+import com.tpp.theperiodpurse.ui.theme.DarkColorPaletteImpl
 import com.tpp.theperiodpurse.ui.theme.HeaderColor1
 import com.tpp.theperiodpurse.ui.theme.Red
 import com.tpp.theperiodpurse.ui.theme.Teal
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 @Composable
-fun BottomNavigation(navController: NavController, appViewModel: AppViewModel) {
+fun BottomNavigation(navController: NavController, appViewModel: AppViewModel, appUiState: AppUiState) {
+    val isDarkMode by rememberUpdatedState(appUiState.darkMode)
+
     BottomNavigation(
+        isDarkMode = isDarkMode,
         appViewModel = appViewModel,
         onInfoNavigationClicked = {
             navController.navigate(Screen.Learn.name) {
@@ -56,7 +61,9 @@ private fun BottomNavigation(
     onSettingsNavigationClicked: () -> Unit,
     modifier: Modifier = Modifier,
     navItemModifier: Modifier = Modifier,
+    isDarkMode: Boolean,
 ) {
+    // DO NOT REMOVE isDarkMode (need to re-render Bottom Nav during Color Mode toggle)
     Column() {
         Box {
             BottomNavigation(
