@@ -54,7 +54,7 @@ fun LogMultipleDatesScreen(
             .fillMaxSize()
             .background(Color.White),
     ) {
-        PopupTopBar(onClose = onClose) {
+        PopupTopBar(onClose = onClose, appViewModel = appViewModel) {
             LogMultipleDatesText()
         }
         val currentMonth = remember { YearMonth.now() }

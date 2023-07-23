@@ -260,7 +260,7 @@ fun AppScreen(
                 modifier = Modifier.fillMaxSize(),
             ) {
                 if (currentRoute(navController) in screensWithNavigationBar) {
-                    BottomNavigation(navController = navController)
+                    BottomNavigation(navController = navController, appViewModel = appViewModel)
                 }
             }
         }

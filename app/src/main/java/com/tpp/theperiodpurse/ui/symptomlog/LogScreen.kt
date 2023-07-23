@@ -172,6 +172,7 @@ fun LogScreen(
                     }
                 }
             },
+            appViewModel = appViewModel
         )
     }
 }
@@ -183,6 +184,7 @@ fun LogScreenLayout(
     navController: NavController,
     logPrompts: List<LogPrompt>,
     logViewModel: LogViewModel,
+    appViewModel: AppViewModel,
     onSave: () -> Unit,
 ) {
     Box() {
@@ -195,6 +197,7 @@ fun LogScreenLayout(
             LogScreenTopBar(
                 navController = navController,
                 date = date,
+                appViewModel = appViewModel
             )
             LogPromptCards(logPrompts = logPrompts, logViewModel = logViewModel)
             Spacer(
@@ -220,8 +223,8 @@ fun LogScreenLayout(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun LogScreenTopBar(navController: NavController, date: LocalDate) {
-    PopupTopBar(onClose = { navController.navigateUp() }) {
+fun LogScreenTopBar(navController: NavController, date: LocalDate, appViewModel: AppViewModel) {
+    PopupTopBar(onClose = { navController.navigateUp() }, appViewModel = appViewModel) {
         LogScreenTopBarContent(navController = navController, date = date)
     }
 }
@@ -500,38 +503,6 @@ fun SaveButton(
                 color = Color.Black,
             )
         }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview
-@Composable
-fun LogScreenLayoutPreview() {
-    val logPrompts = listOf(
-        LogPrompt.Flow,
-        LogPrompt.Mood,
-        LogPrompt.Sleep,
-        LogPrompt.Cramps,
-        LogPrompt.Exercise,
-        LogPrompt.Notes,
-    )
-    LogScreenLayout(
-        date = LocalDate.parse("2022-12-07"),
-        navController = rememberNavController(),
-        logPrompts = logPrompts,
-        logViewModel = LogViewModel(logPrompts),
-        onSave = {},
-    )
-}
-
-@Preview
-@Composable
-fun LogScreenTopBarPreview() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        LogScreenTopBar(
-            date = LocalDate.parse("2000-01-01"),
-            navController = rememberNavController(),
-        )
     }
 }
 

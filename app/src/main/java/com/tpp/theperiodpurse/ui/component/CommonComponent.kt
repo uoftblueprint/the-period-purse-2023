@@ -22,10 +22,12 @@ import com.tpp.theperiodpurse.Screen
 import com.tpp.theperiodpurse.ui.theme.HeaderColor1
 import com.tpp.theperiodpurse.ui.theme.Red
 import com.tpp.theperiodpurse.ui.theme.Teal
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 @Composable
-fun BottomNavigation(navController: NavController) {
+fun BottomNavigation(navController: NavController, appViewModel: AppViewModel) {
     BottomNavigation(
+        appViewModel = appViewModel,
         onInfoNavigationClicked = {
             navController.navigate(Screen.Learn.name) {
 //                popUpTo(navController.graph.findStartDestination().id) {
@@ -49,6 +51,7 @@ fun BottomNavigation(navController: NavController) {
 
 @Composable
 private fun BottomNavigation(
+    appViewModel: AppViewModel,
     onInfoNavigationClicked: () -> Unit,
     onSettingsNavigationClicked: () -> Unit,
     modifier: Modifier = Modifier,
@@ -57,7 +60,7 @@ private fun BottomNavigation(
     Column() {
         Box {
             BottomNavigation(
-                backgroundColor = Color.White,
+                backgroundColor = appViewModel.colorPalette.HeaderColor1,
                 modifier = modifier.align(Alignment.BottomCenter),
             ) {
                 BottomNavigationItem(
@@ -67,7 +70,7 @@ private fun BottomNavigation(
                             contentDescription = null,
                         )
                     },
-                    label = { Text(Screen.Learn.name) },
+                    label = { Text(text = Screen.Learn.name,  color = appViewModel.colorPalette.MainFontColor) },
                     selected = false,
                     onClick = onInfoNavigationClicked,
                     modifier = navItemModifier,
@@ -82,7 +85,8 @@ private fun BottomNavigation(
                             contentDescription = null,
                         )
                     },
-                    label = { Text(Screen.Settings.name) },
+                    label = { Text(text = Screen.Settings.name,
+                    color = appViewModel.colorPalette.MainFontColor) },
                     selected = false,
                     onClick = onSettingsNavigationClicked,
                     modifier = navItemModifier,
@@ -151,6 +155,7 @@ fun FloatingActionButton(
 fun PopupTopBar(
     onClose: () -> Unit,
     modifier: Modifier = Modifier,
+    appViewModel: AppViewModel,
     content:
     @Composable()
     () -> Unit,
@@ -159,7 +164,7 @@ fun PopupTopBar(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxWidth()
-            .background(color = HeaderColor1)
+            .background(color = appViewModel.colorPalette.HeaderColor1)
             .height(100.dp)
             .padding(top = 10.dp),
     ) {
@@ -179,18 +184,5 @@ fun PopupTopBar(
             }
         }
         content()
-    }
-}
-
-@Preview
-@Composable
-fun BottomNavigationPreview() {
-    BottomNavigation({}, {})
-}
-
-@Preview
-@Composable
-fun PopupTopBarPreview() {
-    PopupTopBar({}) {
     }
 }

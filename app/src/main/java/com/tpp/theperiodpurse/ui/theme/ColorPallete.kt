@@ -17,6 +17,14 @@ interface ColorPalette {
     val text1: Color
     val text2: Color
 
+    val HeaderColor1: Color
+    val BottomBarColor1: Color
+    val SelectedColor1: Color
+    val LogSelectedTextColor: Color
+    val MainFontColor: Color
+    val SecondaryFontColor: Color
+    val ButtonDisabledColor: Color
+
     val background: Int
     // Add other color properties as needed for your app's design
 }
@@ -31,6 +39,14 @@ class DarkColorPaletteImpl : ColorPalette {
     override val secondary4 = Color(161, 162, 166)
     override val text1 = Color(	217, 218, 217)
     override val text2 = Color(161, 162, 166)
+
+    override val HeaderColor1 = Color(0xFF090909)
+    override val BottomBarColor1 = Color(0xFF090909)
+    override val SelectedColor1 = Color(0xFF589E92)
+    override val LogSelectedTextColor = Color(0xFF6D6E71)
+    override val MainFontColor = Color(0xFFF1F1F1)
+    override val SecondaryFontColor = Color(161, 162, 166)
+    override val ButtonDisabledColor = Color(0xFFA9BDBA)
 
 
     override val background: Int= R.drawable.darkwatercolour
@@ -48,6 +64,14 @@ class LightColorPaletteImpl : ColorPalette {
     override val secondary4 = Color(109, 110, 113)
     override val text1 = Color.DarkGray
     override val text2 = Color.Gray
+
+    override val HeaderColor1 = Color(0xFFF1F1F1)
+    override val BottomBarColor1 = Color(0xFFFFFFFF)
+    override val SelectedColor1 = Color(0xFF589E92)
+    override val LogSelectedTextColor = Color(0xFF6D6E71)
+    override val MainFontColor = Color(0xFF090909)
+    override val SecondaryFontColor = Color(0xFF717173)
+    override val ButtonDisabledColor = Color(0xFFA9BDBA)
 
     override val background: Int = R.drawable.background
     // Implement other color properties for light mode
