@@ -12,10 +12,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tpp.theperiodpurse.data.model.LogPrompt
 import com.tpp.theperiodpurse.data.model.LogSquare
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
+import java.lang.Appendable
 
 @Composable
-fun CrampsPrompt(logViewModel: LogViewModel) {
+fun CrampsPrompt(logViewModel: LogViewModel, appViewModel: AppViewModel) {
     var selected by remember {
         mutableStateOf(logViewModel.getSquareSelected(logPrompt = LogPrompt.Cramps))
     }
@@ -42,6 +44,7 @@ fun CrampsPrompt(logViewModel: LogViewModel) {
                     LogSelectableSquare(
                         logSquare = flowSquare,
                         selected = selected,
+                        appViewModel = appViewModel
                     ) { logSquare ->
                         if (selected == logSquare.description) {
                             selected = null
@@ -55,14 +58,4 @@ fun CrampsPrompt(logViewModel: LogViewModel) {
             },
         )
     }
-}
-
-@Preview
-@Composable
-fun CrampPromptPreview() {
-    FlowPrompt(
-        logViewModel = LogViewModel(
-            logPrompts = listOf(LogPrompt.Cramps),
-        ),
-    )
 }

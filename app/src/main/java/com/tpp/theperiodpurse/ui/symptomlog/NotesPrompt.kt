@@ -24,11 +24,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import com.tpp.theperiodpurse.data.model.LogPrompt
 import com.tpp.theperiodpurse.ui.theme.LogSelectedTextColor
 import com.tpp.theperiodpurse.ui.theme.MainFontColor
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun NotesPrompt(logViewModel: LogViewModel) {
+fun NotesPrompt(logViewModel: LogViewModel, appViewModel: AppViewModel) {
     var notesText by remember { mutableStateOf(logViewModel.getText(LogPrompt.Notes)) }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current

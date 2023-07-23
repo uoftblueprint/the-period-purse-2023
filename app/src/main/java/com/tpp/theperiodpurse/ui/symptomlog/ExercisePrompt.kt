@@ -26,12 +26,13 @@ import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.model.LogPrompt
 import com.tpp.theperiodpurse.data.model.LogSquare
 import com.tpp.theperiodpurse.ui.onboarding.EditNumberField
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
 import java.sql.Time
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun ExercisePrompt(logViewModel: LogViewModel) {
+fun ExercisePrompt(logViewModel: LogViewModel, appViewModel: AppViewModel) {
     val selectedTime = logViewModel.getText(LogPrompt.Exercise)
     var hoursExercised by remember {
         mutableStateOf(
@@ -188,6 +189,7 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
                         LogSelectableSquare(
                             logSquare = flowSquare,
                             selected = selected,
+                            appViewModel = appViewModel
                         ) { logSquare ->
                             if (selected == logSquare.description) {
                                 selected = null
@@ -215,14 +217,4 @@ private fun saveTextData(
         0,
     )
     logViewModel.setText(LogPrompt.Exercise, time.toString())
-}
-
-@Preview
-@Composable
-fun ExercisePromptPreview() {
-    ExercisePrompt(
-        logViewModel = LogViewModel(
-            logPrompts = listOf(LogPrompt.Exercise),
-        ),
-    )
 }

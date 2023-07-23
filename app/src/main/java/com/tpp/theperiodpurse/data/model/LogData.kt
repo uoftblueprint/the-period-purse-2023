@@ -9,9 +9,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.symptomlog.*
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
 
-typealias ComposablePromptFun = @Composable (logViewModel: LogViewModel) -> Unit
+typealias ComposablePromptFun = @Composable (logViewModel: LogViewModel, appViewModel: AppViewModel) -> Unit
 typealias ComposableIconFun = @Composable (color: Color) -> Unit
 
 enum class LogPrompt(
@@ -28,7 +29,7 @@ enum class LogPrompt(
                 tint = color,
             )
         },
-        prompt = { logViewModel -> FlowPrompt(logViewModel = logViewModel) },
+        prompt = { logViewModel, appViewModel -> FlowPrompt(logViewModel = logViewModel, appViewModel = appViewModel) },
     ),
     Mood(
         title = R.string.mood,
@@ -39,7 +40,7 @@ enum class LogPrompt(
                 tint = color,
             )
         },
-        prompt = { logViewModel -> MoodPrompt(logViewModel = logViewModel) },
+        prompt = { logViewModel, appViewModel -> MoodPrompt(logViewModel = logViewModel, appViewModel = appViewModel) },
     ),
     Sleep(
         title = R.string.sleep,
@@ -50,7 +51,7 @@ enum class LogPrompt(
                 tint = color,
             )
         },
-        prompt = { logViewModel -> SleepPrompt(logViewModel = logViewModel) },
+        prompt = { logViewModel, appViewModel -> SleepPrompt(logViewModel = logViewModel, appViewModel = appViewModel) },
     ),
     Cramps(
         title = R.string.cramps,
@@ -61,7 +62,7 @@ enum class LogPrompt(
                 tint = color,
             )
         },
-        prompt = { logViewModel -> CrampsPrompt(logViewModel = logViewModel) },
+        prompt = { logViewModel, appViewModel -> CrampsPrompt(logViewModel = logViewModel, appViewModel = appViewModel) },
     ),
     Exercise(
         title = R.string.exercise,
@@ -72,7 +73,7 @@ enum class LogPrompt(
                 tint = color,
             )
         },
-        prompt = { logViewModel -> ExercisePrompt(logViewModel = logViewModel) },
+        prompt = { logViewModel, appViewModel -> ExercisePrompt(logViewModel = logViewModel, appViewModel = appViewModel) },
     ),
     Notes(
         title = R.string.notes,
@@ -83,7 +84,7 @@ enum class LogPrompt(
                 tint = color,
             )
         },
-        prompt = { logViewModel -> NotesPrompt(logViewModel = logViewModel) },
+        prompt = { logViewModel, appViewModel -> NotesPrompt(logViewModel = logViewModel, appViewModel = appViewModel) },
     ),
     ;
     companion object {

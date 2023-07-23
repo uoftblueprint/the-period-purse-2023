@@ -21,12 +21,13 @@ import androidx.compose.ui.unit.dp
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.model.LogPrompt
 import com.tpp.theperiodpurse.ui.onboarding.EditNumberField
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
 import java.sql.Time
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SleepPrompt(logViewModel: LogViewModel) {
+fun SleepPrompt(logViewModel: LogViewModel, appViewModel: AppViewModel) {
     val selectedTime = logViewModel.getText(LogPrompt.Sleep)
     var hoursSlept by remember {
         mutableStateOf(
@@ -155,14 +156,4 @@ private fun saveTextData(logViewModel: LogViewModel, hoursSlept: String, minutes
         0,
     )
     logViewModel.setText(LogPrompt.Sleep, time.toString())
-}
-
-@Preview
-@Composable
-fun SleepPromptPreview() {
-    SleepPrompt(
-        logViewModel = LogViewModel(
-            logPrompts = listOf(LogPrompt.Sleep),
-        ),
-    )
 }

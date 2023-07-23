@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import androidx.room.util.appendPlaceholders
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.Screen
@@ -199,7 +200,7 @@ fun LogScreenLayout(
                 date = date,
                 appViewModel = appViewModel
             )
-            LogPromptCards(logPrompts = logPrompts, logViewModel = logViewModel)
+            LogPromptCards(logPrompts = logPrompts, logViewModel = logViewModel, appViewModel = appViewModel)
             Spacer(
                 modifier = Modifier
                     .height(130.dp)
@@ -328,7 +329,7 @@ private fun LogScreenTopBarContent(navController: NavController, date: LocalDate
 }
 
 @Composable
-fun LogPromptCards(logPrompts: List<LogPrompt>, logViewModel: LogViewModel) {
+fun LogPromptCards(logPrompts: List<LogPrompt>, logViewModel: LogViewModel, appViewModel: AppViewModel) {
     LazyColumn(modifier = Modifier.background(Color.White)) {
         items(logPrompts) {
             Column(
@@ -338,21 +339,21 @@ fun LogPromptCards(logPrompts: List<LogPrompt>, logViewModel: LogViewModel) {
                         val x = size.width - strokeWidth
 
                         drawLine(
-                            color = HeaderColor1,
+                            color = appViewModel.colorPalette.HeaderColor1,
                             start = Offset(0f, 0f), // (0,0) at top-left point of the box
                             end = Offset(x, 0f), // top-right point of the box
                             strokeWidth = strokeWidth,
                         )
                     },
             ) {
-                LogPromptCard(logPrompt = it, logViewModel)
+                LogPromptCard(logPrompt = it, logViewModel, appViewModel)
             }
         }
     }
 }
 
 @Composable
-fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
+fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel, appViewModel: AppViewModel) {
     var expanded by remember { mutableStateOf(false) }
 
     val hasInput = (
@@ -412,7 +413,7 @@ fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
                         end = 40.dp,
                     ),
             ) {
-                logPrompt.prompt(logViewModel)
+                logPrompt.prompt(logViewModel, appViewModel)
             }
         }
     }
@@ -436,14 +437,15 @@ fun ChangeableExpandButton(expanded: Boolean, onClick: () -> Unit) {
 fun LogSelectableSquare(
     logSquare: LogSquare,
     selected: String?,
+    appViewModel: AppViewModel,
     onClick: (LogSquare) -> Unit,
 ) {
     val squareColor = animateColorAsState(
         targetValue =
         if (logSquare.description == selected) {
-            SelectedColor1
+            appViewModel.colorPalette.SelectedColor1
         } else {
-            HeaderColor1
+            appViewModel.colorPalette.HeaderColor1
         },
         animationSpec = tween(250, 0, LinearEasing),
     )
@@ -506,50 +508,6 @@ fun SaveButton(
     }
 }
 
-@Preview
-@Composable
-fun LogPromptCardPreview() {
-    val logPrompts = listOf(LogPrompt.Flow)
-    val logViewModel = LogViewModel(logPrompts)
-
-    LogPromptCard(logPrompt = LogPrompt.Flow, logViewModel)
-}
-
-@Preview
-@Composable
-fun LogPromptCardsPreview() {
-    val logPrompts = listOf(
-        LogPrompt.Flow,
-        LogPrompt.Mood,
-        LogPrompt.Sleep,
-        LogPrompt.Cramps,
-        LogPrompt.Exercise,
-        LogPrompt.Notes,
-    )
-    val logViewModel = LogViewModel(logPrompts)
-    LogPromptCards(logPrompts = logPrompts, logViewModel)
-}
-
-@Preview
-@Composable
-fun LogSelectableSquarePreview() {
-    val logPrompts = listOf(LogPrompt.Flow)
-    val logViewModel = LogViewModel(logPrompts)
-    var selected by remember { mutableStateOf<String?>(null) }
-
-    LogSelectableSquare(
-        logSquare = LogSquare.FlowLight,
-        selected = selected,
-    ) { logSquare ->
-        if (selected == logSquare.description) {
-            selected = null
-            logViewModel.resetSquareSelected(logSquare)
-        } else {
-            selected = logSquare.description
-            logViewModel.setSquareSelected(logSquare)
-        }
-    }
-}
 
 @Preview
 @Composable
