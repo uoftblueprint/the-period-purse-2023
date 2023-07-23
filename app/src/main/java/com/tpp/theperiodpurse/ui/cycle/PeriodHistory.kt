@@ -46,7 +46,7 @@ fun PeriodHistoryLayout(
     var yearSelected by remember { mutableStateOf(years.keys.last()) }
     val cyclePage = stringResource(R.string.cycle_page)
     // Iterate over years and create horizontally scrollable buttons
-    Scaffold(topBar = { AppBar(navController = navController) }) {
+    Scaffold(topBar = { AppBar(navController = navController, appViewModel = appViewModel) }) {
         Box(
             modifier = Modifier.padding(it),
         ) {
@@ -117,7 +117,7 @@ private fun PeriodCard(
 }
 
 @Composable
-fun AppBar(navController: NavController) {
+fun AppBar(navController: NavController, appViewModel: AppViewModel) {
     TopAppBar(
         {
             Text(
@@ -129,7 +129,7 @@ fun AppBar(navController: NavController) {
                 fontSize = 20.scaledSp(),
             )
         },
-        backgroundColor = Color.White,
+        backgroundColor = appViewModel.colorPalette.HeaderColor1,
         elevation = 0.dp,
         navigationIcon = { BackIcon(navController = navController) },
     )

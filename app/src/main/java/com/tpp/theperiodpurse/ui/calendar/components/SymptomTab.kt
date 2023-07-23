@@ -52,6 +52,7 @@ fun SymptomTab(
                 symptoms = trackedSymptoms,
                 onSymptomOnClicks = trackedSymptoms.map { { onSymptomClick(it) } },
                 modifier = tabModifier,
+                appViewModel = appViewModel
             )
         }
     }
@@ -114,10 +115,11 @@ private fun SwitchSymptomTab(
     symptoms: List<Symptom>,
     onSymptomOnClicks: List<() -> Unit>,
     modifier: Modifier = Modifier,
+    appViewModel: AppViewModel
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = modifier.testTag("Symptom Options"),
+        modifier = modifier.testTag("Symptom Options").background(appViewModel.colorPalette.HeaderColor1),
     ) {
         symptoms.zip(onSymptomOnClicks).forEach { (symptom, onClick) ->
             val interactionSource = remember { MutableInteractionSource() }
@@ -127,7 +129,7 @@ private fun SwitchSymptomTab(
                 onClick = onClick,
                 interactionSource = interactionSource,
             ) {
-                val defaultColor = Color.Black
+                val defaultColor = appViewModel.colorPalette.MainFontColor
                 val color = if (isPressed) {
                     defaultColor.copy(ContentAlpha.disabled)
                 } else if (selectedSymptom == symptom) {

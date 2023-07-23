@@ -101,10 +101,11 @@ open class LogSquare(
 ) {
     object FlowLight : LogSquare(
         description = "Light",
-        icon = {
+        icon = { color ->
             Icon(
                 painter = painterResource(R.drawable.water_drop_black_24dp),
                 contentDescription = "FlowLight",
+                tint = color
             )
         },
         promptTitle = R.string.period_flow,
@@ -112,10 +113,11 @@ open class LogSquare(
     )
     object FlowMedium : LogSquare(
         description = "Medium",
-        icon = {
+        icon = { color ->
             Icon(
                 painter = painterResource(R.drawable.opacity_black_24dp),
                 contentDescription = "FlowMedium",
+                tint = color
             )
         },
         promptTitle = R.string.period_flow,
@@ -123,10 +125,11 @@ open class LogSquare(
     )
     object FlowHeavy : LogSquare(
         description = "Heavy",
-        icon = {
+        icon = { color ->
             Icon(
                 painter = painterResource(R.drawable.flow_heavy),
                 contentDescription = "FlowHeavy",
+                tint = color
             )
         },
         promptTitle = R.string.period_flow,
@@ -134,10 +137,11 @@ open class LogSquare(
     )
     object FlowSpotting : LogSquare(
         description = "Spotting",
-        icon = {
+        icon = { color ->
             Icon(
                 painter = painterResource(R.drawable.spotting),
                 contentDescription = "FlowSpotting",
+                tint = color
             )
         },
         promptTitle = R.string.period_flow,
@@ -145,10 +149,11 @@ open class LogSquare(
     )
     object FlowNone : LogSquare(
         description = "None",
-        icon = {
+        icon = { color ->
             Icon(
                 painter = painterResource(R.drawable.not_interested_black_24dp),
                 contentDescription = "FlowNone",
+                tint = color
             )
         },
         promptTitle = R.string.period_flow,
@@ -157,10 +162,11 @@ open class LogSquare(
 
     object MoodHappy : LogSquare(
         description = "Happy",
-        icon = {
+        icon = {color ->
             Icon(
                 painter = painterResource(R.drawable.sentiment_satisfied_black_24dp),
                 contentDescription = "MoodHappy",
+                tint = color
             )
         },
         promptTitle = R.string.mood,
@@ -169,10 +175,11 @@ open class LogSquare(
 
     object MoodNeutral : LogSquare(
         description = "Meh",
-        icon = {
+        icon = {color ->
             Icon(
                 painter = painterResource(R.drawable.sentiment_neutral_black_24dp),
                 contentDescription = "MoodNeutral",
+                tint = color
             )
         },
         promptTitle = R.string.mood,
@@ -181,10 +188,11 @@ open class LogSquare(
 
     object MoodSad : LogSquare(
         description = "Sad",
-        icon = {
+        icon = {color ->
             Icon(
                 painter = painterResource(R.drawable.sentiment_dissatisfied_black_24dp),
                 contentDescription = "MoodSad",
+                tint = color
             )
         },
         promptTitle = R.string.mood,
@@ -193,10 +201,11 @@ open class LogSquare(
 
     object MoodSilly : LogSquare(
         description = "Silly/Goofy",
-        icon = {
+        icon = {color ->
             Icon(
                 painter = painterResource(R.drawable.sentiment_very_satisfied_black_24dp),
                 contentDescription = "MoodSilly",
+                tint = color
             )
         },
         promptTitle = R.string.mood,
@@ -205,10 +214,11 @@ open class LogSquare(
 
     object MoodSick : LogSquare(
         description = "Sick",
-        icon = {
+        icon = {color ->
             Icon(
                 painter = painterResource(R.drawable.sick_black_24dp),
                 contentDescription = "MoodSick",
+                tint = color
             )
         },
         promptTitle = R.string.mood,
@@ -217,10 +227,11 @@ open class LogSquare(
 
     object MoodAngry : LogSquare(
         description = "Angry",
-        icon = {
+        icon = {color ->
             Icon(
                 imageVector = Icons.Rounded.MoodBad,
                 contentDescription = "MoodAngry",
+                tint = color
             )
         },
         promptTitle = R.string.mood,
@@ -229,10 +240,11 @@ open class LogSquare(
 
     object MoodLoved : LogSquare(
         description = "Loved",
-        icon = {
+        icon = {color ->
             Icon(
                 imageVector = Icons.Rounded.Favorite,
                 contentDescription = "MoodLoved",
+                tint = color
             )
         },
         promptTitle = R.string.mood,
@@ -241,10 +253,11 @@ open class LogSquare(
 
     object CrampsNeutral : LogSquare(
         description = "Neutral",
-        icon = {
+        icon = {color ->
             Icon(
                 imageVector = Icons.Rounded.SentimentNeutral,
                 contentDescription = "CrampsNeutral",
+                tint = color
             )
         },
         promptTitle = R.string.cramps,
@@ -253,10 +266,11 @@ open class LogSquare(
 
     object CrampsBad : LogSquare(
         description = "Bad",
-        icon = {
+        icon = {color ->
             Icon(
                 imageVector = Icons.Rounded.SentimentDissatisfied,
                 contentDescription = "CrampsBad",
+                tint = color
             )
         },
         promptTitle = R.string.cramps,
@@ -265,10 +279,11 @@ open class LogSquare(
 
     object CrampsTerrible : LogSquare(
         description = "Terrible",
-        icon = {
+        icon = {color ->
             Icon(
                 imageVector = Icons.Rounded.SentimentVeryDissatisfied,
                 contentDescription = "CrampsTerrible",
+                tint = color
             )
         },
         promptTitle = R.string.cramps,
@@ -277,10 +292,11 @@ open class LogSquare(
 
     object CrampsNone : LogSquare(
         description = "None",
-        icon = {
+        icon = {color ->
             Icon(
                 imageVector = Icons.Rounded.SentimentVerySatisfied,
                 contentDescription = "CrampsNone",
+                tint = color
             )
         },
         promptTitle = R.string.cramps,
@@ -289,10 +305,11 @@ open class LogSquare(
 
     object ExerciseCardio : LogSquare(
         description = "Cardio",
-        icon = {
+        icon = {color ->
             Icon(
                 imageVector = Icons.Rounded.DirectionsRun,
                 contentDescription = "ExerciseCardio",
+                tint = color
             )
         },
         promptTitle = R.string.exercise,
@@ -301,10 +318,11 @@ open class LogSquare(
 
     object ExerciseYoga : LogSquare(
         description = "Yoga",
-        icon = {
+        icon = {color ->
             Icon(
                 imageVector = Icons.Rounded.SelfImprovement,
                 contentDescription = "ExerciseYoga",
+                tint = color
             )
         },
         promptTitle = R.string.exercise,
@@ -313,10 +331,11 @@ open class LogSquare(
 
     object ExerciseStrength : LogSquare(
         description = "Strength",
-        icon = {
+        icon = {color ->
             Icon(
                 imageVector = Icons.Rounded.FitnessCenter,
                 contentDescription = "ExerciseStrength",
+                tint = color
             )
         },
         promptTitle = R.string.exercise,
@@ -325,10 +344,11 @@ open class LogSquare(
 
     object ExerciseBallSports : LogSquare(
         description = "Ball Sports",
-        icon = {
+        icon = {color ->
             Icon(
                 imageVector = Icons.Rounded.SportsSoccer,
                 contentDescription = "ExerciseBallSports",
+                tint = color
             )
         },
         promptTitle = R.string.exercise,
@@ -337,10 +357,11 @@ open class LogSquare(
 
     object ExerciseMartialArts : LogSquare(
         description = "Martial Arts",
-        icon = {
+        icon = {color ->
             Icon(
                 imageVector = Icons.Rounded.SportsMartialArts,
                 contentDescription = "ExerciseMartialArts",
+                tint = color
             )
         },
         promptTitle = R.string.exercise,
@@ -349,10 +370,11 @@ open class LogSquare(
 
     object ExerciseWaterSports : LogSquare(
         description = "Water Sports",
-        icon = {
+        icon = {color ->
             Icon(
                 imageVector = Icons.Rounded.Pool,
                 contentDescription = "Water Sports",
+                tint = color
             )
         },
         promptTitle = R.string.exercise,
@@ -361,10 +383,11 @@ open class LogSquare(
 
     object ExerciseCycling : LogSquare(
         description = "Cycling",
-        icon = {
+        icon = {color ->
             Icon(
                 imageVector = Icons.Rounded.DirectionsBike,
                 contentDescription = "ExerciseCycling",
+                tint = color
             )
         },
         promptTitle = R.string.exercise,
@@ -373,10 +396,11 @@ open class LogSquare(
 
     object ExerciseRacquetSports : LogSquare(
         description = "Racquet Sports",
-        icon = {
+        icon = {color ->
             Icon(
                 imageVector = Icons.Rounded.SportsTennis,
                 contentDescription = "ExerciseRacquetSports",
+                tint = color
             )
         },
         promptTitle = R.string.exercise,
@@ -385,10 +409,11 @@ open class LogSquare(
 
     object ExerciseWinterSports : LogSquare(
         description = "Winter Sports",
-        icon = {
+        icon = {color ->
             Icon(
                 imageVector = Icons.Rounded.DownhillSkiing,
                 contentDescription = "ExerciseWinterSports",
+                tint = color
             )
         },
         promptTitle = R.string.exercise,

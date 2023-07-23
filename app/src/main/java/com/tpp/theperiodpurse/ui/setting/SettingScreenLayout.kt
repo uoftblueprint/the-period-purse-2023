@@ -331,7 +331,7 @@ fun TrackingOptionButton(
 ) {
     val configuration = LocalConfiguration.current
     val screenwidth = configuration.screenWidthDp
-    val color = if (appViewModel.isSymptomChecked(symptom)) Teal else Color.White
+    val color = if (appViewModel.isSymptomChecked(symptom)) Teal else appViewModel.colorPalette.CalendarDayColor
     Column(
         modifier = modifier
             .padding((screenwidth * 0.02).dp),
@@ -345,6 +345,7 @@ fun TrackingOptionButton(
         ) {
             Icon(
                 painter = icon,
+                tint = appViewModel.colorPalette.MainFontColor,
                 contentDescription = contentDescription,
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))

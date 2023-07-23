@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.theme.Teal
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 @Composable
 fun TopNavBar(
@@ -29,9 +30,10 @@ fun TopNavBar(
     navController: NavController,
     interactionSource:
     MutableInteractionSource,
+    appViewModel: AppViewModel
 ) {
     TopAppBar(
-        backgroundColor = Color.White,
+        backgroundColor = appViewModel.colorPalette.HeaderColor1,
         elevation = 0.dp,
     ) {
         Row(

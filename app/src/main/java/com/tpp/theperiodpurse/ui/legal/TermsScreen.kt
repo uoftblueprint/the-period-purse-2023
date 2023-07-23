@@ -30,7 +30,7 @@ fun TermsScreen(navController: NavHostController, appViewModel: AppViewModel) {
 
     Scaffold(
         backgroundColor = Color.Transparent,
-        topBar = { TopNavBar(screenName, navController, interactionSource) },
+        topBar = { TopNavBar(screenName, navController, interactionSource, appViewModel) },
         content = {
             Column(
                 modifier = Modifier

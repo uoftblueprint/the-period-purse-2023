@@ -98,7 +98,7 @@ private fun BottomNavigation(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(appViewModel.colorPalette.HeaderColor1)
                 .height(6.dp),
         ) {}
     }
@@ -166,7 +166,7 @@ fun PopupTopBar(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxWidth()
-            .background(color = appViewModel.colorPalette.HeaderColor1)
+            .background(color = appViewModel.colorPalette.CalendarDayColor)
             .height(100.dp)
             .padding(top = 10.dp),
     ) {

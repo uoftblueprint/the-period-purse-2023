@@ -193,7 +193,7 @@ fun LogScreenLayout(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White),
+                .background(appViewModel.colorPalette.HeaderColor1),
         ) {
             LogScreenTopBar(
                 navController = navController,
@@ -226,12 +226,12 @@ fun LogScreenLayout(
 @Composable
 fun LogScreenTopBar(navController: NavController, date: LocalDate, appViewModel: AppViewModel) {
     PopupTopBar(onClose = { navController.navigateUp() }, appViewModel = appViewModel) {
-        LogScreenTopBarContent(navController = navController, date = date)
+        LogScreenTopBarContent(navController = navController, date = date, appViewModel = appViewModel)
     }
 }
 
 @Composable
-private fun LogScreenTopBarContent(navController: NavController, date: LocalDate) {
+private fun LogScreenTopBarContent(navController: NavController, date: LocalDate, appViewModel: AppViewModel) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -280,7 +280,7 @@ private fun LogScreenTopBarContent(navController: NavController, date: LocalDate
 
             Text(
                 text = "Log your symptoms for:",
-                color = Color(50, 50, 50),
+                color = appViewModel.colorPalette.PopUpHeadColor,
                 fontSize = (screenwidth * 0.05).scaledSp(),
             )
             Text(
@@ -291,6 +291,7 @@ private fun LogScreenTopBarContent(navController: NavController, date: LocalDate
                 modifier = Modifier
                     .testTag("DateLabel")
                     .semantics { contentDescription = "DateLabel" },
+                color = appViewModel.colorPalette.MainFontColor
             )
         }
 
@@ -330,7 +331,7 @@ private fun LogScreenTopBarContent(navController: NavController, date: LocalDate
 
 @Composable
 fun LogPromptCards(logPrompts: List<LogPrompt>, logViewModel: LogViewModel, appViewModel: AppViewModel) {
-    LazyColumn(modifier = Modifier.background(Color.White)) {
+    LazyColumn(modifier = Modifier.background(appViewModel.colorPalette.HeaderColor1)) {
         items(logPrompts) {
             Column(
                 modifier = Modifier
@@ -339,7 +340,7 @@ fun LogPromptCards(logPrompts: List<LogPrompt>, logViewModel: LogViewModel, appV
                         val x = size.width - strokeWidth
 
                         drawLine(
-                            color = appViewModel.colorPalette.HeaderColor1,
+                            color = appViewModel.colorPalette.MainFontColor,
                             start = Offset(0f, 0f), // (0,0) at top-left point of the box
                             end = Offset(x, 0f), // top-right point of the box
                             strokeWidth = strokeWidth,
@@ -361,11 +362,11 @@ fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel, appViewModel
             logViewModel.getText(logPrompt) != ""
         )
     val iconColor = animateColorAsState(
-        targetValue = if (hasInput) SelectedColor1 else SecondaryFontColor,
+        targetValue = if (hasInput) appViewModel.colorPalette.SelectedColor1 else  appViewModel.colorPalette.SecondaryFontColor,
         animationSpec = tween(500, 0, LinearEasing),
     )
     val tabColor = animateColorAsState(
-        targetValue = if (hasInput) LogSelectedTextColor else SecondaryFontColor,
+        targetValue = if (hasInput)  appViewModel.colorPalette.SelectedColor1 else appViewModel.colorPalette.SecondaryFontColor,
         animationSpec = tween(500, 0, LinearEasing),
     )
 
@@ -445,7 +446,7 @@ fun LogSelectableSquare(
         if (logSquare.description == selected) {
             appViewModel.colorPalette.SelectedColor1
         } else {
-            appViewModel.colorPalette.HeaderColor1
+            appViewModel.colorPalette.CalendarDayColor
         },
         animationSpec = tween(250, 0, LinearEasing),
     )
@@ -468,12 +469,12 @@ fun LogSelectableSquare(
                 }
                 .semantics { contentDescription = logSquare.description },
         ) {
-            logSquare.icon(SecondaryFontColor)
+            logSquare.icon(appViewModel.colorPalette.MainFontColor)
         }
         Text(
             text = logSquare.description,
             fontSize = 16.sp,
-            color = SecondaryFontColor,
+            color = appViewModel.colorPalette.SecondaryFontColor,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 10.dp, bottom = 20.dp),

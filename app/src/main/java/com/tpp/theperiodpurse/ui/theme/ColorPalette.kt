@@ -21,12 +21,12 @@ interface ColorPalette {
     val LogSelectedTextColor: Color
     val CalendarDayColor: Color
     val CalendarFontColor: Color
+    val PopUpHeadColor: Color
     val MainFontColor: Color
     val SecondaryFontColor: Color
     val ButtonDisabledColor: Color
 
     val background: Int
-    // Add other color properties as needed for your app's design
 }
 
 class DarkColorPaletteImpl : ColorPalette {
@@ -44,6 +44,7 @@ class DarkColorPaletteImpl : ColorPalette {
     override val BottomBarColor1 = Color(0xFF090909)
     override val SelectedColor1 = Color(0xFF589E92)
     override val LogSelectedTextColor = Color(0xFF6D6E71)
+    override val PopUpHeadColor = Color(	161, 162, 166)
     override val CalendarDayColor = Color(0xFF6D6E71)
     override val CalendarFontColor = Color(0xFF6D6E71)
     override val MainFontColor = Color(0xFFF1F1F1)
@@ -71,6 +72,7 @@ class LightColorPaletteImpl : ColorPalette {
     override val BottomBarColor1 = Color(0xFFFFFFFF)
     override val SelectedColor1 = Color(0xFF589E92)
     override val LogSelectedTextColor = Color(0xFF6D6E71)
+    override val PopUpHeadColor =  Color.Black
     override val CalendarDayColor = Color.White
     override val CalendarFontColor = Color(0xFF090909)
     override val MainFontColor = Color(0xFF090909)
@@ -78,6 +80,5 @@ class LightColorPaletteImpl : ColorPalette {
     override val ButtonDisabledColor = Color(0xFFA9BDBA)
 
     override val background: Int = R.drawable.background
-    // Implement other color properties for light mode
 }
 

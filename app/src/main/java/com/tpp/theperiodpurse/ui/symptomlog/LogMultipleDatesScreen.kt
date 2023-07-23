@@ -91,7 +91,7 @@ fun LogMultipleDatesScreen(
 //                        val (dayColor, _) = getDayColorAndIcon(Symptom.FLOW, calendarDayUIStates[day.date])
                         Day(
                             day.date,
-                            color = if (selected) Red else Color.White,
+                            color = if (selected) Red else appViewModel.colorPalette.HeaderColor1,
                             iconId = null,
                             onClick = {
                                 selected = !selected
