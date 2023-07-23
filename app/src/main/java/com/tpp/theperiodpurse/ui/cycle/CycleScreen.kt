@@ -31,7 +31,7 @@ fun CycleScreenLayout(
     navController: NavController,
 ) {
     val dates = ArrayList(appViewModel.getDates())
-    val bg = painterResource(R.drawable.colourwatercolour)
+    val bg = painterResource(appViewModel.colorPalette.background)
 
     periodLength = calculateAveragePeriodLength(dates)
     cycleLength = calculateAverageCycleLength(dates)

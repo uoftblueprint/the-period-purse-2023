@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.tpp.theperiodpurse.ui.component.LoadingScreen
 import com.tpp.theperiodpurse.ui.component.handleError
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 import com.tpp.theperiodpurse.utility.validateUserAuthenticationAndAuthorization
 
@@ -18,12 +19,13 @@ import com.tpp.theperiodpurse.utility.validateUserAuthenticationAndAuthorization
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BackupDatabase(
-    viewModel: OnboardViewModel,
+    onboardViewModel: OnboardViewModel,
+    appViewModel: AppViewModel,
     navController: NavHostController,
     signout: () -> Unit = {},
     context: Context,
 ) {
-    val hasBackedUpToGoogleDrive by viewModel.hasBackedUpToGoogleDrive.observeAsState()
+    val hasBackedUpToGoogleDrive by onboardViewModel.hasBackedUpToGoogleDrive.observeAsState()
     val googleSignedInAccount = GoogleSignIn.getLastSignedInAccount(context)
     val account = googleSignedInAccount?.account
     val hasGoogleDrivePermission = validateUserAuthenticationAndAuthorization(googleSignedInAccount)
@@ -36,13 +38,13 @@ fun BackupDatabase(
 
     LaunchedEffect(key1 = hasBackedUpToGoogleDrive) {
         if (account != null && !hasBackedUpToGoogleDrive!!) {
-            viewModel.backupDatabase(account = account, context)
+            onboardViewModel.backupDatabase(account = account, context)
         } else {
-            viewModel.hasBackedUpToGoogleDrive.postValue(false)
+            onboardViewModel.hasBackedUpToGoogleDrive.postValue(false)
             navController.navigate(SettingScreenNavigation.ConfirmBackup.name)
         }
     }
-    LoadingScreen()
+    LoadingScreen(appViewModel = appViewModel)
 }
 
 fun handleSecurityError(

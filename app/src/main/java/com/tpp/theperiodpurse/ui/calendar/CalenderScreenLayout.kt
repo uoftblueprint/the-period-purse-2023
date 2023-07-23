@@ -40,7 +40,7 @@ fun CalendarScreenLayout(
     // Contains the swappable content
     ThePeriodPurseTheme {
         Log.d("Calendar Screen", "Renderng calendar screen")
-        val bg = painterResource(R.drawable.colourwatercolour)
+        val bg = painterResource(appViewModel.colorPalette.background)
         val appUiState by appViewModel.uiState.collectAsState()
 
         val selectedSymptom = calendarUIState.selectedSymptom

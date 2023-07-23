@@ -18,14 +18,15 @@ import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.component.TopNavBar
 import com.tpp.theperiodpurse.ui.education.EducationBackground
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun TermsScreen(navController: NavHostController) {
+fun TermsScreen(navController: NavHostController, appViewModel: AppViewModel) {
     val interactionSource = remember { MutableInteractionSource() }
     val screenName = stringResource(R.string.terms_and_conditions)
 
-    EducationBackground()
+    EducationBackground(appViewModel = appViewModel)
 
     Scaffold(
         backgroundColor = Color.Transparent,
@@ -77,8 +78,3 @@ fun TermsScreen(navController: NavHostController) {
     )
 }
 
-@Preview
-@Composable
-fun PreviewTermsConditionsScreen() {
-    TermsScreen(rememberNavController())
-}

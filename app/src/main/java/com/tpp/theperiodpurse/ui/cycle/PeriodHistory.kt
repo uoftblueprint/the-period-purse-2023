@@ -36,7 +36,7 @@ fun PeriodHistoryLayout(
     navController: NavController,
 ) {
     val dates = ArrayList(appViewModel.getDates())
-    val bg = painterResource(R.drawable.colourwatercolour)
+    val bg = painterResource(appViewModel.colorPalette.background)
     val periods = parseDatesIntoPeriods(dates)
     var years = findYears(periods)
     if (years == null) {

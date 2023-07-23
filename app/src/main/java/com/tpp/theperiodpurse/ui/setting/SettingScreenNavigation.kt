@@ -93,12 +93,14 @@ fun SettingsScreen(
     )
 
     Scaffold() { innerPadding ->
-        Image(
-            painter = painterResource(id = R.drawable.background),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.FillBounds,
-        )
+        if (appViewModel != null) {
+            Image(
+                painter = painterResource(id = appViewModel.colorPalette.background),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillBounds,
+            )
+        }
 
         NavHost(
             navController = navController,
@@ -183,25 +185,31 @@ fun SettingsScreen(
             }
             composable(route = SettingScreenNavigation.ResetDatabase.name) {
                 if (onboardViewModel != null && onboardUiState != null && appUiState != null && calUiState != null) {
-                    ResetDatabase(
-                        context = context,
-                        viewModel = onboardViewModel,
-                        outController = outController,
-                        onboardUiState = onboardUiState,
-                        appUiState = appUiState,
-                        calUiState = calUiState,
-                        signout = signout,
-                    )
+                    if (appViewModel != null) {
+                        ResetDatabase(
+                            context = context,
+                            onboardViewModel = onboardViewModel,
+                            appViewModel= appViewModel,
+                            outController = outController,
+                            onboardUiState = onboardUiState,
+                            appUiState = appUiState,
+                            calUiState = calUiState,
+                            signout = signout,
+                        )
+                    }
                 }
             }
             composable(route = SettingScreenNavigation.BackupDatabase.name) {
                 if (onboardViewModel != null && onboardUiState != null) {
-                    BackupDatabase(
-                        viewModel = onboardViewModel,
-                        navController = navController,
-                        signout = signout,
-                        context = context,
-                    )
+                    if (appViewModel != null) {
+                        BackupDatabase(
+                            onboardViewModel = onboardViewModel,
+                            appViewModel= appViewModel,
+                            navController = navController,
+                            signout = signout,
+                            context = context,
+                        )
+                    }
                 }
             }
             composable(route = SettingScreenNavigation.ConfirmBackup.name) {

@@ -9,18 +9,20 @@ import androidx.navigation.NavHostController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.ui.component.LoadingScreen
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 import com.tpp.theperiodpurse.utility.validateUserAuthenticationAndAuthorization
 
 @Composable
 fun DownloadBackupFromGoogleDrive(
-    viewModel: OnboardViewModel,
+    onboardViewModel: OnboardViewModel,
+    appViewModel: AppViewModel,
     navHostController: NavHostController,
     signout: () -> Unit = {},
 ) {
     Log.d("DownloadBackupFromGD", "Rendering download backup")
     val context = LocalContext.current.applicationContext
-    val googleDriveLoadSuccess by viewModel.googleDriveLoadSuccess.observeAsState(initial = null)
+    val googleDriveLoadSuccess by onboardViewModel.googleDriveLoadSuccess.observeAsState(initial = null)
     val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(context)
     val googleAccount = googleSignInAccount?.account
     val hasGoogleDrivePermission = validateUserAuthenticationAndAuthorization(googleSignInAccount)
@@ -36,24 +38,24 @@ fun DownloadBackupFromGoogleDrive(
     LaunchedEffect(Unit) {
         if (googleAccount != null) {
             Log.d("DownloadBackupFromGD", "Downloading backup")
-            viewModel.downloadBackup(googleAccount, context)
+            onboardViewModel.downloadBackup(googleAccount, context)
         }
     }
     Log.d("DownloadBackupFromGD", googleDriveLoadSuccess.toString())
     when (googleDriveLoadSuccess) {
         true -> {
             LaunchedEffect(Unit) {
-                viewModel.googleDriveLoadSuccess.postValue(null)
+                onboardViewModel.googleDriveLoadSuccess.postValue(null)
                 navHostController.popBackStack(OnboardingScreen.Welcome.name, inclusive = true)
                 Log.d("DownloadBackupFromGD", "Navigating to load database from storage")
                 navHostController.navigate(OnboardingScreen.LoadDatabase.name)
             }
         }
         false -> {
-            viewModel.googleDriveLoadSuccess.postValue(null)
+            onboardViewModel.googleDriveLoadSuccess.postValue(null)
             Toast.makeText(context, "ERROR - Something went wrong", Toast.LENGTH_SHORT).show()
             navHostController.popBackStack()
         }
-        else -> LoadingScreen()
+        else -> LoadingScreen(appViewModel = appViewModel)
     }
 }

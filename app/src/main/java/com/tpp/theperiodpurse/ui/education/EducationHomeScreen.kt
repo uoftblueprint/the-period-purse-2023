@@ -28,6 +28,7 @@ import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.theme.MainFontColor
 import com.tpp.theperiodpurse.ui.theme.Teal
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 const val gray = 0xFF6D6E71
 const val teal = 0xFF72C6B7
@@ -35,11 +36,12 @@ const val pink = 0xFFFFA3A4
 
 @Composable
 fun EducationScreenLayout(
+    appViewModel: AppViewModel,
     outController: NavHostController = rememberNavController(),
     navController: NavHostController,
 ) {
     val uriHandler = LocalUriHandler.current
-    EducationBackground()
+    EducationBackground(appViewModel = appViewModel)
     EducationScreenContent(navController, uriHandler, outController)
 }
 
@@ -253,10 +255,4 @@ fun TPPCard(uriHandler: UriHandler) {
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun EducationScreenPreview() {
-    EducationScreenLayout(rememberNavController(), rememberNavController())
 }

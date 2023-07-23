@@ -18,14 +18,15 @@ import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.component.TopNavBar
 import com.tpp.theperiodpurse.ui.education.EducationBackground
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun PrivacyScreen(navController: NavHostController) {
+fun PrivacyScreen(navController: NavHostController, appViewModel: AppViewModel) {
     val interactionSource = remember { MutableInteractionSource() }
     val screenName = stringResource(R.string.privacy_policy)
 
-    EducationBackground()
+    EducationBackground(appViewModel = appViewModel)
 
     Scaffold(
         backgroundColor = Color.Transparent,
@@ -78,8 +79,3 @@ fun PrivacyScreen(navController: NavHostController) {
     )
 }
 
-@Preview
-@Composable
-fun PreviewPrivacyScreen() {
-    PrivacyScreen(rememberNavController())
-}

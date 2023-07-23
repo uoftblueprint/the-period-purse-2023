@@ -198,7 +198,7 @@ fun AppScreen(
     val startdestination: String
 
     if (isOnboarded == null && !skipDatabase) {
-        LoadingScreen()
+        LoadingScreen(appViewModel)
     } else {
         if (!skipDatabase) {
             skipOnboarding = (isOnboarded as Boolean)
