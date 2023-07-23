@@ -30,7 +30,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.tpp.theperiodpurse.LegalScreen
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.model.Symptom
 import com.tpp.theperiodpurse.ui.component.SocialMedia
@@ -177,7 +179,9 @@ fun SettingScreenLayout(
             }
             Switch(
                 checked = appViewModel.getColorMode(),
-                onCheckedChange = { appViewModel.toggleColorMode(context) },
+                onCheckedChange = {
+                    appViewModel.toggleColorMode(context)
+                                  },
                 modifier = modifier
                     .fillMaxWidth()
                     .wrapContentWidth(Alignment.End),
