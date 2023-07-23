@@ -68,7 +68,7 @@ fun EducationScreenContent(
                 TopSection(navController)
             }
             items(ProductsList, span = { GridItemSpan(1) }) {
-                PeriodProducts(navController, it)
+                PeriodProducts(navController, it, appViewModel)
             }
             item(span = { GridItemSpan(2) }) {
                 BottomSection(uriHandler, outController, appViewModel = appViewModel)
@@ -167,7 +167,7 @@ fun DYKCard(navController: NavHostController) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PeriodProducts(navController: NavHostController, it: Product) {
+fun PeriodProducts(navController: NavHostController, it: Product, appViewModel: AppViewModel) {
     Card(
         modifier = Modifier
             .padding(12.dp)

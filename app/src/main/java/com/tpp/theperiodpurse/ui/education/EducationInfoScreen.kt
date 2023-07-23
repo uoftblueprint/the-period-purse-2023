@@ -76,12 +76,14 @@ fun EducationInfoScreen(
             fontWeight = Bold,
             fontSize = 32.scaledSp(),
             text = product.ProductName,
+            color = appViewModel.colorPalette.MainFontColor
         )
         Text(
             modifier = Modifier.padding(12.dp),
             textAlign = TextAlign.Center,
             text = product.description,
             fontSize = 18.scaledSp(),
+            color = appViewModel.colorPalette.MainFontColor
         )
         Spacer(modifier = Modifier.weight(45f))
     }
