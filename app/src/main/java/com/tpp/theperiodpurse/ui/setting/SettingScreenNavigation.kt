@@ -52,10 +52,11 @@ fun SettingAppBar(
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
+    appViewModel: AppViewModel,
     color: Color,
 ) {
     TopAppBar(
-        title = { Text(currentScreen) },
+        title = { Text(text = currentScreen, color = appViewModel.colorPalette.MainFontColor) },
         modifier = modifier.padding(0.dp),
         navigationIcon = {
             if (canNavigateBack) {
@@ -63,6 +64,7 @@ fun SettingAppBar(
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = stringResource(R.string.back_button),
+                        tint = appViewModel.colorPalette.MainFontColor
                     )
                 }
             }
@@ -151,37 +153,46 @@ fun SettingsScreen(
                             currentScreen = currentScreen.name,
                             canNavigateBack = navController.previousBackStackEntry != null,
                             navigateUp = { navController.navigateUp() },
-                            color = Color.Transparent,
+                            color = appViewModel.colorPalette.HeaderColor1,
+                            appViewModel = appViewModel
                         ),
                         appViewModel,
                     )
                 }
             }
             composable(route = SettingScreenNavigation.BackUpAccount.name) {
-                BackUpAccountScreen(
-                    appbar = SettingAppBar(
-                        currentScreen = currentScreen.name,
-                        canNavigateBack = navController.previousBackStackEntry != null,
-                        navigateUp = { navController.navigateUp() },
-                        color = Color.White,
-                    ),
-                    navController = navController,
-                    signIn = signIn,
-                    signOut = signout,
-                    context = context,
-                )
+                if (appViewModel != null) {
+                    BackUpAccountScreen(
+                        appbar = SettingAppBar(
+                            currentScreen = "Back Up Account",
+                            canNavigateBack = navController.previousBackStackEntry != null,
+                            navigateUp = { navController.navigateUp() },
+                            color = appViewModel.colorPalette.HeaderColor1,
+                            appViewModel = appViewModel
+                        ),
+                        navController = navController,
+                        signIn = signIn,
+                        signOut = signout,
+                        context = context,
+                        appViewModel = appViewModel
+                    )
+                }
             }
             composable(route = SettingScreenNavigation.DeleteAccount.name) {
                 val context = LocalContext.current
-                DeleteAccountScreen(
-                    appBar = SettingAppBar(
-                        currentScreen = currentScreen.name,
-                        canNavigateBack = navController.previousBackStackEntry != null,
-                        navigateUp = { navController.navigateUp() },
-                        color = Color.White,
-                    ),
-                    navController = navController,
-                )
+                if (appViewModel != null) {
+                    DeleteAccountScreen(
+                        appBar = SettingAppBar(
+                            currentScreen = "Delete Account",
+                            canNavigateBack = navController.previousBackStackEntry != null,
+                            navigateUp = { navController.navigateUp() },
+                            color = appViewModel.colorPalette.HeaderColor1,
+                            appViewModel = appViewModel
+                        ),
+                        navController = navController,
+                        appViewModel = appViewModel
+                    )
+                }
             }
             composable(route = SettingScreenNavigation.ResetDatabase.name) {
                 if (onboardViewModel != null && onboardUiState != null && appUiState != null && calUiState != null) {

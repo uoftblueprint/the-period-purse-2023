@@ -148,7 +148,9 @@ fun SettingScreenLayout(
             )
         }
 
-        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp).background(color = appViewModel.colorPalette.MainFontColor))
+        Divider(modifier = Modifier
+            .padding(start = 10.dp, end = 10.dp)
+            .background(color = appViewModel.colorPalette.MainFontColor))
 
         NavigateButton(
             stringResource(id = R.string.customize_notifications),
@@ -156,7 +158,9 @@ fun SettingScreenLayout(
             onClicked = onNotificationClicked,
         )
 
-        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp).background(color = appViewModel.colorPalette.MainFontColor))
+        Divider(modifier = Modifier
+            .padding(start = 10.dp, end = 10.dp)
+            .background(color = appViewModel.colorPalette.MainFontColor))
 
         Text(
             text = stringResource(R.string.account_settings_heading),
@@ -191,20 +195,26 @@ fun SettingScreenLayout(
             )
         }
 
-        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp).background(color = appViewModel.colorPalette.MainFontColor))
+        Divider(modifier = Modifier
+            .padding(start = 10.dp, end = 10.dp)
+            .background(color = appViewModel.colorPalette.MainFontColor))
 
         NavigateButton(
             text = stringResource(R.string.back_up_account),
             appViewModel= appViewModel,
             onClicked = onBackUpClicked,
         )
-        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp).background(color = appViewModel.colorPalette.MainFontColor))
+        Divider(modifier = Modifier
+            .padding(start = 10.dp, end = 10.dp)
+            .background(color = appViewModel.colorPalette.MainFontColor))
         NavigateButton(
             text = stringResource(id = R.string.delete_account),
             appViewModel = appViewModel,
             onClicked = onDeleteClicked,
         )
-        Divider(modifier = Modifier.padding(start = 10.dp, end = 10.dp).background(color = appViewModel.colorPalette.MainFontColor))
+        Divider(modifier = Modifier
+            .padding(start = 10.dp, end = 10.dp)
+            .background(color = appViewModel.colorPalette.MainFontColor))
         Spacer(modifier = Modifier.padding(20.dp))
         val uriHandler = LocalUriHandler.current
         Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {

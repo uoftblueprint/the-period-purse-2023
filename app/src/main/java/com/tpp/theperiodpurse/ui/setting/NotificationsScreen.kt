@@ -115,12 +115,14 @@ fun NotificationsLayout(context: Context, hasNotificationsPermission: Boolean, a
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(15.dp, top = 60.dp),
             fontSize = 20.scaledSp(),
+            color = appViewModel.colorPalette.MainFontColor
         )
         Text(
             text = stringResource(id = R.string.reminder_description),
             modifier = Modifier.padding(start = 15.dp),
             fontWeight = FontWeight.Light,
             fontSize = 20.scaledSp(),
+            color = appViewModel.colorPalette.MainFontColor
         )
         Divider(color = Color.Gray, thickness = 0.7.dp)
         Expandable(appViewModel)
