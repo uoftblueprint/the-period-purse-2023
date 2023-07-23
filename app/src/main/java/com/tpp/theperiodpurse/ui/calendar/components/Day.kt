@@ -47,7 +47,7 @@ fun Day(
                 .size(64.dp)
                 .clip(shape = RoundedCornerShape(8.dp))
                 .fillMaxSize()
-                .background(if (dayDisabled(date)) greyedOutColor else color)
+                .background(if (dayDisabled(date)) Color.Transparent else color)
                 .semantics { contentDescription = date.toString() }
                 .border(
                     color = Color(200, 205, 205),

@@ -1,5 +1,6 @@
 package com.tpp.theperiodpurse.ui.calendar.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.model.Symptom
 import com.tpp.theperiodpurse.ui.calendar.tabModifier
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 @Composable
 fun SymptomTab(
@@ -33,6 +35,7 @@ fun SymptomTab(
     selectedSymptom: Symptom,
     onSymptomClick: (Symptom) -> Unit,
     modifier: Modifier = Modifier,
+    appViewModel: AppViewModel
 ) {
     var expanded by remember { mutableStateOf(false) }
     Column(modifier = modifier) {
@@ -41,6 +44,7 @@ fun SymptomTab(
             expanded = expanded,
             onExpandButtonClick = { expanded = !expanded },
             modifier = tabModifier,
+            appViewModel = appViewModel
         )
         if (expanded) {
             SwitchSymptomTab(
@@ -59,22 +63,24 @@ private fun DisplaySymptomTab(
     expanded: Boolean,
     onExpandButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
+    appViewModel: AppViewModel
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
-        modifier = modifier,
+        modifier = modifier.background(color = appViewModel.colorPalette.HeaderColor1),
     ) {
         Text(
             text = stringResource(selectedSymptom.nameId),
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(end = 2.dp),
+            color = appViewModel.colorPalette.MainFontColor
         )
         Icon(
             painter = painterResource(
                 id = selectedSymptom.resourceId,
             ),
-            tint = Color.Black,
+            tint = appViewModel.colorPalette.MainFontColor,
             contentDescription = selectedSymptom.name,
             modifier = Modifier
                 .padding(end = 0.dp)
@@ -139,13 +145,3 @@ private fun SwitchSymptomTab(
     }
 }
 
-@Preview
-@Composable
-fun SymptomTabPreview() {
-    var selectedSymptom by remember { mutableStateOf(Symptom.FLOW) }
-    SymptomTab(
-        trackedSymptoms = Symptom.values().asList(),
-        selectedSymptom = selectedSymptom,
-        onSymptomClick = { selectedSymptom = it },
-    )
-}

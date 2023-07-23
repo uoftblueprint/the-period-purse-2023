@@ -70,6 +70,7 @@ fun CalendarScreenLayout(
                     selectedSymptom = selectedSymptom,
                     onSymptomClick = { calendarViewModel.setSelectedSymptom(it) },
                     trackedSymptoms = appUiState.trackedSymptoms,
+                    appViewModel = appViewModel
                 )
                 calendarContentDescription = stringResource(id = R.string.calendar)
                 Calendar(
@@ -83,10 +84,4 @@ fun CalendarScreenLayout(
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun DisplaySymptomTabPreview() {
-    SymptomTab(trackedSymptoms = previewTrackedSymptoms, Symptom.FLOW, {})
 }

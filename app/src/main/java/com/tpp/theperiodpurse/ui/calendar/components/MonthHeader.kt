@@ -42,7 +42,7 @@ fun MonthAndDayHeadings(calendarMonth: CalendarMonth, daysOfWeek: List<DayOfWeek
         fontSize = 18.scaledSp(),
         fontWeight = FontWeight.W500,
         text = calendarMonth.yearMonth.displayText(),
-        color = appViewModel.colorPalette.CalendarDayColor
+        color = appViewModel.colorPalette.CalendarFontColor
     )
 
     // Days of Week
@@ -56,7 +56,7 @@ fun MonthAndDayHeadings(calendarMonth: CalendarMonth, daysOfWeek: List<DayOfWeek
                 fontSize = 10.scaledSp(),
                 fontWeight = FontWeight.ExtraBold,
                 text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
-                color = appViewModel.colorPalette.CalendarDayColor
+                color = appViewModel.colorPalette.CalendarFontColor
             )
         }
     }

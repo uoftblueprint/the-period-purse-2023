@@ -67,6 +67,7 @@ private fun BottomNavigation(
                     icon = {
                         Icon(
                             painterResource(R.drawable.info_black_24dp),
+                            tint = appViewModel.colorPalette.MainFontColor,
                             contentDescription = null,
                         )
                     },
@@ -82,6 +83,7 @@ private fun BottomNavigation(
                     icon = {
                         Icon(
                             painterResource(R.drawable.settings_black_24dp),
+                            tint = appViewModel.colorPalette.MainFontColor,
                             contentDescription = null,
                         )
                     },
