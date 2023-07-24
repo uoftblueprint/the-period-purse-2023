@@ -2,6 +2,7 @@ package com.tpp.theperiodpurse.ui.theme
 
 import androidx.compose.ui.graphics.Color
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.ui.education.pink
 
 
 interface ColorPalette {
@@ -28,6 +29,7 @@ interface ColorPalette {
     val cyclePink: Color
     val cycleBlue: Color
     val popUpTopBar: Color
+    val productBackground: Color
 
     val background: Int
 }
@@ -56,6 +58,7 @@ class DarkColorPaletteImpl : ColorPalette {
     override val cyclePink = Color(	250, 103, 103)
     override val cycleBlue = Color(	90, 159, 147)
     override val popUpTopBar = Color(0xFFA1A2A6)
+    override val productBackground = Color(0xFF6D6E71).copy(0.6f)
 
 
     override val background: Int= R.drawable.darkwatercolour
@@ -87,6 +90,7 @@ class LightColorPaletteImpl : ColorPalette {
     override val cyclePink = Color(0xFFFEDBDB)
     override val cycleBlue = Color(0xFFBAE0D8)
     override val popUpTopBar = Color.White
+    override val productBackground = Color(pink)
 
     override val background: Int = R.drawable.background
 }

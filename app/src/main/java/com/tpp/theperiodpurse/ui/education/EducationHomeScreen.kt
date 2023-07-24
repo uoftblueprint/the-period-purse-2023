@@ -175,7 +175,7 @@ fun PeriodProducts(navController: NavHostController, it: Product, appViewModel: 
             .aspectRatio(1f),
         shape = RoundedCornerShape(12.dp),
         elevation = 10.dp,
-        backgroundColor = Color(pink),
+        backgroundColor = appViewModel.colorPalette.productBackground,
         onClick = {
             navController.currentBackStackEntry?.savedStateHandle?.set(
                 key = "elementId",
