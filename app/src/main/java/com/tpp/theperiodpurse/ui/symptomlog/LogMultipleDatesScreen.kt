@@ -3,7 +3,6 @@ package com.tpp.theperiodpurse.ui.symptomlog
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -65,7 +64,7 @@ fun LogMultipleDatesScreen(
             .fillMaxSize(),
     ) {
         PopupTopBar(onClose = onClose, appViewModel = appViewModel) {
-            LogMultipleDatesText()
+            LogMultipleDatesText(appViewModel)
         }
         val currentMonth = remember { YearMonth.now() }
         val startMonth = remember { currentMonth.minusMonths(12) } // Previous months
@@ -163,7 +162,7 @@ fun LogMultipleDatesScreen(
 }
 
 @Composable
-private fun LogMultipleDatesText(modifier: Modifier = Modifier) {
+private fun LogMultipleDatesText(appViewModel: AppViewModel, modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -173,11 +172,13 @@ private fun LogMultipleDatesText(modifier: Modifier = Modifier) {
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             modifier = modifier,
+            color = appViewModel.colorPalette.MainFontColor
         )
         Text(
             stringResource(R.string.log_multiple_dates_header_body),
             fontSize = 13.scaledSp(),
             modifier = modifier,
+            color = appViewModel.colorPalette.MainFontColor
         )
     }
 }
