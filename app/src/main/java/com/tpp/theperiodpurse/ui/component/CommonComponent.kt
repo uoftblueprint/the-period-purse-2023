@@ -173,7 +173,7 @@ fun PopupTopBar(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxWidth()
-            .background(color = appViewModel.colorPalette.CalendarDayColor)
+            .background(color = appViewModel.colorPalette.popUpTopBar)
             .height(100.dp)
             .padding(top = 10.dp),
     ) {

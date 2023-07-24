@@ -280,7 +280,7 @@ private fun LogScreenTopBarContent(navController: NavController, date: LocalDate
 
             Text(
                 text = "Log your symptoms for:",
-                color = appViewModel.colorPalette.PopUpHeadColor,
+                color = appViewModel.colorPalette.MainFontColor,
                 fontSize = (screenwidth * 0.05).scaledSp(),
             )
             Text(
