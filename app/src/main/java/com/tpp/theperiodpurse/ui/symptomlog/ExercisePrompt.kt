@@ -85,6 +85,7 @@ fun ExercisePrompt(logViewModel: LogViewModel, appViewModel: AppViewModel) {
                         .width(85.dp),
                 ) {
                     EditNumberField(
+                        appViewModel = appViewModel,
                         label = R.string.hours,
                         value = hoursExercised,
                         onValueChange = {
@@ -117,6 +118,7 @@ fun ExercisePrompt(logViewModel: LogViewModel, appViewModel: AppViewModel) {
                         .width(100.dp),
                 ) {
                     EditNumberField(
+                        appViewModel = appViewModel,
                         label = R.string.minutes,
                         value = minutesExercised,
                         onValueChange = {

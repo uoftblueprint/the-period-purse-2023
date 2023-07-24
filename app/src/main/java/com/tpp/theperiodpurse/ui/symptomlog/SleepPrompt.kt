@@ -7,6 +7,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -74,6 +75,7 @@ fun SleepPrompt(logViewModel: LogViewModel, appViewModel: AppViewModel) {
                     .width(85.dp),
             ) {
                 EditNumberField(
+                    appViewModel = appViewModel,
                     label = R.string.hours,
                     value = hoursSlept,
                     onValueChange = {
@@ -105,6 +107,7 @@ fun SleepPrompt(logViewModel: LogViewModel, appViewModel: AppViewModel) {
                     .width(100.dp),
             ) {
                 EditNumberField(
+                    appViewModel = appViewModel,
                     label = R.string.minutes,
                     value = minutesSlept,
                     onValueChange = {
