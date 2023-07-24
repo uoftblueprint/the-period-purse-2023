@@ -196,19 +196,17 @@ fun SettingsScreen(
                 }
             }
             composable(route = SettingScreenNavigation.ResetDatabase.name) {
-                if (onboardViewModel != null && onboardUiState != null && appUiState != null && calUiState != null) {
-                    if (appViewModel != null) {
-                        ResetDatabase(
-                            context = context,
-                            onboardViewModel = onboardViewModel,
-                            appViewModel= appViewModel,
-                            outController = outController,
-                            onboardUiState = onboardUiState,
-                            appUiState = appUiState,
-                            calUiState = calUiState,
-                            signout = signout,
-                        )
-                    }
+                if (onboardViewModel != null && onboardUiState != null && appUiState != null && calUiState != null && appViewModel != null) {
+                    ResetDatabase(
+                        context = context,
+                        onboardViewModel = onboardViewModel,
+                        appViewModel= appViewModel,
+                        outController = outController,
+                        onboardUiState = onboardUiState,
+                        appUiState = appUiState,
+                        calUiState = calUiState,
+                        signout = signout,
+                    )
                 }
             }
             composable(route = SettingScreenNavigation.BackupDatabase.name) {
