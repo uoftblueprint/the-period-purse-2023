@@ -80,7 +80,7 @@ fun LoggingOptionsPopup(
                     .height(18.dp)
                     .clickable(enabled = false) {},
             )
-            CloseOverlayButton(onClick = onExit, appViewModel = appViewModel)
+            CloseOverlayButton(onClick = onExit)
         }
     }
 }
@@ -89,12 +89,11 @@ fun LoggingOptionsPopup(
 fun CloseOverlayButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    appViewModel: AppViewModel
 ) {
     val circle = MaterialTheme.shapes.large.copy(CornerSize(percent = 50))
     FloatingActionButton(
         onClick = onClick,
-        backgroundColor = appViewModel.colorPalette.HeaderColor1,
+        backgroundColor = Color.White,
         modifier = modifier
             .padding(14.dp)
             .border(color = Color.White, width = 2.dp, shape = circle)
