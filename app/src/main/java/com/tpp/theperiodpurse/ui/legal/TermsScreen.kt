@@ -38,7 +38,7 @@ fun TermsScreen(navController: NavHostController, appViewModel: AppViewModel) {
                     .padding(vertical = 12.dp, horizontal = 24.dp)
                     .verticalScroll(rememberScrollState()),
             ) {
-                Title(str = screenName)
+                Title(str = screenName, appViewModel)
 
                 Divider(
                     modifier = Modifier.padding(vertical = 8.dp),
@@ -46,32 +46,32 @@ fun TermsScreen(navController: NavHostController, appViewModel: AppViewModel) {
                     thickness = 2.dp,
                 )
 
-                Body(stringResource(R.string.terms_and_conditions))
+                Body(stringResource(R.string.terms_and_conditions), appViewModel)
 
-                Header(stringResource(R.string.intellectual_property))
-                Body(stringResource(R.string.intellectual_property_details))
+                Header(stringResource(R.string.intellectual_property), appViewModel)
+                Body(stringResource(R.string.intellectual_property_details), appViewModel)
 
-                Header(stringResource(R.string.accounts))
-                Body(stringResource(R.string.account_details))
+                Header(stringResource(R.string.accounts), appViewModel)
+                Body(stringResource(R.string.account_details), appViewModel)
 
-                Header(stringResource(R.string.limitation_of_liability))
-                Body(stringResource(R.string.limitation_of_liability_details))
+                Header(stringResource(R.string.limitation_of_liability), appViewModel)
+                Body(stringResource(R.string.limitation_of_liability_details), appViewModel)
 
-                Header(stringResource(R.string.indemnity))
-                Body(stringResource(R.string.indemnity_details))
+                Header(stringResource(R.string.indemnity), appViewModel)
+                Body(stringResource(R.string.indemnity_details), appViewModel)
 
-                Header(stringResource(R.string.applicable_law))
-                Body(stringResource(R.string.applicable_law_details))
+                Header(stringResource(R.string.applicable_law), appViewModel)
+                Body(stringResource(R.string.applicable_law_details), appViewModel)
 
-                Header(stringResource(R.string.severability))
-                Body(stringResource(R.string.severability_details))
+                Header(stringResource(R.string.severability), appViewModel)
+                Body(stringResource(R.string.severability_details), appViewModel)
 
-                Header(stringResource(R.string.terms_and_conditions))
-                Body(stringResource(R.string.terms_conditions_changes_details))
+                Header(stringResource(R.string.terms_and_conditions), appViewModel)
+                Body(stringResource(R.string.terms_conditions_changes_details), appViewModel)
 
-                Header(stringResource(R.string.contact_details_string))
-                Body(stringResource(R.string.contact_details))
-                Body(stringResource(R.string.terms_conditions_effective_date))
+                Header(stringResource(R.string.contact_details_string), appViewModel)
+                Body(stringResource(R.string.contact_details), appViewModel)
+                Body(stringResource(R.string.terms_conditions_effective_date), appViewModel)
                 Spacer(modifier = Modifier.size(36.dp))
             }
         },

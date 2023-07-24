@@ -345,7 +345,7 @@ fun TrackingOptionButton(
         ) {
             Icon(
                 painter = icon,
-                tint = appViewModel.colorPalette.MainFontColor,
+                tint = Color.DarkGray,
                 contentDescription = contentDescription,
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
