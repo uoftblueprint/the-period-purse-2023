@@ -64,7 +64,7 @@ fun NotesPrompt(logViewModel: LogViewModel, appViewModel: AppViewModel) {
                     notesText = notes
                     saveTextData(logViewModel, notesText)
                 },
-                label = { Text(text = "Record a symptom or make a note") },
+                label = { Text(text = "Record a symptom or make a note", color = appViewModel.colorPalette.MainFontColor) },
                 maxLines = 5,
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
@@ -77,10 +77,12 @@ fun NotesPrompt(logViewModel: LogViewModel, appViewModel: AppViewModel) {
                 ),
                 minLines = 3,
                 colors = TextFieldDefaults.outlinedTextFieldColors(
+                    textColor = appViewModel.colorPalette.MainFontColor,
                     unfocusedBorderColor = LogSelectedTextColor,
-                    focusedBorderColor = MainFontColor,
-                    focusedLabelColor = MainFontColor,
-                    cursorColor = MainFontColor,
+                    focusedBorderColor = appViewModel.colorPalette.MainFontColor,
+                    focusedLabelColor = appViewModel.colorPalette.MainFontColor,
+                    cursorColor = appViewModel.colorPalette.MainFontColor,
+                    backgroundColor = appViewModel.colorPalette.CalendarDayColor
                 ),
             )
         }
