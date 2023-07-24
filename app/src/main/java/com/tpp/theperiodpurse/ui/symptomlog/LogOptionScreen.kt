@@ -77,7 +77,7 @@ fun LoggingOptionsPopup(
             }
             Spacer(
                 modifier = Modifier
-                    .height(18.dp)
+                    .height(20.dp)
                     .clickable(enabled = false) {},
             )
             CloseOverlayButton(onClick = onExit)
