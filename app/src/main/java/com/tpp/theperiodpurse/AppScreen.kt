@@ -252,6 +252,7 @@ fun AppScreen(
                         onLogMultiplePeriodDates = { navController.navigate(Screen.LogMultipleDates.name) },
                         onExit = { loggingOptionsVisible = false },
                         modifier = modifier.padding(bottom = 64.dp),
+                        appViewModel = appViewModel
                     )
                 }
             }

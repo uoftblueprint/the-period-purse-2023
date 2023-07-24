@@ -19,6 +19,7 @@ import androidx.compose.ui.window.Popup
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.theme.Red
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 @Composable
 fun LoggingOptionsPopup(
@@ -26,6 +27,7 @@ fun LoggingOptionsPopup(
     onLogMultiplePeriodDates: () -> Unit,
     onExit: () -> Unit,
     modifier: Modifier = Modifier,
+    appViewModel: AppViewModel
 ) {
     Popup(
         alignment = Alignment.Center,
@@ -35,7 +37,7 @@ fun LoggingOptionsPopup(
             verticalArrangement = Arrangement.Bottom,
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White.copy(0.95f))
+                .background(appViewModel.colorPalette.HeaderColor1.copy(0.8f))
                 .then(modifier)
                 .offset(y = 35.dp)
                 .clickable(
@@ -56,6 +58,7 @@ fun LoggingOptionsPopup(
                         onLogDailySymptomsClick()
                         onExit()
                     },
+                    appViewModel = appViewModel
                 )
                 Spacer(modifier = Modifier.width(30.dp))
                 LoggingOptionButton(
@@ -65,6 +68,7 @@ fun LoggingOptionsPopup(
                         onExit()
                         onLogMultiplePeriodDates()
                     },
+                    appViewModel = appViewModel
                 )
             }
             Spacer(
@@ -101,6 +105,7 @@ private fun LoggingOptionButton(
     icon: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    appViewModel: AppViewModel
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -120,15 +125,9 @@ private fun LoggingOptionButton(
             Icon(
                 painterResource(icon),
                 contentDescription = title,
-                tint = Color.White,
+                tint = appViewModel.colorPalette.MainFontColor,
                 modifier = Modifier.size(24.dp),
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun LogOptionScreenPreview() {
-    LoggingOptionsPopup({}, {}, {})
 }
