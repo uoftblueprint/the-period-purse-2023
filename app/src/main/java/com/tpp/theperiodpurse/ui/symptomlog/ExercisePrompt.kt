@@ -12,6 +12,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -79,6 +80,7 @@ fun ExercisePrompt(logViewModel: LogViewModel, appViewModel: AppViewModel) {
             Row(
                 modifier = Modifier
                     .padding(start = 10.dp, bottom = 10.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
                     modifier = Modifier
@@ -151,7 +153,8 @@ fun ExercisePrompt(logViewModel: LogViewModel, appViewModel: AppViewModel) {
                         hoursExercised = ""
                         minutesExercised = ""
                     },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(200, 200, 200)),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = appViewModel
+                        .colorPalette.secondary1),
                     modifier = Modifier
                         .padding(start = 16.dp),
                 ) {

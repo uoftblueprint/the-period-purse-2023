@@ -12,9 +12,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -58,13 +60,15 @@ fun NotesPrompt(logViewModel: LogViewModel, appViewModel: AppViewModel) {
 
         ) {
             MinLinesOutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
                 value = notesText,
                 onValueChange = {
                         notes: String ->
                     notesText = notes
                     saveTextData(logViewModel, notesText)
                 },
-                label = { Text(text = "Record a symptom or make a note", color = appViewModel.colorPalette.MainFontColor) },
+                placeholder = { Text(text = "Record a symptom or make a note", color =
+                appViewModel.colorPalette.MainFontColor) },
                 maxLines = 5,
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
@@ -79,10 +83,10 @@ fun NotesPrompt(logViewModel: LogViewModel, appViewModel: AppViewModel) {
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     textColor = appViewModel.colorPalette.MainFontColor,
                     unfocusedBorderColor = LogSelectedTextColor,
-                    focusedBorderColor = appViewModel.colorPalette.MainFontColor,
-                    focusedLabelColor = appViewModel.colorPalette.MainFontColor,
-                    cursorColor = appViewModel.colorPalette.MainFontColor,
-                    backgroundColor = appViewModel.colorPalette.CalendarDayColor
+                    focusedBorderColor = Color.Transparent,
+                    focusedLabelColor = Color.Transparent,
+                    cursorColor = appViewModel.colorPalette.primary1,
+                    backgroundColor = appViewModel.colorPalette.secondary4
                 ),
             )
         }

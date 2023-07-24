@@ -115,6 +115,7 @@ private fun LoggingOptionButton(
             textAlign = TextAlign.Center,
             modifier = Modifier.width(100.dp),
             fontSize = 15.scaledSp(),
+            color = appViewModel.colorPalette.MainFontColor
         )
         Spacer(modifier = Modifier.height(4.dp))
         FloatingActionButton(
@@ -125,7 +126,7 @@ private fun LoggingOptionButton(
             Icon(
                 painterResource(icon),
                 contentDescription = title,
-                tint = appViewModel.colorPalette.MainFontColor,
+                tint = Color.White,
                 modifier = Modifier.size(24.dp),
             )
         }

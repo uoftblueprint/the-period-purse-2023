@@ -336,7 +336,7 @@ fun LogPromptCards(logPrompts: List<LogPrompt>, logViewModel: LogViewModel, appV
             Column(
                 modifier = Modifier
                     .drawBehind {
-                        val strokeWidth = 4f
+                        val strokeWidth = 2f
                         val x = size.width - strokeWidth
 
                         drawLine(
@@ -446,7 +446,7 @@ fun LogSelectableSquare(
         if (logSquare.description == selected) {
             appViewModel.colorPalette.SelectedColor1
         } else {
-            appViewModel.colorPalette.CalendarDayColor
+            appViewModel.colorPalette.secondary4
         },
         animationSpec = tween(250, 0, LinearEasing),
     )

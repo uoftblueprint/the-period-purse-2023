@@ -218,20 +218,24 @@ fun EditNumberField(
     onValueChange: (String) -> Unit,
     keyboardActions: KeyboardActions,
     appViewModel: AppViewModel,
+    placeholder: String = "",
 ) {
     TextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(text = stringResource(label), color = appViewModel.colorPalette.MainFontColor) },
+        label = { Text(text = stringResource(label), color = appViewModel.colorPalette.secondary1) },
         modifier = Modifier.fillMaxWidth(),
+        placeholder = { Text(text = placeholder, color = appViewModel.colorPalette.secondary1) },
         singleLine = true,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = appViewModel.colorPalette.CalendarDayColor,
-            cursorColor = appViewModel.colorPalette.MainFontColor,
+            textColor = appViewModel.colorPalette.secondary1,
+            backgroundColor = Color.Transparent,
+            cursorColor = appViewModel.colorPalette.primary1,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
+            placeholderColor = appViewModel.colorPalette.secondary1
         ),
     )
 }
