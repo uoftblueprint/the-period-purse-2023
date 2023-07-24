@@ -76,7 +76,7 @@ fun LoggingOptionsPopup(
                     .height(20.dp)
                     .clickable(enabled = false) {},
             )
-            CloseOverlayButton(onClick = onExit)
+            CloseOverlayButton(onClick = onExit, appViewModel = appViewModel)
         }
     }
 }
@@ -85,10 +85,11 @@ fun LoggingOptionsPopup(
 fun CloseOverlayButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    appViewModel: AppViewModel
 ) {
     FloatingActionButton(
         onClick = onClick,
-        backgroundColor = Color.White,
+        backgroundColor = appViewModel.colorPalette.HeaderColor1,
         modifier = modifier.size(70.dp),
     ) {
         Icon(
