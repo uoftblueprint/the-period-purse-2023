@@ -53,7 +53,6 @@ fun SettingAppBar(
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
     appViewModel: AppViewModel,
-    color: Color,
 ) {
     TopAppBar(
         title = { Text(text = currentScreen, color = appViewModel.colorPalette.MainFontColor) },
@@ -69,7 +68,7 @@ fun SettingAppBar(
                 }
             }
         },
-        backgroundColor = color,
+        backgroundColor = appViewModel.colorPalette.HeaderColor1,
         elevation = 0.dp,
     )
 }
@@ -154,7 +153,6 @@ fun SettingsScreen(
                             currentScreen = currentScreen.name,
                             canNavigateBack = navController.previousBackStackEntry != null,
                             navigateUp = { navController.navigateUp() },
-                            color = appViewModel.colorPalette.HeaderColor1,
                             appViewModel = appViewModel
                         ),
                         appViewModel,
@@ -168,7 +166,6 @@ fun SettingsScreen(
                             currentScreen = "Back Up Account",
                             canNavigateBack = navController.previousBackStackEntry != null,
                             navigateUp = { navController.navigateUp() },
-                            color = appViewModel.colorPalette.HeaderColor1,
                             appViewModel = appViewModel
                         ),
                         navController = navController,
@@ -187,7 +184,6 @@ fun SettingsScreen(
                             currentScreen = "Delete Account",
                             canNavigateBack = navController.previousBackStackEntry != null,
                             navigateUp = { navController.navigateUp() },
-                            color = appViewModel.colorPalette.HeaderColor1,
                             appViewModel = appViewModel
                         ),
                         navController = navController,
