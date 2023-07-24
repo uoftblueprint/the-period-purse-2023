@@ -35,13 +35,13 @@ interface ColorPalette {
 }
 
 class DarkColorPaletteImpl : ColorPalette {
-    override val primary1 = Color(114, 198, 176)
+    override val primary1 = Color(0xFF72C6B7)
     override val primary2 = Color(	240, 46, 48)
     override val primary3 = Color(125, 161, 152)
-    override val secondary1 = Color(114, 198, 176)
-    override val secondary2 = Color(115, 199, 183)
+    override val secondary1 = Color(0xFF5A9F93)
+    override val secondary2 = Color(0xFF73c7b7)
     override val secondary3 = Color(250, 103, 103)
-    override val secondary4 = Color(161, 162, 166)
+    override val secondary4 = Color(0xFF6D6E71)
     override val text1 = Color(	217, 218, 217)
     override val text2 = Color(161, 162, 166)
 
@@ -67,13 +67,13 @@ class DarkColorPaletteImpl : ColorPalette {
 }
 
 class LightColorPaletteImpl : ColorPalette {
-    override val primary1 = Color(114, 198, 176)
+    override val primary1 = Color(0xFF72C6B7)
     override val primary2 = Color(	211, 39, 41)
     override val primary3 = Color(125, 161, 152)
-    override val secondary1 = Color(90, 159, 147)
-    override val secondary2 = Color(115, 199, 183)
+    override val secondary1 = Color(0xFF5A9F93)
+    override val secondary2 = Color(0xFF73c7b7)
     override val secondary3 = Color(179, 31, 32)
-    override val secondary4 = Color(109, 110, 113)
+    override val secondary4 = Color(0xFFEFEFF4)
     override val text1 = Color.DarkGray
     override val text2 = Color.Gray
 

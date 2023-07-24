@@ -135,7 +135,7 @@ private fun LoggingOptionButton(
             Icon(
                 painterResource(icon),
                 contentDescription = title,
-                tint = appViewModel.colorPalette.MainFontColor,
+                tint = Color.White,
                 modifier = Modifier.size(24.dp),
             )
         }
