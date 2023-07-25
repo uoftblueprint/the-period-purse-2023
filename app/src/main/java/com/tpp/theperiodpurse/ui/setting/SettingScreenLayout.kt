@@ -149,7 +149,7 @@ fun SettingScreenLayout(
         Divider(
             modifier = Modifier
             .padding(start = 10.dp, end = 10.dp)
-            .background(color = appViewModel.colorPalette.MainFontColor))
+            .background(color = appViewModel.colorPalette.lineColor))
 
         NavigateButton(
             stringResource(id = R.string.customize_notifications),
