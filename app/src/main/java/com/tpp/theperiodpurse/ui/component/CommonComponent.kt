@@ -27,7 +27,8 @@ import com.tpp.theperiodpurse.ui.theme.Teal
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 @Composable
-fun BottomNavigation(navController: NavController, appViewModel: AppViewModel, appUiState: AppUiState) {
+fun BottomNavigation(navController: NavController, appViewModel: AppViewModel) {
+    val appUiState by appViewModel.uiState.collectAsState()
     val isDarkMode by rememberUpdatedState(appUiState.darkMode)
 
     BottomNavigation(

@@ -267,14 +267,6 @@ fun NavigationGraph(
             )
         }
     }
-    Box(
-        contentAlignment = Alignment.BottomCenter,
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        if (currentRoute(navController) in screensWithNavigationBar) {
-            BottomNavigation(navController = navController, appViewModel = appViewModel, appUiState = appUiState)
-        }
-    }
 }
 
 @Composable
