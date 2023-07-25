@@ -15,17 +15,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.data.getPeriodPrediction
+import com.tpp.theperiodpurse.data.model.FlowSeverity
 import com.tpp.theperiodpurse.data.model.Symptom
 import com.tpp.theperiodpurse.ui.calendar.components.SymptomTab
-import com.tpp.theperiodpurse.ui.theme.ThePeriodPurseTheme
+import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import java.time.YearMonth
+import java.time.ZoneId
 
 val previewTrackedSymptoms = Symptom.values().asList()
 
@@ -38,50 +40,71 @@ fun CalendarScreenLayout(
 ) {
     val calendarUIState by calendarViewModel.uiState.collectAsState()
     // Contains the swappable content
-    ThePeriodPurseTheme {
-        Log.d("Calendar Screen", "Renderng calendar screen")
-        val bg = painterResource(appViewModel.colorPalette.background)
-        val appUiState by appViewModel.uiState.collectAsState()
+    // TODO: upon render, update calendar ui state so that predicted periods are calculated and
+    //  the corresponding day ui is updated. Need to check how expensive this is.
+    Log.d("Calendar Screen", "Renderng calendar screen")
+    val bg = painterResource(appViewModel.colorPalette.background)
+    val appUiState by appViewModel.uiState.collectAsState()
 
-        val selectedSymptom = calendarUIState.selectedSymptom
-        val currentMonth = remember { YearMonth.now() }
-        val startMonth = remember { currentMonth.minusMonths(12) } // Previous months
-        val endMonth = remember { currentMonth.plusMonths(0) } // Next months
-        val firstDayOfWeek = remember { firstDayOfWeekFromLocale() } // Available from the library
+    val selectedSymptom = calendarUIState.selectedSymptom
+    val currentMonth = remember { YearMonth.now() }
+    val startMonth = remember { currentMonth.minusMonths(12) } // Previous months
+    val endMonth = remember { currentMonth.plusMonths(1) } // Next months
+    val firstDayOfWeek = remember { firstDayOfWeekFromLocale() } // Available from the library
 
-        val state = rememberCalendarState(
-            startMonth = startMonth,
-            endMonth = endMonth,
-            firstVisibleMonth = currentMonth,
-            firstDayOfWeek = firstDayOfWeek,
-        )
-        var calendarContentDescription = stringResource(id = R.string.calendar_page)
-        Box {
-            Image(
-                painter = bg,
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .semantics { contentDescription = calendarContentDescription },
-                contentScale = ContentScale.FillBounds,
-            )
-            Column {
-                SymptomTab(
-                    selectedSymptom = selectedSymptom,
-                    onSymptomClick = { calendarViewModel.setSelectedSymptom(it) },
-                    trackedSymptoms = appUiState.trackedSymptoms,
-                    appViewModel = appViewModel
-                )
-                calendarContentDescription = stringResource(id = R.string.calendar)
-                Calendar(
-                    calendarContentDescription = calendarContentDescription,
-                    state = state,
-                    calendarUIState = calendarUIState,
-                    selectedSymptom = selectedSymptom,
-                    navController = navController,
-                    appViewModel = appViewModel
-                )
+    val dates = ArrayList(appViewModel.getDates())
+    // this is very inefficient, but should work for the time being
+    calendarUIState.days.forEach{
+        if (it.value.flow == FlowSeverity.Predicted) {
+            calendarViewModel.clearFlow(it.key)
+        }
+    }
+
+    // clear out days previous predicted
+    if (dates.isNotEmpty()) {
+        val predictedPeriodDates = getPeriodPrediction(ArrayList(appViewModel.getDates()))
+
+        // update the color for these dates
+        predictedPeriodDates.forEach{
+            val localDate = it.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()
+            if (localDate != null) {
+                calendarViewModel.setDayInfo(localDate, CalendarDayUIState(FlowSeverity.Predicted))
             }
+        }
+    }
+
+    val state = rememberCalendarState(
+        startMonth = startMonth,
+        endMonth = endMonth,
+        firstVisibleMonth = currentMonth,
+        firstDayOfWeek = firstDayOfWeek,
+    )
+    var calendarContentDescription = stringResource(id = R.string.calendar_page)
+    Box {
+        Image(
+            painter = bg,
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxSize()
+                .semantics { contentDescription = calendarContentDescription },
+            contentScale = ContentScale.FillBounds,
+        )
+        Column {
+            SymptomTab(
+                selectedSymptom = selectedSymptom,
+                onSymptomClick = { calendarViewModel.setSelectedSymptom(it) },
+                trackedSymptoms = appUiState.trackedSymptoms,
+                appViewModel = appViewModel
+            )
+            calendarContentDescription = stringResource(id = R.string.calendar)
+            Calendar(
+                calendarContentDescription = calendarContentDescription,
+                state = state,
+                calendarUIState = calendarUIState,
+                selectedSymptom = selectedSymptom,
+                navController = navController,
+                appViewModel = appViewModel
+            )
         }
     }
 }
