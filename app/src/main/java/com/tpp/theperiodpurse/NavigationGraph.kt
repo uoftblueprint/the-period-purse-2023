@@ -4,12 +4,9 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -20,7 +17,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.ui.calendar.CalendarScreen
-import com.tpp.theperiodpurse.ui.component.BottomNavigation
 import com.tpp.theperiodpurse.ui.cycle.CycleScreenLayout
 import com.tpp.theperiodpurse.ui.cycle.PeriodHistoryLayout
 import com.tpp.theperiodpurse.ui.education.*
@@ -265,14 +261,6 @@ fun NavigationGraph(
                 onboardViewModel,
                 onboardUIState,
             )
-        }
-    }
-    Box(
-        contentAlignment = Alignment.BottomCenter,
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        if (currentRoute(navController) in screensWithNavigationBar) {
-            BottomNavigation(navController = navController, appViewModel = appViewModel, appUiState = appUiState)
         }
     }
 }

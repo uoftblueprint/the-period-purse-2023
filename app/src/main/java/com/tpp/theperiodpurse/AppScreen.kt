@@ -242,6 +242,7 @@ fun AppScreen(
                 )
 
                 if (loggingOptionsVisible) {
+                    Log.d("AppScreen", "Rendering logging options")
                     LoggingOptionsPopup(
                         onLogDailySymptomsClick = {
                             navigateToLogScreenWithDate(
@@ -254,6 +255,14 @@ fun AppScreen(
                         modifier = modifier.padding(bottom = 64.dp),
                         appViewModel = appViewModel
                     )
+                }
+            }
+            Box(
+                contentAlignment = Alignment.BottomCenter,
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                if (currentRoute(navController) in screensWithNavigationBar) {
+                    BottomNavigation(navController = navController, appViewModel = appViewModel)
                 }
             }
         }
