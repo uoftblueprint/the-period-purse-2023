@@ -6,6 +6,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.data.entity.User
@@ -15,6 +16,7 @@ import com.tpp.theperiodpurse.data.helper.DurationConverter
 import com.tpp.theperiodpurse.data.helper.SymptomConverter
 import java.io.File
 import javax.inject.Singleton
+
 
 @Database(entities = [User::class, Date::class], version = 7, exportSchema = true)
 @Singleton
@@ -28,6 +30,12 @@ abstract class ApplicationRoomDatabase : RoomDatabase() {
     abstract fun userDAO(): UserDAO
     abstract fun dateDAO(): DateDAO
     companion object {
+        val MIGRATION_6_7: Migration = object : Migration(6, 7) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE users ADD COLUMN darkMode INTEGER NOT NULL DEFAULT 0")
+            }
+        }
+
         @Volatile
         private var INSTANCE: ApplicationRoomDatabase? = null
         fun getDatabase(context: Context): ApplicationRoomDatabase {
@@ -43,6 +51,7 @@ abstract class ApplicationRoomDatabase : RoomDatabase() {
                         ApplicationRoomDatabase::class.java,
                         databaseFile.absolutePath,
                     )
+                        .addMigrations(MIGRATION_6_7)
                         .addCallback(getCallback())
                         .fallbackToDestructiveMigration()
                         .build()
