@@ -60,7 +60,10 @@ fun getLastDate(context: Context): String? {
  */
 fun getFact(context: Context): String? {
     val sharedPreferences = getSharedPreferences(context)
-    return sharedPreferences.getString("FACT_KEY", null)
+    if (sharedPreferences.getString("FACT_KEY", null) == null) {
+        setFact(context)
+    }
+    return sharedPreferences.getString("FACT_KEY", "")
 }
 
 
