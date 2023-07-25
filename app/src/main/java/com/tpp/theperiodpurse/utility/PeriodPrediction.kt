@@ -27,30 +27,32 @@ fun addOneDay(date: Date): Date {
  * Return a list containing sublists where each sublist is a period
  */
 fun parseDatesIntoPeriods(periodHistory: ArrayList<TPPDate>): ArrayList<ArrayList<TPPDate>> {
+    val processedDates = processDates(periodHistory)
+
     // each date can only exist once, maybe put put them in a ordered set?
-    sortPeriodHistory(periodHistory)
+    sortPeriodHistory(processedDates)
     val periods = ArrayList<ArrayList<TPPDate>>()
     var currPeriod = ArrayList<TPPDate>()
 
-    if (periodHistory.size == 0) {
+    if (processedDates.size == 0) {
         return periods
     }
 
-    for (i in 0 until periodHistory.size) {
+    for (i in 0 until processedDates.size) {
         // check if next element in the array is within one day
         if (i == 0) {
-            currPeriod.add(periodHistory[i])
+            currPeriod.add(processedDates[i])
         } else {
-            val date1 = periodHistory[i].date
-            val date2 = periodHistory[i - 1].date
+            val date1 = processedDates[i].date
+            val date2 = processedDates[i - 1].date
             if (date1 != null && date2 != null) {
                 val diff = date1.time - date2.time
                 if (diff <= 86400000) {
-                    currPeriod.add(periodHistory[i])
+                    currPeriod.add(processedDates[i])
                 } else {
                     periods.add(currPeriod)
                     currPeriod = ArrayList()
-                    currPeriod.add(periodHistory[i])
+                    currPeriod.add(processedDates[i])
                 }
             }
         }
@@ -64,11 +66,13 @@ fun parseDatesIntoPeriods(periodHistory: ArrayList<TPPDate>): ArrayList<ArrayLis
  * with periods), and sorting the list by incrementing date.
  */
 fun sortPeriodHistory(periodHistory: ArrayList<TPPDate>) {
+    val processedDates = processDates(periodHistory)
+
     // Removes all dates with no flow or spotting.
-    periodHistory.removeAll { it.flow == FlowSeverity.None || it.flow == FlowSeverity.Spotting }
+    processedDates.removeAll { it.flow == FlowSeverity.None || it.flow == FlowSeverity.Spotting }
 
     // Sorts dates in ascending order.
-    periodHistory.sortWith {
+    processedDates.sortWith {
             date1, date2 ->
         date1.date?.compareTo(date2.date) ?: 0
     }
@@ -87,26 +91,28 @@ fun sortPeriodHistory(periodHistory: ArrayList<TPPDate>) {
 *     - Logs on Jan. 1 and Jan. 5 ==> 1 day period, 1 day period
 */
 fun calculateAveragePeriodLength(periodHistory: ArrayList<TPPDate>): Float {
-    sortPeriodHistory(periodHistory)
+    val processedDates = processDates(periodHistory)
 
-    if (periodHistory.isEmpty()) {
+    sortPeriodHistory(processedDates)
+
+    if (processedDates.isEmpty()) {
         return (-1).toFloat()
     }
     val periodLengths = ArrayList<Int>()
 
-    var currDate = periodHistory[0].date
+    var currDate = processedDates[0].date
     var consecutiveDays = 1
 
-    for (i in 1 until periodHistory.size) {
+    for (i in 1 until processedDates.size) {
         val currDatePlusOne = currDate?.let { addOneDay(it) }
 
-        if (currDatePlusOne == periodHistory[i].date) {
+        if (currDatePlusOne == processedDates[i].date) {
             consecutiveDays += 1
         } else {
             periodLengths.add(consecutiveDays)
             consecutiveDays = 1
         }
-        currDate = periodHistory[i].date
+        currDate = processedDates[i].date
     }
     periodLengths.add(consecutiveDays)
 
@@ -127,28 +133,29 @@ fun calculateAveragePeriodLength(periodHistory: ArrayList<TPPDate>): Float {
 *                  ==> Cycles of 3 and 9 days; average cycle length is 6 days.
 */
 fun calculateAverageCycleLength(periodHistory: ArrayList<TPPDate>): Float {
-    sortPeriodHistory(periodHistory)
+    val processedDates = processDates(periodHistory)
+    sortPeriodHistory(processedDates)
 
-    if (periodHistory.size == 0) {
+    if (processedDates.size == 0) {
         return (-1).toFloat()
     }
 
     val cycleLengths = ArrayList<Int>()
 
-    var currDate = periodHistory[0].date
+    var currDate = processedDates[0].date
     var currDatePlusOne = currDate?.let { addOneDay(it) }
 
-    for (i in 1 until periodHistory.size) {
-        if (currDatePlusOne == periodHistory[i].date) {
+    for (i in 1 until processedDates.size) {
+        if (currDatePlusOne == processedDates[i].date) {
             currDatePlusOne = currDatePlusOne?.let { addOneDay(it) }
         } else {
             // Takes the time and subtracts it, then divides to convert from milliseconds to days.
 
-            if (periodHistory[i].date != null) {
-                val time = ((periodHistory[i].date?.time ?: 0) - (currDate?.time ?: 0)) / 86400000
+            if (processedDates[i].date != null) {
+                val time = ((processedDates[i].date?.time ?: 0) - (currDate?.time ?: 0)) / 86400000
                 cycleLengths.add(time.toInt())
 
-                currDate = periodHistory[i].date
+                currDate = processedDates[i].date
 
                 currDatePlusOne = currDate?.let { addOneDay(it) }
             }
@@ -165,11 +172,12 @@ fun calculateAverageCycleLength(periodHistory: ArrayList<TPPDate>): Float {
  * Return the number of days since the last period
  */
 fun calculateDaysSinceLastPeriod(periodHistory: ArrayList<TPPDate>): Long {
-    if (periodHistory.isEmpty()) {
+    val processedDates = processDates(periodHistory)
+    if (processedDates.isEmpty()) {
         return 0
     }
-    sortPeriodHistory(periodHistory)
-    val lastPeriodDate = periodHistory[periodHistory.size - 1].date?.time
+    sortPeriodHistory(processedDates)
+    val lastPeriodDate = processedDates[processedDates.size - 1].date?.time
     val currDate = Date.from(
         LocalDateTime.of(
             LocalDate.now(),
@@ -188,11 +196,12 @@ fun calculateDaysSinceLastPeriod(periodHistory: ArrayList<TPPDate>): Long {
  * (number of days since last cycle / 31) * 360f
  */
 fun calculateArcAngle(periodHistory: ArrayList<TPPDate>): Float {
-    val averageCycleLength = calculateAverageCycleLength(periodHistory)
+    val processedDates = processDates(periodHistory)
+    val averageCycleLength = calculateAverageCycleLength(processedDates)
     if (averageCycleLength <= 0f) {
-        return 360f * min(1f, calculateDaysSinceLastPeriod(periodHistory) / 31f)
+        return 360f * min(1f, calculateDaysSinceLastPeriod(processedDates) / 31f)
     }
-    val resultedAngle = calculateDaysSinceLastPeriod(periodHistory) / averageCycleLength
+    val resultedAngle = calculateDaysSinceLastPeriod(processedDates) / averageCycleLength
     return 360f * min(1f, resultedAngle)
 }
 
@@ -224,13 +233,14 @@ fun findYears(periods: ArrayList<ArrayList<TPPDate>>): MutableMap<Int, ArrayList
  * if there is no cycle, use 31 days
  */
 fun getPeriodPrediction(periodHistory: ArrayList<TPPDate>): ArrayList<Date> {
-    val periodLength = calculateAveragePeriodLength(periodHistory)
-    var cycleLength = calculateAverageCycleLength(periodHistory)
+    val processedDates = processDates(periodHistory)
+    val periodLength = calculateAveragePeriodLength(processedDates)
+    var cycleLength = calculateAverageCycleLength(processedDates)
     if (cycleLength == -2f) {
         cycleLength = 31f
     }
 
-    val periods = parseDatesIntoPeriods(periodHistory)
+    val periods = parseDatesIntoPeriods(processedDates)
     val latestCycle = periods.last().first().date
 
     val dayInMilliseconds = 24 * 60 * 60 * 1000
@@ -258,7 +268,9 @@ fun getPeriodPrediction(periodHistory: ArrayList<TPPDate>): ArrayList<Date> {
  * @param dates an arraylist of
  */
 
-fun processDates(dates: ArrayList<TPPDate>) {
+fun processDates(dates: ArrayList<TPPDate>): ArrayList<TPPDate> {
     // remove duplicate dates
     // remove dates that are predicted
+    val filteredDates = dates.filterNot { it.flow == FlowSeverity.Predicted }
+    return ArrayList(filteredDates.distinctBy { it.date })
 }
