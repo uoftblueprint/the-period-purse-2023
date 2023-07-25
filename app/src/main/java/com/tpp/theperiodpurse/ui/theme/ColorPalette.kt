@@ -15,6 +15,7 @@ interface ColorPalette {
     val secondary4: Color
     val text1: Color
     val text2: Color
+    val lineColor: Color
 
     val HeaderColor1: Color
     val BottomBarColor1: Color
@@ -44,6 +45,7 @@ class DarkColorPaletteImpl : ColorPalette {
     override val secondary4 = Color(0xFF6D6E71)
     override val text1 = Color(	217, 218, 217)
     override val text2 = Color(161, 162, 166)
+    override val lineColor = Color(0xFFFFFFFF)
 
     override val HeaderColor1 = Color(0xFF090909)
     override val BottomBarColor1 = Color(0xFF090909)
@@ -76,6 +78,7 @@ class LightColorPaletteImpl : ColorPalette {
     override val secondary4 = Color(0xFFEFEFF4)
     override val text1 = Color.DarkGray
     override val text2 = Color.Gray
+    override val lineColor = Color(0xFFCFCFCF)
 
     override val HeaderColor1 = Color.White
     override val BottomBarColor1 = Color(0xFFFFFFFF)
@@ -89,7 +92,7 @@ class LightColorPaletteImpl : ColorPalette {
     override val ButtonDisabledColor = Color(0xFFA9BDBA)
     override val cyclePink = Color(0xFFFEDBDB)
     override val cycleBlue = Color(0xFFBAE0D8)
-    override val popUpTopBar = Color.White
+    override val popUpTopBar = Color(0xFFEFEFF4)
     override val productBackground = Color(pink)
 
     override val background: Int = R.drawable.background
