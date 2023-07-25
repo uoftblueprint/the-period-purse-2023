@@ -4,7 +4,6 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -18,8 +17,10 @@ import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.ui.cycle.components.AverageLengthBox
 import com.tpp.theperiodpurse.ui.cycle.components.CurrentCycleBox
 import com.tpp.theperiodpurse.ui.cycle.components.CycleHistoryBox
+import com.tpp.theperiodpurse.ui.cycle.components.UpcomingPeriodBox
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import kotlin.collections.ArrayList
+import kotlin.math.max
 
 private var periodLength = (-1).toFloat()
 private var cycleLength = (-1).toFloat()
@@ -31,10 +32,12 @@ fun CycleScreenLayout(
     navController: NavController,
 ) {
     val dates = ArrayList(appViewModel.getDates())
-    val bg = painterResource(R.drawable.colourwatercolour)
+    val bg = painterResource(appViewModel.colorPalette.background)
 
     periodLength = calculateAveragePeriodLength(dates)
     cycleLength = calculateAverageCycleLength(dates)
+
+    val daysUntilNextPeriod = max((cycleLength - calculateDaysSinceLastPeriod(dates)).toInt(), 0)
 
     Box {
         Image(
@@ -52,19 +55,24 @@ fun CycleScreenLayout(
                 .fillMaxHeight()
                 .padding(horizontal = 20.dp, vertical = 25.dp),
         ) {
-            CurrentCycleBox(dates = dates)
+            // show if next predicted < 7 days
+            if (daysUntilNextPeriod <= 7) {
+                UpcomingPeriodBox(daysUntilNextPeriod, appViewModel = appViewModel)
+            }
+            Spacer(modifier.height(15.dp))
+            CurrentCycleBox(dates = dates, appViewModel = appViewModel)
             Spacer(modifier.height(30.dp))
             Row {
                 AverageLengthBox(
                     title = stringResource(R.string.avg_period_len),
-                    color = Color(0xFFFEDBDB),
+                    color = appViewModel.colorPalette.cyclePink,
                     length = periodLength,
                     image = painterResource(R.drawable.flow_with_heart),
                 )
                 Spacer(modifier.width(16.dp))
                 AverageLengthBox(
                     title = stringResource(R.string.avg_cycle_len),
-                    color = Color(0xFFBAE0D8),
+                    color = appViewModel.colorPalette.cycleBlue,
                     length = cycleLength,
                     image = painterResource(R.drawable.menstruation_calendar__1_),
                 )
@@ -75,6 +83,7 @@ fun CycleScreenLayout(
                 onClickShowFull = {
                     navController.navigate(Screen.CycleFullHistory.name)
                 },
+                appViewModel = appViewModel
             )
             Spacer(modifier.height(80.dp))
         }

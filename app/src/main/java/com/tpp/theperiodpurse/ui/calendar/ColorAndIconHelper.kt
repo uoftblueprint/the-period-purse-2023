@@ -4,12 +4,14 @@ import androidx.compose.ui.graphics.Color
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.model.*
 import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 fun getDayColorAndIcon(
     activeSymptom: Symptom,
     calendarDayUIState: CalendarDayUIState?,
+    appViewModel: AppViewModel
 ): Pair<Color, Int> {
-    val defaultColor = Color.White
+    val defaultColor = appViewModel.colorPalette.CalendarDayColor
     val defaultImage = R.drawable.blank
     val default = Pair(defaultColor, defaultImage)
     if (calendarDayUIState == null) {

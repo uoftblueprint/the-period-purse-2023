@@ -50,6 +50,7 @@ fun TermsAndPrivacyFooter(navController: NavHostController, textColor: Color) {
             textAlign = TextAlign.Center,
             fontSize = (screenwidth * 0.04).scaledSp(),
             text = " and ",
+            color = textColor
         )
 
         ClickableText(

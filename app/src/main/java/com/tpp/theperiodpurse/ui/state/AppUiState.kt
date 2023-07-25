@@ -11,4 +11,5 @@ data class AppUiState(
     var reminderFrequency: String = "Every day",
     var reminderTime: String = "12:00 PM",
     var dates: List<Date> = emptyList(),
+    var darkMode: Boolean = false,
 )

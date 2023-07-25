@@ -2,7 +2,7 @@ package com.tpp.theperiodpurse.ui.symptomlog
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -13,7 +13,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -49,13 +51,20 @@ fun LogMultipleDatesScreen(
     appViewModel: AppViewModel,
 ) {
     val context = LocalContext.current.applicationContext
-    Column(
+    Image(
+        painter = painterResource(appViewModel.colorPalette.background),
+        contentDescription = null,
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .semantics { contentDescription = "Cycle Page" },
+        contentScale = ContentScale.FillBounds,
+    )
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
     ) {
-        PopupTopBar(onClose = onClose) {
-            LogMultipleDatesText()
+        PopupTopBar(onClose = onClose, appViewModel = appViewModel) {
+            LogMultipleDatesText(appViewModel)
         }
         val currentMonth = remember { YearMonth.now() }
         val startMonth = remember { currentMonth.minusMonths(12) } // Previous months
@@ -82,7 +91,7 @@ fun LogMultipleDatesScreen(
                 contentPadding = PaddingValues(bottom = 48.dp),
                 state = state,
                 monthHeader = { month ->
-                    MonthHeader(month)
+                    MonthHeader(month, appViewModel)
                 },
                 dayContent = { day ->
                     if (day.position == DayPosition.MonthDate) {
@@ -91,7 +100,7 @@ fun LogMultipleDatesScreen(
 //                        val (dayColor, _) = getDayColorAndIcon(Symptom.FLOW, calendarDayUIStates[day.date])
                         Day(
                             day.date,
-                            color = if (selected) Red else Color.White,
+                            color = if (selected) Red else appViewModel.colorPalette.CalendarDayColor,
                             iconId = null,
                             onClick = {
                                 selected = !selected
@@ -153,7 +162,7 @@ fun LogMultipleDatesScreen(
 }
 
 @Composable
-private fun LogMultipleDatesText(modifier: Modifier = Modifier) {
+private fun LogMultipleDatesText(appViewModel: AppViewModel, modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -163,11 +172,13 @@ private fun LogMultipleDatesText(modifier: Modifier = Modifier) {
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             modifier = modifier,
+            color = appViewModel.colorPalette.MainFontColor
         )
         Text(
             stringResource(R.string.log_multiple_dates_header_body),
             fontSize = 13.scaledSp(),
             modifier = modifier,
+            color = appViewModel.colorPalette.MainFontColor
         )
     }
 }

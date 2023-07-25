@@ -4,8 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,12 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.theme.Red
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 @Composable
 fun LoggingOptionsPopup(
@@ -26,6 +28,7 @@ fun LoggingOptionsPopup(
     onLogMultiplePeriodDates: () -> Unit,
     onExit: () -> Unit,
     modifier: Modifier = Modifier,
+    appViewModel: AppViewModel
 ) {
     Popup(
         alignment = Alignment.Center,
@@ -35,7 +38,7 @@ fun LoggingOptionsPopup(
             verticalArrangement = Arrangement.Bottom,
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White.copy(0.95f))
+                .background(appViewModel.colorPalette.HeaderColor1.copy(0.8f))
                 .then(modifier)
                 .offset(y = 35.dp)
                 .clickable(
@@ -56,6 +59,7 @@ fun LoggingOptionsPopup(
                         onLogDailySymptomsClick()
                         onExit()
                     },
+                    appViewModel = appViewModel
                 )
                 Spacer(modifier = Modifier.width(30.dp))
                 LoggingOptionButton(
@@ -65,6 +69,7 @@ fun LoggingOptionsPopup(
                         onExit()
                         onLogMultiplePeriodDates()
                     },
+                    appViewModel = appViewModel
                 )
             }
             Spacer(
@@ -101,6 +106,7 @@ private fun LoggingOptionButton(
     icon: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    appViewModel: AppViewModel
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -110,6 +116,7 @@ private fun LoggingOptionButton(
             textAlign = TextAlign.Center,
             modifier = Modifier.width(100.dp),
             fontSize = 15.scaledSp(),
+            color = appViewModel.colorPalette.MainFontColor
         )
         Spacer(modifier = Modifier.height(4.dp))
         FloatingActionButton(
@@ -125,10 +132,4 @@ private fun LoggingOptionButton(
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun LogOptionScreenPreview() {
-    LoggingOptionsPopup({}, {}, {})
 }

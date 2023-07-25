@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 /**
  * A composable function for the delete account screen.
@@ -29,6 +30,7 @@ import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 fun DeleteAccountScreen(
     appBar: Unit,
     navController: NavHostController = rememberNavController(),
+    appViewModel: AppViewModel
 ) {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp
@@ -53,6 +55,7 @@ fun DeleteAccountScreen(
             Text(
                 text = "Are you sure you want to delete your account? You cannot undo this action.",
                 fontSize = 15.scaledSp(),
+                color = appViewModel.colorPalette.MainFontColor
             )
 
             // Display the "Delete Account" button
@@ -72,8 +75,8 @@ fun DeleteAccountScreen(
                 AlertDialog(
                     modifier = Modifier.padding(16.dp),
                     shape = RoundedCornerShape(10.dp),
-                    backgroundColor = Color.White,
-                    contentColor = Color.Black,
+                    backgroundColor = appViewModel.colorPalette.HeaderColor1,
+                    contentColor = appViewModel.colorPalette.MainFontColor,
                     onDismissRequest = { confirmDelete.value = false },
                     title = {
                         Row(
@@ -112,7 +115,7 @@ fun DeleteAccountScreen(
                                 .weight(1f)
                                 .height(48.dp)
                                 .fillMaxWidth(),
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                            colors = ButtonDefaults.buttonColors(backgroundColor = appViewModel.colorPalette.HeaderColor1),
                         ) {
                             Text(
                                 text = "Delete",
@@ -131,7 +134,7 @@ fun DeleteAccountScreen(
                                 .height(48.dp)
                                 .fillMaxWidth(),
 
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                            colors = ButtonDefaults.buttonColors(backgroundColor = appViewModel.colorPalette.HeaderColor1),
                         ) {
                             Text(
                                 text = "Cancel",

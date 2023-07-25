@@ -3,9 +3,10 @@ package com.tpp.theperiodpurse.ui.theme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-private val LightColorPalette = lightColors(
+val LightColorPalette = lightColors(
     primary = Purple500,
     primaryVariant = Purple700,
     secondary = Teal200,
@@ -28,7 +29,7 @@ fun ThePeriodPurseTheme(
 
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(
-        color = HeaderColor1,
+        color = Color.Black,
     )
     systemUiController.setNavigationBarColor(
         color = BottomBarColor1,

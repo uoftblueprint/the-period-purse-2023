@@ -198,7 +198,7 @@ fun AppScreen(
     val startdestination: String
 
     if (isOnboarded == null && !skipDatabase) {
-        LoadingScreen()
+        LoadingScreen(appViewModel)
     } else {
         if (!skipDatabase) {
             skipOnboarding = (isOnboarded as Boolean)
@@ -223,7 +223,7 @@ fun AppScreen(
             isFloatingActionButtonDocked = true,
         ) { innerPadding ->
             Image(
-                painter = painterResource(id = R.drawable.background),
+                painter = painterResource(id = appViewModel.colorPalette.background),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.FillBounds,
@@ -242,6 +242,7 @@ fun AppScreen(
                 )
 
                 if (loggingOptionsVisible) {
+                    Log.d("AppScreen", "Rendering logging options")
                     LoggingOptionsPopup(
                         onLogDailySymptomsClick = {
                             navigateToLogScreenWithDate(
@@ -252,6 +253,7 @@ fun AppScreen(
                         onLogMultiplePeriodDates = { navController.navigate(Screen.LogMultipleDates.name) },
                         onExit = { loggingOptionsVisible = false },
                         modifier = modifier.padding(bottom = 64.dp),
+                        appViewModel = appViewModel
                     )
                 }
             }
@@ -260,7 +262,7 @@ fun AppScreen(
                 modifier = Modifier.fillMaxSize(),
             ) {
                 if (currentRoute(navController) in screensWithNavigationBar) {
-                    BottomNavigation(navController = navController)
+                    BottomNavigation(navController = navController, appViewModel = appViewModel)
                 }
             }
         }

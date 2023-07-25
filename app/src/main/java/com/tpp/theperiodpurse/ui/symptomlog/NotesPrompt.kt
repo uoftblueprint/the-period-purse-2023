@@ -12,9 +12,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -24,11 +26,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import com.tpp.theperiodpurse.data.model.LogPrompt
 import com.tpp.theperiodpurse.ui.theme.LogSelectedTextColor
 import com.tpp.theperiodpurse.ui.theme.MainFontColor
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun NotesPrompt(logViewModel: LogViewModel) {
+fun NotesPrompt(logViewModel: LogViewModel, appViewModel: AppViewModel) {
     var notesText by remember { mutableStateOf(logViewModel.getText(LogPrompt.Notes)) }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -57,13 +60,15 @@ fun NotesPrompt(logViewModel: LogViewModel) {
 
         ) {
             MinLinesOutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
                 value = notesText,
                 onValueChange = {
                         notes: String ->
                     notesText = notes
                     saveTextData(logViewModel, notesText)
                 },
-                label = { Text(text = "Record a symptom or make a note") },
+                placeholder = { Text(text = "Record a symptom or make a note", color =
+                appViewModel.colorPalette.MainFontColor) },
                 maxLines = 5,
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
@@ -76,10 +81,12 @@ fun NotesPrompt(logViewModel: LogViewModel) {
                 ),
                 minLines = 3,
                 colors = TextFieldDefaults.outlinedTextFieldColors(
+                    textColor = appViewModel.colorPalette.MainFontColor,
                     unfocusedBorderColor = LogSelectedTextColor,
-                    focusedBorderColor = MainFontColor,
-                    focusedLabelColor = MainFontColor,
-                    cursorColor = MainFontColor,
+                    focusedBorderColor = Color.Transparent,
+                    focusedLabelColor = Color.Transparent,
+                    cursorColor = appViewModel.colorPalette.primary1,
+                    backgroundColor = appViewModel.colorPalette.secondary4
                 ),
             )
         }

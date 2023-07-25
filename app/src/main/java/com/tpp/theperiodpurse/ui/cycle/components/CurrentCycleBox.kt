@@ -1,6 +1,7 @@
 package com.tpp.theperiodpurse.ui.cycle.components
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -21,27 +22,32 @@ import com.tpp.theperiodpurse.data.calculateArcAngle
 import com.tpp.theperiodpurse.data.calculateDaysSinceLastPeriod
 import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 @Composable
-fun CurrentCycleBox(modifier: Modifier = Modifier, dates: ArrayList<Date>) {
+fun CurrentCycleBox(modifier: Modifier = Modifier, dates: ArrayList<Date>, appViewModel: AppViewModel) {
     Card(
-        modifier
-            .fillMaxWidth()
-            .height(300.dp),
         elevation = 2.dp,
         shape = RoundedCornerShape(5),
+        modifier = modifier
+            .fillMaxWidth()
+            .height(300.dp)
     ) {
-        Text(
-            text = stringResource(R.string.current_cycle),
-            fontSize = 20.scaledSp(),
-            fontWeight = FontWeight(700),
-            color = Color(0xFFB12126),
-            modifier = modifier.padding(start = 20.dp, top = 20.dp),
-        )
-        Spacer(
-            modifier = Modifier.height(16.dp),
-        )
-        CycleInfo(dates = dates, modifier = modifier)
+
+        Column(modifier = modifier.background(color = appViewModel.colorPalette.HeaderColor1)) {
+            Text(
+                text = stringResource(R.string.current_cycle),
+                fontSize = 20.scaledSp(),
+                fontWeight = FontWeight(700),
+                color = Color(0xFFB12126),
+                modifier = modifier.padding(start = 20.dp, top = 20.dp),
+            )
+            Spacer(
+                modifier = Modifier.height(16.dp),
+            )
+            CycleInfo(dates = dates, modifier = modifier)
+        }
+
     }
 }
 

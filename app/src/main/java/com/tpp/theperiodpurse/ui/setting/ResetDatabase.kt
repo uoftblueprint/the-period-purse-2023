@@ -15,6 +15,7 @@ import com.tpp.theperiodpurse.ui.component.LoadingScreen
 import com.tpp.theperiodpurse.ui.state.AppUiState
 import com.tpp.theperiodpurse.ui.state.CalendarUIState
 import com.tpp.theperiodpurse.ui.state.OnboardUIState
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -23,7 +24,7 @@ import kotlinx.coroutines.withContext
  * A composable function for resetting the database and performing necessary cleanup.
  *
  * @param context The Android context.
- * @param viewModel The OnboardViewModel instance.
+ * @param onboardViewModel The OnboardViewModel instance.
  * @param outController The NavHostController instance for the outer navigation graph.
  * @param navController The NavHostController instance for the current navigation graph.
  * @param onboardUiState The OnboardUIState object.
@@ -35,7 +36,8 @@ import kotlinx.coroutines.withContext
 @Composable
 fun ResetDatabase(
     context: Context,
-    viewModel: OnboardViewModel,
+    onboardViewModel: OnboardViewModel,
+    appViewModel: AppViewModel,
     outController: NavHostController,
     onboardUiState: OnboardUIState,
     appUiState: AppUiState,
@@ -43,32 +45,35 @@ fun ResetDatabase(
     signout: () -> Unit = {},
 ) {
     // Observe the state of whether the database is deleted or not
-    val isDeleted by viewModel.isOnboarded.observeAsState(initial = null)
+    val isDeleted by onboardViewModel.isOnboarded.observeAsState(initial = null)
     val confirmLoad = remember { mutableStateOf(false) }
 
     // Check the deleted status in the background
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
-            viewModel.checkDeletedStatus(context)
+            onboardViewModel.checkDeletedStatus(context)
         }
     }
 
     // If the deletion status is not known, show a loading screen
     if (isDeleted == null) {
-        LoadingScreen()
+        LoadingScreen(appViewModel = appViewModel)
     } else {
         if (!confirmLoad.value) {
             // Reset necessary states and data
             calUiState.days = LinkedHashMap()
             appUiState.trackedSymptoms = listOf()
             appUiState.dates = emptyList()
+            appUiState.darkMode = false
             onboardUiState.days = 0
             onboardUiState.symptomsOptions = listOf()
             onboardUiState.date = ""
             onboardUiState.googleAccount = null
 
+            appViewModel.setColorMode(false, context)
+
             // If the user is logged in with Google, sign out
-            if (viewModel.checkGoogleLogin(context)) {
+            if (onboardViewModel.checkGoogleLogin(context)) {
                 signout()
             }
 

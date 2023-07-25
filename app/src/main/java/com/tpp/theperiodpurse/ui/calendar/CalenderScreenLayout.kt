@@ -40,7 +40,7 @@ fun CalendarScreenLayout(
     // Contains the swappable content
     ThePeriodPurseTheme {
         Log.d("Calendar Screen", "Renderng calendar screen")
-        val bg = painterResource(R.drawable.colourwatercolour)
+        val bg = painterResource(appViewModel.colorPalette.background)
         val appUiState by appViewModel.uiState.collectAsState()
 
         val selectedSymptom = calendarUIState.selectedSymptom
@@ -70,6 +70,7 @@ fun CalendarScreenLayout(
                     selectedSymptom = selectedSymptom,
                     onSymptomClick = { calendarViewModel.setSelectedSymptom(it) },
                     trackedSymptoms = appUiState.trackedSymptoms,
+                    appViewModel = appViewModel
                 )
                 calendarContentDescription = stringResource(id = R.string.calendar)
                 Calendar(
@@ -78,14 +79,9 @@ fun CalendarScreenLayout(
                     calendarUIState = calendarUIState,
                     selectedSymptom = selectedSymptom,
                     navController = navController,
+                    appViewModel = appViewModel
                 )
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun DisplaySymptomTabPreview() {
-    SymptomTab(trackedSymptoms = previewTrackedSymptoms, Symptom.FLOW, {})
 }

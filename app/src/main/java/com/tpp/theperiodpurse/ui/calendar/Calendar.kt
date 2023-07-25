@@ -17,6 +17,7 @@ import com.tpp.theperiodpurse.data.model.Symptom
 import com.tpp.theperiodpurse.navigateToLogScreenWithDate
 import com.tpp.theperiodpurse.ui.calendar.components.MonthHeader
 import com.tpp.theperiodpurse.ui.state.CalendarUIState
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -26,6 +27,7 @@ fun Calendar(
     calendarUIState: CalendarUIState,
     selectedSymptom: Symptom,
     navController: NavController,
+    appViewModel: AppViewModel
 ) {
     VerticalCalendar(
         modifier = Modifier
@@ -34,7 +36,7 @@ fun Calendar(
         contentPadding = PaddingValues(bottom = 120.dp),
         state = state,
         monthHeader = { month ->
-            MonthHeader(month)
+            MonthHeader(month, appViewModel)
         },
         dayContent = { day ->
             if (day.position == DayPosition.MonthDate) {
@@ -43,6 +45,7 @@ fun Calendar(
                     calendarDayUIState = calendarUIState.days[day.date],
                     activeSymptom = selectedSymptom,
                     onClick = { navigateToLogScreenWithDate(day.date, navController) },
+                    appViewModel = appViewModel
                 )
             }
         },

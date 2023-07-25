@@ -25,9 +25,11 @@ import com.tpp.theperiodpurse.ui.datasource.Product
 import com.tpp.theperiodpurse.ui.datasource.ProductsList
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.theme.Teal
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 @Composable
 fun EducationInfoScreen(
+    appViewModel: AppViewModel,
     navController: NavHostController,
     elementId: String,
 ) {
@@ -38,7 +40,7 @@ fun EducationInfoScreen(
             product = it
         }
     }
-    EducationBackground()
+    EducationBackground(appViewModel = appViewModel)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -74,19 +76,15 @@ fun EducationInfoScreen(
             fontWeight = Bold,
             fontSize = 32.scaledSp(),
             text = product.ProductName,
+            color = appViewModel.colorPalette.MainFontColor
         )
         Text(
             modifier = Modifier.padding(12.dp),
             textAlign = TextAlign.Center,
             text = product.description,
             fontSize = 18.scaledSp(),
+            color = appViewModel.colorPalette.MainFontColor
         )
         Spacer(modifier = Modifier.weight(45f))
     }
-}
-
-@Preview
-@Composable
-fun EducationInfoPreview() {
-    EducationInfoScreen(rememberNavController(), "Pads")
 }

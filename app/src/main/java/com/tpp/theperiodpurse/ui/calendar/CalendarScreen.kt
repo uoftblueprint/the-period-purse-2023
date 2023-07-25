@@ -53,7 +53,7 @@ fun CalendarScreen(
                 verticalArrangement = Arrangement.Bottom,
                 modifier = Modifier.padding(padding),
             ) {
-                Tabs(tabs = tabs, pagerState = pagerState)
+                Tabs(tabs = tabs, pagerState = pagerState, appViewModel = appViewModel)
                 TabsContent(
                     tabs = tabs,
                     pagerState = pagerState,

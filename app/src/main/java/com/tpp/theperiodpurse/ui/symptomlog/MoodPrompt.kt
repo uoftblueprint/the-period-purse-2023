@@ -12,10 +12,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tpp.theperiodpurse.data.model.LogPrompt
 import com.tpp.theperiodpurse.data.model.LogSquare
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
 
 @Composable
-fun MoodPrompt(logViewModel: LogViewModel) {
+fun MoodPrompt(logViewModel: LogViewModel, appViewModel: AppViewModel) {
     var selected by remember {
         mutableStateOf(logViewModel.getSquareSelected(logPrompt = LogPrompt.Mood))
     }
@@ -45,6 +46,7 @@ fun MoodPrompt(logViewModel: LogViewModel) {
                     LogSelectableSquare(
                         logSquare = flowSquare,
                         selected = selected,
+                        appViewModel = appViewModel
                     ) { logSquare ->
                         if (selected == logSquare.description) {
                             selected = null
@@ -58,14 +60,4 @@ fun MoodPrompt(logViewModel: LogViewModel) {
             },
         )
     }
-}
-
-@Preview
-@Composable
-fun MoodPromptPreview() {
-    FlowPrompt(
-        logViewModel = LogViewModel(
-            logPrompts = listOf(LogPrompt.Mood),
-        ),
-    )
 }

@@ -11,13 +11,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 @Composable
-fun LoadingScreen() {
+fun LoadingScreen(appViewModel: AppViewModel) {
     val redLoading = Color(195, 50, 50)
 
     Image(
-        painter = painterResource(id = R.drawable.background),
+        painter = painterResource(id = appViewModel.colorPalette.background),
         contentDescription = null,
         modifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.FillBounds,

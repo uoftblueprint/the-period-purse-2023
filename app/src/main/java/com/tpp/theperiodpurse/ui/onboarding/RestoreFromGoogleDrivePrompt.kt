@@ -19,22 +19,24 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.ui.component.LoadingScreen
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RestoreFromGoogleDrivePrompt(
     googleAccount: Account?,
-    viewModel: OnboardViewModel,
+    onboardViewModel: OnboardViewModel,
+    appViewModel: AppViewModel,
     navHostController: NavHostController,
     signout: () -> Unit = {},
     context: Context,
 ) {
-    val googleDriveFolder by viewModel.googleDriveFolder.observeAsState()
-    val drivePermissionHasError by viewModel.drivePermissionHasError.observeAsState()
+    val googleDriveFolder by onboardViewModel.googleDriveFolder.observeAsState()
+    val drivePermissionHasError by onboardViewModel.drivePermissionHasError.observeAsState()
     if (googleAccount != null) {
         LaunchedEffect(key1 = googleAccount) {
-            viewModel.checkGoogleDrive(account = googleAccount, context = context)
+            onboardViewModel.checkGoogleDrive(account = googleAccount, context = context)
         }
     } else {
         // if user is not authenticated, we shouldn't be on this page
@@ -42,7 +44,7 @@ fun RestoreFromGoogleDrivePrompt(
     }
     // show rendering screen while we wait
     if (googleDriveFolder == null) {
-        LoadingScreen()
+        LoadingScreen(appViewModel = appViewModel)
     } else {
         // no permission, give error and navigate away
         if (drivePermissionHasError == true) {

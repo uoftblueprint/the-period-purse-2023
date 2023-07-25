@@ -31,8 +31,11 @@ import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.state.OnboardUIState
 import com.tpp.theperiodpurse.ui.theme.ButtonDisabledColor
+import com.tpp.theperiodpurse.ui.theme.DarkColorPaletteImpl
 import com.tpp.theperiodpurse.ui.theme.Teal
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.OnboardViewModel
+import java.lang.Appendable
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -214,15 +217,26 @@ fun EditNumberField(
     keyboardOptions: KeyboardOptions,
     onValueChange: (String) -> Unit,
     keyboardActions: KeyboardActions,
+    appViewModel: AppViewModel,
+    placeholder: String = "",
 ) {
     TextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(stringResource(label)) },
+        label = { Text(text = stringResource(label), color = appViewModel.colorPalette.secondary1) },
         modifier = Modifier.fillMaxWidth(),
+        placeholder = { Text(text = placeholder, color = appViewModel.colorPalette.secondary1) },
         singleLine = true,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
+        colors = TextFieldDefaults.textFieldColors(
+            textColor = appViewModel.colorPalette.secondary1,
+            backgroundColor = Color.Transparent,
+            cursorColor = appViewModel.colorPalette.primary1,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            placeholderColor = appViewModel.colorPalette.secondary1
+        ),
     )
 }
 

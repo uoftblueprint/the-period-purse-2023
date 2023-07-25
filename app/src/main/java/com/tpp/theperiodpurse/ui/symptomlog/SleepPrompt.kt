@@ -7,8 +7,10 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,12 +23,13 @@ import androidx.compose.ui.unit.dp
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.model.LogPrompt
 import com.tpp.theperiodpurse.ui.onboarding.EditNumberField
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
 import java.sql.Time
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SleepPrompt(logViewModel: LogViewModel) {
+fun SleepPrompt(logViewModel: LogViewModel, appViewModel: AppViewModel) {
     val selectedTime = logViewModel.getText(LogPrompt.Sleep)
     var hoursSlept by remember {
         mutableStateOf(
@@ -67,12 +70,14 @@ fun SleepPrompt(logViewModel: LogViewModel) {
                     start = 10.dp,
                     bottom = 10.dp,
                 ),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = Modifier
                     .width(85.dp),
             ) {
                 EditNumberField(
+                    appViewModel = appViewModel,
                     label = R.string.hours,
                     value = hoursSlept,
                     onValueChange = {
@@ -104,6 +109,7 @@ fun SleepPrompt(logViewModel: LogViewModel) {
                     .width(100.dp),
             ) {
                 EditNumberField(
+                    appViewModel = appViewModel,
                     label = R.string.minutes,
                     value = minutesSlept,
                     onValueChange = {
@@ -136,7 +142,8 @@ fun SleepPrompt(logViewModel: LogViewModel) {
                     hoursSlept = ""
                     minutesSlept = ""
                 },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(200, 200, 200)),
+                colors = ButtonDefaults.buttonColors(backgroundColor = appViewModel.colorPalette
+                    .secondary1),
                 modifier = Modifier
                     .padding(start = 16.dp),
             ) {
@@ -155,14 +162,4 @@ private fun saveTextData(logViewModel: LogViewModel, hoursSlept: String, minutes
         0,
     )
     logViewModel.setText(LogPrompt.Sleep, time.toString())
-}
-
-@Preview
-@Composable
-fun SleepPromptPreview() {
-    SleepPrompt(
-        logViewModel = LogViewModel(
-            logPrompts = listOf(LogPrompt.Sleep),
-        ),
-    )
 }
