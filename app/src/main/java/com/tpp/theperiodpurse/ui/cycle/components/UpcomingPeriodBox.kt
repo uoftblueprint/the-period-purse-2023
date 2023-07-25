@@ -37,7 +37,7 @@ fun UpcomingPeriodBox(daysUntilPeriod: Int, appViewModel: AppViewModel? = null) 
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "You period mighat be coming in the next $daysUntilPeriod days",
+                text = "You period might be coming in the next $daysUntilPeriod days",
                 modifier = Modifier.weight(2f)
             )
             Image(

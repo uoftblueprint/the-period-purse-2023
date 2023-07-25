@@ -186,7 +186,12 @@ fun calculateDaysSinceLastPeriod(periodHistory: ArrayList<Date>): Long {
  * (number of days since last cycle / 31) * 360f
  */
 fun calculateArcAngle(periodHistory: ArrayList<Date>): Float {
-    return 360f * min(1f, calculateDaysSinceLastPeriod(periodHistory) / 31f)
+    val averageCycleLength = calculateAverageCycleLength(periodHistory)
+    if (averageCycleLength <= 0f) {
+        return 360f * min(1f, calculateDaysSinceLastPeriod(periodHistory) / 31f)
+    }
+    val resultedAngle = calculateDaysSinceLastPeriod(periodHistory) / averageCycleLength
+    return 360f * min(1f, resultedAngle)
 }
 
 /**
