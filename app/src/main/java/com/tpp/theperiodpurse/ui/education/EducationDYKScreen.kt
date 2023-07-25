@@ -24,14 +24,15 @@ import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.theme.Teal
 import com.tpp.theperiodpurse.utility.getFact
 import com.tpp.theperiodpurse.utility.setFact
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 @Composable
-fun EducationDYKScreen(navController: NavHostController) {
+fun EducationDYKScreen(navController: NavHostController, appViewModel: AppViewModel) {
     val interactionSource = remember { MutableInteractionSource() }
     val context = LocalContext.current
     setFact(context)
 
-    EducationBackground()
+    EducationBackground(appViewModel = appViewModel)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -62,6 +63,7 @@ fun EducationDYKScreen(navController: NavHostController) {
             fontWeight = FontWeight.Bold,
             text = stringResource(R.string.did_you_know),
             fontSize = 25.scaledSp(),
+            color = appViewModel.colorPalette.MainFontColor
         )
         getFact(context)?.let {
             Text(
@@ -69,15 +71,10 @@ fun EducationDYKScreen(navController: NavHostController) {
                 textAlign = TextAlign.Center,
                 lineHeight = 20.scaledSp(),
                 fontSize = 20.scaledSp(),
-                text = it
+                text = it,
+                color = appViewModel.colorPalette.MainFontColor
             )
         }
         Spacer(modifier = Modifier.weight(1f))
     }
-}
-
-@Preview
-@Composable
-fun PreviewEducationDYKScreen() {
-    EducationDYKScreen(rememberNavController())
 }

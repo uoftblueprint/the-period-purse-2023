@@ -8,6 +8,7 @@ import com.kizitonwose.calendar.core.CalendarDay
 import com.tpp.theperiodpurse.data.model.Symptom
 import com.tpp.theperiodpurse.ui.calendar.components.Day
 import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 // Creates the days
 @RequiresApi(Build.VERSION_CODES.O)
@@ -18,7 +19,8 @@ fun CalendarDay(
     activeSymptom: Symptom,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    appViewModel: AppViewModel
 ) {
-    val (dayColor, iconId) = getDayColorAndIcon(activeSymptom, calendarDayUIState)
+    val (dayColor, iconId) = getDayColorAndIcon(activeSymptom, calendarDayUIState, appViewModel)
     Day(day.date, dayColor, iconId, onClick, modifier)
 }

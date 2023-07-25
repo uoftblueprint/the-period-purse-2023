@@ -10,6 +10,9 @@ import com.tpp.theperiodpurse.data.repository.DateRepository
 import com.tpp.theperiodpurse.data.repository.UserRepository
 import com.tpp.theperiodpurse.ui.state.AppUiState
 import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
+import com.tpp.theperiodpurse.ui.theme.ColorPalette
+import com.tpp.theperiodpurse.ui.theme.DarkColorPaletteImpl
+import com.tpp.theperiodpurse.ui.theme.LightColorPaletteImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,6 +29,11 @@ class AppViewModel @Inject constructor(
     private val dateRepository: DateRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(AppUiState())
+    var colorPalette: ColorPalette = if (_uiState.value.darkMode == true){
+        DarkColorPaletteImpl()
+    } else {
+        LightColorPaletteImpl()
+    }
     val uiState: StateFlow<AppUiState> = _uiState.asStateFlow()
     var databaseIsLoadedFromStorage: MutableLiveData<Boolean?> = MutableLiveData(null)
 
@@ -46,8 +54,10 @@ class AppViewModel @Inject constructor(
                         allowReminders = user.allowReminders,
                         reminderFrequency = user.reminderFreq,
                         reminderTime = user.reminderTime,
+                        darkMode = user.darkMode
                     )
                 }
+                setColorMode(darkMode = user.darkMode, context = context)
                 databaseDates.collect { dates ->
                     updateUIDateState(dates, calendarViewModel)
                 }
@@ -78,6 +88,7 @@ class AppViewModel @Inject constructor(
                 ).toString()
             }
 
+
             calendarViewModel.setDayInfo(
                 date.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
                 CalendarDayUIState(
@@ -98,6 +109,26 @@ class AppViewModel @Inject constructor(
 
     fun getDates(): List<Date> {
         return uiState.value.dates
+    }
+
+    fun toggleColorMode(context: Context) {
+        val currentColorMode = _uiState.value.darkMode
+        setColorMode(!currentColorMode, context)
+    }
+
+    fun setColorMode(darkMode: Boolean, context: Context) {
+        colorPalette = if (darkMode) {
+            DarkColorPaletteImpl()
+        } else {
+            LightColorPaletteImpl()
+        }
+        _uiState.update { currentState -> currentState.copy(darkMode = darkMode) }
+        userRepository.setColorMode(darkMode, context)
+
+    }
+
+    fun getColorMode(): Boolean {
+        return uiState.value.darkMode
     }
 
     fun setTrackedSymptoms(trackedSymptoms: ArrayList<Symptom>, context: Context) {

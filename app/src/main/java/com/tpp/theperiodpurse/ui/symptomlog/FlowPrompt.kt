@@ -8,14 +8,16 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tpp.theperiodpurse.data.model.LogPrompt
 import com.tpp.theperiodpurse.data.model.LogSquare
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
 
 @Composable
-fun FlowPrompt(logViewModel: LogViewModel) {
+fun FlowPrompt(logViewModel: LogViewModel, appViewModel: AppViewModel) {
     var selected by remember {
         mutableStateOf(logViewModel.getSquareSelected(logPrompt = LogPrompt.Flow))
     }
@@ -43,6 +45,7 @@ fun FlowPrompt(logViewModel: LogViewModel) {
                     LogSelectableSquare(
                         logSquare = flowSquare,
                         selected = selected,
+                        appViewModel = appViewModel
                     ) { logSquare ->
                         if (selected == logSquare.description) {
                             selected = null
@@ -56,14 +59,4 @@ fun FlowPrompt(logViewModel: LogViewModel) {
             },
         )
     }
-}
-
-@Preview
-@Composable
-fun FlowPromptPreview() {
-    FlowPrompt(
-        logViewModel = LogViewModel(
-            logPrompts = listOf(LogPrompt.Flow),
-        ),
-    )
 }

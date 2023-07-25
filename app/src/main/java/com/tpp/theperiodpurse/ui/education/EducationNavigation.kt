@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.tpp.theperiodpurse.R
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 enum class EducationNavigation {
     Learn, DYK, ProductInfo
@@ -19,6 +20,7 @@ enum class EducationNavigation {
 
 @Composable
 fun EducationScreen(
+    appViewModel: AppViewModel,
     outController: NavHostController = rememberNavController(),
     navController: NavHostController = rememberNavController(),
 ) {
@@ -27,10 +29,10 @@ fun EducationScreen(
         startDestination = EducationNavigation.Learn.name,
     ) {
         composable(route = EducationNavigation.Learn.name) {
-            EducationScreenLayout(outController, navController)
+            EducationScreenLayout(appViewModel = appViewModel, outController, navController)
         }
         composable(EducationNavigation.DYK.name) {
-            EducationDYKScreen(navController)
+            EducationDYKScreen(navController, appViewModel = appViewModel)
         }
         composable(
             route = EducationNavigation.ProductInfo.name,
@@ -39,16 +41,16 @@ fun EducationScreen(
             val elementId =
                 navController.previousBackStackEntry?.savedStateHandle?.get<String>("elementId")
             if (elementId != null) {
-                EducationInfoScreen(navController, elementId)
+                EducationInfoScreen(appViewModel = appViewModel, navController, elementId)
             }
         }
     }
 }
 
 @Composable
-fun EducationBackground() {
+fun EducationBackground(appViewModel: AppViewModel) {
     Image(
-        painter = painterResource(R.drawable.colourwatercolour),
+        painter = painterResource(appViewModel.colorPalette.background),
         contentDescription = null,
         modifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.FillBounds,

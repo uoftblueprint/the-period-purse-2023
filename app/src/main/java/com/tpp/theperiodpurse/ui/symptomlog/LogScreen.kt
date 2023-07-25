@@ -14,7 +14,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -23,8 +23,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
@@ -37,7 +35,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.Screen
@@ -47,9 +44,6 @@ import com.tpp.theperiodpurse.data.model.*
 import com.tpp.theperiodpurse.ui.component.PopupTopBar
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
-import com.tpp.theperiodpurse.ui.theme.HeaderColor1
-import com.tpp.theperiodpurse.ui.theme.LogSelectedTextColor
-import com.tpp.theperiodpurse.ui.theme.SecondaryFontColor
 import com.tpp.theperiodpurse.ui.theme.SelectedColor1
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
@@ -172,6 +166,7 @@ fun LogScreen(
                     }
                 }
             },
+            appViewModel = appViewModel
         )
     }
 }
@@ -183,6 +178,7 @@ fun LogScreenLayout(
     navController: NavController,
     logPrompts: List<LogPrompt>,
     logViewModel: LogViewModel,
+    appViewModel: AppViewModel,
     onSave: () -> Unit,
 ) {
     Box() {
@@ -190,13 +186,14 @@ fun LogScreenLayout(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White),
+                .background(appViewModel.colorPalette.HeaderColor1),
         ) {
             LogScreenTopBar(
                 navController = navController,
                 date = date,
+                appViewModel = appViewModel
             )
-            LogPromptCards(logPrompts = logPrompts, logViewModel = logViewModel)
+            LogPromptCards(logPrompts = logPrompts, logViewModel = logViewModel, appViewModel = appViewModel)
             Spacer(
                 modifier = Modifier
                     .height(130.dp)
@@ -220,14 +217,14 @@ fun LogScreenLayout(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun LogScreenTopBar(navController: NavController, date: LocalDate) {
-    PopupTopBar(onClose = { navController.navigateUp() }) {
-        LogScreenTopBarContent(navController = navController, date = date)
+fun LogScreenTopBar(navController: NavController, date: LocalDate, appViewModel: AppViewModel) {
+    PopupTopBar(onClose = { navController.navigateUp() }, appViewModel = appViewModel) {
+        LogScreenTopBarContent(navController = navController, date = date, appViewModel = appViewModel)
     }
 }
 
 @Composable
-private fun LogScreenTopBarContent(navController: NavController, date: LocalDate) {
+private fun LogScreenTopBarContent(navController: NavController, date: LocalDate, appViewModel: AppViewModel) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -276,7 +273,7 @@ private fun LogScreenTopBarContent(navController: NavController, date: LocalDate
 
             Text(
                 text = "Log your symptoms for:",
-                color = Color(50, 50, 50),
+                color = appViewModel.colorPalette.MainFontColor,
                 fontSize = (screenwidth * 0.05).scaledSp(),
             )
             Text(
@@ -287,6 +284,7 @@ private fun LogScreenTopBarContent(navController: NavController, date: LocalDate
                 modifier = Modifier
                     .testTag("DateLabel")
                     .semantics { contentDescription = "DateLabel" },
+                color = appViewModel.colorPalette.MainFontColor
             )
         }
 
@@ -325,31 +323,24 @@ private fun LogScreenTopBarContent(navController: NavController, date: LocalDate
 }
 
 @Composable
-fun LogPromptCards(logPrompts: List<LogPrompt>, logViewModel: LogViewModel) {
-    LazyColumn(modifier = Modifier.background(Color.White)) {
-        items(logPrompts) {
-            Column(
-                modifier = Modifier
-                    .drawBehind {
-                        val strokeWidth = 4f
-                        val x = size.width - strokeWidth
-
-                        drawLine(
-                            color = HeaderColor1,
-                            start = Offset(0f, 0f), // (0,0) at top-left point of the box
-                            end = Offset(x, 0f), // top-right point of the box
-                            strokeWidth = strokeWidth,
-                        )
-                    },
-            ) {
-                LogPromptCard(logPrompt = it, logViewModel)
+fun LogPromptCards(logPrompts: List<LogPrompt>, logViewModel: LogViewModel, appViewModel: AppViewModel) {
+    LazyColumn(modifier = Modifier.background(appViewModel.colorPalette.HeaderColor1)) {
+        itemsIndexed(logPrompts) { index, it ->
+            Column() {
+                LogPromptCard(logPrompt = it, logViewModel, appViewModel)
+                if (index != logPrompts.lastIndex) {
+                    Divider(
+                        modifier = Modifier
+                            .padding(start = 10.dp, end = 10.dp)
+                            .background(color = appViewModel.colorPalette.lineColor))
+                }
             }
         }
     }
 }
 
 @Composable
-fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
+fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel, appViewModel: AppViewModel) {
     var expanded by remember { mutableStateOf(false) }
 
     val hasInput = (
@@ -357,11 +348,11 @@ fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
             logViewModel.getText(logPrompt) != ""
         )
     val iconColor = animateColorAsState(
-        targetValue = if (hasInput) SelectedColor1 else SecondaryFontColor,
+        targetValue = if (hasInput) appViewModel.colorPalette.SelectedColor1 else  appViewModel.colorPalette.SecondaryFontColor,
         animationSpec = tween(500, 0, LinearEasing),
     )
     val tabColor = animateColorAsState(
-        targetValue = if (hasInput) LogSelectedTextColor else SecondaryFontColor,
+        targetValue = if (hasInput)  appViewModel.colorPalette.SelectedColor1 else appViewModel.colorPalette.SecondaryFontColor,
         animationSpec = tween(500, 0, LinearEasing),
     )
 
@@ -409,7 +400,7 @@ fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel) {
                         end = 40.dp,
                     ),
             ) {
-                logPrompt.prompt(logViewModel)
+                logPrompt.prompt(logViewModel, appViewModel)
             }
         }
     }
@@ -433,14 +424,15 @@ fun ChangeableExpandButton(expanded: Boolean, onClick: () -> Unit) {
 fun LogSelectableSquare(
     logSquare: LogSquare,
     selected: String?,
+    appViewModel: AppViewModel,
     onClick: (LogSquare) -> Unit,
 ) {
     val squareColor = animateColorAsState(
         targetValue =
         if (logSquare.description == selected) {
-            SelectedColor1
+            appViewModel.colorPalette.SelectedColor1
         } else {
-            HeaderColor1
+            appViewModel.colorPalette.secondary4
         },
         animationSpec = tween(250, 0, LinearEasing),
     )
@@ -463,12 +455,12 @@ fun LogSelectableSquare(
                 }
                 .semantics { contentDescription = logSquare.description },
         ) {
-            logSquare.icon(SecondaryFontColor)
+            logSquare.icon(appViewModel.colorPalette.MainFontColor)
         }
         Text(
             text = logSquare.description,
             fontSize = 16.sp,
-            color = SecondaryFontColor,
+            color = appViewModel.colorPalette.SecondaryFontColor,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 10.dp, bottom = 20.dp),
@@ -503,82 +495,6 @@ fun SaveButton(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview
-@Composable
-fun LogScreenLayoutPreview() {
-    val logPrompts = listOf(
-        LogPrompt.Flow,
-        LogPrompt.Mood,
-        LogPrompt.Sleep,
-        LogPrompt.Cramps,
-        LogPrompt.Exercise,
-        LogPrompt.Notes,
-    )
-    LogScreenLayout(
-        date = LocalDate.parse("2022-12-07"),
-        navController = rememberNavController(),
-        logPrompts = logPrompts,
-        logViewModel = LogViewModel(logPrompts),
-        onSave = {},
-    )
-}
-
-@Preview
-@Composable
-fun LogScreenTopBarPreview() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        LogScreenTopBar(
-            date = LocalDate.parse("2000-01-01"),
-            navController = rememberNavController(),
-        )
-    }
-}
-
-@Preview
-@Composable
-fun LogPromptCardPreview() {
-    val logPrompts = listOf(LogPrompt.Flow)
-    val logViewModel = LogViewModel(logPrompts)
-
-    LogPromptCard(logPrompt = LogPrompt.Flow, logViewModel)
-}
-
-@Preview
-@Composable
-fun LogPromptCardsPreview() {
-    val logPrompts = listOf(
-        LogPrompt.Flow,
-        LogPrompt.Mood,
-        LogPrompt.Sleep,
-        LogPrompt.Cramps,
-        LogPrompt.Exercise,
-        LogPrompt.Notes,
-    )
-    val logViewModel = LogViewModel(logPrompts)
-    LogPromptCards(logPrompts = logPrompts, logViewModel)
-}
-
-@Preview
-@Composable
-fun LogSelectableSquarePreview() {
-    val logPrompts = listOf(LogPrompt.Flow)
-    val logViewModel = LogViewModel(logPrompts)
-    var selected by remember { mutableStateOf<String?>(null) }
-
-    LogSelectableSquare(
-        logSquare = LogSquare.FlowLight,
-        selected = selected,
-    ) { logSquare ->
-        if (selected == logSquare.description) {
-            selected = null
-            logViewModel.resetSquareSelected(logSquare)
-        } else {
-            selected = logSquare.description
-            logViewModel.setSquareSelected(logSquare)
-        }
-    }
-}
 
 @Preview
 @Composable

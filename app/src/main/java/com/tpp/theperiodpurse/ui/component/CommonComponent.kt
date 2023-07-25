@@ -13,63 +13,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.Screen
-import com.tpp.theperiodpurse.ui.theme.HeaderColor1
 import com.tpp.theperiodpurse.ui.theme.Red
 import com.tpp.theperiodpurse.ui.theme.Teal
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 @Composable
-fun BottomNavigation(navController: NavController) {
-    BottomNavigation(
-        onInfoNavigationClicked = {
-            navController.navigate(Screen.Learn.name) {
-//                popUpTo(navController.graph.findStartDestination().id) {
-//                    saveState = true
-//                }
-//                launchSingleTop = true
-//                restoreState = true
-            }
-        },
-        onSettingsNavigationClicked = {
-            navController.navigate(Screen.Settings.name) {
-//                popUpTo(navController.graph.findStartDestination().id) {
-//                    saveState = true
-//                }
-//                launchSingleTop = true
-//                restoreState = true
-            }
-        },
-    )
-}
-
-@Composable
-private fun BottomNavigation(
-    onInfoNavigationClicked: () -> Unit,
-    onSettingsNavigationClicked: () -> Unit,
+fun BottomNavigation(
+    appViewModel: AppViewModel,
+    navController: NavController,
     modifier: Modifier = Modifier,
     navItemModifier: Modifier = Modifier,
 ) {
+    appViewModel.uiState.collectAsState().value.darkMode
     Column() {
         Box {
             BottomNavigation(
-                backgroundColor = Color.White,
+                backgroundColor = appViewModel.colorPalette.HeaderColor1,
                 modifier = modifier.align(Alignment.BottomCenter),
             ) {
                 BottomNavigationItem(
                     icon = {
                         Icon(
                             painterResource(R.drawable.info_black_24dp),
+                            tint = appViewModel.colorPalette.MainFontColor,
                             contentDescription = null,
                         )
                     },
-                    label = { Text(Screen.Learn.name) },
+                    label = { Text(text = Screen.Learn.name,  color = appViewModel.colorPalette.MainFontColor) },
                     selected = false,
-                    onClick = onInfoNavigationClicked,
+                    onClick = { navController.navigate(Screen.Learn.name) },
                     modifier = navItemModifier,
                 )
 
@@ -79,12 +56,14 @@ private fun BottomNavigation(
                     icon = {
                         Icon(
                             painterResource(R.drawable.settings_black_24dp),
+                            tint = appViewModel.colorPalette.MainFontColor,
                             contentDescription = null,
                         )
                     },
-                    label = { Text(Screen.Settings.name) },
+                    label = { Text(text = Screen.Settings.name,
+                    color = appViewModel.colorPalette.MainFontColor) },
                     selected = false,
-                    onClick = onSettingsNavigationClicked,
+                    onClick = { navController.navigate(Screen.Settings.name) },
                     modifier = navItemModifier,
                 )
             }
@@ -92,7 +71,7 @@ private fun BottomNavigation(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(appViewModel.colorPalette.HeaderColor1)
                 .height(6.dp),
         ) {}
     }
@@ -151,6 +130,7 @@ fun FloatingActionButton(
 fun PopupTopBar(
     onClose: () -> Unit,
     modifier: Modifier = Modifier,
+    appViewModel: AppViewModel,
     content:
     @Composable()
     () -> Unit,
@@ -159,7 +139,7 @@ fun PopupTopBar(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxWidth()
-            .background(color = HeaderColor1)
+            .background(color = appViewModel.colorPalette.popUpTopBar)
             .height(100.dp)
             .padding(top = 10.dp),
     ) {
@@ -179,18 +159,5 @@ fun PopupTopBar(
             }
         }
         content()
-    }
-}
-
-@Preview
-@Composable
-fun BottomNavigationPreview() {
-    BottomNavigation({}, {})
-}
-
-@Preview
-@Composable
-fun PopupTopBarPreview() {
-    PopupTopBar({}) {
     }
 }
