@@ -18,8 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.data.calculateArcAngle
-import com.tpp.theperiodpurse.data.calculateDaysSinceLastPeriod
+import com.tpp.theperiodpurse.utility.calculateArcAngle
+import com.tpp.theperiodpurse.utility.calculateDaysSinceLastPeriod
 import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel

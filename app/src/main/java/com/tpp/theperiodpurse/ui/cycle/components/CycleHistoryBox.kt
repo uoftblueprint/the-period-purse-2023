@@ -14,11 +14,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.entity.Date
-import com.tpp.theperiodpurse.data.parseDatesIntoPeriods
+import com.tpp.theperiodpurse.utility.parseDatesIntoPeriods
 import com.tpp.theperiodpurse.ui.education.teal
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel

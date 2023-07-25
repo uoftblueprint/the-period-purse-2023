@@ -1,11 +1,16 @@
 package com.tpp.theperiodpurse
 
-import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.data.entity.*
 import com.tpp.theperiodpurse.data.model.CrampSeverity
 import com.tpp.theperiodpurse.data.model.Exercise
 import com.tpp.theperiodpurse.data.model.FlowSeverity
 import com.tpp.theperiodpurse.data.model.Mood
+import com.tpp.theperiodpurse.utility.calculateArcAngle
+import com.tpp.theperiodpurse.utility.calculateAverageCycleLength
+import com.tpp.theperiodpurse.utility.calculateAveragePeriodLength
+import com.tpp.theperiodpurse.utility.calculateDaysSinceLastPeriod
+import com.tpp.theperiodpurse.utility.findYears
+import com.tpp.theperiodpurse.utility.parseDatesIntoPeriods
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Assert.*
 import org.junit.Test
@@ -17,7 +22,7 @@ class PeriodPredictionTest {
     @Test
     fun sortPeriodHistory() {
         val testedList = periodHistoryUnsorted
-        sortPeriodHistory(testedList)
+        com.tpp.theperiodpurse.utility.sortPeriodHistory(testedList)
 
         assertEquals(
             testedList,

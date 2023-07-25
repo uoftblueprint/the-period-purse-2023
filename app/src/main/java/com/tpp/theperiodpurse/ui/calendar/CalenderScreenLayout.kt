@@ -19,7 +19,7 @@ import androidx.navigation.NavController
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.data.getPeriodPrediction
+import com.tpp.theperiodpurse.utility.getPeriodPrediction
 import com.tpp.theperiodpurse.data.model.FlowSeverity
 import com.tpp.theperiodpurse.data.model.Symptom
 import com.tpp.theperiodpurse.ui.calendar.components.SymptomTab

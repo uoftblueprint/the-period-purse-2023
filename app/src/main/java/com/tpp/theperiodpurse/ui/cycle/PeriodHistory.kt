@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.entity.Date
-import com.tpp.theperiodpurse.data.findYears
-import com.tpp.theperiodpurse.data.parseDatesIntoPeriods
+import com.tpp.theperiodpurse.utility.findYears
+import com.tpp.theperiodpurse.utility.parseDatesIntoPeriods
 import com.tpp.theperiodpurse.ui.cycle.components.PeriodEntries
 import com.tpp.theperiodpurse.ui.cycle.components.YearTab
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp

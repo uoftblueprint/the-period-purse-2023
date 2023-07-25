@@ -1,4 +1,4 @@
-package com.tpp.theperiodpurse.data
+package com.tpp.theperiodpurse.utility
 
 import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.data.model.FlowSeverity
@@ -27,6 +27,7 @@ fun addOneDay(date: java.util.Date): java.util.Date {
  * Return a list containing sublists where each sublist is a period
  */
 fun parseDatesIntoPeriods(periodHistory: ArrayList<Date>): ArrayList<ArrayList<Date>> {
+    // each date can only exist once, maybe put put them in a ordered set?
     sortPeriodHistory(periodHistory)
     val periods = ArrayList<ArrayList<Date>>()
     var currPeriod = ArrayList<Date>()
@@ -219,12 +220,18 @@ fun findYears(periods: ArrayList<ArrayList<Date>>): MutableMap<Int, ArrayList<Ar
 }
 
 
+/**
+ * if there is no cycle, use 31 days
+ */
 fun getPeriodPrediction(periodHistory: ArrayList<Date>): ArrayList<java.util.Date> {
-    var periodLength = calculateAveragePeriodLength(periodHistory)
+    val periodLength = calculateAveragePeriodLength(periodHistory)
     var cycleLength = calculateAverageCycleLength(periodHistory)
+    if (cycleLength == -2f) {
+        cycleLength = 31f
+    }
 
-    var periods = parseDatesIntoPeriods(periodHistory)
-    var latestCycle = periods[0].last().date
+    val periods = parseDatesIntoPeriods(periodHistory)
+    val latestCycle = periods.last().first().date
 
     val dayInMilliseconds = 24 * 60 * 60 * 1000
 
@@ -234,7 +241,7 @@ fun getPeriodPrediction(periodHistory: ArrayList<Date>): ArrayList<java.util.Dat
     val newTime = (latestCycle.time + timeToAdd).toLong()
     var newDate = java.util.Date(newTime)
 
-    var dates = ArrayList<java.util.Date>()
+    val dates = ArrayList<java.util.Date>()
     dates.add(newDate)
 
     // create an array of all consecutive predicted dates
@@ -244,4 +251,14 @@ fun getPeriodPrediction(periodHistory: ArrayList<Date>): ArrayList<java.util.Dat
     }
 
     return dates
+}
+
+/**
+ * Process the list so that dates are only
+ * @param dates an arraylist of
+ */
+
+fun processDates(dates: ArrayList<Date>) {
+    // remove duplicate dates
+    // remove dates that are predicted
 }
