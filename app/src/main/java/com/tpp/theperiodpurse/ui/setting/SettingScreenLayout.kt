@@ -30,18 +30,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
-import com.tpp.theperiodpurse.LegalScreen
 import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.currentRoute
 import com.tpp.theperiodpurse.data.model.Symptom
-import com.tpp.theperiodpurse.screensWithNavigationBar
 import com.tpp.theperiodpurse.ui.component.SocialMedia
 import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
-import com.tpp.theperiodpurse.ui.theme.MainFontColor
 import com.tpp.theperiodpurse.ui.theme.Teal
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
@@ -152,7 +146,8 @@ fun SettingScreenLayout(
             )
         }
 
-        Divider(modifier = Modifier
+        Divider(
+            modifier = Modifier
             .padding(start = 10.dp, end = 10.dp)
             .background(color = appViewModel.colorPalette.MainFontColor))
 
@@ -164,7 +159,7 @@ fun SettingScreenLayout(
 
         Divider(modifier = Modifier
             .padding(start = 10.dp, end = 10.dp)
-            .background(color = appViewModel.colorPalette.MainFontColor))
+            .background(color = appViewModel.colorPalette.lineColor))
 
         Text(
             text = stringResource(R.string.account_settings_heading),
@@ -201,7 +196,7 @@ fun SettingScreenLayout(
 
         Divider(modifier = Modifier
             .padding(start = 10.dp, end = 10.dp)
-            .background(color = appViewModel.colorPalette.MainFontColor))
+            .background(color = appViewModel.colorPalette.lineColor))
 
         NavigateButton(
             text = stringResource(R.string.back_up_account),
@@ -210,7 +205,7 @@ fun SettingScreenLayout(
         )
         Divider(modifier = Modifier
             .padding(start = 10.dp, end = 10.dp)
-            .background(color = appViewModel.colorPalette.MainFontColor))
+            .background(color = appViewModel.colorPalette.lineColor))
         NavigateButton(
             text = stringResource(id = R.string.delete_account),
             appViewModel = appViewModel,
@@ -218,7 +213,7 @@ fun SettingScreenLayout(
         )
         Divider(modifier = Modifier
             .padding(start = 10.dp, end = 10.dp)
-            .background(color = appViewModel.colorPalette.MainFontColor))
+            .background(color = appViewModel.colorPalette.lineColor))
         Spacer(modifier = Modifier.padding(20.dp))
         val uriHandler = LocalUriHandler.current
         Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {

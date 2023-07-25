@@ -113,18 +113,11 @@ class AppViewModel @Inject constructor(
 
     fun toggleColorMode(context: Context) {
         val currentColorMode = _uiState.value.darkMode
-        _uiState.update { currentState -> currentState.copy(darkMode = !currentColorMode) }
-        userRepository.setColorMode(!currentColorMode, context)
-
-        colorPalette = if (!currentColorMode == true) {
-            DarkColorPaletteImpl()
-        } else {
-            LightColorPaletteImpl()
-        }
+        setColorMode(!currentColorMode, context)
     }
 
     fun setColorMode(darkMode: Boolean, context: Context) {
-        colorPalette = if (darkMode == true) {
+        colorPalette = if (darkMode) {
             DarkColorPaletteImpl()
         } else {
             LightColorPaletteImpl()

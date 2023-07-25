@@ -242,6 +242,7 @@ fun AppScreen(
                 )
 
                 if (loggingOptionsVisible) {
+                    Log.d("AppScreen", "Rendering logging options")
                     LoggingOptionsPopup(
                         onLogDailySymptomsClick = {
                             navigateToLogScreenWithDate(

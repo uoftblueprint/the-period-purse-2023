@@ -14,7 +14,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -23,8 +23,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
@@ -37,8 +35,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import androidx.room.util.appendPlaceholders
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.Screen
@@ -48,9 +44,6 @@ import com.tpp.theperiodpurse.data.model.*
 import com.tpp.theperiodpurse.ui.component.PopupTopBar
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.state.CalendarDayUIState
-import com.tpp.theperiodpurse.ui.theme.HeaderColor1
-import com.tpp.theperiodpurse.ui.theme.LogSelectedTextColor
-import com.tpp.theperiodpurse.ui.theme.SecondaryFontColor
 import com.tpp.theperiodpurse.ui.theme.SelectedColor1
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
@@ -332,22 +325,15 @@ private fun LogScreenTopBarContent(navController: NavController, date: LocalDate
 @Composable
 fun LogPromptCards(logPrompts: List<LogPrompt>, logViewModel: LogViewModel, appViewModel: AppViewModel) {
     LazyColumn(modifier = Modifier.background(appViewModel.colorPalette.HeaderColor1)) {
-        items(logPrompts) {
-            Column(
-                modifier = Modifier
-                    .drawBehind {
-                        val strokeWidth = 2f
-                        val x = size.width - strokeWidth
-
-                        drawLine(
-                            color = appViewModel.colorPalette.MainFontColor,
-                            start = Offset(0f, 0f), // (0,0) at top-left point of the box
-                            end = Offset(x, 0f), // top-right point of the box
-                            strokeWidth = strokeWidth,
-                        )
-                    },
-            ) {
+        itemsIndexed(logPrompts) { index, it ->
+            Column() {
                 LogPromptCard(logPrompt = it, logViewModel, appViewModel)
+                if (index != logPrompts.lastIndex) {
+                    Divider(
+                        modifier = Modifier
+                            .padding(start = 10.dp, end = 10.dp)
+                            .background(color = appViewModel.colorPalette.lineColor))
+                }
             }
         }
     }

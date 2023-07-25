@@ -13,58 +13,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.Screen
-import com.tpp.theperiodpurse.ui.state.AppUiState
-import com.tpp.theperiodpurse.ui.theme.DarkColorPaletteImpl
-import com.tpp.theperiodpurse.ui.theme.HeaderColor1
 import com.tpp.theperiodpurse.ui.theme.Red
 import com.tpp.theperiodpurse.ui.theme.Teal
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 @Composable
-fun BottomNavigation(navController: NavController, appViewModel: AppViewModel) {
-    val appUiState by appViewModel.uiState.collectAsState()
-    val isDarkMode by rememberUpdatedState(appUiState.darkMode)
-
-    BottomNavigation(
-        isDarkMode = isDarkMode,
-        appViewModel = appViewModel,
-        onInfoNavigationClicked = {
-            navController.navigate(Screen.Learn.name) {
-//                popUpTo(navController.graph.findStartDestination().id) {
-//                    saveState = true
-//                }
-//                launchSingleTop = true
-//                restoreState = true
-            }
-        },
-        onSettingsNavigationClicked = {
-            navController.navigate(Screen.Settings.name) {
-//                popUpTo(navController.graph.findStartDestination().id) {
-//                    saveState = true
-//                }
-//                launchSingleTop = true
-//                restoreState = true
-            }
-        },
-    )
-}
-
-@Composable
-private fun BottomNavigation(
+fun BottomNavigation(
     appViewModel: AppViewModel,
-    onInfoNavigationClicked: () -> Unit,
-    onSettingsNavigationClicked: () -> Unit,
+    navController: NavController,
     modifier: Modifier = Modifier,
     navItemModifier: Modifier = Modifier,
-    isDarkMode: Boolean,
 ) {
-    // DO NOT REMOVE isDarkMode (need to re-render Bottom Nav during Color Mode toggle)
+    appViewModel.uiState.collectAsState().value.darkMode
     Column() {
         Box {
             BottomNavigation(
@@ -81,7 +46,7 @@ private fun BottomNavigation(
                     },
                     label = { Text(text = Screen.Learn.name,  color = appViewModel.colorPalette.MainFontColor) },
                     selected = false,
-                    onClick = onInfoNavigationClicked,
+                    onClick = { navController.navigate(Screen.Learn.name) },
                     modifier = navItemModifier,
                 )
 
@@ -98,7 +63,7 @@ private fun BottomNavigation(
                     label = { Text(text = Screen.Settings.name,
                     color = appViewModel.colorPalette.MainFontColor) },
                     selected = false,
-                    onClick = onSettingsNavigationClicked,
+                    onClick = { navController.navigate(Screen.Settings.name) },
                     modifier = navItemModifier,
                 )
             }
