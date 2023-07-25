@@ -38,6 +38,7 @@ import com.tpp.theperiodpurse.ui.component.handleError
 import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
 import com.tpp.theperiodpurse.ui.state.OnboardUIState
 import com.tpp.theperiodpurse.ui.theme.MainFontColor
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.utility.validateUserAuthenticationAndAuthorization
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -49,6 +50,7 @@ fun WelcomeScreen(
     navController: NavHostController,
     context: Context,
     onboardUIState: OnboardUIState,
+    appViewModel: AppViewModel
 ) {
     val configuration = LocalConfiguration.current
     val screenheight = configuration.screenHeightDp
@@ -90,7 +92,7 @@ fun WelcomeScreen(
         }
     } else {
         Image(
-            painter = painterResource(id = R.drawable.background),
+            painter = painterResource(id = appViewModel.colorPalette.background),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds,

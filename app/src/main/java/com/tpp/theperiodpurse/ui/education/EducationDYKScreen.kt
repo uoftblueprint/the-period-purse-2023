@@ -21,11 +21,12 @@ import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.theme.Teal
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 @Composable
-fun EducationDYKScreen(navController: NavHostController) {
+fun EducationDYKScreen(navController: NavHostController, appViewModel: AppViewModel) {
     val interactionSource = remember { MutableInteractionSource() }
-    EducationBackground()
+    EducationBackground(appViewModel = appViewModel)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -56,6 +57,7 @@ fun EducationDYKScreen(navController: NavHostController) {
             fontWeight = FontWeight.Bold,
             text = stringResource(R.string.did_you_know),
             fontSize = 25.scaledSp(),
+            color = appViewModel.colorPalette.MainFontColor
         )
         Text(
             modifier = Modifier.padding(horizontal = 72.dp, vertical = 0.dp),
@@ -63,13 +65,8 @@ fun EducationDYKScreen(navController: NavHostController) {
             lineHeight = 20.scaledSp(),
             fontSize = 20.scaledSp(),
             text = stringResource(R.string.board_game_long),
+            color = appViewModel.colorPalette.MainFontColor
         )
         Spacer(modifier = Modifier.weight(1f))
     }
-}
-
-@Preview
-@Composable
-fun PreviewEducationDYKScreen() {
-    EducationDYKScreen(rememberNavController())
 }

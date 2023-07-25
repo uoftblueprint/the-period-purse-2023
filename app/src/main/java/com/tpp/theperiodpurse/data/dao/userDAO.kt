@@ -14,6 +14,8 @@ interface UserDAO {
     @Query("UPDATE users SET symptomsToTrack = :symptoms WHERE id = :id")
     suspend fun updateSymptoms(id: Int, symptoms: String)
 
+    @Query("UPDATE users SET darkMode = :darkMode WHERE id = :id")
+    suspend fun toggleColorMode(id: Int, darkMode: Boolean)
     @Query("UPDATE users SET allowReminders = :allowReminder WHERE id = :id")
     suspend fun updateReminders(id: Int, allowReminder: Boolean)
 

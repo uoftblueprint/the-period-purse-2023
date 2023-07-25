@@ -1,5 +1,6 @@
 package com.tpp.theperiodpurse.ui.cycle.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
@@ -20,12 +21,14 @@ import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.data.parseDatesIntoPeriods
 import com.tpp.theperiodpurse.ui.education.teal
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 @Composable
 fun CycleHistoryBox(
     modifier: Modifier = Modifier,
     dates: ArrayList<Date>?,
     onClickShowFull: (Int) -> Unit,
+    appViewModel: AppViewModel
 ) {
     Card(
         modifier
@@ -34,7 +37,7 @@ fun CycleHistoryBox(
         elevation = 2.dp,
         shape = RoundedCornerShape(10),
     ) {
-        Column(modifier.padding(horizontal = 15.dp, vertical = 15.dp)) {
+        Column(modifier.background(color = appViewModel.colorPalette.HeaderColor1).padding(horizontal = 15.dp, vertical = 15.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -64,14 +67,8 @@ fun CycleHistoryBox(
             // Show three most recent periods
             if (dates != null) {
                 val periods = parseDatesIntoPeriods(dates)
-                PeriodEntries(periods, 3)
+                PeriodEntries(periods, 3, appViewModel)
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun DisplayPeriodHistory() {
-    CycleHistoryBox(dates = null, onClickShowFull = {})
 }

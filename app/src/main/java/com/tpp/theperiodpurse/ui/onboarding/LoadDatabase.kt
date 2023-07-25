@@ -32,7 +32,7 @@ fun LoadDatabase(
         appViewModel.loadData(calViewModel, context)
     }
     if (databaseIsLoadedFromStorage == null) {
-        LoadingScreen()
+        LoadingScreen(appViewModel)
     } else {
         LaunchedEffect(Unit) {
             Log.d("Load Database", "Navigating to calendar")

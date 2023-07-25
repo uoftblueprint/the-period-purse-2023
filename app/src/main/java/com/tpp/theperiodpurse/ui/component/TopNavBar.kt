@@ -13,7 +13,6 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -22,6 +21,7 @@ import androidx.navigation.NavController
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.theme.Teal
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 @Composable
 fun TopNavBar(
@@ -29,9 +29,10 @@ fun TopNavBar(
     navController: NavController,
     interactionSource:
     MutableInteractionSource,
+    appViewModel: AppViewModel
 ) {
     TopAppBar(
-        backgroundColor = Color.White,
+        backgroundColor = appViewModel.colorPalette.HeaderColor1,
         elevation = 0.dp,
     ) {
         Row(
@@ -57,7 +58,7 @@ fun TopNavBar(
             Text(
                 fontSize = 20.scaledSp(),
                 fontWeight = FontWeight.Bold,
-                color = Color.Black,
+                color = appViewModel.colorPalette.MainFontColor,
                 text = screenName,
             )
             Spacer(modifier = Modifier.weight(1f))

@@ -22,6 +22,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.common.api.Status
 import com.tpp.theperiodpurse.ui.onboarding.GoogleSignInButton
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.utility.validateUserAuthenticationAndAuthorization
 
 /**
@@ -37,6 +38,7 @@ import com.tpp.theperiodpurse.utility.validateUserAuthenticationAndAuthorization
 fun BackUpAccountScreen(
     appbar: Unit,
     navController: NavHostController = rememberNavController(),
+    appViewModel: AppViewModel,
     signIn: () -> Unit,
     signOut: () -> Unit = {},
     context: Context,
@@ -66,7 +68,7 @@ fun BackUpAccountScreen(
     appbar
 
     if (account == null) {
-        SignInView(screenheight, signIn)
+        SignInView(screenheight, signIn, appViewModel)
     } else if (authorized) {
         Box(
             modifier = Modifier
@@ -89,6 +91,7 @@ fun BackUpAccountScreen(
                 Text(
                     text = "Backing up to Google Drive will upload your data to Google Drive and ensure you can access it on other devices.",
                     fontSize = 13.scaledSp(),
+                    color = appViewModel.colorPalette.MainFontColor
                 )
                 Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))
                 Button(
@@ -121,7 +124,7 @@ fun BackUpAccountScreen(
 }
 
 @Composable
-private fun SignInView(screenheight: Int, signIn: () -> Unit) {
+private fun SignInView(screenheight: Int, signIn: () -> Unit, appViewModel: AppViewModel) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -144,6 +147,7 @@ private fun SignInView(screenheight: Int, signIn: () -> Unit) {
             Text(
                 text = "Sign in to backup your data",
                 fontSize = 15.scaledSp(),
+                color = appViewModel.colorPalette.MainFontColor
             )
 
             Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))

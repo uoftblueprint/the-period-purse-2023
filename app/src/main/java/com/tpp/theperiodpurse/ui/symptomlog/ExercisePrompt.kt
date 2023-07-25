@@ -12,6 +12,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -26,12 +27,13 @@ import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.data.model.LogPrompt
 import com.tpp.theperiodpurse.data.model.LogSquare
 import com.tpp.theperiodpurse.ui.onboarding.EditNumberField
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.LogViewModel
 import java.sql.Time
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun ExercisePrompt(logViewModel: LogViewModel) {
+fun ExercisePrompt(logViewModel: LogViewModel, appViewModel: AppViewModel) {
     val selectedTime = logViewModel.getText(LogPrompt.Exercise)
     var hoursExercised by remember {
         mutableStateOf(
@@ -78,12 +80,14 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
             Row(
                 modifier = Modifier
                     .padding(start = 10.dp, bottom = 10.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
                     modifier = Modifier
                         .width(85.dp),
                 ) {
                     EditNumberField(
+                        appViewModel = appViewModel,
                         label = R.string.hours,
                         value = hoursExercised,
                         onValueChange = {
@@ -116,6 +120,7 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
                         .width(100.dp),
                 ) {
                     EditNumberField(
+                        appViewModel = appViewModel,
                         label = R.string.minutes,
                         value = minutesExercised,
                         onValueChange = {
@@ -148,7 +153,8 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
                         hoursExercised = ""
                         minutesExercised = ""
                     },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(200, 200, 200)),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = appViewModel
+                        .colorPalette.secondary1),
                     modifier = Modifier
                         .padding(start = 16.dp),
                 ) {
@@ -188,6 +194,7 @@ fun ExercisePrompt(logViewModel: LogViewModel) {
                         LogSelectableSquare(
                             logSquare = flowSquare,
                             selected = selected,
+                            appViewModel = appViewModel
                         ) { logSquare ->
                             if (selected == logSquare.description) {
                                 selected = null
@@ -215,14 +222,4 @@ private fun saveTextData(
         0,
     )
     logViewModel.setText(LogPrompt.Exercise, time.toString())
-}
-
-@Preview
-@Composable
-fun ExercisePromptPreview() {
-    ExercisePrompt(
-        logViewModel = LogViewModel(
-            logPrompts = listOf(LogPrompt.Exercise),
-        ),
-    )
 }

@@ -18,6 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
+import java.lang.Appendable
 
 @Composable
 fun AverageLengthBox(
@@ -38,7 +40,7 @@ fun AverageLengthBox(
                 text = title,
                 fontSize = 12.scaledSp(),
                 fontWeight = FontWeight(700),
-                color = Color(0xFF868083),
+                color = Color.Black,
             )
             Spacer(modifier.height(20.dp))
             AverageLengthRow(length, modifier, image)

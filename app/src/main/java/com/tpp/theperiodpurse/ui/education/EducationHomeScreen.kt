@@ -1,6 +1,7 @@
 package com.tpp.theperiodpurse.ui.education
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,6 +29,7 @@ import com.tpp.theperiodpurse.ui.legal.TermsAndPrivacyFooter
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.theme.MainFontColor
 import com.tpp.theperiodpurse.ui.theme.Teal
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 const val gray = 0xFF6D6E71
 const val teal = 0xFF72C6B7
@@ -35,12 +37,13 @@ const val pink = 0xFFFFA3A4
 
 @Composable
 fun EducationScreenLayout(
+    appViewModel: AppViewModel,
     outController: NavHostController = rememberNavController(),
     navController: NavHostController,
 ) {
     val uriHandler = LocalUriHandler.current
-    EducationBackground()
-    EducationScreenContent(navController, uriHandler, outController)
+    EducationBackground(appViewModel = appViewModel)
+    EducationScreenContent(navController, uriHandler, outController, appViewModel)
 }
 
 @Composable
@@ -48,6 +51,7 @@ fun EducationScreenContent(
     navController: NavHostController,
     uriHandler: UriHandler,
     outController: NavHostController,
+    appViewModel: AppViewModel
 ) {
     Column(
         modifier = Modifier
@@ -64,10 +68,10 @@ fun EducationScreenContent(
                 TopSection(navController)
             }
             items(ProductsList, span = { GridItemSpan(1) }) {
-                PeriodProducts(navController, it)
+                PeriodProducts(navController, it, appViewModel)
             }
             item(span = { GridItemSpan(2) }) {
-                BottomSection(uriHandler, outController)
+                BottomSection(uriHandler, outController, appViewModel = appViewModel)
             }
         }
     }
@@ -95,9 +99,9 @@ fun TopSection(navController: NavHostController) {
 }
 
 @Composable
-fun BottomSection(uriHandler: UriHandler, outController: NavHostController) {
+fun BottomSection(uriHandler: UriHandler, outController: NavHostController, appViewModel: AppViewModel) {
     Column {
-        TPPCard(uriHandler)
+        TPPCard(uriHandler, appViewModel = appViewModel)
         Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             SocialMedia(uriHandler)
         }
@@ -108,10 +112,10 @@ fun BottomSection(uriHandler: UriHandler, outController: NavHostController) {
             text = stringResource(R.string.copyright),
             textAlign = TextAlign.Center,
             fontSize = 15.scaledSp(),
-            color = Color.DarkGray,
+            color = appViewModel.colorPalette.MainFontColor,
         )
         Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            TermsAndPrivacyFooter(outController, MainFontColor)
+            TermsAndPrivacyFooter(outController, appViewModel.colorPalette.MainFontColor)
         }
         Spacer(modifier = Modifier.size(64.dp))
     }
@@ -163,7 +167,7 @@ fun DYKCard(navController: NavHostController) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PeriodProducts(navController: NavHostController, it: Product) {
+fun PeriodProducts(navController: NavHostController, it: Product, appViewModel: AppViewModel) {
     Card(
         modifier = Modifier
             .padding(12.dp)
@@ -171,7 +175,7 @@ fun PeriodProducts(navController: NavHostController, it: Product) {
             .aspectRatio(1f),
         shape = RoundedCornerShape(12.dp),
         elevation = 10.dp,
-        backgroundColor = Color(pink),
+        backgroundColor = appViewModel.colorPalette.productBackground,
         onClick = {
             navController.currentBackStackEntry?.savedStateHandle?.set(
                 key = "elementId",
@@ -211,7 +215,7 @@ fun PeriodProducts(navController: NavHostController, it: Product) {
 }
 
 @Composable
-fun TPPCard(uriHandler: UriHandler) {
+fun TPPCard(uriHandler: UriHandler, appViewModel: AppViewModel) {
     Card(
         modifier = Modifier
             .padding(horizontal = 32.dp, vertical = 28.dp)
@@ -221,7 +225,7 @@ fun TPPCard(uriHandler: UriHandler) {
         backgroundColor = Color.White,
     ) {
         Column(
-            modifier = Modifier.wrapContentSize(Alignment.Center),
+            modifier = Modifier.background(color= appViewModel.colorPalette.HeaderColor1).wrapContentSize(Alignment.Center),
         ) {
             Text(
                 modifier = Modifier
@@ -231,12 +235,14 @@ fun TPPCard(uriHandler: UriHandler) {
                 fontWeight = Bold,
                 text = stringResource(R.string.learn_more),
                 fontSize = 15.scaledSp(),
+                color = appViewModel.colorPalette.MainFontColor
             )
             Text(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 0.dp),
                 textAlign = TextAlign.Center,
                 text = stringResource(R.string.strives_to_achieve_short),
                 fontSize = 13.scaledSp(),
+                color = appViewModel.colorPalette.MainFontColor
             )
             Button(
                 modifier = Modifier
@@ -245,7 +251,7 @@ fun TPPCard(uriHandler: UriHandler) {
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Teal,
-                    contentColor = Color.Black,
+                    contentColor = appViewModel.colorPalette.MainFontColor,
                 ),
                 onClick = { uriHandler.openUri("https://www.theperiodpurse.com/") },
             ) {
@@ -253,10 +259,4 @@ fun TPPCard(uriHandler: UriHandler) {
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun EducationScreenPreview() {
-    EducationScreenLayout(rememberNavController(), rememberNavController())
 }

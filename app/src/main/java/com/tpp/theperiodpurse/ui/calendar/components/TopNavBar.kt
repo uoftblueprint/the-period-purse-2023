@@ -34,7 +34,7 @@ private class NoRippleTheme : RippleTheme {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun Tabs(tabs: List<CalendarTabItem>, pagerState: PagerState) {
+fun Tabs(tabs: List<CalendarTabItem>, pagerState: PagerState, appViewModel: AppViewModel) {
     // Composable for tabs
     // Tabs are displayed in ordered row by tabs list
     // PagerState allows for navigation/animation between paginated layouts
@@ -42,8 +42,8 @@ fun Tabs(tabs: List<CalendarTabItem>, pagerState: PagerState) {
     CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme()) {
         TabRow(
             selectedTabIndex = pagerState.currentPage,
-            backgroundColor = HeaderColor1,
-            contentColor = Color.Black,
+            backgroundColor = appViewModel.colorPalette.HeaderColor1,
+            contentColor = appViewModel.colorPalette.MainFontColor,
             indicator = { tabPositions ->
                 TabRowDefaults.Indicator(
                     Modifier.pagerTabIndicatorOffset(
@@ -93,14 +93,3 @@ fun TabsContent(
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
-@Preview(showBackground = true)
-@Composable
-fun TabsPreview() {
-    val tabs = listOf(
-        CalendarTabItem.CalendarTab,
-        CalendarTabItem.CycleTab,
-    )
-    val pagerState = rememberPagerState()
-    Tabs(tabs = tabs, pagerState = pagerState)
-}

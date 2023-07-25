@@ -13,13 +13,14 @@ import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.tpp.theperiodpurse.ui.calendar.displayText
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import java.time.DayOfWeek
 import java.time.format.TextStyle
 import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MonthHeader(calendarMonth: CalendarMonth) {
+fun MonthHeader(calendarMonth: CalendarMonth, appViewModel: AppViewModel) {
     // The header that is displayed for every month; contains week & month.
     val daysOfWeek = calendarMonth.weekDays.first().map { it.date.dayOfWeek }
     Column(
@@ -27,13 +28,13 @@ fun MonthHeader(calendarMonth: CalendarMonth) {
             .padding(vertical = 18.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        MonthAndDayHeadings(calendarMonth, daysOfWeek)
+        MonthAndDayHeadings(calendarMonth, daysOfWeek, appViewModel)
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MonthAndDayHeadings(calendarMonth: CalendarMonth, daysOfWeek: List<DayOfWeek>) {
+fun MonthAndDayHeadings(calendarMonth: CalendarMonth, daysOfWeek: List<DayOfWeek>, appViewModel: AppViewModel) {
     // Month
     Text(
         modifier = Modifier.padding(12.dp),
@@ -41,6 +42,7 @@ fun MonthAndDayHeadings(calendarMonth: CalendarMonth, daysOfWeek: List<DayOfWeek
         fontSize = 18.scaledSp(),
         fontWeight = FontWeight.W500,
         text = calendarMonth.yearMonth.displayText(),
+        color = appViewModel.colorPalette.CalendarFontColor
     )
 
     // Days of Week
@@ -54,6 +56,7 @@ fun MonthAndDayHeadings(calendarMonth: CalendarMonth, daysOfWeek: List<DayOfWeek
                 fontSize = 10.scaledSp(),
                 fontWeight = FontWeight.ExtraBold,
                 text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
+                color = appViewModel.colorPalette.CalendarFontColor
             )
         }
     }

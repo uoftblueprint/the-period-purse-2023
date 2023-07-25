@@ -155,15 +155,15 @@ fun NavigationGraph(
         // Education Screens
 
         composable(route = Screen.Learn.name) {
-            EducationScreen(outController = navController)
+            EducationScreen(outController = navController, appViewModel = appViewModel)
         }
 
         composable(LegalScreen.Terms.name) {
-            TermsScreen(navController)
+            TermsScreen(appViewModel = appViewModel, navController = navController)
         }
 
         composable(LegalScreen.Privacy.name) {
-            PrivacyScreen(navController)
+            PrivacyScreen(navController, appViewModel)
         }
 
         // Welcome Screen
@@ -176,6 +176,7 @@ fun NavigationGraph(
                 navController = navController,
                 context = context,
                 onboardUIState = onboardUIState,
+                appViewModel = appViewModel,
             )
         }
 
@@ -236,7 +237,8 @@ fun NavigationGraph(
         }
         composable(route = OnboardingScreen.RestoreFromGoogleDrivePrompt.name) {
             RestoreFromGoogleDrivePrompt(
-                viewModel = onboardViewModel,
+                onboardViewModel = onboardViewModel,
+                appViewModel = appViewModel,
                 navHostController = navController,
                 context = context,
                 signout = signout,
@@ -246,7 +248,8 @@ fun NavigationGraph(
 
         composable(route = OnboardingScreen.DownloadBackupFromGoogleDrive.name) {
             DownloadBackupFromGoogleDrive(
-                viewModel = onboardViewModel,
+                onboardViewModel = onboardViewModel,
+                appViewModel = appViewModel,
                 navHostController = navController,
                 signout = signout,
             )

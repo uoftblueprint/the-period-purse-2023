@@ -10,18 +10,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
+import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
 @Composable
-fun Body(str: String) {
+fun Body(str: String, appViewModel: AppViewModel) {
     Text(
         fontSize = 14.scaledSp(),
         lineHeight = 16.scaledSp(),
         text = str,
+        color = appViewModel.colorPalette.MainFontColor
     )
 }
 
 @Composable
-fun Header(str: String) {
+fun Header(str: String, appViewModel: AppViewModel) {
     Column {
         Spacer(modifier = Modifier.size(12.dp))
 
@@ -31,15 +33,17 @@ fun Header(str: String) {
             fontWeight = FontWeight.Bold,
             lineHeight = 24.scaledSp(),
             text = str,
+            color = appViewModel.colorPalette.MainFontColor
         )
     }
 }
 
 @Composable
-fun Title(str: String) {
+fun Title(str: String, appViewModel: AppViewModel) {
     Text(
         fontSize = 32.scaledSp(),
         fontWeight = FontWeight.Bold,
         text = str,
+        color = appViewModel.colorPalette.MainFontColor
     )
 }
