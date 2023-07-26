@@ -57,9 +57,16 @@ fun CycleScreenLayout(
                 .fillMaxHeight()
                 .padding(horizontal = 20.dp, vertical = 25.dp),
         ) {
-            // show if next predicted < 7 days
+            // show if next predicted <= 7 days
             if (daysUntilNextPeriod <= 7) {
-                UpcomingPeriodBox(daysUntilNextPeriod, appViewModel = appViewModel)
+                if (daysUntilNextPeriod <= 0) {
+                    UpcomingPeriodBox("You period will likely come any day now!",
+                        appViewModel = appViewModel)
+                } else {
+                    UpcomingPeriodBox("You period might be coming in the next " +
+                        "$daysUntilNextPeriod days",
+                        appViewModel = appViewModel)
+                }
             }
             Spacer(modifier.height(15.dp))
             CurrentCycleBox(dates = dates, appViewModel = appViewModel)
@@ -70,6 +77,7 @@ fun CycleScreenLayout(
                     color = appViewModel.colorPalette.cyclePink,
                     length = periodLength,
                     image = painterResource(R.drawable.flow_with_heart),
+                    modifier = Modifier.weight(1f)
                 )
                 Spacer(modifier.width(16.dp))
                 AverageLengthBox(
@@ -77,6 +85,7 @@ fun CycleScreenLayout(
                     color = appViewModel.colorPalette.cycleBlue,
                     length = cycleLength,
                     image = painterResource(R.drawable.menstruation_calendar__1_),
+                    modifier = Modifier.weight(1f)
                 )
             }
             Spacer(modifier.height(30.dp))

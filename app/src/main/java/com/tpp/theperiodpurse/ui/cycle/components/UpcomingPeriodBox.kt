@@ -20,8 +20,9 @@ import androidx.compose.ui.unit.dp
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 
+
 @Composable
-fun UpcomingPeriodBox(daysUntilPeriod: Int, appViewModel: AppViewModel? = null) {
+fun UpcomingPeriodBox(text: String, appViewModel: AppViewModel? = null) {
     val color = appViewModel?.colorPalette?.secondary2 ?: Color.White
     Card(
         shape = RoundedCornerShape(12.dp),
@@ -37,7 +38,7 @@ fun UpcomingPeriodBox(daysUntilPeriod: Int, appViewModel: AppViewModel? = null) 
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "You period might be coming in the next $daysUntilPeriod days",
+                text = text,
                 modifier = Modifier.weight(2f)
             )
             Image(
@@ -55,5 +56,5 @@ fun UpcomingPeriodBox(daysUntilPeriod: Int, appViewModel: AppViewModel? = null) 
 @Preview
 @Composable
 fun UpcomingPeriodBoxPreview(){
-    UpcomingPeriodBox(10)
+    UpcomingPeriodBox("Your period will likely come any day now!")
 }
