@@ -5,11 +5,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.tpp.theperiodpurse.R
-import com.tpp.theperiodpurse.data.addOneDay
+import com.tpp.theperiodpurse.utility.addOneDay
 import com.tpp.theperiodpurse.data.entity.Date
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
-import java.lang.Appendable
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId

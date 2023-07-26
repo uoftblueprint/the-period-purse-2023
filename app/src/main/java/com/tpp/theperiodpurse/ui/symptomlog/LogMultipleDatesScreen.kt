@@ -95,7 +95,8 @@ fun LogMultipleDatesScreen(
                 },
                 dayContent = { day ->
                     if (day.position == DayPosition.MonthDate) {
-                        val initSelected = calendarDayUIStates[day.date]?.flow != null
+                        val initSelected = calendarDayUIStates[day.date]?.flow != null &&
+                                calendarDayUIStates[day.date]?.flow != FlowSeverity.Predicted
                         var selected by remember { mutableStateOf(initSelected) }
 //                        val (dayColor, _) = getDayColorAndIcon(Symptom.FLOW, calendarDayUIStates[day.date])
                         Day(

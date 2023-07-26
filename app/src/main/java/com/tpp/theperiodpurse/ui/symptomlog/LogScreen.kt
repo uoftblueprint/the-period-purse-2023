@@ -346,7 +346,7 @@ fun LogPromptCard(logPrompt: LogPrompt, logViewModel: LogViewModel, appViewModel
     val hasInput = (
         logViewModel.getSquareSelected(logPrompt) != null ||
             logViewModel.getText(logPrompt) != ""
-        )
+        ) && logViewModel.getSquareSelected(logPrompt) != "Predicted"
     val iconColor = animateColorAsState(
         targetValue = if (hasInput) appViewModel.colorPalette.SelectedColor1 else  appViewModel.colorPalette.SecondaryFontColor,
         animationSpec = tween(500, 0, LinearEasing),

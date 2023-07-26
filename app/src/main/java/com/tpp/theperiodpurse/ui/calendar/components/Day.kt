@@ -36,7 +36,14 @@ fun Day(
     @DrawableRes iconId: Int?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    isPredicted: Boolean = false
 ) {
+    val (dayColor, textColor) = if (isPredicted || !dayDisabled(date)) {
+        color.copy(alpha = 0.8f) to Color.Black
+    } else {
+        Color.Transparent to Color(190, 190, 190)
+    }
+
     Box(
         modifier = Modifier
             .padding(1.dp)
@@ -47,7 +54,7 @@ fun Day(
                 .size(64.dp)
                 .clip(shape = RoundedCornerShape(8.dp))
                 .fillMaxSize()
-                .background(if (dayDisabled(date)) Color.Transparent else color.copy(0.8f))
+                .background(dayColor)
                 .semantics { contentDescription = date.toString() }
                 .border(
                     color = Color(200, 205, 205),
@@ -62,19 +69,19 @@ fun Day(
             val boxModifier = Modifier
                 .padding(12.dp)
                 .align(Alignment.Center)
-            DayInteriorStyling(date = date, boxModifier = boxModifier, iconId = iconId)
+            DayInteriorStyling(date = date, boxModifier = boxModifier, iconId = iconId, textColor)
         }
     }
 }
 
 @Composable
-fun DayInteriorStyling(date: LocalDate, boxModifier: Modifier, iconId: Int?) {
+fun DayInteriorStyling(date: LocalDate, boxModifier: Modifier, iconId: Int?, textColor: Color) {
     Text(
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
         fontSize = 12.scaledSp(),
         fontWeight = FontWeight.Bold,
         text = date.dayOfMonth.toString(),
-        color = if (dayDisabled(date)) Color(190, 190, 190) else Color.Black,
+        color = textColor
     )
     DayImage(boxModifier = boxModifier, iconId = iconId, date = date)
 }

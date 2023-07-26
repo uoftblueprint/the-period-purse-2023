@@ -13,12 +13,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.Screen
-import com.tpp.theperiodpurse.data.*
 import com.tpp.theperiodpurse.ui.cycle.components.AverageLengthBox
 import com.tpp.theperiodpurse.ui.cycle.components.CurrentCycleBox
 import com.tpp.theperiodpurse.ui.cycle.components.CycleHistoryBox
 import com.tpp.theperiodpurse.ui.cycle.components.UpcomingPeriodBox
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
+import com.tpp.theperiodpurse.utility.calculateAverageCycleLength
+import com.tpp.theperiodpurse.utility.calculateAveragePeriodLength
+import com.tpp.theperiodpurse.utility.calculateDaysSinceLastPeriod
 import kotlin.collections.ArrayList
 import kotlin.math.max
 
