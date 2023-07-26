@@ -69,38 +69,36 @@ class MainActivity : ComponentActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         setContent {
-            ThePeriodPurseTheme {
-                val context = LocalContext.current.applicationContext
-                var hasNotificationPermission by remember {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        mutableStateOf(
-                            ContextCompat.checkSelfPermission(
-                                context,
-                                POST_NOTIFICATIONS,
-                            ) == PackageManager.PERMISSION_GRANTED,
-                        )
-                    } else {
-                        mutableStateOf(true)
-                    }
-                }
-                val launcher = rememberLauncherForActivityResult(
-                    contract = ActivityResultContracts.RequestPermission(),
-                    onResult = { isGranted ->
-                        hasNotificationPermission = isGranted
-                        if (!isGranted) {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                shouldShowRequestPermissionRationale(POST_NOTIFICATIONS)
-                            }
-                        }
-                    },
-                )
+            val context = LocalContext.current.applicationContext
+            var hasNotificationPermission by remember {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    SideEffect {
-                        launcher.launch(POST_NOTIFICATIONS)
-                    }
+                    mutableStateOf(
+                        ContextCompat.checkSelfPermission(
+                            context,
+                            POST_NOTIFICATIONS,
+                        ) == PackageManager.PERMISSION_GRANTED,
+                    )
+                } else {
+                    mutableStateOf(true)
                 }
-                Application(context = context, signIn = { signIn() }, signout = { signOut() })
             }
+            val launcher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.RequestPermission(),
+                onResult = { isGranted ->
+                    hasNotificationPermission = isGranted
+                    if (!isGranted) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            shouldShowRequestPermissionRationale(POST_NOTIFICATIONS)
+                        }
+                    }
+                },
+            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                SideEffect {
+                    launcher.launch(POST_NOTIFICATIONS)
+                }
+            }
+            Application(context = context, signIn = { signIn() }, signout = { signOut() })
         }
     }
     private val signInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -186,83 +184,85 @@ fun AppScreen(
     hasNotificationsPermissions: Boolean = false,
 
 ) {
-    var loggingOptionsVisible by remember { mutableStateOf(false) }
-    var skipOnboarding = skipOnboarding
-    val isOnboarded by onboardViewModel.isOnboarded.observeAsState(initial = null)
+    ThePeriodPurseTheme(appViewModel) {
+        var loggingOptionsVisible by remember { mutableStateOf(false) }
+        var skipOnboarding = skipOnboarding
+        val isOnboarded by onboardViewModel.isOnboarded.observeAsState(initial = null)
 
-    if (!skipDatabase) {
-        LaunchedEffect(Unit) {
-            onboardViewModel.checkOnboardedStatus(context)
-        }
-    }
-    val startdestination: String
-
-    if (isOnboarded == null && !skipDatabase) {
-        LoadingScreen(appViewModel)
-    } else {
         if (!skipDatabase) {
-            skipOnboarding = (isOnboarded as Boolean)
-        }
-        if (skipOnboarding) {
-            startdestination = OnboardingScreen.LoadDatabase.name
-        } else if (skipWelcome) {
-            startdestination = OnboardingScreen.QuestionOne.name
-        } else {
-            startdestination = OnboardingScreen.Welcome.name
-        }
-        Scaffold(
-            floatingActionButton = {
-                if (currentRoute(navController) in screensWithNavigationBar) {
-                    FloatingActionButton(
-                        navController = navController,
-                        onClickInCalendar = { loggingOptionsVisible = true },
-                    )
-                }
-            },
-            floatingActionButtonPosition = FabPosition.Center,
-            isFloatingActionButtonDocked = true,
-        ) { innerPadding ->
-            Image(
-                painter = painterResource(id = appViewModel.colorPalette.background),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.FillBounds,
-            )
-            Box {
-                NavigationGraph(
-                    navController = navController,
-                    startDestination = startdestination,
-                    onboardViewModel = onboardViewModel,
-                    appViewModel = appViewModel,
-                    calendarViewModel = calendarViewModel,
-                    modifier = modifier.padding(innerPadding),
-                    signIn = signIn,
-                    context = context,
-                    signout = signout,
-                )
-
-                if (loggingOptionsVisible) {
-                    Log.d("AppScreen", "Rendering logging options")
-                    LoggingOptionsPopup(
-                        onLogDailySymptomsClick = {
-                            navigateToLogScreenWithDate(
-                                LocalDate.now(),
-                                navController,
-                            )
-                        },
-                        onLogMultiplePeriodDates = { navController.navigate(Screen.LogMultipleDates.name) },
-                        onExit = { loggingOptionsVisible = false },
-                        modifier = modifier.padding(bottom = 64.dp),
-                        appViewModel = appViewModel
-                    )
-                }
+            LaunchedEffect(Unit) {
+                onboardViewModel.checkOnboardedStatus(context)
             }
-            Box(
-                contentAlignment = Alignment.BottomCenter,
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                if (currentRoute(navController) in screensWithNavigationBar) {
-                    BottomNavigation(navController = navController, appViewModel = appViewModel)
+        }
+        val startdestination: String
+
+        if (isOnboarded == null && !skipDatabase) {
+            LoadingScreen(appViewModel)
+        } else {
+            if (!skipDatabase) {
+                skipOnboarding = (isOnboarded as Boolean)
+            }
+            if (skipOnboarding) {
+                startdestination = OnboardingScreen.LoadDatabase.name
+            } else if (skipWelcome) {
+                startdestination = OnboardingScreen.QuestionOne.name
+            } else {
+                startdestination = OnboardingScreen.Welcome.name
+            }
+            Scaffold(
+                floatingActionButton = {
+                    if (currentRoute(navController) in screensWithNavigationBar) {
+                        FloatingActionButton(
+                            navController = navController,
+                            onClickInCalendar = { loggingOptionsVisible = true },
+                        )
+                    }
+                },
+                floatingActionButtonPosition = FabPosition.Center,
+                isFloatingActionButtonDocked = true,
+            ) { innerPadding ->
+                Image(
+                    painter = painterResource(id = appViewModel.colorPalette.background),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.FillBounds,
+                )
+                Box {
+                    NavigationGraph(
+                        navController = navController,
+                        startDestination = startdestination,
+                        onboardViewModel = onboardViewModel,
+                        appViewModel = appViewModel,
+                        calendarViewModel = calendarViewModel,
+                        modifier = modifier.padding(innerPadding),
+                        signIn = signIn,
+                        context = context,
+                        signout = signout,
+                    )
+
+                    if (loggingOptionsVisible) {
+                        Log.d("AppScreen", "Rendering logging options")
+                        LoggingOptionsPopup(
+                            onLogDailySymptomsClick = {
+                                navigateToLogScreenWithDate(
+                                    LocalDate.now(),
+                                    navController,
+                                )
+                            },
+                            onLogMultiplePeriodDates = { navController.navigate(Screen.LogMultipleDates.name) },
+                            onExit = { loggingOptionsVisible = false },
+                            modifier = modifier.padding(bottom = 64.dp),
+                            appViewModel = appViewModel
+                        )
+                    }
+                }
+                Box(
+                    contentAlignment = Alignment.BottomCenter,
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+                    if (currentRoute(navController) in screensWithNavigationBar) {
+                        BottomNavigation(navController = navController, appViewModel = appViewModel)
+                    }
                 }
             }
         }
