@@ -1,7 +1,6 @@
 package com.tpp.theperiodpurse.ui.cycle.components
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -11,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -31,10 +31,12 @@ fun CurrentCycleBox(modifier: Modifier = Modifier, dates: ArrayList<Date>, appVi
         shape = RoundedCornerShape(5),
         modifier = modifier
             .fillMaxWidth()
-            .height(300.dp)
+            .height(300.dp),
+        backgroundColor = if (appViewModel.getColorMode()) appViewModel.colorPalette
+            .HeaderColor1.copy(0.75f) else Color.White,
     ) {
 
-        Column(modifier = modifier.background(color = appViewModel.colorPalette.HeaderColor1)) {
+        Column {
             Text(
                 text = stringResource(R.string.current_cycle),
                 fontSize = 20.scaledSp(),
@@ -42,10 +44,7 @@ fun CurrentCycleBox(modifier: Modifier = Modifier, dates: ArrayList<Date>, appVi
                 color = Color(0xFFB12126),
                 modifier = modifier.padding(start = 20.dp, top = 20.dp),
             )
-            Spacer(
-                modifier = Modifier.height(16.dp),
-            )
-            CycleInfo(dates = dates, modifier = modifier)
+            CycleInfo(dates = dates, modifier = modifier, appViewModel = appViewModel)
         }
 
     }
@@ -55,7 +54,9 @@ fun CurrentCycleBox(modifier: Modifier = Modifier, dates: ArrayList<Date>, appVi
 private fun CycleInfo(
     dates: ArrayList<Date>,
     modifier: Modifier,
+    appViewModel: AppViewModel
 ) {
+    val gradientColor = listOf(appViewModel.colorPalette.primary2, appViewModel.colorPalette.primary1)
     Box(
         modifier = Modifier
             .padding(20.dp)
@@ -67,24 +68,24 @@ private fun CycleInfo(
                 .size(200.dp),
         ) {
             Canvas(modifier = Modifier.matchParentSize()) {
-                val strokeWidth = 25.dp.toPx()
+                val strokeWidth = 23.dp.toPx()
                 val ringColor = Color(0xFFB12126)
                 val radius = (size.minDimension - strokeWidth) / 2
 
                 drawArc(
                     color = ringColor.copy(alpha = 0.2f),
-                    startAngle = 0f,
-                    sweepAngle = 360f,
+                    startAngle = -80f,
+                    sweepAngle = 340f,
                     useCenter = false,
                     topLeft = center - Offset(radius, radius),
                     size = Size(radius * 2, radius * 2),
-                    style = Stroke(width = strokeWidth),
+                    style = Stroke(width = strokeWidth, cap = StrokeCap.Round),
                 )
 
                 // Draw the progress ring
                 drawArc(
-                    color = ringColor,
-                    startAngle = -90f,
+                    brush = Brush.linearGradient(gradientColor),
+                    startAngle = -80f,
                     sweepAngle = calculateArcAngle(dates),
                     useCenter = false,
                     topLeft = center - Offset(radius, radius),
@@ -98,21 +99,22 @@ private fun CycleInfo(
             ) {
                 Text(
                     text = calculateDaysSinceLastPeriod(dates).toString(),
-                    fontSize = 50.scaledSp(),
+                    fontSize = 40.scaledSp(),
+                    modifier = Modifier.padding(0.dp),
                     fontWeight = FontWeight(900),
                     color = Color(0xFFB12126),
                 )
                 Text(
                     text = stringResource(R.string.days_since),
-                    fontSize = 16.scaledSp(),
+                    fontSize = 15.scaledSp(),
                     fontWeight = FontWeight(500),
-                    color = Color(0xFF868083),
+                    color = appViewModel.colorPalette.MainFontColor
                 )
                 Text(
                     text = stringResource(R.string.last_period),
-                    fontSize = 16.scaledSp(),
+                    fontSize = 15.scaledSp(),
                     fontWeight = FontWeight(500),
-                    color = Color(0xFF868083),
+                    color = appViewModel.colorPalette.MainFontColor
                 )
             }
         }
