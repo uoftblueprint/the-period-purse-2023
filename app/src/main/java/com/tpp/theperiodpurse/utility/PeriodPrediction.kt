@@ -65,7 +65,7 @@ fun parseDatesIntoPeriods(periodHistory: ArrayList<TPPDate>): ArrayList<ArrayLis
  * Sorts an array list of Dates that removes the dates with no flow (i.e., filtering by dates
  * with periods), and sorting the list by incrementing date.
  */
-private fun sortPeriodHistory(processedDates: ArrayList<TPPDate>) {
+fun sortPeriodHistory(processedDates: ArrayList<TPPDate>) {
     // Removes all dates with no flow or spotting.
     processedDates.removeAll { it.flow == FlowSeverity.None || it.flow == FlowSeverity.Spotting }
 
@@ -197,10 +197,10 @@ fun calculateArcAngle(periodHistory: ArrayList<TPPDate>): Float {
     val processedDates = processDates(periodHistory)
     val averageCycleLength = calculateAverageCycleLength(processedDates)
     if (averageCycleLength <= 0f) {
-        return 360f * min(1f, calculateDaysSinceLastPeriod(processedDates) / 31f)
+        return 340f * min(1f, calculateDaysSinceLastPeriod(processedDates) / 31f)
     }
     val resultedAngle = calculateDaysSinceLastPeriod(processedDates) / averageCycleLength
-    return 360f * min(1f, resultedAngle)
+    return 340f * min(1f, resultedAngle)
 }
 
 /**

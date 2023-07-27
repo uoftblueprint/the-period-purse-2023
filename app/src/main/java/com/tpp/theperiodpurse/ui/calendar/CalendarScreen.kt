@@ -15,7 +15,6 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.*
 import com.kizitonwose.calendar.core.*
 import com.tpp.theperiodpurse.ui.calendar.components.*
-import com.tpp.theperiodpurse.ui.theme.ThePeriodPurseTheme
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
 import com.tpp.theperiodpurse.ui.viewmodel.CalendarViewModel
 import java.util.*
@@ -47,21 +46,19 @@ fun CalendarScreen(
         CalendarTabItem.CycleTab,
     )
     val pagerState = rememberPagerState()
-    ThePeriodPurseTheme {
-        Scaffold(topBar = {}) { padding ->
-            Column(
-                verticalArrangement = Arrangement.Bottom,
-                modifier = Modifier.padding(padding),
-            ) {
-                Tabs(tabs = tabs, pagerState = pagerState, appViewModel = appViewModel)
-                TabsContent(
-                    tabs = tabs,
-                    pagerState = pagerState,
-                    calendarViewModel = calendarViewModel,
-                    navController = navController,
-                    appViewModel = appViewModel,
-                )
-            }
+    Scaffold(topBar = {}) { padding ->
+        Column(
+            verticalArrangement = Arrangement.Bottom,
+            modifier = Modifier.padding(padding),
+        ) {
+            Tabs(tabs = tabs, pagerState = pagerState, appViewModel = appViewModel)
+            TabsContent(
+                tabs = tabs,
+                pagerState = pagerState,
+                calendarViewModel = calendarViewModel,
+                navController = navController,
+                appViewModel = appViewModel,
+            )
         }
     }
 }
@@ -69,7 +66,5 @@ fun CalendarScreen(
 @Preview
 @Composable
 fun CalendarScreenPreview() {
-    ThePeriodPurseTheme {
-        CalendarScreen(rememberNavController(), viewModel(), viewModel())
-    }
+    CalendarScreen(rememberNavController(), viewModel(), viewModel())
 }

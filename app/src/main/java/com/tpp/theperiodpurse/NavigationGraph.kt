@@ -1,8 +1,10 @@
 package com.tpp.theperiodpurse
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -78,8 +80,8 @@ fun NavigationGraph(
     appViewModel: AppViewModel,
     modifier: Modifier = Modifier,
     context: Context,
-    signIn: () -> Unit,
     signout: () -> Unit = {},
+    signIn: (launcher: ActivityResultLauncher<Intent>) -> Unit,
 ) {
     val onboardUIState by onboardViewModel.uiState.collectAsState()
     val appUiState by appViewModel.uiState.collectAsState()
@@ -133,7 +135,7 @@ fun NavigationGraph(
                 onboardViewModel = onboardViewModel,
                 appUiState = appUiState,
                 calUiState = calUiState,
-                signIn = signIn,
+                signIn = { signInLauncher -> signIn(signInLauncher) },
                 signout = signout,
             )
         }
@@ -171,7 +173,7 @@ fun NavigationGraph(
             WelcomeScreen(
                 onNextButtonClicked =
                 { navController.navigate(OnboardingScreen.QuestionOne.name) },
-                signIn = signIn,
+                signIn = { signInLauncher -> signIn(signInLauncher) },
                 signout = signout,
                 navController = navController,
                 context = context,

@@ -13,13 +13,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
-import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
-import java.lang.Appendable
+import com.tpp.theperiodpurse.ui.theme.DarkColorPaletteImpl
 
 @Composable
 fun AverageLengthBox(
@@ -30,20 +31,24 @@ fun AverageLengthBox(
     color: Color,
 ) {
     Card(
-        modifier.width(177.dp),
+        modifier = modifier.height(110.dp),
         elevation = 2.dp,
         backgroundColor = color,
         shape = RoundedCornerShape(10),
     ) {
-        Column(modifier.padding(18.dp)) {
+        Column(
+            modifier = Modifier.padding(vertical = 10.dp, horizontal = 15.dp)
+        ) {
             Text(
                 text = title,
-                fontSize = 12.scaledSp(),
+                fontSize = 13.scaledSp(),
                 fontWeight = FontWeight(700),
                 color = Color.Black,
             )
-            Spacer(modifier.height(20.dp))
-            AverageLengthRow(length, modifier, image)
+            AverageLengthRow(
+                length = length,
+                image = image,
+            )
         }
     }
 }
@@ -51,41 +56,49 @@ fun AverageLengthBox(
 @Composable
 private fun AverageLengthRow(
     length: Float,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     image: Painter,
 ) {
-    Row {
+    Row (modifier = modifier.padding(top = 10.dp)){
         Text(
             text = when (length) {
                 (-1).toFloat() -> stringResource(R.string.log_to_learn)
                 (-2).toFloat() -> stringResource(R.string.log_to_learn)
-                else -> "%.2f Days".format(length)
+                else -> "${length.toInt()} Days"
             },
             fontSize = when (length) {
-                (-1).toFloat() -> 10.scaledSp()
-                (-2).toFloat() -> 10.scaledSp()
+                (-1).toFloat() -> 13.scaledSp()
+                (-2).toFloat() -> 13.scaledSp()
                 else -> 20.scaledSp()
             },
             fontWeight = FontWeight(500),
-            modifier = modifier.width(55.dp),
+            modifier = modifier
+                .weight(1f),
         )
-        Spacer(modifier.width(29.dp))
+        Spacer(modifier = Modifier.width(10.dp))
         Box(
             modifier
-                .size(50.dp)
                 .clip(RoundedCornerShape(50))
-                .background(Color.White),
+                .background(color = Color.White)
+                .aspectRatio(1f) // Maintain a 1:1 aspect ratio
+                .weight(0.5f)
         ) {
             Image(
                 painter = image,
                 contentDescription = null,
                 modifier = Modifier
                     .matchParentSize()
-                    .aspectRatio(1f) // Maintain a 1:1 aspect ratio
-                    .padding(8.dp), // Add padding to shrink the image inside the box
+                    .padding(10.dp), // Add padding to shrink the image inside the box
                 contentScale = ContentScale.Fit,
                 alignment = Alignment.Center,
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun AverageLengthBoxPreview(){
+    AverageLengthBox(title = "Average Period Length", image = painterResource(R.drawable
+        .flow_with_heart), length = 5.00f, color = DarkColorPaletteImpl().secondary3,)
 }

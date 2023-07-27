@@ -16,10 +16,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.datasource.Product
 import com.tpp.theperiodpurse.ui.datasource.ProductsList
@@ -85,6 +83,6 @@ fun EducationInfoScreen(
             fontSize = 18.scaledSp(),
             color = appViewModel.colorPalette.MainFontColor
         )
-        Spacer(modifier = Modifier.weight(45f))
+        Spacer(modifier = Modifier.height(50.dp))
     }
 }

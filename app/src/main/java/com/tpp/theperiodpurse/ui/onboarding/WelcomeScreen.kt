@@ -1,7 +1,14 @@
 package com.tpp.theperiodpurse.ui.onboarding
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Build
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -10,8 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,8 +35,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInResult
-import com.google.android.gms.common.api.Status
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.tpp.theperiodpurse.OnboardingScreen
 import com.tpp.theperiodpurse.R
 import com.tpp.theperiodpurse.ui.component.handleError
@@ -44,7 +49,7 @@ import com.tpp.theperiodpurse.utility.validateUserAuthenticationAndAuthorization
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WelcomeScreen(
-    signIn: () -> Unit,
+    signIn: (launcher: ActivityResultLauncher<Intent>) -> Unit,
     signout: () -> Unit = {},
     onNextButtonClicked: () -> Unit,
     navController: NavHostController,
@@ -56,24 +61,16 @@ fun WelcomeScreen(
     val screenheight = configuration.screenHeightDp
     val screenwidth = configuration.screenWidthDp
     val account = GoogleSignIn.getLastSignedInAccount(context)
-    // use a value through view model which appscreen can post to
-
-    val signInResult = remember {
-        mutableStateOf(
-            GoogleSignInResult(
-                GoogleSignInAccount.createDefault(),
-                Status.RESULT_CANCELED,
-            ),
-        )
-    }
-    LaunchedEffect(signInResult.value) {
-        if (!signInResult.value.isSuccess) {
-            signInResult.value = GoogleSignInResult(
-                GoogleSignInAccount.createDefault(),
-                Status.RESULT_CANCELED,
-            )
+    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts
+        .StartActivityForResult()){ result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = result.data
+            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleSignInResult(task, context, onboardUIState, signout, navController)
         }
     }
+    Log.d("Welcome", "Re-rendering")
+
     if (account != null) {
         onboardUIState.googleAccount = account.account
         val hasGoogleDrivePermission = validateUserAuthenticationAndAuthorization(account)
@@ -87,6 +84,7 @@ fun WelcomeScreen(
             )
         } else {
             LaunchedEffect(Unit) {
+                Log.d("Welcome", "Navigating Second Time")
                 navController.navigate(OnboardingScreen.RestoreFromGoogleDrivePrompt.name)
             }
         }
@@ -126,9 +124,7 @@ fun WelcomeScreen(
             )
             Spacer(modifier = Modifier.height(5.dp))
             // Sign in with Google Button
-            GoogleSignInButton {
-                signIn()
-            }
+            GoogleSignInButton { signIn(launcher) }
 
             Spacer(modifier = Modifier.height((screenheight * 0.006).dp))
 
@@ -221,5 +217,34 @@ fun handleSecurityError(
     handleError(context, msg) {
         signout()
         navController.navigate(OnboardingScreen.Welcome.name)
+    }
+}
+
+private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>, context: Context,
+                               onboardUIState: OnboardUIState, signout: () -> Unit, navController: NavHostController) {
+    try {
+        if (completedTask.isSuccessful) {
+            val account = GoogleSignIn.getLastSignedInAccount(context)
+            if (account != null) { onboardUIState.googleAccount = account.account }
+            val hasGoogleDrivePermission = validateUserAuthenticationAndAuthorization(account)
+            if (!hasGoogleDrivePermission) {
+                handleSecurityError(
+                    context,
+                    signout,
+                    "ERROR - Please grant all the required " +
+                            "permissions",
+                    navController,
+                )
+            } else {
+                Log.d("Welcome", "Navigating First Time")
+                Toast.makeText(context, "SignIn Successful", Toast.LENGTH_SHORT).show()
+                navController.navigate(OnboardingScreen.RestoreFromGoogleDrivePrompt.name)
+            }
+        } else {
+            Toast.makeText(context, "SignIn Failed", Toast.LENGTH_SHORT).show()
+        }
+    } catch (e: ApiException) {
+        Log.d("Sign In", e.toString())
+        Toast.makeText(context, "SignIn Failed", Toast.LENGTH_SHORT).show()
     }
 }

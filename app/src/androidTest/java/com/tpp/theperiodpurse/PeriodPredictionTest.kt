@@ -195,7 +195,7 @@ class PeriodPredictionTest {
     @Test
     fun arcAngleCalculation() {
         assertEquals(
-            360f * 14 / 31,
+            340f * 14 / 31,
             calculateArcAngle(periodHistoryHalfMonth),
         )
     }
@@ -203,7 +203,7 @@ class PeriodPredictionTest {
     @Test
     fun arcAngleCalculation_MaxDays() {
         assertEquals(
-            360f,
+            340f,
             calculateArcAngle(periodHistoryOneCycle),
         )
     }
