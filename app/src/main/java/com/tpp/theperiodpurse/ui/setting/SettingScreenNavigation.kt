@@ -2,8 +2,10 @@ package com.tpp.theperiodpurse.ui.setting
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -14,7 +16,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -85,7 +86,7 @@ fun SettingsScreen(
     onboardViewModel: OnboardViewModel?,
     appUiState: AppUiState?,
     calUiState: CalendarUIState?,
-    signIn: () -> Unit,
+    signIn: (launcher: ActivityResultLauncher<Intent>) -> Unit,
     signout: () -> Unit = {},
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -169,7 +170,7 @@ fun SettingsScreen(
                             appViewModel = appViewModel
                         ),
                         navController = navController,
-                        signIn = signIn,
+                        signIn = { signInLauncher -> signIn(signInLauncher) },
                         signOut = signout,
                         context = context,
                         appViewModel = appViewModel

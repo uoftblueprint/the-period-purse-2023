@@ -1,7 +1,6 @@
 package com.tpp.theperiodpurse
 
 import android.Manifest.permission.POST_NOTIFICATIONS
-import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -14,6 +13,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
@@ -32,12 +32,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
-import com.google.android.gms.tasks.Task
 import com.google.api.services.drive.DriveScopes
 import com.tpp.theperiodpurse.ui.component.BottomNavigation
 import com.tpp.theperiodpurse.ui.component.FloatingActionButton
@@ -98,33 +95,13 @@ class MainActivity : ComponentActivity() {
                     launcher.launch(POST_NOTIFICATIONS)
                 }
             }
-            Application(context = context, signIn = { signIn() }, signout = { signOut() })
+            Application(context = context, signIn = { signInLauncher -> signIn(signInLauncher) },
+                signout = { signOut() })
         }
     }
-    private val signInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data: Intent? = result.data
-            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleSignInResult(task)
-        }
-    }
-    private fun signIn() {
+    private fun signIn(launcher: ActivityResultLauncher<Intent>) {
         val signInIntent = googleSignInClient.signInIntent
-        signInLauncher.launch(signInIntent)
-    }
-    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
-        try {
-            if (completedTask.isSuccessful) {
-                Toast.makeText(this, "SignIn Successful", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "SignIn Failed", Toast.LENGTH_SHORT).show()
-            }
-        } catch (e: ApiException) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.d("Sign In", e.toString())
-            Toast.makeText(this, "SignIn Failed", Toast.LENGTH_SHORT).show()
-        }
+        launcher.launch(signInIntent)
     }
     private fun signOut() {
         googleSignInClient.revokeAccess().addOnCompleteListener {
@@ -139,12 +116,12 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Application(
     context: Context,
-    signIn: () -> Unit,
+    signIn: (launcher: ActivityResultLauncher<Intent>) -> Unit,
     signout: () -> Unit = {},
     hasNotificationsPermission: Boolean = false,
 ) {
     AppScreen(
-        signIn = signIn,
+        signIn = { signInLauncher -> signIn(signInLauncher) },
         context = context,
         signout = signout,
         hasNotificationsPermissions = hasNotificationsPermission,
@@ -175,14 +152,13 @@ fun AppScreen(
     onboardViewModel: OnboardViewModel = viewModel(),
     calendarViewModel: CalendarViewModel = viewModel(),
     navController: NavHostController = rememberNavController(),
-    signIn: () -> Unit,
     skipWelcome: Boolean = false,
     skipDatabase: Boolean = false,
     skipOnboarding: Boolean = false,
     context: Context,
     signout: () -> Unit = {},
+    signIn: (launcher: ActivityResultLauncher<Intent>) -> Unit,
     hasNotificationsPermissions: Boolean = false,
-
 ) {
     ThePeriodPurseTheme(appViewModel) {
         var loggingOptionsVisible by remember { mutableStateOf(false) }
@@ -235,9 +211,9 @@ fun AppScreen(
                         appViewModel = appViewModel,
                         calendarViewModel = calendarViewModel,
                         modifier = modifier.padding(innerPadding),
-                        signIn = signIn,
                         context = context,
                         signout = signout,
+                        signIn = { signInLauncher -> signIn(signInLauncher) }
                     )
 
                     if (loggingOptionsVisible) {

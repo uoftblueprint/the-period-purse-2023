@@ -1,14 +1,18 @@
 package com.tpp.theperiodpurse.ui.setting
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,8 +22,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInResult
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.tasks.Task
 import com.tpp.theperiodpurse.ui.onboarding.GoogleSignInButton
 import com.tpp.theperiodpurse.ui.onboarding.scaledSp
 import com.tpp.theperiodpurse.ui.viewmodel.AppViewModel
@@ -39,7 +44,7 @@ fun BackUpAccountScreen(
     appbar: Unit,
     navController: NavHostController = rememberNavController(),
     appViewModel: AppViewModel,
-    signIn: () -> Unit,
+    signIn: (launcher: ActivityResultLauncher<Intent>) -> Unit,
     signOut: () -> Unit = {},
     context: Context,
 ) {
@@ -48,27 +53,11 @@ fun BackUpAccountScreen(
 
     val account = GoogleSignIn.getLastSignedInAccount(context)
     val authorized = validateUserAuthenticationAndAuthorization(account)
-
-    val signInResult = remember {
-        mutableStateOf(
-            GoogleSignInResult(
-                GoogleSignInAccount.createDefault(),
-                Status.RESULT_CANCELED,
-            ),
-        )
-    }
-    LaunchedEffect(signInResult.value) {
-        if (!signInResult.value.isSuccess) {
-            signInResult.value = GoogleSignInResult(
-                GoogleSignInAccount.createDefault(),
-                Status.RESULT_CANCELED,
-            )
-        }
-    }
+    Log.d("Backup account", "Re-rendering")
     appbar
 
     if (account == null) {
-        SignInView(screenheight, signIn, appViewModel)
+        SignInView(screenheight, signIn, appViewModel, context, signOut, navController)
     } else if (authorized) {
         Box(
             modifier = Modifier
@@ -124,7 +113,16 @@ fun BackUpAccountScreen(
 }
 
 @Composable
-private fun SignInView(screenheight: Int, signIn: () -> Unit, appViewModel: AppViewModel) {
+private fun SignInView(screenheight: Int, signIn: (launcher: ActivityResultLauncher<Intent>) ->
+Unit, appViewModel: AppViewModel, context: Context, signOut: () -> Unit, navController: NavHostController) {
+    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts
+        .StartActivityForResult()){ result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = result.data
+            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleSignInResult(task, context, signOut, navController)
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -153,9 +151,31 @@ private fun SignInView(screenheight: Int, signIn: () -> Unit, appViewModel: AppV
             Spacer(modifier = Modifier.height((screenheight * (0.02)).dp))
 
             GoogleSignInButton {
-                signIn()
+                signIn(launcher)
             }
         }
+    }
+}
+private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>, context: Context,
+                               signout: () -> Unit, navController: NavHostController) {
+    try {
+        if (completedTask.isSuccessful) {
+            val account = GoogleSignIn.getLastSignedInAccount(context)
+            val hasGoogleDrivePermission = validateUserAuthenticationAndAuthorization(account)
+            if (!hasGoogleDrivePermission) {
+                handleSecurityError(context, signout, "ERROR - Please grant all the required " +
+                        "permissions", navController)
+            } else {
+                Log.d("Welcome", "Navigating First Time")
+                Toast.makeText(context, "SignIn Successful", Toast.LENGTH_SHORT).show()
+                navController.navigate(SettingScreenNavigation.BackUpAccount.name)
+            }
+        } else {
+            Toast.makeText(context, "SignIn Failed", Toast.LENGTH_SHORT).show()
+        }
+    } catch (e: ApiException) {
+        Log.d("Sign In", e.toString())
+        Toast.makeText(context, "SignIn Failed", Toast.LENGTH_SHORT).show()
     }
 }
 

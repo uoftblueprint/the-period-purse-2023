@@ -32,6 +32,7 @@ fun RestoreFromGoogleDrivePrompt(
     signout: () -> Unit = {},
     context: Context,
 ) {
+    Log.d("RestoreFromGoogleDrive", "Rendering")
     val googleDriveFolder by onboardViewModel.googleDriveFolder.observeAsState()
     val drivePermissionHasError by onboardViewModel.drivePermissionHasError.observeAsState()
     if (googleAccount != null) {
